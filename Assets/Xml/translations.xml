@@ -1,0 +1,95 @@
+<languages>
+	<language id="en" type="latin">
+		<change_fraction><![CDATA[CHANGE FRACTION]]></change_fraction>
+		<change_size><![CDATA[CHANGE SIZE]]></change_size>
+		<change_colour><![CDATA[CHANGE COLOUR]]></change_colour>
+		<copy><![CDATA[COPY]]></copy>
+		<cut><![CDATA[USE]]></cut>
+		<show_hide_symbol><![CDATA[SHOW/HIDE SYMBOL]]></show_hide_symbol>
+		<partition><![CDATA[PARTITION]]></partition>
+		<popup_pause_text><![CDATA[PAUSE]]></popup_pause_text>
+		<hint_shape_menu><![CDATA[Shape models: click to choose a representation]]></hint_shape_menu>
+		<hint_create_horizontal><![CDATA[Horizontal rectangle: click to create]]></hint_create_horizontal>
+		<hint_create_vertical><![CDATA[Vertical rectangle: click to create]]></hint_create_vertical>
+		<hint_trash><![CDATA[Bin: drag an object here to remove it from workspace]]></hint_trash>
+		<hint_find_eq><![CDATA[Find equivalent: checks if two representations are equivalent]]></hint_find_eq>
+		<hint_drag_eq><![CDATA[Drag a representation here to check equivalence]]></hint_drag_eq>
+		<hint_onshape><![CDATA[Left click and drag to move, Right click to open tools menu]]></hint_onshape>
+		<hint_change_fraction><![CDATA[Click to change denominator or numerator]]></hint_change_fraction>
+		<hint_showhide><![CDATA[Click to show/hide fraction symbol]]></hint_showhide>
+		<hint_partition><![CDATA[Click to partition the fraction representation]]></hint_partition>
+		<hint_denominator_first><![CDATA[Set the denominator first]]></hint_denominator_first>
+		<hint_denominator><![CDATA[Set the denominator]]></hint_denominator>
+		<hint_numerator><![CDATA[Set the numerator]]></hint_numerator>
+		<hint_create_lines><![CDATA[Numbered line: click to create]]></hint_create_lines>
+		<hint_create_liquid><![CDATA[Liquid measure: click to create]]></hint_create_liquid>
+		<hint_scale_fraction><![CDATA[Click to change the representation's size]]></hint_scale_fraction>
+		<hint_cut><![CDATA[Click to use the fraction's content]]></hint_cut>
+		<hint_copy><![CDATA[Click to create a copy of the fraction]]></hint_copy>
+		<compare><![CDATA[COMPARE]]></compare>
+		<join><![CDATA[JOIN]]></join>
+		<taking_away><![CDATA[TAKING AWAY]]></taking_away>
+		<hint_compare><![CDATA[Compare this fraction's content with another one]]></hint_compare>
+		<hint_join><![CDATA[Join this fraction's content with another one]]></hint_join>
+		<hint_taking_away><![CDATA[Take a fraction's content away from this one]]></hint_taking_away>
+		<find_parent><![CDATA[FIND PARENT]]></find_parent>
+		<hint_find_parent><![CDATA[Find the parent of this fraction's content]]></hint_find_parent>
+		<hint_compare2><![CDATA[Choose the fraction's content to compare]]></hint_compare2>
+		<hint_join2><![CDATA[Choose the fraction's content to join]]></hint_join2>
+		<hint_taking_away2><![CDATA[Choose the fraction's content to take away]]></hint_taking_away2>
+		<action_not_valid><![CDATA[This action is not valid in Fractions Lab]]></action_not_valid>
+		<start><![CDATA[START]]></start>
+		<ok><![CDATA[OK]]></ok>
+		<hint_hide_side_menu><![CDATA[Click to hide representation toolbar]]></hint_hide_side_menu>
+		<hint_show_side_menu><![CDATA[Click to show representation toolbar]]></hint_show_side_menu>
+	</language>
+	<language id="de" type="latin">
+		<change_fraction><![CDATA[BRUCH ABÄNDERN]]></change_fraction>
+		<change_size><![CDATA[GRÖSSE ÄNDERN]]></change_size>
+		<change_colour><![CDATA[FARBE ÄNDERN]]></change_colour>
+		<copy><![CDATA[KOPIEREN]]></copy>
+		<cut><![CDATA[VERWENDEN]]></cut>
+		<show_hide_symbol><![CDATA[SYMBOL ZEIGEN/VERBERGEN]]></show_hide_symbol>
+		<partition><![CDATA[AUFTEILEN]]></partition>
+		<popup_pause_text><![CDATA[PAUSE]]></popup_pause_text>
+		<hint_shape_menu><![CDATA[Form: Klicke hier um eine Repräsentation auszuwählen]]></hint_shape_menu>
+		<hint_create_horizontal><![CDATA[Horizontales Rechteck: Klicke hier um eins zu erstellen]]></hint_create_horizontal>
+		<hint_create_vertical><![CDATA[Verticales Rechteck: Klicke hier um eins zu erstellen]]></hint_create_vertical>
+		<hint_trash><![CDATA[Mülltonne: Um ein Object löschen, ziehe es vom Arbeitsraum hier hin
+]]></hint_trash>
+		<hint_find_eq><![CDATA[Gleichwertige Brüche: Prüfe, ob zwei Repräsentationen gleichwertig sind]]></hint_find_eq>
+		<hint_drag_eq><![CDATA[Um auf Gleichwertigkeit zu prüfen, ziehe eine Repräsentation hier hin]]></hint_drag_eq>
+		<hint_onshape><![CDATA[Linksklick und ziehen, um ein Objekt zu bewegen. Rechtsklick, um das Menü zu öffnen.
+]]></hint_onshape>
+		<hint_change_fraction><![CDATA[Klicke hier um den Nenner oder Zähler zu ändern
+]]></hint_change_fraction>
+		<hint_showhide><![CDATA[Klicke hier um den Bruch zu zeigen/verbergen
+]]></hint_showhide>
+		<hint_partition><![CDATA[Klicke hier um den Bruch aufzuteilen
+]]></hint_partition>
+		<hint_denominator_first><![CDATA[Setze als erstes den Nenner]]></hint_denominator_first>
+		<hint_denominator><![CDATA[Setze den Nenner]]></hint_denominator>
+		<hint_numerator><![CDATA[Setze den Zähler]]></hint_numerator>
+		<hint_create_lines><![CDATA[Zahlenstrahl: Klicke hier um einen zu erstellen]]></hint_create_lines>
+		<hint_create_liquid><![CDATA[Messbecher: Klicke hier um einen zu erstellen]]></hint_create_liquid>
+		<hint_scale_fraction><![CDATA[Klicke hier um die Grösse abzuändern]]></hint_scale_fraction>
+		<hint_cut><![CDATA[Klicke hier um den Inhalt des Bruchs abzuändern]]></hint_cut>
+		<hint_copy><![CDATA[Klicke hier um eine Kopie des Bruchs zu erstellen]]></hint_copy>
+		<compare><![CDATA[VERGLEICHE]]></compare>
+		<join><![CDATA[VERBINDE]]></join>
+		<taking_away><![CDATA[WEGNEHMEN]]></taking_away>
+		<hint_compare><![CDATA[Vergleiche den Inhalt des Bruchs mit einem anderen]]></hint_compare>
+		<hint_join><![CDATA[Verbinde den Inhalt des Bruchs mit einem anderen]]></hint_join>
+		<hint_taking_away><![CDATA[Nehme den Inhalt des Bruchs weg]]></hint_taking_away>
+		<find_parent><![CDATA[FINDE URSPRUNGSBRUCH]]></find_parent>
+		<hint_find_parent><![CDATA[Finde den Ursprungsbruch dieses Bruchs]]></hint_find_parent>
+		<hint_compare2><![CDATA[Wähle den Inhalt eines Bruchs um es zu vergleichen]]></hint_compare2>
+		<hint_join2><![CDATA[Wähle den Inhalt eines Bruchs um es zu verbinden]]></hint_join2>
+		<hint_taking_away2><![CDATA[Wähle den Inhalt eines Bruchs um es zu wegzunehmen]]></hint_taking_away2>
+		<action_not_valid><![CDATA[Im Bruch Labor ist diese Aktion ist nicht möglich]]></action_not_valid>
+		<start><![CDATA[START]]></start>
+		<ok><![CDATA[OK]]></ok>
+		<hint_hide_side_menu><![CDATA[Klicke hier um die Symbolleiste der Repräsentationen zu verbergen]]></hint_hide_side_menu>
+		<hint_show_side_menu><![CDATA[Klicke hier um die Symbolleiste der Repräsentationen zu zeigen]]></hint_show_side_menu>
+	</language>
+</languages>
