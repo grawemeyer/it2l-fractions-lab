@@ -24,6 +24,7 @@ namespace taskDependentSupport.core
 
 		private void sendHighMessage(string message) 
 		{
+			//test
 			var json = "{\"method\": \"HighFeedback\", \"parameters\": {\"message\": \"" + message +"\"}}";
 			taskDependentSupport.TDSWrapper.eventManager.SendMessage("SendEvent", json);
 		}
