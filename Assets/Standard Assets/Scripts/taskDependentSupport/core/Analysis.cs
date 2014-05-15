@@ -7,7 +7,7 @@ namespace taskDependentSupport.core
 	public class Analysis {
 
 
-		public void analyseEvent(string type, string name, string id)
+		public void analyseEvent(string type, string name, string id, string value, int fractionsValue, string position)
 		{
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){

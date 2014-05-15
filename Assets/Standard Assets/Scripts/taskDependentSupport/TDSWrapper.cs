@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using taskDependentSupport.core;
 
 namespace taskDependentSupport
@@ -36,19 +37,26 @@ namespace taskDependentSupport
 
 			string eventType = "";
 			string eventName = "";
-			string evenType = "";
-			
+			string objectID = "";
+			string objectValue = "";
+			string objectPosition = "";
+			int objectValueInt = 0;
+
 			if (args.Length>0) eventType = (string) args [0];
 			if (args.Length>1) eventName = (string) args [1];
-			if (args.Length>2) eventType = (string) args [2];
-
-			Debug.Log (" hier in SendMessageToSupport");
-			Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
-			Debug.Log (" hier in SendMessageToSupport eventName: "+eventName);
-			Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
-			
+			if (args.Length>2) objectID = (string) args [2];
+			if (args.Length > 3){
+				try {
+					objectValue = (string)args [3];
+				} catch (Exception ex) {
+					Debug.Log (" hier in catch statement");
+					objectValueInt = (int)args[3];			
+				};
+			}
+			if (args.Length>4) objectPosition = (string) args [4];
+				
 			Analysis analyse = new Analysis();
-			analyse.analyseEvent(eventType, eventName, eventType);
+			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition);
 
 			Reasoning reasoning = new Reasoning();
 			reasoning.processEvent();
@@ -56,29 +64,6 @@ namespace taskDependentSupport
 			Feedback feedback = new Feedback();
 			feedback.generateFeedbackMessage();
 
-
-			//string result = "";
-			//string test = (string) args [args.Length - 1];
-
-			//for (int i = 0; i < args.Length; i++) {
-			//	result += " "+args[i]; 
-				//result =args[i]; 
-			//}
-			//if (test.Equals ("Equivalence")) {
-				//System.Console.WriteLine ("Equivalence!!! ");
-				//if (eventManager != null) {
-				//	string message = "testing";
-				//	string json = "{\"method\": \"HighFeedback\", \"parameters\": {\"message\": \"" + message +"\"}}";
-					//u.getUnity().SendMessage("ExternalInterface", "SendEvent", json);
-				//	eventManager.SendMessage("SendEvent", json);
-				//}
-				//else {
-				//	System.Console.WriteLine ("eventManager == null");
-				//}
-			//}
-			
-
-			//System.Console.WriteLine("hier in wrapper "+result);
 		}
 		#endregion
 		
