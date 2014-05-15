@@ -49,7 +49,6 @@ namespace taskDependentSupport
 				try {
 					objectValue = (string)args [3];
 				} catch (Exception ex) {
-					Debug.Log (" hier in catch statement");
 					objectValueInt = (int)args[3];			
 				};
 			}
