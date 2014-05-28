@@ -16,12 +16,21 @@ namespace taskDependentSupport.core
 				}
 			}
 			if (type.Equals ("FractionGenerated")){
-				StudentModel.setCurrentFractions(StudentModel.getCurrentFractions() +1);
+				Fraction thisFraction = new Fraction();
+				thisFraction.setName(name);
+				thisFraction.setID(id);
+				StudentModel.addCurrentFractions(thisFraction);
 				StudentModel.setCompared(false);
 				StudentModel.setComparedResult(false);
 			}
+			if (type.Equals("FractionChange")){
+				if (name.Equals("Numerator")) StudentModel.setNumeratorAtFraction(id, fractionsValue);
+				if (name.Equals("Denominator")) StudentModel.setDenominatorAtFraction(id, fractionsValue);
+				if (name.Equals("Partition")) StudentModel.setPartitionAtFraction(id, fractionsValue);
+			}
+
 			if (type.Equals ("FractionTrashed")){
-				StudentModel.setCurrentFractions(StudentModel.getCurrentFractions() -1);
+				StudentModel.removeFraction(id);
 				StudentModel.setCompared(false);
 				StudentModel.setComparedResult(false);
 			}

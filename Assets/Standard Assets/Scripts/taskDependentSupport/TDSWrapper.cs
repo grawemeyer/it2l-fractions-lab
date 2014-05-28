@@ -32,7 +32,6 @@ namespace taskDependentSupport
 		
 		public static void SendMessageToSupport(params object[] args)
 		{
-
 			if (intelligentSupportOff) return;
 
 			string eventType = "";

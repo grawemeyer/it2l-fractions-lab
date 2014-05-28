@@ -9,11 +9,11 @@ namespace taskDependentSupport.core
 	
 		public void processEvent()
 		{
-			if ((StudentModel.getCurrentFractions() == 2) && (! StudentModel.getCompared())){
+			if ((StudentModel.getCurrentFractions().Count == 2) && (! StudentModel.getCompared())){
 				FeedbackStrategyModel.setMessage(1, "low");
 			}
 			
-			else if (StudentModel.getComparedResult()){
+			if (StudentModel.getComparedResult()){
 				FeedbackStrategyModel.setMessage(2, "high");
 			}
 			
