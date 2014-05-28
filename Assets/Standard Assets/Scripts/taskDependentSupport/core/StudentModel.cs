@@ -11,6 +11,17 @@ namespace taskDependentSupport.core
 		private static List<Fraction> currentFractions = new List<Fraction>();
 		private static bool compared = false;
 		private static bool comparedResult = false;
+		private static long time = 0;
+
+		public static void setEventTime(long value)
+		{
+			time = value;
+		}
+
+		public static long getEventTime()
+		{
+			return time;
+		}
 
 		public static int getEquivalenceOpen()
 		{

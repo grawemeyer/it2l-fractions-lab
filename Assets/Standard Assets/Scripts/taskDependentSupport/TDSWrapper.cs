@@ -52,9 +52,12 @@ namespace taskDependentSupport
 				};
 			}
 			if (args.Length>4) objectPosition = (string) args [4];
+
+			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
+			ticks /= 10000000; //Convert windows ticks to seconds
 				
 			Analysis analyse = new Analysis();
-			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition);
+			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
 			Reasoning reasoning = new Reasoning();
 			reasoning.processEvent();

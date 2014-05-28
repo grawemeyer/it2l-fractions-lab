@@ -7,8 +7,10 @@ namespace taskDependentSupport.core
 	public class Analysis {
 
 		 
-		public void analyseEvent(string type, string name, string id, string value, int fractionsValue, string position)
+		public void analyseEvent(string type, string name, string id, string value, int fractionsValue, string position, long time)
 		{
+			StudentModel.setEventTime(time);
+
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){
 					if (StudentModel.getEquivalenceOpen() == 0) StudentModel.setEquivalenceOpen(1);
