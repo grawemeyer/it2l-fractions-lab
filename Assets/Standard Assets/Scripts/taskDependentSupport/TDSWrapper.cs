@@ -34,6 +34,7 @@ namespace taskDependentSupport
 		{
 			if (intelligentSupportOff) return;
 
+
 			string eventType = "";
 			string eventName = "";
 			string objectID = "";
@@ -44,6 +45,7 @@ namespace taskDependentSupport
 			if (args.Length>0) eventType = (string) args [0];
 			if (args.Length>1) eventName = (string) args [1];
 			if (args.Length>2) objectID = (string) args [2];
+
 			if (args.Length > 3){
 				try {
 					objectValue = (string)args [3];

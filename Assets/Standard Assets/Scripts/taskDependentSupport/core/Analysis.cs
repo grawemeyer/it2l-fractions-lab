@@ -28,7 +28,7 @@ namespace taskDependentSupport.core
 			if (type.Equals("FractionChange")){
 				if (name.Equals("Numerator")) StudentModel.setNumeratorAtFraction(id, fractionsValue);
 				if (name.Equals("Denominator")) StudentModel.setDenominatorAtFraction(id, fractionsValue);
-				if (name.Equals("Partition")) StudentModel.setPartitionAtFraction(id, fractionsValue);
+				if (name.Equals("Partitions")) StudentModel.setPartitionAtFraction(id, fractionsValue);
 			}
 
 			if (type.Equals ("FractionTrashed")){
