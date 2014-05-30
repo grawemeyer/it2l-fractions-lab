@@ -68,6 +68,22 @@ public class PartitionMCElement : WSElement, IWSElement
             lastPartitions = partitions;
         }
     }
+
+    void OnGUI()
+    {
+        GUI.skin = Workspace.Instance.skin;
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+
+        if (root.GetComponent<RootElement>().mode == InteractionMode.Freeze)
+            return;
+
+        if (GUI.Button(new Rect(screenPos.x - (10 * Screen.width / 800.0f), Screen.height - screenPos.y - (12 * Screen.height / 600.0f), 21.0f * Screen.width / 800.0f, 22.0f * Screen.height / 600.0f), ""))
+        {
+            Workspace.Instance.SendMessage("SetFocusOn", root);
+            root.SendMessage("SetMode", InteractionMode.Partitioning);
+            root.SendMessage("PlaceButtons");
+        }
+    }
     #endregion
 
     #region Protected Methods

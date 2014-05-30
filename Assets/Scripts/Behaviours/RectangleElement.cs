@@ -28,18 +28,21 @@ public class RectangleElement : WSElement, IWSElement
     public int lastPartitions = 1;
     public float lastElementScale = 1.0f;
     protected float strokeWidth = 0.1f;
-    
-    protected GameObject root = null;
     #endregion
 
     #region Unity Callbacks
     void Awake()
     {
-        root = transform.parent.gameObject;
+        //root = transform.parent.gameObject;
     }
     #endregion
 
     #region Public Methods
+    public override void SetRoot(GameObject r)
+    {
+        root = transform.parent.gameObject;
+    }
+
     public override SBSBounds GetBounds()
     {
         if (state == ElementsState.Fraction || state == ElementsState.Result)
@@ -71,7 +74,7 @@ public class RectangleElement : WSElement, IWSElement
         {
             UpdatePartitions(partitions);
             UpdateDenominatorByPartition(partitions);
-            UpdateNumeratorByPartition(partitions);
+            UpdateNumeratorByPartition(partitions, lastPartitions);
             lastPartitions = partitions;
             lastNumerator = partNumerator;
         }
@@ -122,29 +125,19 @@ public class RectangleElement : WSElement, IWSElement
             }
             else
             {
-                List<int> supp = new List<int>();
-                List<int> tmp = new List<int>(selectedSlices);
-                tmp.Sort();
-                for (int i = 0; i < tmp.Count; i++)
-                    if (tmp[i] < denominator)
-                        supp.Add(tmp[i]);
-
-                for (int i = 0; i < supp.Count; i++)
-                {
-                    for (int j = 0; j < partitions; j++)
+                for (int i = 0; i < partNumerator; i += partitions)
+                    if (slices[i])
                     {
-                        if (!tmp.Contains(supp[i] + j * denominator))
-                        {
-                            return false;
-                        }
+                        for (int j = 0; j < partitions; j++)
+                            if (!slices[i + j])
+                                return false;
                     }
-                }
             }
         }
         return true;
     }
 
-    public override void IncreaseNumerator()
+    /*public override void IncreaseNumerator()
     {
         if (partitions == 1)
         {
@@ -153,6 +146,7 @@ public class RectangleElement : WSElement, IWSElement
                 this.numerator = this.denominator;
 
             this.partNumerator = this.numerator * partitions;
+
         }
         else
         {
@@ -162,6 +156,7 @@ public class RectangleElement : WSElement, IWSElement
 
             this.numerator = this.partNumerator / this.partitions;
         }
+
         root.BroadcastMessage("SetNumerator", this.numerator);
         root.BroadcastMessage("SetPartNumerator", this.partNumerator);
 
@@ -190,9 +185,9 @@ public class RectangleElement : WSElement, IWSElement
         root.BroadcastMessage("SetPartNumerator", this.partNumerator);
 
         ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
-    }
+    }*/
 
-    public override void IncreasePartitions()
+    /*public override void IncreasePartitions()
     {
         this.partitions++;
 
@@ -216,9 +211,9 @@ public class RectangleElement : WSElement, IWSElement
         root.BroadcastMessage("SetPartitions", this.partitions);
 
         ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Partitions", root.name, partitions);
-    }
+    }*/
 
-    public override void IncreaseDenominator()
+    /*public override void IncreaseDenominator()
     {
         this.denominator++;
         this.partDenominator = denominator * partitions;
@@ -253,10 +248,16 @@ public class RectangleElement : WSElement, IWSElement
 
             ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Denominator", root.name, partDenominator);
         }
-    }
+    }*/
     #endregion
 
     #region Messages
+    void SetContentColor(Color c)
+    {
+        color = c;
+        Draw(zIndex);
+    }
+
     void Cut()
     {
         for (int i = 0; i < transform.childCount; i++)
@@ -289,6 +290,7 @@ public class RectangleElement : WSElement, IWSElement
     {
         lastNumerator = numerator;
         lastDenominator = denominator;
+        lastPartitions = partitions;
 
         GameObject bg = new GameObject("background");
         bg.transform.parent = transform;
@@ -308,7 +310,7 @@ public class RectangleElement : WSElement, IWSElement
             UpdateDenominatorByPartition(partitions);
             UpdateNumerator(numerator);
             UpdatePartitions(partitions);
-            UpdateNumeratorByPartition(partitions);
+            UpdateNumeratorByPartition(partitions, 0);
 
             UpdateSliceStructure();
             UpdateSlices();
@@ -321,13 +323,19 @@ public class RectangleElement : WSElement, IWSElement
         {
             slices[index] = false;
             selectedSlices.Remove(index);
-            root.BroadcastMessage("DecreaseNumerator");
+            //Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().DecreaseNumerator();
+            partNumerator--;
+            if (partNumerator < 0)
+                partNumerator = 0;
+            numerator = partNumerator / partitions;
         }
         else
         {
             slices[index] = true;
             selectedSlices.Add(index);
-            root.BroadcastMessage("IncreaseNumerator");
+            //Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().IncreaseNumerator();
+            partNumerator++;
+            numerator = partNumerator / partitions;            
         }
 
         if (partitions == 1)
@@ -335,6 +343,7 @@ public class RectangleElement : WSElement, IWSElement
         else
             lastNumerator = partNumerator;
         UpdateSlices();
+        Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().UpdateByChildren();
     }
 
     void UpdateNumerator(int value)
@@ -351,9 +360,12 @@ public class RectangleElement : WSElement, IWSElement
             for (int i = 0; i < Mathf.Abs(diff); i++)
             {
                 int lastIdx = selectedSlices.Count - 1;
-                int removeIdx = selectedSlices[lastIdx];
-                slices[removeIdx] = false;
-                selectedSlices.RemoveAt(lastIdx);
+                if (lastIdx >= 0.0f)
+                {
+                    int removeIdx = selectedSlices[lastIdx];
+                    slices[removeIdx] = false;
+                    selectedSlices.RemoveAt(lastIdx);
+                }
             }
         }
         else if (diff > 0)
@@ -375,13 +387,49 @@ public class RectangleElement : WSElement, IWSElement
         UpdateSlices();
     }
 
-    void UpdateNumeratorByPartition(int partition)
+    void UpdateNumeratorByPartition(int partition, int lastPartition)
     {
+        selectedSlices.RemoveAll(item => item % lastPartitions != 0);
+
+        if (lastPartition > 0)
+        {
+            for (int i = 0; i < selectedSlices.Count; i++)
+                selectedSlices[i] /= lastPartition;
+        }
+
+        for (int i = 0; i < selectedSlices.Count; i++)
+            selectedSlices[i] *= partition;
+
+        List<int> tmp = new List<int>(selectedSlices);
+
+        for (int i = 0; i < tmp.Count; i++)
+            for (int j = 0; j < Mathf.Min(partNumerator - 1, partition - 1); j++)
+                selectedSlices.Add(tmp[i] + (j + 1));
+
+        for (int i = 0; i < slices.Count; i++)
+            slices[i] = selectedSlices.Contains(i);
+
+        //hack
+        if (selectedSlices.Count > 0 && selectedSlices.Count < partNumerator)
+        {
+            Debug.Log(root.name + ", " + selectedSlices.Count + " < " + partNumerator);
+            for (int i = 0; i < slices.Count; i++)
+                if (!slices[i] && selectedSlices.Count < partNumerator)
+                {
+                    slices[i] = true;
+                    selectedSlices.Add(i);
+                }
+        }
+
+        UpdateSlices();
+
+        /*
         List<int> tmp = new List<int>(selectedSlices);
         selectedSlices.Clear();
         for (int j = 0; j < partition; j++)
         {
-            for (int i = 0; i < numerator; i++)
+            int n = Mathf.Min(numerator, denominator);
+            for (int i = 0; i < n; i++)
             {
                 slices[tmp[i] + j * denominator] = true;
                 selectedSlices.Add(tmp[i] + j * denominator);
@@ -389,6 +437,7 @@ public class RectangleElement : WSElement, IWSElement
         }
 
         UpdateSlices();
+        */
     }
 
     void UpdateDenominatorByPartition(int partition)
@@ -416,10 +465,22 @@ public class RectangleElement : WSElement, IWSElement
         if (value > 0)
         {
             int prevDen = slices.Count / partitions;
-            int diff = value - prevDen;
+            int diff = (value - prevDen);
             if (diff < 0)
             {
-                for (int j = partitions - 1; j >= 0; j--)
+                int startSlice = partitions * (denominator - 1);
+                for (int j = 0; j < partitions; j++)
+                {
+                    int lastPos = startSlice + j;
+                    if (slices[lastPos])
+                    {
+                        int freeIdx = slices.FindIndex(0, p => p.Equals(false));
+                        if (freeIdx >= 0)
+                            slices[freeIdx] = true;
+                    }
+                    slices.RemoveAt(lastPos);
+                }
+                /*for (int j = partitions - 1; j >= 0; j--)
                 {
                     for (int i = 0; i < Mathf.Abs(diff); i++)
                     {
@@ -432,7 +493,7 @@ public class RectangleElement : WSElement, IWSElement
                         }
                         slices.RemoveAt(lastPos);
                     }
-                }
+                }*/
             }
             else
             {
@@ -440,7 +501,8 @@ public class RectangleElement : WSElement, IWSElement
                 {
                     for (int i = 0; i < Mathf.Abs(diff); i++)
                     {
-                        slices.Insert(denominator * (j + 1) - 1, false);
+                        slices.Add(false);
+                        //slices.Insert(denominator * (j + 1) - 1, false);
                     }
                 }
             }
@@ -455,9 +517,17 @@ public class RectangleElement : WSElement, IWSElement
                     selectedSlices.Add(k);
                 }
             }
+            /*
+            //hack
+            if (this.numerator == this.denominator)
+            {
+                this.partNumerator = this.numerator * partitions;
+                n = this.partNumerator;
+            }
 
             root.BroadcastMessage("SetPartNumerator", n);
             //root.BroadcastMessage("SetPartDenominator", partDenominator);
+            */
         }
         else if (value == 0)
         {
@@ -536,11 +606,12 @@ public class RectangleElement : WSElement, IWSElement
             baseSizeY = sliceHeight / elementScale;
         }
 
-        for (int p = 0; p < partitions; p++)
+        for (int p = 0; p < partitions; p++) 
         {
-            for (int i = 0; i < sliceCount; i++)
+            for (int i = 0; i < sliceCount; i++) 
             {
-                int sliceIndex = (p * sliceCount + i);
+                //int sliceIndex = (p * sliceCount + i);
+                int sliceIndex = (i * partitions + p);
                 if (slices[sliceIndex] || state != ElementsState.Cut)
                 {
                     GameObject slice = new GameObject("slice" + sliceIndex);
@@ -604,6 +675,7 @@ public class RectangleElement : WSElement, IWSElement
 
             GameObject lineRoot = new GameObject(rootName);
             lineRoot.transform.parent = transform;
+            lineRoot.transform.position = transform.TransformPoint(Vector3.zero);
 
             if (type == ElementsType.VRect)
             {
@@ -614,11 +686,12 @@ public class RectangleElement : WSElement, IWSElement
 
                 /* top line */
                 Vector3[] topList = new Vector3[2];
-                topList[0] = transform.position - new Vector3(baseX - strokeWidth * elementScale * 0.5f, -baseY, 0.0f);
-                topList[1] = transform.position - new Vector3(-baseX + strokeWidth * elementScale * 0.5f, -baseY, 0.0f);
+                topList[0] = new Vector3(baseX - strokeWidth * elementScale * 0.5f, -baseY, 0.0f);
+                topList[1] = new Vector3(-baseX + strokeWidth * elementScale * 0.5f, -baseY, 0.0f);
 
                 GameObject lineTop = new GameObject("line_t");
                 lineTop.transform.parent = lineRoot.transform;
+                lineTop.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                 lineTop.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                 MeshLineElement compTop = lineTop.AddComponent<MeshLineElement>();
                 compTop.lineWidth = strokeWidth * elementScale;
@@ -629,11 +702,12 @@ public class RectangleElement : WSElement, IWSElement
 
                 /* bottom line */
                 Vector3[] bottomList = new Vector3[2];
-                bottomList[0] = transform.position - new Vector3(baseX - strokeWidth * elementScale * 0.5f, baseY, 0.0f);
-                bottomList[1] = transform.position - new Vector3(-baseX + strokeWidth * elementScale * 0.5f, baseY, 0.0f);
+                bottomList[0] = new Vector3(baseX - strokeWidth * elementScale * 0.5f, baseY, 0.0f);
+                bottomList[1] = new Vector3(-baseX + strokeWidth * elementScale * 0.5f, baseY, 0.0f);
 
                 GameObject lineBottom = new GameObject("line_b");
                 lineBottom.transform.parent = lineRoot.transform;
+                lineBottom.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                 lineBottom.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                 MeshLineElement compBottom = lineBottom.AddComponent<MeshLineElement>();
                 compBottom.lineWidth = strokeWidth * elementScale;
@@ -645,11 +719,12 @@ public class RectangleElement : WSElement, IWSElement
                 for (int i = 0; i < denominator + 1; i++)
                 {
                     Vector3[] pointList = new Vector3[2];
-                    pointList[0] = transform.position - new Vector3(baseX + stepX * i, -baseY, 0.0f);
-                    pointList[1] = transform.position - new Vector3(baseX + stepX * i, baseY, 0.0f);
+                    pointList[0] = new Vector3(baseX + stepX * i, -baseY, 0.0f);
+                    pointList[1] = new Vector3(baseX + stepX * i, baseY, 0.0f);
 
                     GameObject line = new GameObject("line_" + i);
                     line.transform.parent = lineRoot.transform;
+                    line.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                     line.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                     MeshLineElement comp = line.AddComponent<MeshLineElement>();
                     comp.lineWidth = strokeWidth * elementScale;
@@ -662,11 +737,12 @@ public class RectangleElement : WSElement, IWSElement
                 for (int i = 0; i < partitions - 1; i++)
                 {
                     Vector3[] pointList = new Vector3[2];
-                    pointList[0] = transform.position - new Vector3(-baseX, baseY + stepY * (i + 1), 0.0f);
-                    pointList[1] = transform.position - new Vector3(baseX, baseY + stepY * (i + 1), 0.0f);
+                    pointList[0] = new Vector3(-baseX, baseY + stepY * (i + 1), 0.0f);
+                    pointList[1] = new Vector3(baseX, baseY + stepY * (i + 1), 0.0f);
 
                     GameObject line = new GameObject("pline_" + i);
                     line.transform.parent = lineRoot.transform;
+                    line.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                     line.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                     MeshLineElement comp = line.AddComponent<MeshLineElement>();
                     comp.lineWidth = strokeWidth * 0.3f * elementScale;
@@ -686,11 +762,12 @@ public class RectangleElement : WSElement, IWSElement
 
                 /* top line */
                 Vector3[] topList = new Vector3[2];
-                topList[0] = transform.position - new Vector3(-baseX, -baseY + strokeWidth * elementScale * 0.5f, 0.0f);
-                topList[1] = transform.position - new Vector3(-baseX, baseY - strokeWidth * elementScale * 0.5f, 0.0f);
+                topList[0] = new Vector3(-baseX, -baseY + strokeWidth * elementScale * 0.5f, 0.0f);
+                topList[1] = new Vector3(-baseX, baseY - strokeWidth * elementScale * 0.5f, 0.0f);
 
                 GameObject lineTop = new GameObject("line_t");
                 lineTop.transform.parent = lineRoot.transform;
+                lineTop.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                 lineTop.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                 MeshLineElement compTop = lineTop.AddComponent<MeshLineElement>();
                 compTop.lineWidth = strokeWidth * elementScale;
@@ -701,11 +778,12 @@ public class RectangleElement : WSElement, IWSElement
 
                 /* bottom line */
                 Vector3[] bottomList = new Vector3[2];
-                bottomList[0] = transform.position - new Vector3(baseX, -baseY + strokeWidth * elementScale * 0.5f, 0.0f);
-                bottomList[1] = transform.position - new Vector3(baseX, baseY - strokeWidth * elementScale * 0.5f, 0.0f);
+                bottomList[0] = new Vector3(baseX, -baseY + strokeWidth * elementScale * 0.5f, 0.0f);
+                bottomList[1] = new Vector3(baseX, baseY - strokeWidth * elementScale * 0.5f, 0.0f);
 
                 GameObject lineBottom = new GameObject("line_b");
                 lineBottom.transform.parent = lineRoot.transform;
+                lineBottom.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                 lineBottom.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                 MeshLineElement compBottom = lineBottom.AddComponent<MeshLineElement>();
                 compBottom.lineWidth = strokeWidth * elementScale;
@@ -717,11 +795,12 @@ public class RectangleElement : WSElement, IWSElement
                 for (int i = 0; i < partitions - 1; i++)
                 {
                     Vector3[] pointList = new Vector3[2];
-                    pointList[0] = transform.position - new Vector3(baseX + stepX * (i + 1), -baseY, 0.0f);
-                    pointList[1] = transform.position - new Vector3(baseX + stepX * (i + 1), baseY, 0.0f);
+                    pointList[0] = new Vector3(baseX + stepX * (i + 1), -baseY, 0.0f);
+                    pointList[1] = new Vector3(baseX + stepX * (i + 1), baseY, 0.0f);
 
                     GameObject line = new GameObject("pline_" + i);
                     line.transform.parent = lineRoot.transform;
+                    line.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                     line.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                     MeshLineElement comp = line.AddComponent<MeshLineElement>();
                     comp.lineWidth = strokeWidth * 0.3f * elementScale;
@@ -734,11 +813,12 @@ public class RectangleElement : WSElement, IWSElement
                 for (int i = 0; i < denominator + 1; i++)
                 {
                     Vector3[] pointList = new Vector3[2];
-                    pointList[0] = transform.position - new Vector3(-baseX, baseY + stepY * i, 0.0f);
-                    pointList[1] = transform.position - new Vector3(baseX, baseY + stepY * i, 0.0f);
+                    pointList[0] = new Vector3(-baseX, baseY + stepY * i, 0.0f);
+                    pointList[1] = new Vector3(baseX, baseY + stepY * i, 0.0f);
 
                     GameObject line = new GameObject("line_" + i);
                     line.transform.parent = lineRoot.transform;
+                    line.transform.position = lineRoot.transform.TransformPoint(Vector3.zero);
                     line.transform.position += new Vector3(0.0f, 0.0f, -0.4f);
                     MeshLineElement comp = line.AddComponent<MeshLineElement>();
                     comp.lineWidth = strokeWidth * elementScale;

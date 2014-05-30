@@ -20,6 +20,17 @@ namespace fractionslab.utils
             }
         }
 
+        public void SendBack(T item)
+        {
+            int i = this.IndexOf(item);
+            if (i >= 0)
+            {
+                T tmp = this[i];
+                this.RemoveAt(i);
+                Add(tmp);
+            }
+        }
+
         public override string ToString()
         {
             string tmp = string.Empty;

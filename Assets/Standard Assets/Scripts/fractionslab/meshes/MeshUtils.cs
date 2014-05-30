@@ -89,7 +89,7 @@ namespace fractionslab.meshes
             rectMesh.normals = normals;
             rectMesh.colors = colors;
 
-            int[] triangles = { 0, 1, 3, 1, 2, 3};
+            int[] triangles = { 0, 1, 3, 1, 2, 3 };
             rectMesh.triangles = triangles;
         }
 

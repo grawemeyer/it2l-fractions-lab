@@ -25,7 +25,7 @@ namespace fractionslab.behaviours
         #region Public Methods
         public override SBSBounds GetBounds()
         {
-            bounds.Reset();
+            bounds = new SBSBounds(transform.position, new SBSVector3(0.0f, 0.0f, 0.0f));
             return bounds;
         }
 

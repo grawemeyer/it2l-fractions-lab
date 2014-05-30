@@ -71,7 +71,6 @@ public class InteractiveMovieClipElement : WSElement, IWSElement
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-					Debug.Log("SendMouseDown");
                     sendMouseDown = true;
                     root.SendMessage("OnPressScaleModifier", gameObject.name);
                 }
@@ -107,6 +106,9 @@ public class InteractiveMovieClipElement : WSElement, IWSElement
     protected void OnClick()
     {
         if (!isEnabled)
+            return;
+
+        if (!root.GetComponent<RootElement>().inputEnabled)
             return;
 
         switch (mcb.movieClip.name)

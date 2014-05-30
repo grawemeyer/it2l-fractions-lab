@@ -6,6 +6,7 @@ namespace fractionslab
 {
     public class WSElement : MonoBehaviour, IWSElement
     {
+        public GameObject root = null;
         public ElementsState state;
         public int numerator = 0;
         public int denominator = 0;
@@ -20,6 +21,7 @@ namespace fractionslab
         public Color color;
         public int fractionBaseOffset = 0;
         public bool inputEnabled = true;
+        public bool isSubFraction = false;
                 
         protected int zIndex;
         protected SBSBounds bounds;
@@ -83,6 +85,10 @@ namespace fractionslab
             this.zIndex = zIndex;
         }
 
+        public virtual void SetRoot(GameObject r)
+        {
+        }
+
         public virtual void SetFractionBaseOffset(int fractionBaseOffset)
         {
             this.fractionBaseOffset = fractionBaseOffset;
@@ -137,11 +143,16 @@ namespace fractionslab
             this.partNumerator = num;
         }
 
+        public virtual void SetPartNumerator(string num)
+        {
+            this.partNumerator = int.Parse(num);
+        }
+
         public virtual void SetPartDenominator(int den)
         {
             this.partDenominator = den;
-            if (this.partNumerator > this.partDenominator && state != ElementsState.Result)
-                this.partNumerator = this.partDenominator;
+            //if (this.partNumerator > this.partDenominator && state != ElementsState.Result)
+            //    this.partNumerator = this.partDenominator;
         }
 
         public virtual void SetNumerator(int numerator)
@@ -149,11 +160,16 @@ namespace fractionslab
             this.numerator = numerator;
         }
 
+        public virtual void SetNumerator(string numerator)
+        {
+            this.numerator = int.Parse(numerator);
+        }
+
         public virtual void SetDenominator(int denominator)
         {
             this.denominator = denominator;
-            if (this.numerator > this.denominator && state != ElementsState.Result)
-                this.numerator = this.denominator;
+            //if (this.numerator > this.denominator && state != ElementsState.Result)
+            //    this.numerator = this.denominator;
         }
 
         public virtual void SetPartitions(int partitions)
@@ -194,6 +210,11 @@ namespace fractionslab
         {
             minScale = min;
             maxScale = max;
+        }
+
+        public virtual void SetIsSubFraction(bool flag)
+        {
+            isSubFraction = flag;
         }
     }
 }

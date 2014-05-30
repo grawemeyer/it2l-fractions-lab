@@ -12,6 +12,7 @@ using pumpkin.events;
 public class SingleLabelMCElement : WSElement, IWSElement
 {
     #region Public Fields
+    public GameObject mcObj = null;
     #endregion
 
     #region Protected Fields
@@ -28,6 +29,35 @@ public class SingleLabelMCElement : WSElement, IWSElement
     void Awake()
     {
         root = transform.parent.gameObject;
+
+        if (mcObj == null)
+        {
+            mcObj = new GameObject("mc");
+            mcObj.transform.parent = transform;
+            mcb = mcObj.AddComponent<MovieClipBehaviour>();
+            mcb.swf = "Flash/i_talk_2_learn.swf";
+            mcb.symbolName = "mcNumberClass";
+            mcb.movieClip = new MovieClip(mcb.swf + ":" + mcb.symbolName);
+        }
+        else
+        {
+            mcb = mcObj.GetComponent<MovieClipBehaviour>();
+        }
+
+        float offsX = 0.5f * scale,
+              offsY = 0.5f * scale;
+        if (Application.platform == RuntimePlatform.OSXWebPlayer)
+            offsX = offsY = 0.0f;
+#if UNITY_IPHONE
+		offsX = offsY = 0.0f;
+#endif
+
+        mcObj.transform.position = transform.TransformPoint(new Vector3(offsX, offsY, 0.0f));
+
+        /*mcb = mcObj.AddComponent<MovieClipBehaviour>();
+        mcb.swf = "Flash/i_talk_2_learn.swf";
+        mcb.symbolName = "mcNumberClass";
+        mcb.movieClip = new MovieClip(mcb.swf + ":" + mcb.symbolName);*/
     }
     #endregion
 
@@ -37,16 +67,11 @@ public class SingleLabelMCElement : WSElement, IWSElement
     #region Public Methods
     public override void Initialize()
     {
-        mcb = gameObject.AddComponent<MovieClipBehaviour>();
-        mcb.swf = "Flash/i_talk_2_learn.swf";
-        mcb.symbolName = "mcNumberClass";
-        mcb.movieClip = new MovieClip(mcb.swf + ":" + mcb.symbolName);
-
-        renderer.material = new Material(Shader.Find("Transparent/DiffuseDoubeSided"));
-        renderer.material.mainTexture = Resources.Load("Flash/i_talk_2_learn.swf/i_talk_2_learn.swf_Tex0") as Texture2D;
+        mcObj.renderer.material = new Material(Shader.Find("Transparent/DiffuseDoubeSided"));
+        mcObj.renderer.material.mainTexture = Resources.Load("Flash/i_talk_2_learn.swf/i_talk_2_learn.swf_Tex0") as Texture2D;
         mcb.Awake();
 
-        transform.localScale = new Vector3(scale, scale, scale);
+        mcObj.transform.localScale = new Vector3(scale, scale, scale);
 
         base.Initialize();
     }
@@ -59,8 +84,8 @@ public class SingleLabelMCElement : WSElement, IWSElement
 
         if (null != mcb)
         {
-            mcb.movieClip.getChildByName<TextField>("tfValue").colorTransform = meshColor;
-            mcb.movieClip.getChildByName<TextField>("tfValue").text = value;
+            mcb.movieClip.getChildByName<MovieClip>("mcLabel").getChildByName<TextField>("tfValue").colorTransform = meshColor;
+            mcb.movieClip.getChildByName<MovieClip>("mcLabel").getChildByName<TextField>("tfValue").text = value;
         }
     }
 

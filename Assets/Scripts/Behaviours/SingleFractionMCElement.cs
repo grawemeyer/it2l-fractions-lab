@@ -11,6 +11,8 @@ using pumpkin.events;
 public class SingleFractionMCElement : WSElement, IWSElement
 {
     #region Public Fields
+    public bool showNumbers = false;
+    public GameObject mcObj = null;
     #endregion
 
     #region Protected Fields
@@ -23,9 +25,6 @@ public class SingleFractionMCElement : WSElement, IWSElement
     protected float height = 4.0f;
     protected MovieClipBehaviour mcb = null;
     protected GameObject root = null;
-    protected bool showNumbers = false;
-
-    protected GameObject mcObj = null;
     #endregion
 
     #region Unity Callbacks
@@ -33,24 +32,39 @@ public class SingleFractionMCElement : WSElement, IWSElement
     {
         root = transform.parent.gameObject;
 
-        mcObj = new GameObject("mc");
+        //if(transform.parent.GetComponentInChildren<MovieClipBehaviour>() != null)
+        //    DestroyImmediate(transform.parent.GetComponentInChildren<MovieClipBehaviour>().gameObject);
+
+        if (mcObj == null)
+        {
+            mcObj = new GameObject("mc");
+            mcb = mcObj.AddComponent<MovieClipBehaviour>();
+            mcb.swf = "Flash/i_talk_2_learn.swf";
+            mcb.symbolName = "mcSingleFractionClass";
+            mcb.movieClip = new MovieClip(mcb.swf + ":" + mcb.symbolName);
+        }
+        else
+        {
+            mcb = mcObj.GetComponent<MovieClipBehaviour>();
+        }
+        
         mcObj.transform.parent = transform;
 
         float offsX = 0.5f * scale,
-              offsY = 0.5f * scale;
+                offsY = 0.5f * scale;
         if (Application.platform == RuntimePlatform.OSXWebPlayer)
-			offsX = offsY = 0.0f;
+            offsX = offsY = 0.0f;
 #if UNITY_IPHONE
-		offsX = offsY = 0.0f;
+	offsX = offsY = 0.0f;
 #endif
 
         mcObj.transform.position = transform.TransformPoint(new Vector3(offsX, offsY, 0.0f));
 
-        mcb = mcObj.AddComponent<MovieClipBehaviour>();
+        /*mcb = mcObj.AddComponent<MovieClipBehaviour>();
         mcb.swf = "Flash/i_talk_2_learn.swf";
         mcb.symbolName = "mcSingleFractionClass";
-        mcb.movieClip = new MovieClip(mcb.swf + ":" + mcb.symbolName);
-
+        mcb.movieClip = new MovieClip(mcb.swf + ":" + mcb.symbolName);*/
+        
         BoxCollider coll = gameObject.AddComponent<BoxCollider>();
         coll.size = new Vector3(0.6f * scale, 1.15f * scale, 1.0f);
     }
@@ -69,32 +83,23 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
         mcb.movieClip.getChildByName<TextField>("tfValue1").visible = showNumbers;
         mcb.movieClip.getChildByName<TextField>("tfValue2").visible = showNumbers;
-    }
 
+        mcb.movieClip.getChildByName<TextField>("tfValue1").text = numerator.ToString();
+        
+        UpdateNumerator();
+        UpdateDenominator();
+    }
+    
     void Update()
     {
         if (numerator != lastNumerator || partNumerator != lastPartNumerator)
         {
-            if (partitions == 1)
-            {
-                mcb.movieClip.getChildByName<TextField>("tfValue1").text = numerator.ToString();
-                lastNumerator = numerator;
-            }
-
-            mcb.movieClip.getChildByName<TextField>("tfValue1").text = partNumerator.ToString();
-            lastPartNumerator = partNumerator;
+            UpdateNumerator();
         }
 
         if (denominator != lastDenominator || partDenominator != lastPartDenominator)
         {
-            if (partitions == 1)
-            {
-                mcb.movieClip.getChildByName<TextField>("tfValue2").text = denominator.ToString();
-                lastDenominator = denominator;
-            }
-
-            mcb.movieClip.getChildByName<TextField>("tfValue2").text = partDenominator.ToString();
-            lastPartDenominator = partDenominator;
+            UpdateDenominator();
         }
     }
 
@@ -103,20 +108,56 @@ public class SingleFractionMCElement : WSElement, IWSElement
         GUI.skin = Workspace.Instance.skin;
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
 
+        if (root.GetComponent<RootElement>().mode == InteractionMode.Freeze)
+            return;
+
+        if (!root.GetComponent<RootElement>().inputEnabled)
+            return;
+
 		if (GUI.Button(new Rect(screenPos.x - (10 * Screen.width / 800.0f), Screen.height - screenPos.y - (24 * Screen.height / 600.0f), 21.0f * Screen.width / 800.0f, 22.0f * Screen.height / 600.0f), ""))
         {
             if (denominator > 0)
+            {
+                Workspace.Instance.SendMessage("SetFocusOn", root);
+                root.SendMessage("SetMode", InteractionMode.Changing);
                 root.SendMessage("OnSelectFractionPart", FractionPart.Numerator);
+            }
         }
 
 		if (GUI.Button(new Rect(screenPos.x - (10 * Screen.width / 800.0f), Screen.height - screenPos.y + (4 * Screen.height / 600.0f), 21.0f * Screen.width / 800.0f, 22.0f * Screen.height / 600.0f), ""))
         {
+            Workspace.Instance.SendMessage("SetFocusOn", root);
+            root.SendMessage("SetMode", InteractionMode.Changing);
             root.SendMessage("OnSelectFractionPart", FractionPart.Denominator);
         }
     }
     #endregion
 
     #region Protected Methods
+    protected void UpdateNumerator()
+    {
+        if (partitions == 1)
+        {
+            mcb.movieClip.getChildByName<TextField>("tfValue1").text = numerator.ToString();
+            lastNumerator = numerator;
+        }
+
+        mcb.movieClip.getChildByName<TextField>("tfValue1").text = partNumerator.ToString();
+        lastPartNumerator = partNumerator;
+    }
+
+    protected void UpdateDenominator()
+    {
+        if (partitions == 1)
+        {
+            mcb.movieClip.getChildByName<TextField>("tfValue2").text = denominator.ToString();
+            lastDenominator = denominator;
+        }
+
+        mcb.movieClip.getChildByName<TextField>("tfValue2").text = partDenominator.ToString();
+        lastPartDenominator = partDenominator;
+    }
+
     protected void OnSelectNumerator()
     {
         root.SendMessage("OnSelectFractionPart", FractionPart.Numerator);
@@ -136,7 +177,7 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
     public override void Draw(int zIndex)
     {
-        Update();
+        //Update();
     }
 
     public override SBSBounds GetBounds()

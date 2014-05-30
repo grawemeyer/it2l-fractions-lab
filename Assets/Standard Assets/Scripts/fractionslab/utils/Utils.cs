@@ -34,7 +34,9 @@ namespace fractionslab.utils
         VRect = 0,
         HRect,
         Line,
-        Liquid
+        Liquid,
+        Arrow,
+        Highlight
     }
 
     public enum ElementsState

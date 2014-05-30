@@ -11,9 +11,10 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.104";
+    public const string VER = "0.152";
 
     #region Protected Fields
+    protected string SWFUtilsPath = "Flash/Utils.swf:";
     protected string SWFPath = "Flash/i_talk_2_learn.swf:";
     protected string SWFPathBottom = "Flash/i_talk_2_learn_bottom.swf:";
     protected Stage stage = null;
@@ -21,6 +22,8 @@ public class InterfaceBehaviour : MonoBehaviour
     protected bool inputEnabled = true;
     protected LocalizationUtils localizationUtils;
 
+    protected Dictionary<string, MovieClip> highlightMovieclips = new Dictionary<string, MovieClip>();
+    
     protected List<SBSVector3> startingPoints = new List<SBSVector3>();
 
     protected MovieClip mcStartPage;
@@ -36,7 +39,8 @@ public class InterfaceBehaviour : MonoBehaviour
     protected MovieClip btFeedbackClose;
 
     //HUD Menus
-    protected string[] menuTexts = { "{change_fraction}", "{change_size}", "{change_colour}", "{copy}", "{cut}", "{show_hide_symbol}", "{partition}", "{join}", "{taking_away}", "{compare}", "{find_parent}" }; 
+    //protected string[] menuTexts = { "{change_fraction}", "{change_size}", "{change_colour}", "{copy}", "{cut}", "{show_hide_symbol}", "{partition}", "{join}", "{taking_away}", "{compare}", "{find_parent}" };
+    protected string[] menuTexts = { "{change_colour}", "{copy}", "{partition}", "{join}", "{taking_away}" }; 
     protected MovieClip mcHints;
     protected MovieClip mcTrash;
     protected MovieClip mcMenuAction;
@@ -48,7 +52,9 @@ public class InterfaceBehaviour : MonoBehaviour
     protected MovieClip mcTopBG;
     protected MovieClip mcOperation;
     protected MovieClip mcFeedback;
+    protected MovieClip mcResultOperator;
     protected MovieClip mcActionsPopupButton;
+    protected MovieClip mcColorPalette;
     protected List<ToolsBarData> toolsBarData;
 
     protected List<MenuToolsData> menuToolsData;
@@ -71,6 +77,11 @@ public class InterfaceBehaviour : MonoBehaviour
 
     protected bool isOperationShown = false;
 	protected bool isSmall = false;
+
+    protected float toolsMenuButtonsBgWidth = 0;
+    protected float actionsMenuButtonsBgWidth = 0;
+
+    protected bool isOnTrash = false;
     #endregion
 
     public static Color Green1 = new Color(0.2784f, 0.4510f, 0.1922f);
@@ -135,6 +146,74 @@ public class InterfaceBehaviour : MonoBehaviour
         InitializeStartPage();
     }
 
+    MovieClip mcHighlight = null;
+    void InterfaceHighlightByName(string name)
+    {
+        if(highlightMovieclips.ContainsKey(name))
+            InterfaceHighlight(highlightMovieclips[name]);
+    }
+
+    void InterfaceHighlight(MovieClip m)
+    {
+        DestroyImmediate(GameObject.FindGameObjectWithTag("Highlight"));
+        DestroyInterfaceHighlight();
+
+        mcHighlight = new MovieClip(SWFPath + "mcHighlightClass");
+        mcIngame.addChildAt(mcHighlight, mcIngame.getChildIndex(mcMouseIcon));
+        
+        MovieClip top, bottom, left, right, topLeft, topRight, bottomLeft, bottomRight;
+        top = mcHighlight.getChildByName<MovieClip>("mcTop");
+        bottom = mcHighlight.getChildByName<MovieClip>("mcBottom");
+        left = mcHighlight.getChildByName<MovieClip>("mcLeft");
+        right = mcHighlight.getChildByName<MovieClip>("mcRight");
+        topLeft = mcHighlight.getChildByName<MovieClip>("mcTopLeft");
+        topRight = mcHighlight.getChildByName<MovieClip>("mcTopRight");
+        bottomLeft = mcHighlight.getChildByName<MovieClip>("mcBottomLeft");
+        bottomRight = mcHighlight.getChildByName<MovieClip>("mcBottomRight");
+
+        pumpkin.geom.Rectangle mRect = m.getBounds(m);
+        Vector2 mCoords = m.localToGlobal(Vector2.zero);
+
+        mcHighlight.x = mCoords.x;
+        mcHighlight.y = mCoords.y;
+        
+        top.scaleX = 1.0f;
+        top.scaleX = mRect.width * 0.5f;
+        top.y = -mRect.height * 0.5f;
+        bottom.scaleX = 1.0f;
+        bottom.scaleX = mRect.width * 0.5f;
+        bottom.y = mRect.height * 0.5f;
+        left.scaleY = 1.0f;
+        left.scaleY = mRect.height * 0.5f;
+        left.x = -mRect.width * 0.5f;
+        right.scaleY = 1.0f;
+        right.scaleY = mRect.height * 0.5f;
+        right.x = m.width * 0.5f;
+
+        topLeft.y = topRight.y = top.y;
+        topLeft.x = bottomLeft.x = left.x;
+        bottomLeft.y = bottomRight.y = bottom.y;
+        topRight.x = right.x;
+        bottomRight.x = right.x + bottomRight.width;
+        FixUVs(top);
+        FixUVs(bottom);
+        FixUVs(left);
+        FixUVs(right);
+        FixUVs(topLeft);
+        FixUVs(topRight);
+        FixUVs(bottomLeft);
+        FixUVs(bottomRight);
+    }
+
+    void DestroyInterfaceHighlight()
+    {
+        if (mcHighlight != null)
+        {
+            mcIngame.removeChild(mcHighlight);
+            mcHighlight = null;
+        }
+    }
+
     void Update()
     {
         if (mcMouseIcon != null)
@@ -157,6 +236,8 @@ public class InterfaceBehaviour : MonoBehaviour
 				OnHideContextMenu();
 				OnHideActionsMenu();
 				OnHideSubMenus();
+                if (!actionsPopupBG.activeSelf)
+                    Workspace.Instance.SendMessage("ResetAction");
 			}
         }
 
@@ -205,6 +286,7 @@ public class InterfaceBehaviour : MonoBehaviour
 			}
 		}
 #endif
+
     }
 
     void OnGUI()
@@ -481,10 +563,11 @@ public class InterfaceBehaviour : MonoBehaviour
         {
             bool correct = Mathf.Abs(totFraction - result) < 0.000001f;
             if (correct)
-                mcFeedback.gotoAndStop("right");
+                mcResultOperator.gotoAndStop("equal");
+            else if (totFraction > result)
+                mcResultOperator.gotoAndStop("major");
             else
-                mcFeedback.gotoAndStop("wrong");
-            mcFeedback.visible = true;
+                mcResultOperator.gotoAndStop("minor");
 
             switch (lastOperation)
             {
@@ -508,26 +591,34 @@ public class InterfaceBehaviour : MonoBehaviour
 		MovieClipOverlayCameraBehaviour.overlayCameraName = "UICamera";
 		stage = MovieClipOverlayCameraBehaviour.instance.stage;
 
-        mcStartPage = new MovieClip(SWFPath + "mcStartPageClass");
+        string src = Application.srcValue;
+        if (src.Contains("showStartPage=false"))
+        {
+            InitializeHUD();
+        }
+        else
+        {
+            mcStartPage = new MovieClip(SWFPath + "mcStartPageClass");
 
-        localizationUtils.AddTranslationButton(mcStartPage.getChildByName<MovieClip>("btStart"), "{start}", LocalizedButton.Alignment.center, Color.white);
+            localizationUtils.AddTranslationButton(mcStartPage.getChildByName<MovieClip>("btStart"), "{start}", LocalizedButton.Alignment.center, Color.white);
 
-        mcMouseIcon = mcStartPage.getChildByName<MovieClip>("mcCursor");
-        mcMouseIcon.scaleX = mcMouseIcon.scaleY = 0.5f;
-        mcMouseIcon.gotoAndStop(1);
-        mcMouseIcon.mouseEnabled = false;
+            mcMouseIcon = mcStartPage.getChildByName<MovieClip>("mcCursor");
+            mcMouseIcon.scaleX = mcMouseIcon.scaleY = 0.5f;
+            mcMouseIcon.gotoAndStop(1);
+            mcMouseIcon.mouseEnabled = false;
 #if !UNITY_IPHONE
-        Screen.showCursor = false;
+            Screen.showCursor = false;
 #else
-        mcMouseIcon.visible = false;
+            mcMouseIcon.visible = false;
 #endif
-		
-		mcStartPage.scaleX = Screen.width / 800.0f;
-		mcStartPage.scaleY = Screen.height / 600.0f;
-		stage.addChild(mcStartPage);
+
+            mcStartPage.scaleX = Screen.width / 800.0f;
+            mcStartPage.scaleY = Screen.height / 600.0f;
+            stage.addChild(mcStartPage);
+        }
 
         //localization
-        Localizations.Instance.mcLanguage = "eng";
+        Localizations.Instance.mcLanguage = "de";
         #region Multilanguage Init
         InitMultilinguageInterface();
         #endregion
@@ -565,34 +656,46 @@ public class InterfaceBehaviour : MonoBehaviour
 
         mcHints = mcIngame.getChildByName<MovieClip>("mcHints");
         mcHints.getChildByName<TextField>("tfLabel").text = "";
+        highlightMovieclips.Add(mcHints.name, mcHints);
 
         mcTrash = mcIngameBottom.getChildByName<MovieClip>("mcTrash");
         mcTrash.gotoAndStop("up");
         mcTrash.addEventListener(MouseEvent.MOUSE_ENTER, OnTrashEnter);
         mcTrash.addEventListener(MouseEvent.MOUSE_LEAVE, OnTrashLeave);
+        highlightMovieclips.Add(mcTrash.name, mcTrash);
 
         mcActionsPopupButton = new MovieClip(SWFPath + "btStartClass");
         mcActionsPopupButton.name = "btOk";
         mcActionsPopupButton.gotoAndStop("up");
         localizationUtils.AddTranslationButton(mcActionsPopupButton, "{ok}", LocalizedButton.Alignment.center, Color.white);
 		mcActionsPopupButton.x = 406.0f; //Screen.width * 0.5f;
-		mcActionsPopupButton.y = 490.0f; //Screen.height - (600.0f - 490.0f);
+		mcActionsPopupButton.y = 500.0f; //Screen.height - (600.0f - 490.0f);
         stage.addChild(mcActionsPopupButton);
         mcActionsPopupButton.visible = false;
+        highlightMovieclips.Add(mcActionsPopupButton.name, mcActionsPopupButton);
 
         //Menu Actions-----------
         mcMenuAction = mcIngame.getChildByName<MovieClip>("mcMenuAction");
         mcMenuAction.visible = false;
         InitializeMenuActions(mcMenuAction);
+        highlightMovieclips.Add(mcMenuAction.name, mcMenuAction);
 
         //Tools Side Bar-----------
         mcBarTools = mcIngame.getChildByName<MovieClip>("mcSideButton");
         InitializeBarTools(mcBarTools);
+        highlightMovieclips.Add(mcBarTools.name, mcBarTools);
 
         //Menu Tools-----------
         mcMenuTools = mcIngame.getChildByName<MovieClip>("mcMenuTools");
         mcMenuTools.visible = false;
         InitializeMenuTools(mcMenuTools);
+        highlightMovieclips.Add(mcMenuTools.name, mcMenuTools);
+
+        //Color Palette
+        mcColorPalette = mcIngame.getChildByName<MovieClip>("mcColorPalette");
+        mcColorPalette.visible = false;
+        InitializeColorPalette(mcColorPalette);
+        highlightMovieclips.Add(mcColorPalette.name, mcColorPalette);
 
         //Fraction HUD-----------
         mcSingleFraction = mcIngame.getChildByName<MovieClip>("mcSingleFraction");
@@ -631,7 +734,7 @@ public class InterfaceBehaviour : MonoBehaviour
             stage.addChild(mcIngame);
 
         //localization
-        Localizations.Instance.mcLanguage = "eng";
+        Localizations.Instance.mcLanguage = "de";
         #region Multilanguage Init
         InitMultilinguageInterface();
         #endregion
@@ -750,6 +853,7 @@ public class InterfaceBehaviour : MonoBehaviour
     void OnTrashEnter(CEvent evt)
 	{
 #if !UNITY_IPHONE
+        isOnTrash = true;
         MovieClip mc = evt.currentTarget as MovieClip;
         if (elementSelected)
         {
@@ -763,6 +867,7 @@ public class InterfaceBehaviour : MonoBehaviour
     void OnTrashLeave(CEvent evt)
     {
 #if !UNITY_IPHONE
+        isOnTrash = false;
         MovieClip mc = evt.currentTarget as MovieClip;
         if (elementSelected)
         {
@@ -775,49 +880,163 @@ public class InterfaceBehaviour : MonoBehaviour
     #endregion
 
     #region Menu Tools Functions
+    float TextboxWidth(MovieClip exampleButton, int startRange, int endRange)
+    {
+        float w = 0;
+        for (int i = startRange; i <= endRange; i++)
+        {
+            string translatedStr = Localizations.Instance.replaceText(menuTexts[i]);
+            TextField txtField = exampleButton.getChildByName<TextField>("tfLabel");
+            txtField.text = translatedStr;
+            float strLength = 0.0f;
+            for (int k = 0; k < translatedStr.Length; k++)
+                strLength = strLength + txtField.getGlyph(translatedStr[k]).charWidth + txtField.textFormat.letterSpacing;
+
+            w = Mathf.Max(w, strLength);
+        }
+        return w;
+    }
+
+    protected List<GraphicsDrawOP> drawOps = new List<GraphicsDrawOP>();
+    void FixHorizontalUVs(pumpkin.display.Sprite mc)
+    {
+        if (null == mc)
+            return;
+
+        foreach (GraphicsDrawOP drawOp in mc.graphics.drawOPs)
+        {
+            if (drawOps.IndexOf(drawOp) < 0)
+            {
+                Vector2 halfTexel = drawOp.material.mainTexture.texelSize * 0.5f;
+                Rect r = drawOp.drawSrcRect;
+                r.xMin += halfTexel.x;
+                r.xMax -= halfTexel.x;
+                //r.yMin += halfTexel.y;
+                //r.yMax -= halfTexel.y;
+                drawOp.drawSrcRect = r;
+                drawOps.Add(drawOp);
+            }
+        }
+
+        for (int i = 0; i < mc.numChildren; ++i)
+            FixHorizontalUVs(mc.getChildAt<pumpkin.display.Sprite>(i));
+    }
+
+    void FixUVs(pumpkin.display.Sprite mc)
+    {
+        if (null == mc)
+            return;
+
+        foreach (GraphicsDrawOP drawOp in mc.graphics.drawOPs)
+        {
+            if (drawOps.IndexOf(drawOp) < 0)
+            {
+                Vector2 halfTexel = drawOp.material.mainTexture.texelSize * 0.5f;
+                Rect r = drawOp.drawSrcRect;
+                r.xMin += halfTexel.x;
+                r.xMax -= halfTexel.x;
+                r.yMin += halfTexel.y;
+                r.yMax -= halfTexel.y;
+                drawOp.drawSrcRect = r;
+                drawOps.Add(drawOp);
+            }
+        }
+
+        for (int i = 0; i < mc.numChildren; ++i)
+            FixUVs(mc.getChildAt<pumpkin.display.Sprite>(i));
+    }
+
+    void SetMenuElementBgWidth(MovieClip bg, TextField txtField, float width)
+    {
+        SetBgWidth(bg, width);
+
+        txtField.width = width;
+    }
+
+    void SetBgWidth(MovieClip bg, float width)
+    {
+        MovieClip centerMc = bg.getChildByName<MovieClip>("mcCenter");
+        MovieClip rightMc = bg.getChildByName<MovieClip>("mcRight");
+        MovieClip leftMc = bg.getChildByName<MovieClip>("mcLeft");
+        float leftX = leftMc.x;
+        float centerX = centerMc.x;
+        float rightX = rightMc.x;
+
+        width = Mathf.CeilToInt(width);
+
+        centerMc.scaleX = 1.0f;
+        centerMc.scaleX = width * 0.5f;
+
+        leftMc.x = leftX;
+        centerMc.x = leftMc.x - 1;
+        rightMc.x = centerMc.x + centerMc.width - 1;
+
+        FixHorizontalUVs(centerMc);
+    }
+
+    void InitializeColorPalette(MovieClip colorPalette)
+    {
+        SetupButton(colorPalette.getChildByName<MovieClip>("btClosePopupColors"));
+        SetupButton(colorPalette.getChildByName<MovieClip>("btColorShape1"));
+        SetupButton(colorPalette.getChildByName<MovieClip>("btColorShape2"));
+        SetupButton(colorPalette.getChildByName<MovieClip>("btColorShape3"));
+        SetupButton(colorPalette.getChildByName<MovieClip>("btColorShape4"));
+    }
+
     void InitializeMenuActions(MovieClip menuActions)
     {
         menuActionsData = new List<MenuToolsData>();
 
-        InitializeSingleMenuAction("Join", menuActions.getChildByName<MovieClip>("btJoin"), JoinCuts, menuTexts[7]);
-        InitializeSingleMenuAction("TakingAway", menuActions.getChildByName<MovieClip>("btTakeAway"), TakingAwayCuts, menuTexts[8]);
-        InitializeSingleMenuAction("Compare", menuActions.getChildByName<MovieClip>("btCompare"), CompareCuts, menuTexts[9]);
-        InitializeSingleMenuAction("FindParent", menuActions.getChildByName<MovieClip>("btFind"), FindParent, menuTexts[10]);
+        actionsMenuButtonsBgWidth = 0.0f;
+        actionsMenuButtonsBgWidth = TextboxWidth(menuActions.getChildByName<MovieClip>("btJoin"), 3, 4);
 
-        //DisableButton(menuActions.getChildByName<MovieClip>("btFind"), menuTexts[10]);
+        /*InitializeSingleMenuAction("Join", menuActions.getChildByName<MovieClip>("btJoin"), JoinCuts, menuTexts[7], actionsMenuButtonsBgWidth);
+        InitializeSingleMenuAction("TakingAway", menuActions.getChildByName<MovieClip>("btTakeAway"), TakingAwayCuts, menuTexts[8], actionsMenuButtonsBgWidth);
+        InitializeSingleMenuAction("Compare", menuActions.getChildByName<MovieClip>("btCompare"), CompareCuts, menuTexts[9], actionsMenuButtonsBgWidth);
+        InitializeSingleMenuAction("FindParent", menuActions.getChildByName<MovieClip>("btFind"), FindParent, menuTexts[10], actionsMenuButtonsBgWidth);*/
+        InitializeSingleMenuAction("Join", menuActions.getChildByName<MovieClip>("btJoin"), JoinCuts, menuTexts[3], actionsMenuButtonsBgWidth);
+        InitializeSingleMenuAction("TakingAway", menuActions.getChildByName<MovieClip>("btTakeAway"), TakingAwayCuts, menuTexts[4], actionsMenuButtonsBgWidth);
+
+        SetBgWidth(menuActions.getChildByName<MovieClip>("mcBg"), actionsMenuButtonsBgWidth);
     }
 
     void InitializeMenuTools(MovieClip menuTools)
     {
         menuToolsData = new List<MenuToolsData>();
 
-        InitializeSingleMenuTool("ChangeFraction", menuTools.getChildByName<MovieClip>("btChangeFraction"), ChangeFraction, menuTexts[0]);
-        InitializeSingleMenuTool("ChangeSize", menuTools.getChildByName<MovieClip>("btChangeSize"), ChangeSize, menuTexts[1]);
-        InitializeSingleMenuTool("ChangeColor", menuTools.getChildByName<MovieClip>("btChangeColor"), null, menuTexts[2]);
-        InitializeSingleMenuTool("Copy", menuTools.getChildByName<MovieClip>("btCopy"), Copy, menuTexts[3]);
-        InitializeSingleMenuTool("Cut", menuTools.getChildByName<MovieClip>("btCut"), CutFraction, menuTexts[4]);
-        InitializeSingleMenuTool("Show", menuTools.getChildByName<MovieClip>("btShow"), ShowHideSymbol, menuTexts[5]);
-        InitializeSingleMenuTool("Partition", menuTools.getChildByName<MovieClip>("btPartition"), Partition, menuTexts[6]);
+        toolsMenuButtonsBgWidth = 0.0f;
+        toolsMenuButtonsBgWidth = TextboxWidth(menuTools.getChildByName<MovieClip>("btChangeColor"), 0, 2);
 
-        DisableButton(menuTools.getChildByName<MovieClip>("btChangeColor"), menuTexts[2]);
-        DisableButton(menuTools.getChildByName<MovieClip>("btChangeSize"), menuTexts[1]);
+        //InitializeSingleMenuTool("ChangeFraction", menuTools.getChildByName<MovieClip>("btChangeFraction"), ChangeFraction, menuTexts[0], toolsMenuButtonsBgWidth);
+        //InitializeSingleMenuTool("ChangeSize", menuTools.getChildByName<MovieClip>("btChangeSize"), ChangeSize, menuTexts[1], toolsMenuButtonsBgWidth);
+        InitializeSingleMenuTool("ChangeColor", menuTools.getChildByName<MovieClip>("btChangeColor"), ChangeColor, menuTexts[0], toolsMenuButtonsBgWidth);
+        InitializeSingleMenuTool("Copy", menuTools.getChildByName<MovieClip>("btCopy"), Copy, menuTexts[1], toolsMenuButtonsBgWidth);
+        //InitializeSingleMenuTool("Cut", menuTools.getChildByName<MovieClip>("btCut"), CutFraction, menuTexts[4], toolsMenuButtonsBgWidth);
+        //InitializeSingleMenuTool("Show", menuTools.getChildByName<MovieClip>("btShow"), ShowHideSymbol, menuTexts[5], toolsMenuButtonsBgWidth);
+        InitializeSingleMenuTool("Partition", menuTools.getChildByName<MovieClip>("btPartition"), Partition, menuTexts[2], toolsMenuButtonsBgWidth);
+
+        SetBgWidth(menuTools.getChildByName<MovieClip>("mcBg"), toolsMenuButtonsBgWidth);
+        //DisableButton(menuTools.getChildByName<MovieClip>("btChangeColor"), menuTexts[2]);
+        //DisableButton(menuTools.getChildByName<MovieClip>("btChangeSize"), menuTexts[1]);
     }
 
-    void InitializeSingleMenuAction(string name, MovieClip button, MenuToolDelegate buttonDelegate, string text)
+    void InitializeSingleMenuAction(string name, MovieClip button, MenuToolDelegate buttonDelegate, string text, float width)
     {
         MenuToolsData data = new MenuToolsData();
-        button.getChildByName<TextField>("tfLabel").colorTransform = Green1;
         localizationUtils.AddTranslationText(button.getChildByName<TextField>("tfLabel"), text);
+        button.getChildByName<TextField>("tfLabel").colorTransform = Green1;
         data.toolName = name;
         data.button = button;
         data.callback = buttonDelegate;
         menuActionsData.Add(data);
         SetupButton(button);
+        SetMenuElementBgWidth(button.getChildByName<MovieClip>("mcBg").getChildByName<MovieClip>("mcBg"), button.getChildByName<TextField>("tfLabel"), width);
     }
 
-    void InitializeSingleMenuTool(string name, MovieClip button, MenuToolDelegate buttonDelegate, string text)
+    void InitializeSingleMenuTool(string name, MovieClip button, MenuToolDelegate buttonDelegate, string text, float width)
     {
         MenuToolsData data = new MenuToolsData();
+        SetMenuElementBgWidth(button.getChildByName<MovieClip>("mcBg"), button.getChildByName<TextField>("tfLabel"), width);
         button.getChildByName<TextField>("tfLabel").colorTransform = Green1;
         localizationUtils.AddTranslationText(button.getChildByName<TextField>("tfLabel"), text);
         data.toolName = name;
@@ -864,10 +1083,11 @@ public class InterfaceBehaviour : MonoBehaviour
         mcMenuAction.visible = false;
         Workspace.Instance.SendMessage("EnableInput");
         ShowSuggestion("{hint_join2}");
-        Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Wait);
+        //Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Wait);
 
         Workspace.Instance.SendMessage("SetCurrenAction", ActionType.Join);
-        Workspace.Instance.SendMessage("SetFirstOperationCut", Workspace.Instance.ElementOnFocus);
+        Workspace.Instance.SendMessage("StartCurrentAction");
+        //Workspace.Instance.SendMessage("SetFirstOperationCut", Workspace.Instance.ElementOnFocus);
     }
 
     void TakingAwayCuts()
@@ -875,13 +1095,14 @@ public class InterfaceBehaviour : MonoBehaviour
         mcMenuAction.visible = false;
         Workspace.Instance.SendMessage("EnableInput");
         ShowSuggestion("{hint_taking_away2}");
-        Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Wait);
+        //Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Wait);
 
         Workspace.Instance.SendMessage("SetCurrenAction", ActionType.TakingAway);
-        Workspace.Instance.SendMessage("SetFirstOperationCut", Workspace.Instance.ElementOnFocus);
+        Workspace.Instance.SendMessage("StartCurrentAction");
+        //Workspace.Instance.SendMessage("SetFirstOperationCut", Workspace.Instance.ElementOnFocus);
     }
 
-    void CompareCuts()
+    /*void CompareCuts()
     {
         mcMenuAction.visible = false;
         Workspace.Instance.SendMessage("EnableInput");
@@ -897,7 +1118,7 @@ public class InterfaceBehaviour : MonoBehaviour
         mcMenuAction.visible = false;
         Workspace.Instance.ElementOnFocus.SendMessage("FindParent");
         Workspace.Instance.SendMessage("EnableInput");
-    }
+    }*/
 
     void ChangeFraction()
     {
@@ -911,6 +1132,13 @@ public class InterfaceBehaviour : MonoBehaviour
         mcMenuTools.visible = false;
         Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Scaling);
         Workspace.Instance.SendMessage("EnableInput");
+    }
+
+    void ChangeColor()
+    {
+        mcMenuTools.visible = false;
+        mcColorPalette.visible = true;
+        DisableHUD();
     }
 
     void Copy()
@@ -930,16 +1158,17 @@ public class InterfaceBehaviour : MonoBehaviour
     void Partition()
     {
         mcMenuTools.visible = false;
-        Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Partitioning);
+        //Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Partitioning);
+        Workspace.Instance.ElementOnFocus.SendMessage("SetPartitioning");
         Workspace.Instance.SendMessage("EnableInput");
     }
 
-    void ShowHideSymbol()
+    /*void ShowHideSymbol()
     {
         mcMenuTools.visible = false;
         Workspace.Instance.ElementOnFocus.SendMessage("ToggleSymbol");
         Workspace.Instance.SendMessage("EnableInput");
-    }
+    }*/
     #endregion
 
     #region Tool Bar Functions
@@ -951,8 +1180,12 @@ public class InterfaceBehaviour : MonoBehaviour
         InitializeSingleTool("Numbers", barTools.getChildByName<MovieClip>("btNumbers"), null);
         InitializeSingleTool("Lines", barTools.getChildByName<MovieClip>("btLines"), null);
         InitializeSingleTool("Pies", barTools.getChildByName<MovieClip>("btPies"), barTools.getChildByName<MovieClip>("mcSubMenu1"));
-        InitializeSingleTool("Sets", barTools.getChildByName<MovieClip>("btSets"), null);
+        InitializeSingleTool("Sets", barTools.getChildByName<MovieClip>("btSets"), barTools.getChildByName<MovieClip>("mcSubMenu2"));
         InitializeSingleTool("Containers", barTools.getChildByName<MovieClip>("btContainers"), null);
+        highlightMovieclips.Add("btNumbers", barTools.getChildByName<MovieClip>("btNumbers"));
+        highlightMovieclips.Add("btLines", barTools.getChildByName<MovieClip>("btLines"));
+        highlightMovieclips.Add("btPies", barTools.getChildByName<MovieClip>("btPies"));
+        highlightMovieclips.Add("btSets", barTools.getChildByName<MovieClip>("btSets"));
 
         //FLAG: disable representation buttons
         //DisableButton(barTools.getChildByName<MovieClip>("btLines"));
@@ -1096,10 +1329,21 @@ public class InterfaceBehaviour : MonoBehaviour
         }
     }
 
+    void CloseToolSubmenu()
+    {
+        for (int i = 0; i < toolsBarData.Count; i++)
+        {
+            MovieClip subMenu = toolsBarData[i].subMenu;
+            if (subMenu != null)
+                subMenu.visible = false;
+        }
+    }
+    
     void EnableBarTools()
     {
         SetButtonHider();
         InitializeSingleTool("Pies", mcBarTools.getChildByName<MovieClip>("btPies"), mcBarTools.getChildByName<MovieClip>("mcSubMenu1"));
+        //InitializeSingleTool("Sets", mcBarTools.getChildByName<MovieClip>("btSets"), mcBarTools.getChildByName<MovieClip>("mcSubMenu2"));
         InitializeSingleTool("Lines", mcBarTools.getChildByName<MovieClip>("btLines"), null);
         InitializeSingleTool("Containers", mcBarTools.getChildByName<MovieClip>("btContainers"), null);
     }
@@ -1122,6 +1366,9 @@ public class InterfaceBehaviour : MonoBehaviour
         SetupButton(mcTop.getChildByName<MovieClip>("mcFractionAdd"));
         SetupButton(mcTop.getChildByName<MovieClip>("mcFractionSub"));
         SetupButton(mcTop.getChildByName<MovieClip>("mcFractionSearch"));
+        highlightMovieclips.Add("mcFractionAdd", mcTop.getChildByName<MovieClip>("mcFractionAdd"));
+        highlightMovieclips.Add("mcFractionSub", mcTop.getChildByName<MovieClip>("mcFractionSub"));
+        highlightMovieclips.Add("mcFractionSearch", mcTop.getChildByName<MovieClip>("mcFractionSearch"));
 
         //Pelle: cheat
         //DisableButton(mcTop.getChildByName<MovieClip>("mcFractionAdd"));
@@ -1135,6 +1382,7 @@ public class InterfaceBehaviour : MonoBehaviour
         mcTopBG.addEventListener(MouseEvent.MOUSE_ENTER, OnTopEnter);
         mcTopBG.addEventListener(MouseEvent.MOUSE_LEAVE, OnTopLeave);
         mcOperation = mcTopBottom.getChildByName<MovieClip>("mcOperation");
+
         GameObject bottomUI = new GameObject("UICameraBottom", typeof(Camera));
         bottomUI.camera.orthographic = true;
         bottomUI.camera.clearFlags = CameraClearFlags.SolidColor;
@@ -1157,6 +1405,9 @@ public class InterfaceBehaviour : MonoBehaviour
         mcOperation.getChildByName<MovieClip>("mcSecondOperator").getChildByName<TextField>("tfDenominator").colorTransform = Green1;
         mcOperation.getChildByName<MovieClip>("mcResult").getChildByName<TextField>("tfNumerator").colorTransform = Green1;
         mcOperation.getChildByName<MovieClip>("mcResult").getChildByName<TextField>("tfDenominator").colorTransform = Green1;
+        highlightMovieclips.Add("mcFirstOperator", mcOperation.getChildByName<MovieClip>("mcFirstOperator"));
+        highlightMovieclips.Add("mcSecondOperator", mcOperation.getChildByName<MovieClip>("mcSecondOperator"));
+        highlightMovieclips.Add("mcResult", mcOperation.getChildByName<MovieClip>("mcResult"));
     }
 
     void ShowOperationMenu(FractionsOperations currOperation)
@@ -1175,6 +1426,8 @@ public class InterfaceBehaviour : MonoBehaviour
 
             mcFeedback = mcOperation.getChildByName<MovieClip>("mcFeedback");
             mcFeedback.visible = false;
+            mcResultOperator = mcOperation.getChildByName<MovieClip>("mcResultOperator");
+            mcResultOperator.gotoAndStop("question");
         }
         else
         {
@@ -1185,16 +1438,20 @@ public class InterfaceBehaviour : MonoBehaviour
             mcTopBottom.visible = false;
         }
         mcFeedback.visible = false;
+        mcResultOperator.gotoAndStop("question");
         /*SetFractionValue(mcOperation.getChildByName<MovieClip>("mcFirstOperator"), 0.0f, 0.0f);
         SetFractionValue(mcOperation.getChildByName<MovieClip>("mcSecondOperator"), 0.0f, 0.0f);
         SetFractionValue(mcOperation.getChildByName<MovieClip>("mcResult"), 0.0f, 0.0f);*/
 
         lastOperation = currOperation;
-        CheckFractionOperation();
+        //CheckFractionOperation();
     }
 
     void HideOperationMenu()
     {
+        mcResultOperator = mcOperation.getChildByName<MovieClip>("mcResultOperator");
+        Debug.Log("mcOperation: " + mcOperation);
+        mcResultOperator.gotoAndStop("question");
         mcFeedback = mcOperation.getChildByName<MovieClip>("mcFeedback");
         mcFeedback.visible = false;
         mcTopBottom.visible = false;
@@ -1246,7 +1503,6 @@ public class InterfaceBehaviour : MonoBehaviour
 
             ExternalEventsManager.Instance.SendMessageToSupport("FractionPlaced", str1 + str2, root.name, root.partNumerator + "/" + root.partDenominator);
         }
-
     }
 
     void SetFractionValue(MovieClip mc, float numerator, float denominator)
@@ -1343,6 +1599,11 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btCompare":
             case "btFind":
             case "mcBgSideArrow":
+            case "btClosePopupColors":
+            case "btColorShape1":
+            case "btColorShape2":
+            case "btColorShape3":
+            case "btColorShape4":
                 isPressingButton = true;
                 break;
             case "btPartition":
@@ -1360,6 +1621,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
         if (!isPressingButton)
 			return;
+        CloseToolSubmenu();
 
         mc.gotoAndStop("dn");
         switch (mc.name)
@@ -1373,6 +1635,7 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btNumbers":
                 break;
             case "btSets":
+                OpenToolSubmenu(mc.name);
                 break;
             case "btPies":
                 OpenToolSubmenu(mc.name);
@@ -1388,14 +1651,35 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btHRect":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Shape/HRects");
                 CreateVRect();
-                OpenToolSubmenu("btPies");
+                //OpenToolSubmenu("btPies");
                 ShowSuggestion("{hint_denominator_first}");
                 DisableHUD();
                 break;
             case "btVRect":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Shape/VRects");
                 CreateHRect();
-                OpenToolSubmenu("btPies");
+                //OpenToolSubmenu("btPies");
+                ShowSuggestion("{hint_denominator_first}");
+                DisableHUD();
+                break;
+            case "btHearts":
+                ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sets/Hearts");
+                //CreateHRect();
+                OpenToolSubmenu("btSets");
+                ShowSuggestion("{hint_denominator_first}");
+                DisableHUD();
+                break;
+            case "btStars":
+                ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sets/Hearts");
+                //CreateHRect();
+                OpenToolSubmenu("btSets");
+                ShowSuggestion("{hint_denominator_first}");
+                DisableHUD();
+                break;
+            case "btMoons":
+                ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sets/Hearts");
+                //CreateHRect();
+                OpenToolSubmenu("btSets");
                 ShowSuggestion("{hint_denominator_first}");
                 DisableHUD();
                 break;
@@ -1455,17 +1739,17 @@ public class InterfaceBehaviour : MonoBehaviour
                 break;
             case "btJoin":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Action/Join");
-                mcMouseIcon.gotoAndStop(3);
+                //mcMouseIcon.gotoAndStop(3);
                 MenuActionsCallback(mc.name);
                 break;
             case "btTakeAway":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Action/TakingAway");
-                mcMouseIcon.gotoAndStop(4);
+                //mcMouseIcon.gotoAndStop(4);
                 MenuActionsCallback(mc.name);
                 break;
             case "btCompare":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Action/Compare");
-                mcMouseIcon.gotoAndStop(5);
+                //mcMouseIcon.gotoAndStop(5);
                 MenuActionsCallback(mc.name);
                 break;
             case "btFind":
@@ -1474,7 +1758,37 @@ public class InterfaceBehaviour : MonoBehaviour
                 break;
             case "mcBgSideArrow":
                 ArrowButtonCallback();
-				break;
+                CloseToolSubmenu();
+                break;
+            case "btClosePopupColors":
+                mcColorPalette.visible = false;
+                Workspace.Instance.SendMessage("EnableInput");
+                EnableHUD();
+                break;
+            case "btColorShape1":
+                mcColorPalette.visible = false;
+                Workspace.Instance.ElementOnFocus.SendMessage("ChangeColor", Workspace.Instance.colorList[0]);
+                Workspace.Instance.SendMessage("EnableInput");
+                EnableHUD();
+                break;
+            case "btColorShape2":
+                mcColorPalette.visible = false;
+                Workspace.Instance.ElementOnFocus.SendMessage("ChangeColor", Workspace.Instance.colorList[1]);
+                Workspace.Instance.SendMessage("EnableInput");
+                EnableHUD();
+                break;
+            case "btColorShape3":
+                mcColorPalette.visible = false;
+                Workspace.Instance.ElementOnFocus.SendMessage("ChangeColor", Workspace.Instance.colorList[2]);
+                Workspace.Instance.SendMessage("EnableInput");
+                EnableHUD();
+                break;
+            case "btColorShape4":
+                mcColorPalette.visible = false;
+                Workspace.Instance.ElementOnFocus.SendMessage("ChangeColor", Workspace.Instance.colorList[3]);
+                Workspace.Instance.SendMessage("EnableInput");
+                EnableHUD();
+                break;
 		}
 
 		isPressingButton = false;
@@ -1506,6 +1820,12 @@ public class InterfaceBehaviour : MonoBehaviour
             case ("mcFractionSearch"):
                 ShowHint("{hint_find_eq}");
                 break;
+            case ("mcFractionAdd"):
+                ShowHint("{hint_find_sum}");
+                break;
+            case ("mcFractionSub"):
+                ShowHint("{hint_find_sub}");
+                break;
             case ("btChangeFraction"):
                 ShowHint("{hint_change_fraction}");
                 break;
@@ -1514,6 +1834,9 @@ public class InterfaceBehaviour : MonoBehaviour
                 break;
             case ("btChangeSize"):
                 ShowHint("{hint_scale_fraction}");
+                break;
+            case "btChangeColor":
+                ShowHint("{hint_change_colour}");
                 break;
             case "btPartition":
                 ShowHint("{hint_partition}");
@@ -1675,10 +1998,13 @@ public class InterfaceBehaviour : MonoBehaviour
         GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
         RootElement selElement = elementOnFocus.GetComponentInChildren<RootElement>();
 
-		if (IsOverHUDElement(mcTrash))
+		if (IsOverHUDElement(mcTrash) && isOnTrash)
         {
-            if (selElement.state == ElementsState.Improper || selElement.denominator != 0 && selElement.mode == InteractionMode.Moving)
+            //if (selElement.state == ElementsState.Improper || selElement.denominator != 0 && selElement.mode == InteractionMode.Moving)
             {
+                if (selElement.denominator == 0)
+                    EnableHUD();
+
                 Workspace.Instance.SendMessage("DeleteElement", element);
 
                 string eventName = "FractionTrashed";
@@ -1721,6 +2047,16 @@ public class InterfaceBehaviour : MonoBehaviour
         }
         elementSelected = false;
 
+        if (mcTopBottom.visible)
+        {
+            dropOverMc = null;
+            if (null != mcOperation.getChildByName<MovieClip>("Fraction1Area"))
+                CheckDragDrop(mcOperation.getChildByName<MovieClip>("Fraction1Area"));
+
+            CheckDragDrop(mcOperation.getChildByName<MovieClip>("Fraction2Area"));
+            CheckDragDrop(mcOperation.getChildByName<MovieClip>("ResultArea"));
+        }
+
         if (dropOverMc != null)
         {
             if (selElement.denominator != 0 && selElement.mode == InteractionMode.Moving && (selElement.state == ElementsState.Fraction || selElement.state == ElementsState.Result))
@@ -1729,9 +2065,8 @@ public class InterfaceBehaviour : MonoBehaviour
                 SendDropMessage(dropOverMc, selElement);
                 //elementOnFocus.SendMessage("ResetLastPosition");
             }
-            Debug.Log("ResetLastPosition");
             elementOnFocus.SendMessage("ResetLastPosition");
-            Workspace.Instance.ElementOnFocus.SendMessage("ScaleUp");
+            //Workspace.Instance.ElementOnFocus.SendMessage("ScaleUp");
         }
         dropOverMc = null;
     }
@@ -1762,90 +2097,66 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void CheckResultFraction()
     {
-        DisableButton(mcMenuTools.getChildByName<MovieClip>("btChangeFraction"), menuTexts[0]);
-        DisableButton(mcMenuTools.getChildByName<MovieClip>("btChangeSize"), menuTexts[1]);
-        DisableButton(mcMenuTools.getChildByName<MovieClip>("btChangeColor"), menuTexts[2]);
-        DisableButton(mcMenuTools.getChildByName<MovieClip>("btCopy"), menuTexts[3]);
-        DisableButton(mcMenuTools.getChildByName<MovieClip>("btCut"), menuTexts[4]);
-        DisableButton(mcMenuTools.getChildByName<MovieClip>("btPartition"), menuTexts[6]);
+        //DisableButton(mcMenuTools.getChildByName<MovieClip>("btChangeFraction"), menuTexts[0]);
+        //DisableButton(mcMenuTools.getChildByName<MovieClip>("btChangeSize"), menuTexts[1]);
+        DisableButton(mcMenuTools.getChildByName<MovieClip>("btChangeColor"), menuTexts[0]);
+        DisableButton(mcMenuTools.getChildByName<MovieClip>("btCopy"), menuTexts[1]);
+        //DisableButton(mcMenuTools.getChildByName<MovieClip>("btCut"), menuTexts[4]);
+        DisableButton(mcMenuTools.getChildByName<MovieClip>("btPartition"), menuTexts[2]);
     }
 
-    void CheckCutEnabled()
+    /*void CheckCutEnabled()
     {
         MovieClip notification = mcMenuTools.getChildByName<MovieClip>("btCut");
         bool cutEnabled = elementOnFocus.GetComponent<RootElement>().CheckCut();
         if (cutEnabled)
-            InitializeSingleMenuTool("Cut", mcMenuTools.getChildByName<MovieClip>("btCut"), CutFraction, menuTexts[4]);
+            InitializeSingleMenuTool("Cut", mcMenuTools.getChildByName<MovieClip>("btCut"), CutFraction, menuTexts[4], toolsMenuButtonsBgWidth);
         else
             DisableButton(mcMenuTools.getChildByName<MovieClip>("btCut"), menuTexts[4]);
-    }
+    }*/
 
     void OnShowContextMenu(GameObject element)
     {
         InitializeMenuTools(mcMenuTools);
         elementOnFocus = element;
-#if !UNITY_IPHONE
-        Vector3 elementPos = mainCamera.WorldToScreenPoint(element.transform.position);
-        if (elementPos.x > Screen.width * 0.5f)
-            mcMenuTools.x = elementPos.x - mcMenuTools.width * 1.0f;
-        else
-            mcMenuTools.x = elementPos.x + mcMenuTools.width * 1.0f;
 
-        mcMenuTools.y = Mathf.Clamp(Screen.height - Input.mousePosition.y, 250.0f, 400.0f);
-#else
 		Vector3 elementPos = mainCamera.WorldToScreenPoint(element.transform.position);
-		float hGap = mcMenuTools.width;
+        float wGap = mcMenuTools.width * 0.5f;
 		if (elementPos.x > Screen.width * 0.5f)
-			mcMenuTools.x = elementPos.x / (Screen.width / 800.0f) - hGap;
+            mcMenuTools.x = elementPos.x / (Screen.width / 800.0f) - wGap;
 		else
-			mcMenuTools.x = elementPos.x / (Screen.width / 800.0f) + hGap;
+            mcMenuTools.x = elementPos.x / (Screen.width / 800.0f) + wGap;
 
-		mcMenuTools.y = 600.0f - (elementPos.y / (Screen.height / 600.0f));
-		mcMenuTools.y = Mathf.Clamp(mcMenuTools.y, 250.0f, 400.0f);
-
-#endif
-		mcMenuTools.visible = true;
-
-        if (elementOnFocus.GetComponent<RootElement>().state == ElementsState.Result)
-        {
-            CheckResultFraction();
-        }
+        float hGap = mcMenuTools.height * 0.5f;
+        if (elementPos.y > Screen.height * 0.5f)
+            mcMenuTools.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) - hGap);
         else
-        {
-            CheckCutEnabled();
-        }
+            mcMenuTools.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) + hGap);
+
+		mcMenuTools.visible = true;
         CheckNotificationWarning();
         Workspace.Instance.SendMessage("DisableInput");
     }
 
     void OnShowActionsMenu(GameObject element)
     {
-		elementOnFocus = element;
-#if !UNITY_IPHONE
+        elementOnFocus = element;
+
         Vector3 elementPos = mainCamera.WorldToScreenPoint(element.transform.position);
+        float wGap = 0.0f; // mcMenuAction.width * 0.5f;
         if (elementPos.x > Screen.width * 0.5f)
-            mcMenuAction.x = elementPos.x - mcMenuAction.width * 1.0f;
+            mcMenuAction.x = Input.mousePosition.x / (Screen.width / 800.0f) - wGap;
         else
-            mcMenuAction.x = elementPos.x + mcMenuAction.width * 1.0f;
+            mcMenuAction.x = Input.mousePosition.x / (Screen.width / 800.0f) + wGap;
 
-		mcMenuAction.y = Mathf.Clamp(Screen.height - Input.mousePosition.y, 250.0f, 400.0f);
-#else
-		Vector3 elementPos = mainCamera.WorldToScreenPoint(element.transform.position);
-		float hGap = mcMenuAction.width;
-		if (elementPos.x > Screen.width * 0.5f)
-			mcMenuAction.x = elementPos.x / (Screen.width / 800.0f) - hGap;
-		else
-			mcMenuAction.x = elementPos.x / (Screen.width / 800.0f) + hGap;
+        mcMenuAction.x = Mathf.Clamp(mcMenuAction.x, mcMenuAction.width * 0.5f, Screen.width - mcMenuAction.width * 0.5f);
 
-		mcMenuAction.y = 600.0f - (elementPos.y / (Screen.height / 600.0f));
-		mcMenuAction.y = Mathf.Clamp(mcMenuAction.y, 200.0f, 450.0f);
-#endif
+        float hGap = mcMenuAction.height * 0.5f;
+        if (elementPos.y > Screen.height * 0.5f)
+            mcMenuAction.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) - hGap);
+        else
+            mcMenuAction.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) + hGap);
         mcMenuAction.visible = true;
-
-        if (element.GetComponent<RootElement>().type == ElementsType.HRect || element.GetComponent<RootElement>().type == ElementsType.VRect)
-        {
-            DisableButton(mcMenuAction.getChildByName<MovieClip>("btCompare"), menuTexts[9]);
-        }
         Workspace.Instance.SendMessage("DisableInput");
     }
 
@@ -1869,7 +2180,7 @@ public class InterfaceBehaviour : MonoBehaviour
             if (!IsOverHUDElement(mcMenuAction))
             {
                 mcMenuAction.visible = false;
-                InitializeSingleMenuAction("FindParent", mcMenuAction.getChildByName<MovieClip>("btCompare"), CompareCuts, menuTexts[9]);
+                //InitializeSingleMenuAction("FindParent", mcMenuAction.getChildByName<MovieClip>("btCompare"), CompareCuts, menuTexts[9], actionsMenuButtonsBgWidth);
                 Workspace.Instance.SendMessage("EnableInput");
             }
         }
@@ -1917,4 +2228,5 @@ public class InterfaceBehaviour : MonoBehaviour
         EnableHUD();
     }
     #endregion
+
 }

@@ -8,7 +8,22 @@ using fractionslab.meshes;
 
 public class LineElement : WSElement, IWSElement
 {
+    #region Public Enum
+    public enum LinePositions
+    { 
+        Alone,
+        Right,
+        Center,
+        Left
+    }
+    #endregion
+
     #region Protected Fields
+    public LinePositions linePosition = LinePositions.Alone;
+    #endregion
+
+    #region Protected Fields
+
     protected bool justFreezed = false;
 
     protected int lastNumerator = 0;
@@ -18,7 +33,6 @@ public class LineElement : WSElement, IWSElement
     //protected float height = 0.0f;
     protected float strokeWidth = 0.06f;
     protected float lastElementScale = 1.0f;
-    protected GameObject root = null;
 
     protected GameObject bg = null;
     protected GameObject label0 = null;
@@ -31,11 +45,16 @@ public class LineElement : WSElement, IWSElement
     #region Unity Callbacks
     void Awake()
     {
-        root = transform.parent.gameObject;
+        //root = transform.parent.gameObject;
     }
     #endregion
 
     #region Public Methods
+    public override void SetRoot(GameObject r)
+    {
+        root = transform.parent.gameObject;
+    }
+
     public override SBSBounds GetBounds()
     {
         if (state == ElementsState.Fraction || state == ElementsState.Result)
@@ -58,6 +77,9 @@ public class LineElement : WSElement, IWSElement
     public override void Draw(int zIndex)
     {
         base.Draw(zIndex);
+
+        if (!Workspace.Instance.OperationPending)
+            UpdateArrowsState();
 
         Vector3 pos = transform.position;
         pos.z = zIndex;
@@ -116,7 +138,7 @@ public class LineElement : WSElement, IWSElement
         return ((partDenominator % partitions == 0) && (partNumerator % partitions == 0));
     }
 
-    public override void IncreaseNumerator()
+    /*public override void IncreaseNumerator()
     {
         if (partitions == 1)
         {
@@ -164,9 +186,9 @@ public class LineElement : WSElement, IWSElement
         root.BroadcastMessage("SetPartNumerator", this.partNumerator);
 
         ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
-    }
+    }*/
 
-    public override void IncreaseDenominator()
+    /*public override void IncreaseDenominator()
     {
         this.denominator++;
         this.partDenominator = denominator * partitions;
@@ -201,9 +223,9 @@ public class LineElement : WSElement, IWSElement
 
             ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Denominator", root.name, partDenominator);
         }
-    }
+    }*/
 
-    public override void IncreasePartitions()
+    /*public override void IncreasePartitions()
     {
         this.partitions++;
 
@@ -227,10 +249,18 @@ public class LineElement : WSElement, IWSElement
         root.BroadcastMessage("SetPartitions", this.partitions);
 
         ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Partition", root.name, partitions);
-    }
+    }*/
     #endregion
 
     #region Messages
+    void ForceDraw()
+    {
+        lastNumerator = 0;
+        lastDenominator = 0;
+        lastPartitions = 0;
+        Draw(zIndex);
+    }
+
     void Cut()
     {
         root.GetComponent<RootElement>().UpdateGraphics();
@@ -240,6 +270,13 @@ public class LineElement : WSElement, IWSElement
     {
         Width = size.x;
         Height = size.y;
+    }
+
+    void SetContentColor(Color c)
+    {
+        color = c;
+        UpdateSlice();
+        Draw(zIndex);
     }
 
     void Initialize()
@@ -294,9 +331,20 @@ public class LineElement : WSElement, IWSElement
         }
 
         if (localPos.x >= xPos)
-            IncreaseNumerator();
+        {
+            if (partNumerator < partDenominator)
+                Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().IncreaseNumerator(); //root.BroadcastMessage("IncreaseNumerator");
+        }
         else
-            DecreaseNumerator();
+        {
+            RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
+            int num = superRoot.elements.Count;
+            if (partNumerator < partDenominator || superRoot.elements[num - 1] == root)
+            {
+                Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().DecreaseNumerator(); //root.BroadcastMessage("DecreaseNumerator");
+                Workspace.Instance.ElementOnFocus.BroadcastMessage("ForceDraw", SendMessageOptions.DontRequireReceiver);
+            }
+        }
 
         Draw(zIndex);
     }
@@ -368,12 +416,13 @@ public class LineElement : WSElement, IWSElement
 
             float offsX = 0.0f,
                   offsY = 0.0f;
-            if (Application.platform == RuntimePlatform.OSXWebPlayer)
-				offsX = offsY = -1.0f;
+            //if (Application.platform == RuntimePlatform.OSXWebPlayer)
+			//	offsX = offsY = -1.0f;
 #if UNITY_IPHONE
-			offsX = offsY = -1.0f;
+			//offsX = offsY = -1.0f;
 #endif
-            label0.transform.position = transform.TransformPoint(new Vector3(label0X + offsX, 2.12f + offsY, 0.8f));
+            label0X = -width * 0.5f;
+            label0.transform.position = transform.TransformPoint(new Vector3(label0X + offsX, 0.7f + offsY, 0.8f));
 
             label0.AddComponent<SingleLabelMCElement>();
             label0.SendMessage("Initialize");
@@ -389,12 +438,13 @@ public class LineElement : WSElement, IWSElement
 
             float offsX = 0.0f,
                   offsY = 0.0f;
-            if (Application.platform == RuntimePlatform.OSXWebPlayer)
-				offsX = offsY = -1.0f;
+            //if (Application.platform == RuntimePlatform.OSXWebPlayer)
+			//	offsX = offsY = -1.0f;
 #if UNITY_IPHONE
-			offsX = offsY = -1.0f;
+			//offsX = offsY = -1.0f;
 #endif
-            label1.transform.position = transform.TransformPoint(new Vector3(label1X + offsX, 2.12f + offsY, 0.8f));
+            label1X = width * 0.5f;
+            label1.transform.position = transform.TransformPoint(new Vector3(label1X + offsX, 0.7f + offsY, 0.8f));
 
             label1.AddComponent<SingleLabelMCElement>();
             label1.SendMessage("Initialize");
@@ -406,6 +456,9 @@ public class LineElement : WSElement, IWSElement
 
     protected void UpdateTicks()
     {
+        if (this.partDenominator <= 0)
+            return;
+
         for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).name.StartsWith("tick"))
@@ -430,7 +483,13 @@ public class LineElement : WSElement, IWSElement
         zeroTick.AddComponent<MeshElement>();
         zeroTick.SendMessage("Initialize");
         zeroTick.SendMessage("SetMode", mode);
-        zeroTick.SendMessage("SetType", type);
+        if (type == ElementsType.Line && (linePosition == LinePositions.Alone || linePosition == LinePositions.Left))
+        {
+            zeroTick.SendMessage("SetArrowLeft", true);
+            zeroTick.SendMessage("SetType", ElementsType.Arrow);
+        }
+        else
+            zeroTick.SendMessage("SetType", type);
         zeroTick.SendMessage("SetSize", new Vector2(tickWidth * elementScale, 0.6f * elementScale));
         zeroTick.SendMessage("SetColor", meshColor);
         zeroTick.SendMessage("SetStrokeDist", 0.2f);
@@ -451,7 +510,13 @@ public class LineElement : WSElement, IWSElement
                 tick.AddComponent<MeshElement>();
                 tick.SendMessage("Initialize");
                 tick.SendMessage("SetMode", mode);
-                tick.SendMessage("SetType", type);
+                ElementsType newType = type;
+                if (type == ElementsType.Line && i == 0 && (linePosition == LinePositions.Alone || linePosition == LinePositions.Right))
+                {
+                    newType = ElementsType.Arrow;
+                    tick.SendMessage("SetArrowLeft", false);
+                }
+                tick.SendMessage("SetType", newType);
                 if (i % partitions == 0)
                     tick.SendMessage("SetSize", new Vector2(tickWidth * elementScale, 0.6f * elementScale));
                 else
@@ -496,12 +561,44 @@ public class LineElement : WSElement, IWSElement
         slice.SendMessage("SetStrokeWidth", 0.0f);
     }
 
+    protected void UpdateArrowsState()
+    {
+        GameObject p = root.transform.parent.gameObject;
+        RootElement r = p.GetComponent<RootElement>();
+
+        if (r.elements.Count == 1)
+        {
+            linePosition = LinePositions.Alone;
+        }
+        else
+        {
+            for (int i = 0; i < r.elements.Count; i++)
+            {
+                if (root == r.elements[i])
+                {
+                    if (i == 0)
+                        linePosition = LinePositions.Left;
+                    else if (i == r.elements.Count - 1)
+                        linePosition = LinePositions.Right;
+                    else
+                        linePosition = LinePositions.Center;
+                }
+            }
+        }
+        UpdateTicks();
+    }
+
     public void DecreaseCutNumerator()
     {
         partNumerator--;
         UpdateSlice();
         UpdateTicks();
         Draw(0);
+    }
+
+    public void SetLinePosition(LinePositions pos)
+    {
+        linePosition = pos;
     }
     #endregion
 }

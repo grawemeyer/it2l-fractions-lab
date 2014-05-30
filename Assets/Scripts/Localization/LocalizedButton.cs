@@ -226,7 +226,7 @@ public class LocalizedButton
     #region Private Functions
 
     protected List<GraphicsDrawOP> drawOps = new List<GraphicsDrawOP>();
-    void FixUVs(pumpkin.display.Sprite mc)
+    public void FixUVs(pumpkin.display.Sprite mc)
     {
         if (null == mc)
             return;

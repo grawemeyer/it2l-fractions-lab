@@ -18,6 +18,8 @@ namespace fractionslab.behaviours
         protected GameObject stroke = null;
         protected float strokeDist;
         protected float strokeWidth;
+
+        protected float arrowDirection = 1.0f;
         #endregion
 
         #region Unity Callbacks
@@ -86,14 +88,75 @@ namespace fractionslab.behaviours
 
                     renderer.material.SetColor("_Color", meshColor);
                     break;
+
                 case ElementsType.Liquid:
                 case ElementsType.Line:
                     if (mode == InteractionMode.Freeze)
                         meshColor += new Color(0.4f, 0.4f, 0.4f);
 
+                    transform.localScale = Vector3.one;
                     MeshUtils.CreateRectangle(width, height, meshColor, out mesh);
                     if (null != mf)
                         mf.mesh = mesh;
+                    renderer.material.SetColor("_Color", meshColor);
+                    break;
+
+                case ElementsType.Arrow:
+                    if (mode == InteractionMode.Freeze)
+                        meshColor += new Color(0.4f, 0.4f, 0.4f);
+                    
+                    Vector3[] arrowPointsList = {
+                                                  new Vector3(0.3f * arrowDirection, 0.2f, 0.0f),
+                                                  new Vector3(0.0f, 0.0f, 0.0f),
+                                                  new Vector3(0.3f* arrowDirection, -0.2f, 0.0f)
+                                              };
+
+                    MeshUtils.CreateLine(arrowPointsList, width, meshColor, false, out mesh);
+                    if (null != mf)
+                        mf.mesh = mesh;
+                    renderer.material.SetColor("_Color", meshColor);
+                    break;
+
+                case ElementsType.Highlight: 
+                    
+                    meshColor += new Color(1.0f, 0.0f, 0.0f, 1.0f);
+
+                    MeshUtils.CreateRectangle(width, height, meshColor, out mesh);
+                    if (null != mf)
+                        mf.mesh = mesh;
+
+                    if (null == stroke && strokeWidth > 0)
+                    {
+                        string strokeName = "stroke";
+                        for (int i = 0; i < transform.childCount; i++)
+                            if (transform.GetChild(i).name.Equals(strokeName))
+                                Destroy(transform.GetChild(i).gameObject);
+
+                        Color strokeColor = new Color(0.1098f, 0.2431f, 0.0353f);
+                        if (mode == InteractionMode.Freeze)
+                            strokeColor += new Color(0.4f, 0.4f, 0.4f);
+
+                        Vector3[] pointList = {
+                                                  new Vector3(-width * 0.5f, -height * 0.5f, -strokeDist),
+                                                  new Vector3(-width * 0.5f, height * 0.5f, strokeDist),
+                                                  new Vector3(width * 0.5f, height * 0.5f, -strokeDist),
+                                                  new Vector3(width * 0.5f, -height * 0.5f, strokeDist)
+                                              };
+                        GameObject root = new GameObject(strokeName);
+                        root.isStatic = true;
+                        root.transform.parent = transform;
+                        root.transform.localScale = Vector3.one;
+                        root.transform.position = transform.TransformPoint(Vector3.zero);
+                        MeshLineElement comp = root.AddComponent<MeshLineElement>();
+                        comp.lineWidth = strokeWidth;
+                        comp.pointsList = pointList;
+                        comp.isClosed = true;
+                        comp.color = strokeColor;
+                        comp.Initialize();
+
+                        /*MeshUtils.CreateRectangleStroke(gameObject, strokeDist, strokeWidth, strokeColor, out stroke);*/
+                    }
+
                     renderer.material.SetColor("_Color", meshColor);
                     break;
             }
@@ -123,6 +186,11 @@ namespace fractionslab.behaviours
         void SetStrokeWidth(float width)
         {
             strokeWidth = width;
+        }
+
+        void SetArrowLeft(bool left)
+        {
+            arrowDirection = left ? 1.0f : -1.0f;
         }
         #endregion
     }

@@ -23,6 +23,8 @@ public class Workspace : MonoBehaviour
     #endregion
 
     #region Static/Const Fields
+    public const int MAXVALUE = 3;
+    public const float POPUPSIZE = 15.0f;
     public static int elemCounter = 0;
     #endregion
 
@@ -37,20 +39,20 @@ public class Workspace : MonoBehaviour
     public Color greenResult = new Color(0.3373f, 0.5294f, 0.2392f, 1.0f);
     public Color greyResult = new Color(0.6863f, 0.6588f, 0.5569f, 1.0f);
     public GameObject liquidSource;
+    public List<Color> colorList = new List<Color>();
     #endregion
 
     #region Protected Fields
     protected int colorCounter = 0;
     protected SBSBounds bounds;
     protected WSList<GameObject> elements;
-    protected List<Color> colorList = new List<Color>();
     [SerializeField]
     protected ActionType currentAction;
     [SerializeField]
     protected GameObject firstCut = null;
     [SerializeField]
     protected GameObject secondCut = null;
-
+    protected GameObject containerObject = null;
     [SerializeField]
     protected bool inputEnabled = true;
     #endregion
@@ -112,22 +114,32 @@ public class Workspace : MonoBehaviour
         colorList.Add(new Color(0.2431f, 0.6627f, 0.9882f, 0.5f));
         colorList.Add(new Color(0.6588f, 0.4078f, 1.0f, 0.5f));
 
-        //CreatePopup();
         UpdateWS();
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+            DestroyHighlight();
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (null != ElementOnFocus)
+                Highlight(ElementOnFocus.name);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+            Highlight("mcFractionAdd");
+
+        if (Input.GetKeyDown(KeyCode.E))
+            Highlight("btLines");
     }
 
     void OnMouseDown()
     {
-//#if !UNITY_IPHONE || UNITY_EDITOR
-        OnMouseDownEvent();
-//#endif
-    }
-
-    void OnMouseDownEvent()
-    {
         if (!inputEnabled)
             return;
-
+        
         if (ElementOnFocus != null)
         {
             if (ElementOnFocus.GetComponent<RootElement>().denominator > 0)
@@ -142,340 +154,49 @@ public class Workspace : MonoBehaviour
             }
         }
     }
-
-    void Update()
-    {
-#if UNITY_IPHONE
-        /*if (Input.touchCount > 0)
-        {
-            Touch touch = Input.touches[0];
-            Ray ray = Camera.main.ScreenPointToRay(touch.position);
-            RaycastHit hit ;
-            if (Physics.Raycast(ray, out hit))
-            {
-                if (hit.collider == collider)
-                {
-                    switch (touch.phase)
-                    {
-                        case (TouchPhase.Began):
-                            OnMouseDownEvent();
-                            break;
-                        case (TouchPhase.Moved):
-                        case (TouchPhase.Stationary):
-                        case (TouchPhase.Ended):
-                        case (TouchPhase.Canceled):
-                            break;
-                    }
-                }
-            }
-        }*/
-#endif
-    }
     #endregion
 
-    #region Messages
-    GameObject CreateSingleFraction(string name, Element element)
+    #region Internal Utilities
+    GameObject CreateSingleFraction(string name, Element element, bool isSubFraction)
     {
         GameObject root = new GameObject(name);
         root.transform.parent = transform;
         root.transform.position = element.position;
         root.AddComponent<RootElement>();
+        root.SendMessage("SetType", element.type);
         root.SendMessage("SetElementState", element.state);
         root.SendMessage("SetNumerator", element.numerator);
         root.SendMessage("SetDenominator", element.denominator);
         root.SendMessage("SetPartitions", element.partitions);
         root.SendMessage("SetPartNumerator", element.partNumerator);
         root.SendMessage("SetPartDenominator", element.partDenominator);
+        root.SendMessage("SetIsSubFraction", isSubFraction);
 
-        if (element.denominator == 0)
-        {
+        if (element.denominator == 0 && !isSubFraction)
             root.SendMessage("SetMode", InteractionMode.Initializing);
-        }
         else
-        {
-            //interfaces.SendMessage("EnableHUD");
             root.SendMessage("SetMode", InteractionMode.Moving);
-        }
 
         root.SendMessage("SetColor", element.color);
 
         return root;
     }
 
-    GameObject CreateVRect(Element element)
-    {
-        GameObject root = CreateSingleFraction("vrect_" + (++elemCounter), element);
-
-        if (element.partNumerator > element.partDenominator)
-        {
-            int diff = element.partNumerator - element.partDenominator;
-
-            Element elem1 = element;
-            elem1.numerator = elem1.denominator;
-            elem1.partNumerator = elem1.partDenominator;
-
-            Element elem2 = element;
-            elem2.partNumerator = diff;
-            elem2.numerator = elem2.partNumerator / element.partitions;
-
-            float gap = 0.4f;
-
-            GameObject child1 = CreateSingleFraction("vrect_child1", elem1);
-            child1.transform.position = element.position - new SBSVector3(3.0f + gap * 0.5f, 0.0f, 0.0f);
-            child1.transform.parent = root.transform;
-            child1.SendMessage("InitializeAs", element.type);
-            child1.SendMessage("SetEnableCollider", false);
-
-            GameObject child2 = CreateSingleFraction("vrect_child2", elem2);
-            child2.transform.position = element.position + new SBSVector3(3.0f + gap * 0.5f, 0.0f, 0.0f);
-            child2.transform.parent = root.transform;
-            child2.SendMessage("InitializeAs", element.type);
-            child2.SendMessage("SetEnableCollider", false);
-
-        }
-        else
-        {
-            root.SendMessage("InitializeAs", element.type);
-        }
-
-        elements.Push(root);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "VRects", root.name);
-
-        return root;
-    }
-
-    GameObject CreateHRect(Element element)
-    {
-        GameObject root = CreateSingleFraction("vrect_" + (++elemCounter), element);
-
-        if (element.partNumerator > element.partDenominator)
-        {
-            int diff = element.partNumerator - element.partDenominator;
-
-            Element elem1 = element;
-            elem1.numerator = elem1.denominator;
-            elem1.partNumerator = elem1.partDenominator;
-
-            Element elem2 = element;
-            elem2.partNumerator = diff;
-            elem2.numerator = elem2.partNumerator / element.partitions;
-
-            float gap = 0.4f;
-
-            GameObject child1 = CreateSingleFraction("hrect_child1", elem1);
-            child1.transform.position = element.position - new SBSVector3(3.0f + gap * 0.5f, 0.0f, 0.0f);
-            child1.transform.parent = root.transform;
-            child1.SendMessage("InitializeAs", element.type);
-            child1.SendMessage("SetEnableCollider", false);
-
-            GameObject child2 = CreateSingleFraction("hrect_child2", elem2);
-            child2.transform.position = element.position + new SBSVector3(3.0f + gap * 0.5f, 0.0f, 0.0f);
-            child2.transform.parent = root.transform;
-            child2.SendMessage("InitializeAs", element.type);
-            child2.SendMessage("SetEnableCollider", false);
-
-        }
-        else
-        {
-            root.SendMessage("InitializeAs", element.type);
-        }
-
-        elements.Push(root);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "HRects", root.name);
-
-        return root;
-    }
-
-    GameObject CreateNumberedLine(Element element)
-    {
-        GameObject root = CreateSingleFraction("line_" + (++elemCounter), element);
-
-        if (element.partNumerator > element.partDenominator)
-        {
-            int diff = element.partNumerator - element.partDenominator;
-
-            Element elem1 = element;
-            elem1.numerator = elem1.denominator;
-            elem1.partNumerator = elem1.partDenominator;
-
-            Element elem2 = element;
-            elem2.partNumerator = diff;
-            elem2.numerator = elem2.partNumerator / element.partitions;
-
-            GameObject child1 = CreateSingleFraction("line_child1", elem1);
-            child1.transform.position = element.position - new SBSVector3(3.5f, 0.0f, 0.0f);
-            child1.transform.parent = root.transform;
-            child1.SendMessage("SetFractionBaseOffset", 0);
-            child1.SendMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
-            child1.SendMessage("InitializeAs", element.type);
-            child1.SendMessage("SetEnableCollider", false);
-
-            GameObject child2 = CreateSingleFraction("line_child2", elem2);
-            child2.transform.position = element.position + new SBSVector3(3.5f, 0.0f, 0.0f);
-            child2.transform.parent = root.transform;
-            child2.SendMessage("SetFractionBaseOffset", 1);
-            child2.SendMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
-            child2.SendMessage("InitializeAs", element.type);
-            child2.SendMessage("SetEnableCollider", false);
-
-        }
-        else
-        {
-            root.SendMessage("SetFractionBaseOffset", 0);
-            root.SendMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
-            root.SendMessage("InitializeAs", element.type);
-        }
-
-        elements.Push(root);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "NumberedLines", root.name);
-
-        return root;
-    }
-
-    GameObject CreateLiquidMeasures(Element element)
-    {
-        GameObject root = CreateSingleFraction("liquid_" + (++elemCounter), element);
-
-        if (element.partNumerator > element.partDenominator)
-        {
-            int diff = element.partNumerator - element.partDenominator;
-
-            Element elem1 = element;
-            elem1.numerator = elem1.denominator;
-            elem1.partNumerator = elem1.partDenominator;
-
-            Element elem2 = element;
-            elem2.partNumerator = diff;
-            elem2.numerator = elem2.partNumerator / element.partitions;
-
-            float gap = 0.4f;
-
-            GameObject child1 = CreateSingleFraction("liquid_child1", elem1);
-            child1.transform.position = element.position - new SBSVector3(3.0f + gap * 0.5f, 0.0f, 0.0f);
-            child1.transform.parent = root.transform;
-            child1.SendMessage("InitializeAs", element.type);
-            child1.SendMessage("SetEnableCollider", false);
-
-            GameObject child2 = CreateSingleFraction("liquid_child2", elem2);
-            child2.transform.position = element.position + new SBSVector3(3.0f + gap * 0.5f, 0.0f, 0.0f);
-            child2.transform.parent = root.transform;
-            child2.SendMessage("InitializeAs", element.type);
-            child2.SendMessage("SetEnableCollider", false);
-
-        }
-        else
-        {
-            root.SendMessage("InitializeAs", element.type);
-        }
-
-        elements.Push(root);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "LiquidMeasures", root.name);
-
-        return root;
-    }
-
-    /*void CreateLiquidMeasures(Element element)
-    {
-        GameObject root = new GameObject("liquid_" + (++elemCounter));
-        root.transform.parent = transform;
-        root.transform.position = element.position;
-        root.AddComponent<RootElement>();
-        root.SendMessage("SetMode", InteractionMode.Initializing);
-        root.SendMessage("SetColor", element.color);
-        root.SendMessage("SetElementState", element.state);
-        root.SendMessage("InitializeAs", element.type);
-
-        elements.Push(root);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendBrowserMessage("FractionGenerated", "LiquidMeasure", root.name);
-    }*/
-
-    void CreatePopup()
-    {
-        GameObject slice = new GameObject("popup");
-        slice.transform.parent = transform;
-        slice.transform.position = Vector3.zero;
-
-        Mesh mesh;
-        MeshUtils.CreateRectangle(18.0f, 12.0f, Workspace.Instance.white, out mesh);
-        slice.GetComponent<MeshFilter>().mesh = mesh;
-        slice.renderer.material.SetColor("_Color", Workspace.Instance.white);
-    }
-
-    void CreateCopy(GameObject source)
-    {
-        GameObject root = Instantiate(source) as GameObject;
-        string[] splitted = source.name.Split('_');
-        root.name = splitted[0] + "_" + (++elemCounter);
-        root.transform.parent = transform;
-        float xOffset = (root.transform.position.x > 0.0f) ? -1.0f : 1.0f;
-        float yOffset = (root.transform.position.y > 0.0f) ? -1.0f : 1.0f;
-        root.transform.position += new Vector3(xOffset, yOffset, 0.0f);
-        root.BroadcastMessage("SetType", source.GetComponent<RootElement>().type, SendMessageOptions.DontRequireReceiver);
-        root.BroadcastMessage("SetColor", GetColor(), SendMessageOptions.DontRequireReceiver);
-        root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
-        root.BroadcastMessage("DetachModifierSymbol");
-
-        elements.Push(root);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendBrowserMessage("FractionCopy", root.name);
-    }
-
-    void CutFraction(GameObject source)
-    {
-        GameObject root = Instantiate(source) as GameObject;
-        root.name = source.name + "_cut";
-        root.transform.parent = transform;
-        float xOffset = (root.transform.position.x > 0.0f) ? -1.0f : 1.0f;
-        float yOffset = (root.transform.position.y > 0.0f) ? -1.0f : 1.0f;
-        root.transform.position += new Vector3(xOffset, yOffset, 0.0f);
-        root.GetComponent<RootElement>().parentRef = source;
-        root.BroadcastMessage("SetType", source.GetComponent<RootElement>().type, SendMessageOptions.DontRequireReceiver);
-        root.BroadcastMessage("SetColor", source.GetComponent<RootElement>().color, SendMessageOptions.DontRequireReceiver);
-        root.BroadcastMessage("SetElementState", ElementsState.Cut, SendMessageOptions.DontRequireReceiver);
-        root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
-        root.BroadcastMessage("DetachModifierSymbol");
-
-        root.GetComponent<RootElement>().Cut();
-
-        elements.Push(root);
-
-        source.BroadcastMessage("SetMode", InteractionMode.Freeze);
-        UpdateWS();
-
-        ExternalEventsManager.Instance.SendBrowserMessage("FractionCut", root.name);
-    }
-
-    GameObject CreateProperFractions(GameObject f1, GameObject f2)
+    GameObject CreateContainer(GameObject f1, GameObject f2)
     {
         Element element = new Element();
         element.position = Vector3.zero;
-        element.color = Workspace.Instance.greenResult;
+        element.color = f1.GetComponent<RootElement>().color; //Workspace.Instance.greenResult;
         element.type = f1.GetComponent<RootElement>().type;
-        element.state = ElementsState.Result;
-
-        if (currentAction == ActionType.Join)
-            element.partNumerator = f1.GetComponent<RootElement>().partNumerator + f2.GetComponent<RootElement>().partNumerator;
-        else
-            element.partNumerator = f1.GetComponent<RootElement>().partNumerator - f2.GetComponent<RootElement>().partNumerator;
-
+        element.state = ElementsState.Fraction; //ElementsState.Result;
+        element.partNumerator = 0;
         element.partDenominator = f1.GetComponent<RootElement>().partDenominator;
         element.numerator = element.partNumerator / firstCut.GetComponent<RootElement>().partitions;
         element.denominator = f1.GetComponent<RootElement>().denominator;
         element.partitions = f1.GetComponent<RootElement>().partitions;
 
         GameObject root = null;
-        switch(element.type)
+        switch (element.type)
         {
             case (ElementsType.HRect):
                 root = CreateHRect(element);
@@ -492,8 +213,59 @@ public class Workspace : MonoBehaviour
         }
 
         root.SendMessage("SetMode", InteractionMode.Wait);
-        f1.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
-        f2.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+        return root;
+    }
+
+    GameObject CreateProperFractions(GameObject f1, GameObject f2)
+    {
+        Element element = new Element();
+        element.position = Vector3.zero;
+        element.color = f1.GetComponent<RootElement>().color; //Workspace.Instance.greenResult;
+        element.type = f1.GetComponent<RootElement>().type;
+        element.state = ElementsState.Fraction; //ElementsState.Result;
+
+        if (currentAction == ActionType.Join)
+            element.partNumerator = f1.GetComponent<RootElement>().partNumerator + f2.GetComponent<RootElement>().partNumerator;
+        else
+            element.partNumerator = f1.GetComponent<RootElement>().partNumerator - f2.GetComponent<RootElement>().partNumerator;
+
+        element.partDenominator = f1.GetComponent<RootElement>().partDenominator;
+        element.numerator = element.partNumerator / firstCut.GetComponent<RootElement>().partitions;
+        element.denominator = f1.GetComponent<RootElement>().denominator;
+        element.partitions = f1.GetComponent<RootElement>().partitions;
+
+        GameObject root = null;
+        switch (element.type)
+        {
+            case (ElementsType.HRect):
+                root = CreateHRect(element);
+                break;
+            case (ElementsType.VRect):
+                root = CreateVRect(element);
+                break;
+            case (ElementsType.Line):
+                root = CreateNumberedLine(element);
+                break;
+            case (ElementsType.Liquid):
+                root = CreateLiquidMeasures(element);
+                break;
+        }
+        root.SendMessage("SetMode", InteractionMode.Wait);
+
+        if (f1.GetComponent<RootElement>().parentRef != null)
+        {
+            f1.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            f1.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            f1.GetComponent<RootElement>().parentRef = null;
+        }
+
+        if (f2.GetComponent<RootElement>().parentRef != null)
+        {
+            f2.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            f2.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            f2.GetComponent<RootElement>().parentRef = null;
+        }
+
         elements.Remove(f1);
         elements.Remove(f2);
 
@@ -515,9 +287,25 @@ public class Workspace : MonoBehaviour
         root.SendMessage("SetMode", InteractionMode.Wait);
         root.SendMessage("SetColor", grey);
         root.SendMessage("SetElementState", ElementsState.Improper);
+        root.SendMessage("UpdateGraphics");
+        root.SendMessage("DisableInput");
 
-        f1.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
-        f2.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+        if (firstCut.GetComponent<RootElement>().parentRef != null)
+        {
+            firstCut.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            firstCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            firstCut.GetComponent<RootElement>().parentRef = null;
+        }
+
+        if (secondCut.GetComponent<RootElement>().parentRef != null)
+        {
+            secondCut.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            secondCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            secondCut.GetComponent<RootElement>().parentRef = null;
+        }
+
+        //f1.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+        //f2.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
         f1.SendMessage("SetMode", InteractionMode.Moving);
         f2.SendMessage("SetMode", InteractionMode.Moving);
 
@@ -559,6 +347,297 @@ public class Workspace : MonoBehaviour
 
         return root;
     }
+    #endregion
+
+    #region Messages
+    void CreateFractionsChildren(Element element, GameObject root, float gap, string label)
+    {
+        float totalWidth = 0.0f;
+        float totalHeight = 0.0f;
+
+        int wholes = Mathf.Max(1, Mathf.CeilToInt((float)element.partNumerator / (float)element.partDenominator));
+        
+        int diff = element.partNumerator - (element.partDenominator * Mathf.Max(wholes - 1, 1));
+        if (wholes == 1)
+            diff = element.partNumerator;
+
+        totalWidth += gap * (wholes - 1);
+
+        for (int i = 0; i < wholes; i++)
+        {
+            Element elem = element;
+            if (i == wholes - 1)
+            {
+                elem.partNumerator = diff;
+                elem.numerator = elem.partNumerator / element.partitions;
+            }
+            else
+            {
+                elem.numerator = elem.denominator;
+                elem.partNumerator = elem.partDenominator;
+            }
+
+            GameObject child = CreateSingleFraction(label +"_child" + (i + 1), elem, true);
+            child.transform.parent = root.transform;
+            if (elem.type == ElementsType.Line)
+            {
+                child.SendMessage("SetFractionBaseOffset", i);
+                root.BroadcastMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
+            }
+            child.SendMessage("InitializeAs", element.type);
+            child.SendMessage("SetEnableCollider", false);
+
+            child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
+
+            root.GetComponent<RootElement>().elements.Add(child);
+
+            totalHeight = child.GetComponent<RootElement>().height;
+            totalWidth += child.GetComponent<RootElement>().width;
+        }
+
+        root.GetComponent<RootElement>().height = totalHeight;
+        root.GetComponent<RootElement>().width = totalWidth;
+
+        root.transform.position += new Vector3(totalWidth * 0.25f, 0.0f, 0.0f);
+    }
+
+    public void AddFractionsChildren(GameObject root)
+    {
+        string label = root.name.Split('_')[0];
+        float totalWidth = 0.0f;
+        float totalHeight = 0.0f;
+        
+        RootElement r = root.GetComponent<RootElement>();
+        Element element = new Element();        
+        element.numerator = r.numerator;
+        element.denominator = r.denominator;
+        element.partNumerator = r.partNumerator;
+        element.partDenominator = r.partDenominator;
+        element.partitions = r.partitions;
+        element.state = r.state;
+        element.type = r.type;
+        element.position = Vector3.zero;
+        element.color = r.color;
+
+        float gap = 0.0f;
+        switch (element.type)
+        {
+            case (ElementsType.HRect):
+            case (ElementsType.VRect):
+                gap = 0.4f;
+                break;
+            case (ElementsType.Liquid):
+                gap = 0.6f;
+                break;
+        }
+
+        //int diff = element.partNumerator - element.partDenominator;
+
+        int wholes = r.elements.Count + 1; // Mathf.Max(1, Mathf.CeilToInt((float)element.partNumerator / (float)element.partDenominator));
+
+        totalWidth += gap * (wholes - 1);
+
+        int i = wholes - 1;
+
+        Element elem = element;
+        elem.partNumerator = 1;
+        elem.numerator = elem.partNumerator / element.partitions;
+
+        GameObject child = CreateSingleFraction(label + "_child" + (i + 1), elem, true);
+        child.transform.parent = root.transform;
+        if (elem.type == ElementsType.Line)
+        {
+            child.SendMessage("SetFractionBaseOffset", i);
+            child.SendMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
+        }
+        child.SendMessage("InitializeAs", element.type);
+        child.SendMessage("SetEnableCollider", false);
+
+        child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
+
+        root.GetComponent<RootElement>().elements.Add(child);
+
+        totalHeight = child.GetComponent<RootElement>().height;
+        totalWidth += child.GetComponent<RootElement>().width;
+
+        root.GetComponent<RootElement>().height = totalHeight;
+        root.GetComponent<RootElement>().width = totalWidth;
+
+        //root.transform.position += new Vector3(totalWidth * 0.25f, 0.0f, 0.0f);
+
+        RepositioningChildren(root);
+    }
+
+    public void RemoveEmptyChildren(GameObject root)
+    {
+        if (root.GetComponent<RootElement>().elements.Count > 1)
+        {
+            int elemCount = root.GetComponent<RootElement>().elements.Count;
+            for (int i = 0; i < elemCount; i++)
+            {
+                GameObject child = root.GetComponent<RootElement>().elements[i];
+                if (child.GetComponent<RootElement>().partNumerator <= 0)
+                {
+                    Destroy(child);
+                    child = null;
+                    root.GetComponent<RootElement>().elements[i] = null;
+                }
+            }
+            root.GetComponent<RootElement>().elements.RemoveAll(item => item == null);
+            RepositioningChildren(root);
+        }
+    }
+
+    void RepositioningChildren(GameObject root)
+    {
+        float totalWidth = 0.0f;
+        float totalHeight = 0.0f;
+
+        RootElement element = root.GetComponent<RootElement>();
+
+        float gap = 0.0f;
+        switch (element.type)
+        {
+            case (ElementsType.HRect):
+            case (ElementsType.VRect):
+                gap = 0.4f;
+                break;
+            case (ElementsType.Liquid):
+                gap = 0.6f;
+                break;
+        }
+
+        int wholes = element.elements.Count;
+
+        totalWidth += gap * (wholes - 1);
+
+        for (int i = 0; i < wholes; i++)
+        {
+            GameObject child = element.elements[i];
+            child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
+            totalHeight = child.GetComponent<RootElement>().height;
+            totalWidth += child.GetComponent<RootElement>().width;
+        }
+
+        root.GetComponent<RootElement>().height = totalHeight;
+        root.GetComponent<RootElement>().width = totalWidth;
+
+        root.BroadcastMessage("UpdateArrowsState", SendMessageOptions.DontRequireReceiver);
+        if (!OperationPending)
+            UpdateWS();
+    }
+
+    GameObject CreateVRect(Element element)
+    {
+        string label = "vrect";
+        GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
+        CreateFractionsChildren(element, root, 0.4f, label);
+        elements.Push(root);
+        UpdateWS();
+        root.BroadcastMessage("SetRoot", root);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "VRects", root.name);
+        return root;
+    }
+
+    GameObject CreateHRect(Element element)
+    {
+        string label = "vrect";
+        GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
+        CreateFractionsChildren(element, root, 0.4f, label);
+        elements.Push(root);
+        UpdateWS();
+        root.BroadcastMessage("SetRoot", root);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "HRects", root.name);
+        return root;
+    }
+
+    GameObject CreateNumberedLine(Element element)
+    {
+        string label = "line";
+        GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
+        CreateFractionsChildren(element, root, 0.0f, label);
+        elements.Push(root);
+        UpdateWS();
+        root.BroadcastMessage("SetRoot", root);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "NumberedLines", root.name);
+        return root;
+    }
+
+    GameObject CreateLiquidMeasures(Element element)
+    {
+        string label = "liquid";
+        GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
+        CreateFractionsChildren(element, root, 0.6f, label);
+        elements.Push(root);
+        UpdateWS();
+        root.BroadcastMessage("SetRoot", root);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "LiquidMeasures", root.name);
+        return root;
+    }
+
+    /*void CreatePopup()
+    {
+        GameObject slice = new GameObject("popup");
+        slice.transform.parent = transform;
+        slice.transform.position = Vector3.zero;
+
+        Mesh mesh;
+        MeshUtils.CreateRectangle(18.0f, 12.0f, Workspace.Instance.white, out mesh);
+        slice.GetComponent<MeshFilter>().mesh = mesh;
+        slice.renderer.material.SetColor("_Color", Workspace.Instance.white);
+    }*/
+
+    void CreateCopy(GameObject source)
+    {
+        GameObject root = Instantiate(source) as GameObject;
+        string[] splitted = source.name.Split('_');
+        root.name = splitted[0] + "_" + (++elemCounter);
+        root.transform.parent = transform;
+
+        for (int i = 0; i < root.transform.childCount; i++)
+            if (root.transform.GetChild(i).name.Equals("partition"))
+                Destroy(root.transform.GetChild(i).gameObject);
+
+        float xOffset = (root.transform.position.x > 0.0f) ? -1.0f : 1.0f;
+        float yOffset = (root.transform.position.y > 0.0f) ? -1.0f : 1.0f;
+        root.transform.position += new Vector3(xOffset, yOffset, 0.0f);
+        root.BroadcastMessage("SetType", source.GetComponent<RootElement>().type, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetColor", GetColor(), SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
+        root.GetComponent<RootElement>().UpdateGraphics();
+
+        elements.Push(root);
+        UpdateWS();
+
+        ExternalEventsManager.Instance.SendBrowserMessage("FractionCopy", root.name);
+    }
+
+    void CutFraction(GameObject source)
+    {
+        GameObject root = Instantiate(source) as GameObject;
+        source.GetComponent<RootElement>().cutRef = root;
+        root.name = source.name + "_cut";
+        root.transform.parent = transform;
+        float xOffset = (root.transform.position.x > 0.0f) ? -1.0f : 1.0f;
+        float yOffset = (root.transform.position.y > 0.0f) ? -1.0f : 1.0f;
+        root.transform.position += new Vector3(xOffset, yOffset, 0.0f);
+        root.GetComponent<RootElement>().parentRef = source;
+        root.BroadcastMessage("SetType", source.GetComponent<RootElement>().type, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetColor", source.GetComponent<RootElement>().color, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetElementState", ElementsState.Cut, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
+        root.BroadcastMessage("DetachModifierSymbol");
+        root.BroadcastMessage("DetachModifierPartition");
+
+        root.GetComponent<RootElement>().Cut();
+
+        elements.Push(root);
+
+        source.BroadcastMessage("SetMode", InteractionMode.Freeze);
+        UpdateWS();
+
+        ExternalEventsManager.Instance.SendBrowserMessage("FractionCut", root.name);
+    }
 
     void SetFocusOn(GameObject elem)
     {
@@ -569,10 +648,22 @@ public class Workspace : MonoBehaviour
         }
     }
 
+    void SendBack(GameObject elem)
+    {
+        if (ElementOnFocus.GetComponent<RootElement>().denominator > 0 || ElementOnFocus.GetComponent<RootElement>().state == ElementsState.Improper)
+        {
+            elements.SendBack(elem);
+            UpdateWS();
+        }
+    }
+
     void DeleteElement(GameObject element)
     {
         if (null != element.GetComponent<RootElement>().parentRef)
             element.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+
+        if (null != element.GetComponent<RootElement>().cutRef)
+            element.GetComponent<RootElement>().cutRef.GetComponent<RootElement>().parentRef = null;
 
         Tweener.StopAndDestroyAllTweens();
         Destroy(element);
@@ -608,6 +699,32 @@ public class Workspace : MonoBehaviour
     {
         secondCut = sc;
     }
+
+    void CheckCutOverlap(Vector3 mousePos)
+    {
+        GameObject tmp = null;
+        for (int i = 0; i < elements.Count; i++)
+        {
+            RootElement ec = elements[i].GetComponent<RootElement>();
+            if (ec.state == ElementsState.Cut && elements[i] != ElementOnFocus)
+            {
+                if (ec.GetBounds().ContainsPointXY(Camera.main.ScreenToWorldPoint(mousePos)))
+                {
+                    tmp = elements[i];
+                    break;
+                }
+            }
+        }
+
+        if (tmp != null)
+        {
+            interfaces.SendMessage("OnShowActionsMenu", ElementOnFocus);
+            //ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Wait;
+            //tmp.GetComponent<RootElement>().mode = InteractionMode.Wait;
+            Workspace.Instance.SendMessage("SetFirstOperationCut", ElementOnFocus);
+            Workspace.Instance.SendMessage("SetSecondOperationCut", tmp);
+        }
+    }
     #endregion
 
     #region Actions Management
@@ -633,25 +750,56 @@ public class Workspace : MonoBehaviour
         RootElement firstCutRoot = firstCut.GetComponent<RootElement>();
         RootElement secondCutRoot = secondCut.GetComponent<RootElement>();
 
+        firstCutRoot.mode = InteractionMode.Wait;
+        secondCutRoot.mode = InteractionMode.Wait;
+
+        if (firstCutRoot.GetPartValue() < secondCutRoot.GetPartValue())
+        {
+            GameObject tmp = firstCut;
+            firstCut = secondCut;
+            secondCut = tmp;
+            firstCutRoot = firstCut.GetComponent<RootElement>();
+            secondCutRoot = secondCut.GetComponent<RootElement>();
+        }
+
         bool result = CheckActionValidity(firstCutRoot, secondCutRoot);
         if (result)
         {
             if (CheckDenominator(firstCutRoot, secondCutRoot))
             {
-                firstCutRoot.ResetScale();
-                secondCutRoot.ResetScale();
-
-                switch (currentAction)
+                if (CheckValueGreaterThen(firstCutRoot, secondCutRoot, MAXVALUE))
                 {
-                    case (ActionType.Join):
-                        StartCoroutine(MakeProperJoin());
-                        break;
-                    case (ActionType.Compare):
-                        StartCoroutine(MakeProperCompare());
-                        break;
-                    case (ActionType.TakingAway):
-                        StartCoroutine(MakeProperTakingAway());
-                        break;
+                    //firstCutRoot.ResetScale();
+                    //secondCutRoot.ResetScale();
+
+                    switch (currentAction)
+                    {
+                        case (ActionType.Join):
+                            StartCoroutine(MakeProperJoin());
+                            break;
+                        /*case (ActionType.Compare):
+                            StartCoroutine(MakeProperCompare());
+                            break;*/
+                        case (ActionType.TakingAway):
+                            StartCoroutine(MakeProperTakingAway());
+                            break;
+                    }                    
+                }
+                else
+                {
+                    interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + MAXVALUE + "}");
+                    switch (currentAction)
+                    {
+                        case (ActionType.Join):
+                            ExternalEventsManager.Instance.SendMessageToSupport("JoinError", firstCut.name, secondCut.name);
+                            break;
+                        case (ActionType.Compare):
+                            ExternalEventsManager.Instance.SendMessageToSupport("CompareError", firstCut.name, secondCut.name);
+                            break;
+                        case (ActionType.TakingAway):
+                            ExternalEventsManager.Instance.SendMessageToSupport("TakingAwayError", firstCut.name, secondCut.name);
+                            break;
+                    }
                 }
             }
             else
@@ -684,19 +832,8 @@ public class Workspace : MonoBehaviour
             RootElement firstCutRoot = firstCut.GetComponent<RootElement>();
             RootElement secondCutRoot = secondCut.GetComponent<RootElement>();
 
-            if (firstCutRoot.type == ElementsType.Liquid)
-            {
-                Vector3 basePos = new Vector3(0.0f, -firstCut.GetComponent<RootElement>().height * 0.5f, 0.0f);
-                firstCut.SendMessage("SetCoord", basePos);
-                firstCut.SendMessage("MoveToCoord", -1.0f);
-                secondCut.SendMessage("SetCoord", basePos + new Vector3(0.0f, firstCut.GetComponent<RootElement>().height * 0.5f + secondCut.GetComponent<RootElement>().height * 0.5f + 0.2f, 0.0f));
-                secondCut.SendMessage("MoveToCoord", -1.0f);
-            }
-            else
-            {
-                firstCut.SendMessage("MoveToPopup", -1.0f);
-                secondCut.SendMessage("MoveToPopup", -1.0f);
-            }
+            firstCut.SendMessage("MoveToCoord", -1.0f);
+            secondCut.SendMessage("MoveToCoord", -1.0f);
 
             StopAllCoroutines();
             if (resultObject == null)
@@ -708,7 +845,21 @@ public class Workspace : MonoBehaviour
             }
         }
 
+        BoxCollider containerBB = resultObject.GetComponent<BoxCollider>();
+        Vector3 containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.1f), 0.0f);
+        resultObject.transform.position = containerPos;
+        if (resultObject.GetComponent<RootElement>().state != ElementsState.Improper)
+            resultObject.SendMessage("AttachSymbol", true);
+
         resultObject.SendMessage("SetMode", InteractionMode.Moving);
+
+        if (null != containerObject)
+        {
+            elements.Remove(containerObject);
+            Destroy(containerObject);
+            containerObject = null;
+        }
+        UpdateWS();
     }
     #endregion
 
@@ -718,32 +869,213 @@ public class Workspace : MonoBehaviour
         ExternalEventsManager.Instance.SendMessageToSupport("ProperJoin", firstCut.name, secondCut.name);
         interfaces.SendMessage("ShowActionPopup");
 
-        switch (firstCut.GetComponent<RootElement>().type)
+        float gap = 0.1f;
+        if (firstCut.GetComponent<RootElement>().type == ElementsType.Line)
+            gap = 0.0f;
+
+        BoxCollider firstBB = firstCut.GetComponent<BoxCollider>();
+        BoxCollider secondBB = secondCut.GetComponent<BoxCollider>();
+
+        float totalWidth = firstBB.size.x + secondBB.size.x + gap;
+        float scaleFactor = 1.0f;
+        if (totalWidth > POPUPSIZE)
         {
-            case (ElementsType.HRect):
-            case (ElementsType.VRect):
-            case (ElementsType.Line):
-                firstCut.SendMessage("MoveToPopup", 1.0f);
-                yield return new WaitForSeconds(1.2f);
-                secondCut.SendMessage("MoveToPopup", 1.0f);
-                yield return new WaitForSeconds(2.2f);
-                break;
-            case (ElementsType.Liquid):
-                Vector3 basePos = new Vector3(0.0f, -firstCut.GetComponent<RootElement>().height * 0.5f, 0.0f);
-                firstCut.SendMessage("SetCoord", basePos);
-                firstCut.SendMessage("MoveToCoord", 1.0f);
-                yield return new WaitForSeconds(1.2f);
-                secondCut.SendMessage("SetCoord", basePos + new Vector3(0.0f, firstCut.GetComponent<RootElement>().height * 0.5f + secondCut.GetComponent<RootElement>().height * 0.5f, 0.0f));
-                secondCut.SendMessage("MoveToCoord", 1.0f);
-                yield return new WaitForSeconds(2.2f);
-                break;
+            scaleFactor = POPUPSIZE / totalWidth;
+            firstCut.transform.localScale = scaleFactor * Vector3.one;
+            secondCut.transform.localScale = scaleFactor * Vector3.one;
+        }
+        float diff = totalWidth * 0.5f - firstBB.size.x;
+
+        Vector3 firstPos = Vector3.zero + new Vector3(-firstBB.center.x * scaleFactor, 0.0f, 0.0f)
+            + new Vector3(-(firstBB.size.x * scaleFactor * 0.5f + gap * 0.5f * scaleFactor) - diff * scaleFactor, firstBB.size.y * 0.5f * scaleFactor + gap * scaleFactor, 0.0f);
+        Vector3 secondPos = Vector3.zero + new Vector3(-secondBB.center.x * scaleFactor, 0.0f, 0.0f)
+            + new Vector3(secondBB.size.x * scaleFactor * 0.5f + gap * 0.5f * scaleFactor - diff * scaleFactor, firstBB.size.y * 0.5f * scaleFactor + gap * scaleFactor, 0.0f);
+
+        /*float totalWidth = firstBB.size.x + secondBB.size.x + gap;
+        float diff = totalWidth * 0.5f - firstBB.size.x;
+
+        Vector3 firstPos = Vector3.zero + new Vector3(-firstBB.center.x, 0.0f, 0.0f) + new Vector3(-(firstBB.size.x * 0.5f + gap * 0.5f) - diff, firstBB.size.y * 0.5f + gap, 0.0f);
+        Vector3 secondPos = Vector3.zero + new Vector3(-secondBB.center.x, 0.0f, 0.0f) + new Vector3(secondBB.size.x * 0.5f + gap * 0.5f - diff, firstBB.size.y * 0.5f + gap, 0.0f);*/
+
+        firstCut.SendMessage("SetCoord", firstPos);
+        secondCut.SendMessage("SetCoord", secondPos);
+
+        firstCut.SendMessage("MoveToCoord", 1.0f);
+
+        yield return new WaitForSeconds(1.2f);
+        
+        secondCut.SendMessage("MoveToCoord", 1.0f);
+
+        yield return new WaitForSeconds(1.2f);
+        
+        containerObject = CreateContainer(firstCut, secondCut);
+        BoxCollider containerBB = containerObject.GetComponent<BoxCollider>();
+        Vector3 containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.06f), 0.0f);
+        containerObject.transform.position = containerPos;
+        containerObject.SendMessage("AttachSymbol", true);
+        containerObject.SendMessage("DisableInput");
+
+        yield return new WaitForSeconds(0.2f);
+
+        int numerator = firstCut.GetComponent<RootElement>().partNumerator;
+        for (int i = 0; i < numerator; i++)
+        {
+            yield return new WaitForSeconds(1.0f);
+            firstCut.SendMessage("DecreaseCutNumerator");
+            containerObject.GetComponent<RootElement>().IncreaseNumerator();
+            containerObject.GetComponent<RootElement>().UpdateGraphics();
+            yield return new WaitForEndOfFrame();
+            containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.06f), 0.0f);
+            containerObject.transform.position = containerPos;
         }
 
-        resultObject = CreateProperFractions(firstCut, secondCut);
+        numerator = secondCut.GetComponent<RootElement>().partNumerator;
+        for (int i = 0; i < numerator; i++)
+        {
+            yield return new WaitForSeconds(1.0f);
+            secondCut.SendMessage("DecreaseCutNumerator");
+            containerObject.GetComponent<RootElement>().IncreaseNumerator();
+            containerObject.GetComponent<RootElement>().UpdateGraphics();
+            yield return new WaitForEndOfFrame();
+            containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.06f), 0.0f);
+            containerObject.transform.position = containerPos;
+        }
+
+        resultObject = containerObject;
+        containerObject = null;
         SetFocusOn(resultObject);
+
+        if (firstCut.GetComponent<RootElement>().parentRef != null)
+        {
+            firstCut.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            firstCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            firstCut.GetComponent<RootElement>().parentRef = null;
+        }
+
+        if (secondCut.GetComponent<RootElement>().parentRef != null)
+        {
+            secondCut.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            secondCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            secondCut.GetComponent<RootElement>().parentRef = null;
+        }
+
+        elements.Remove(firstCut);
+        elements.Remove(secondCut);
+
+        Destroy(firstCut);
+        Destroy(secondCut);
+        firstCut = null;
+        secondCut = null;
+
+        UpdateWS();
     }
 
-    IEnumerator MakeProperCompare()
+    IEnumerator MakeProperTakingAway()
+    {
+        ExternalEventsManager.Instance.SendMessageToSupport("ProperJoin", firstCut.name, secondCut.name);
+        interfaces.SendMessage("ShowActionPopup");
+
+        float gap = 0.1f;
+        if (firstCut.GetComponent<RootElement>().type == ElementsType.Line)
+            gap = 0.0f;
+
+        BoxCollider firstBB = firstCut.GetComponent<BoxCollider>();
+        BoxCollider secondBB = secondCut.GetComponent<BoxCollider>();
+
+        float totalWidth = firstBB.size.x + secondBB.size.x + gap;
+        float scaleFactor = 1.0f;
+        if (totalWidth > POPUPSIZE)
+        {
+            scaleFactor = POPUPSIZE / totalWidth;
+            firstCut.transform.localScale = scaleFactor * Vector3.one;
+            secondCut.transform.localScale = scaleFactor * Vector3.one;
+        }
+        float diff = totalWidth * 0.5f - firstBB.size.x;
+
+        Vector3 firstPos = Vector3.zero + new Vector3(-firstBB.center.x * scaleFactor, 0.0f, 0.0f)
+            + new Vector3(-(firstBB.size.x * scaleFactor * 0.5f + gap * 0.5f * scaleFactor) - diff * scaleFactor, firstBB.size.y * 0.5f * scaleFactor + gap * scaleFactor, 0.0f);
+        Vector3 secondPos = Vector3.zero + new Vector3(-secondBB.center.x * scaleFactor, 0.0f, 0.0f)
+            + new Vector3(secondBB.size.x * scaleFactor * 0.5f + gap * 0.5f * scaleFactor - diff * scaleFactor, firstBB.size.y * 0.5f * scaleFactor + gap * scaleFactor, 0.0f);
+
+        /*float totalWidth = firstBB.size.x + secondBB.size.x + gap;
+        float diff = totalWidth * 0.5f - firstBB.size.x;
+
+        Vector3 firstPos = Vector3.zero + new Vector3(-firstBB.center.x, 0.0f, 0.0f) + new Vector3(-(firstBB.size.x * 0.5f + gap * 0.5f) - diff, firstBB.size.y * 0.5f + gap, 0.0f);
+        Vector3 secondPos = Vector3.zero + new Vector3(-secondBB.center.x, 0.0f, 0.0f) + new Vector3(secondBB.size.x * 0.5f + gap * 0.5f - diff, firstBB.size.y * 0.5f + gap, 0.0f);*/
+        firstCut.SendMessage("SetCoord", firstPos);
+        secondCut.SendMessage("SetCoord", secondPos);
+
+        firstCut.SendMessage("MoveToCoord", 1.0f);
+
+        yield return new WaitForSeconds(1.2f);
+
+        secondCut.SendMessage("MoveToCoord", 1.0f);
+
+        yield return new WaitForSeconds(1.2f);
+
+        int numerator = secondCut.GetComponent<RootElement>().partNumerator;
+        for (int i = 0; i < numerator; i++)
+        {
+            yield return new WaitForSeconds(1.0f);
+            firstCut.SendMessage("DecreaseCutNumerator");
+            secondCut.SendMessage("DecreaseCutNumerator");
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        yield return new WaitForSeconds(1.2f);
+
+        containerObject = CreateContainer(firstCut, secondCut);
+        BoxCollider containerBB = containerObject.GetComponent<BoxCollider>();
+        Vector3 containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.06f), 0.0f);
+        containerObject.transform.position = containerPos;
+        containerObject.SendMessage("AttachSymbol", true);
+        containerObject.SendMessage("DisableInput");
+
+        yield return new WaitForSeconds(0.2f);
+
+        numerator = firstCut.GetComponent<RootElement>().partNumerator - secondCut.GetComponent<RootElement>().partNumerator;
+        for (int i = 0; i < numerator; i++)
+        {
+            yield return new WaitForSeconds(1.0f);
+            firstCut.SendMessage("DecreaseCutNumerator");
+            containerObject.GetComponent<RootElement>().IncreaseNumerator();
+            containerObject.GetComponent<RootElement>().UpdateGraphics();
+            yield return new WaitForEndOfFrame();
+            containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.06f), 0.0f);
+            containerObject.transform.position = containerPos;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        resultObject = containerObject;
+        containerObject = null;
+        SetFocusOn(resultObject);
+
+        if (firstCut.GetComponent<RootElement>().parentRef != null)
+        {
+            firstCut.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            firstCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            firstCut.GetComponent<RootElement>().parentRef = null;
+        }
+
+        if (secondCut.GetComponent<RootElement>().parentRef != null)
+        {
+            secondCut.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+            secondCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
+            secondCut.GetComponent<RootElement>().parentRef = null;
+        }
+
+        elements.Remove(firstCut);
+        elements.Remove(secondCut);
+
+        Destroy(firstCut);
+        Destroy(secondCut);
+        firstCut = null;
+        secondCut = null;
+
+        UpdateWS();
+    }
+
+    /*IEnumerator MakeProperCompare()
     {
         ExternalEventsManager.Instance.SendMessageToSupport("ProperCompare", firstCut.name, secondCut.name);
         interfaces.SendMessage("ShowActionPopup");
@@ -791,9 +1123,9 @@ public class Workspace : MonoBehaviour
 
         resultObject = CreateProperFractions(firstCut, secondCut);
         SetFocusOn(resultObject);
-    }
+    }*/
 
-    IEnumerator MakeProperTakingAway()
+    IEnumerator MakeProperTakingAwayOLD()
     {
         ExternalEventsManager.Instance.SendMessageToSupport("ProperTakingAway", firstCut.name, secondCut.name);
         interfaces.SendMessage("ShowActionPopup");
@@ -876,28 +1208,45 @@ public class Workspace : MonoBehaviour
                 ExternalEventsManager.Instance.SendMessageToSupport("ImproperTakingAway", firstCut.name, secondCut.name);
                 break;
         }
-
+        
         interfaces.SendMessage("ShowActionPopup");
-        if (firstCut.GetComponent<RootElement>().type != ElementsType.Liquid)
+
+        float gap = 0.1f;
+        if (firstCut.GetComponent<RootElement>().type == ElementsType.Line)
+            gap = 0.0f;
+
+        BoxCollider firstBB = firstCut.GetComponent<BoxCollider>();
+        BoxCollider secondBB = secondCut.GetComponent<BoxCollider>();
+
+        float totalWidth = firstBB.size.x + secondBB.size.x + gap;
+        float scaleFactor = 1.0f;
+        if (totalWidth > POPUPSIZE)
         {
-            firstCut.SendMessage("MoveToPopup", 1.0f);
-            yield return new WaitForSeconds(1.2f);
-            secondCut.SendMessage("MoveToPopup", 1.0f);
-            yield return new WaitForSeconds(1.2f);
+            scaleFactor = POPUPSIZE / totalWidth;
+            firstCut.transform.localScale = scaleFactor * Vector3.one;
+            secondCut.transform.localScale = scaleFactor * Vector3.one;
         }
-        else
-        {
-            Vector3 basePos = new Vector3(0.0f, -firstCut.GetComponent<RootElement>().height * 0.5f, 0.0f);
-            firstCut.SendMessage("SetCoord", basePos);
-            firstCut.SendMessage("MoveToCoord", 1.0f);
-            yield return new WaitForSeconds(1.2f);
-            secondCut.SendMessage("SetCoord", basePos + new Vector3(0.0f, firstCut.GetComponent<RootElement>().height * 0.5f + secondCut.GetComponent<RootElement>().height * 0.5f + 0.2f, 0.0f));
-            secondCut.SendMessage("MoveToCoord", 1.0f);
-            yield return new WaitForSeconds(1.2f);
-        }
+        float diff = totalWidth * 0.5f - firstBB.size.x;
+
+        Vector3 firstPos = Vector3.zero + new Vector3(-firstBB.center.x * scaleFactor, 0.0f, 0.0f)
+            + new Vector3(-(firstBB.size.x * scaleFactor * 0.5f + gap * 0.5f * scaleFactor) - diff * scaleFactor, firstBB.size.y * 0.5f * scaleFactor + gap * scaleFactor, 0.0f);
+        Vector3 secondPos = Vector3.zero + new Vector3(-secondBB.center.x * scaleFactor, 0.0f, 0.0f)
+            + new Vector3(secondBB.size.x * scaleFactor * 0.5f + gap * 0.5f * scaleFactor - diff * scaleFactor, firstBB.size.y * 0.5f * scaleFactor + gap * scaleFactor, 0.0f);
+
+        firstCut.SendMessage("SetCoord", firstPos);
+        secondCut.SendMessage("SetCoord", secondPos);
+
+        firstCut.SendMessage("MoveToCoord", 1.0f);
+
+        yield return new WaitForSeconds(1.2f);
+
+        secondCut.SendMessage("MoveToCoord", 1.0f);
+
+        yield return new WaitForSeconds(1.0f);
 
         resultObject = CreateImproperFractions(firstCut, secondCut);
         SetFocusOn(resultObject);
+        UpdateWS();
     }
     #endregion
 
@@ -910,11 +1259,15 @@ public class Workspace : MonoBehaviour
             || ((firstCutRoot.type == ElementsType.HRect) && (secondCutRoot.type == ElementsType.VRect))
             || ((firstCutRoot.type == ElementsType.VRect) && (secondCutRoot.type == ElementsType.HRect));
 
-        bool checkValue = true;
-        if (currentAction != ActionType.Join)
-            checkValue = firstCutRoot.GetPartValue() >= secondCutRoot.GetPartValue();
+        return checkRepresentations;
+    }
 
-        return checkRepresentations && checkValue;
+    protected bool CheckValueGreaterThen(RootElement firstCutRoot, RootElement secondCutRoot, int value)
+    {
+        if (currentAction == ActionType.Join)
+            return (((float)(firstCutRoot.partNumerator + secondCutRoot.partNumerator) / (float)firstCutRoot.partDenominator) <= value);
+
+        return (((float)(firstCutRoot.partNumerator - secondCutRoot.partNumerator) / (float)firstCutRoot.partDenominator) <= value);
     }
 
     protected bool CheckDenominator(RootElement firstCutRoot, RootElement secondCutRoot)
@@ -929,7 +1282,9 @@ public class Workspace : MonoBehaviour
     {
         for (int i = 0; i < elements.Count; i++)
         {
-            elements[i].SendMessage("Draw", i);
+            if (elements[i].GetComponent<RootElement>().mode != InteractionMode.Wait)
+                elements[i].SendMessage("Draw", i);
+
             if (i > 0)
             {
                 if (elements[i].GetComponent<RootElement>().mode != InteractionMode.Freeze)
@@ -938,7 +1293,10 @@ public class Workspace : MonoBehaviour
                 if (elements[0].GetComponent<RootElement>().denominator == 0 && elements[0].GetComponent<RootElement>().state != ElementsState.Improper)
                     elements[i].SendMessage("DisableInput");
                 else
-                    elements[i].SendMessage("EnableInput");
+                {
+                    if (inputEnabled)
+                        elements[i].SendMessage("EnableInput");
+                }
             }
         }
 
@@ -949,6 +1307,20 @@ public class Workspace : MonoBehaviour
     #endregion
 
     #region Public Methods
+    public void Highlight(string name)
+    {
+        interfaces.SendMessage("InterfaceHighlightByName", name);
+
+        if(transform.childCount > 0)
+            gameObject.BroadcastMessage("InitHighlight", name);
+    }
+
+    public void DestroyHighlight()
+    {
+        interfaces.SendMessage("DestroyInterfaceHighlight");
+        Destroy(GameObject.FindGameObjectWithTag("Highlight"));
+    }
+
     public Color GetColor()
     {
         if (colorCounter >= colorList.Count)
@@ -960,25 +1332,16 @@ public class Workspace : MonoBehaviour
     {
         bool isFirst = (go == firstCut);
         RootElement cutRoot = (isFirst) ? firstCut.GetComponent<RootElement>() : secondCut.GetComponent<RootElement>();
+        BoxCollider bb = cutRoot.GetComponent<BoxCollider>();
 
-        if (cutRoot.type == ElementsType.HRect || cutRoot.type == ElementsType.VRect || cutRoot.type == ElementsType.Liquid)
-        {
-            float gap = 0.1f;
-            if (isFirst)
-                return (Vector3.zero - new Vector3(cutRoot.width * 0.5f + gap * 0.5f, 0.0f, 0.0f));
-            else
-                return (Vector3.zero + new Vector3(cutRoot.width * 0.5f + gap * 0.5f, 0.0f, 0.0f));
-        }
-        else if (cutRoot.type == ElementsType.Line)
-        {
-            float gap = 0.0f;
-            if (isFirst)
-                return (Vector3.zero - new Vector3(cutRoot.width * 0.5f + gap * 0.5f, 0.0f, 0.0f));
-            else
-                return (Vector3.zero + new Vector3(cutRoot.width * 0.5f + gap * 0.5f, 0.0f, 0.0f));
-        }
+        float gap = 0.1f;
+        if (cutRoot.type == ElementsType.Line)
+            gap = 0.0f;
 
-        return Vector3.zero;
+        if (isFirst)
+            return (Vector3.zero - new Vector3(bb.size.x * 0.5f + gap * 0.5f, 0.0f, 0.0f) - bb.center);
+        else
+            return (Vector3.zero + new Vector3(bb.size.x * 0.5f + gap * 0.5f, 0.0f, 0.0f) - bb.center);
     }
 
     public void CancelOperation()

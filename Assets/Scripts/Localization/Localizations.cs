@@ -194,6 +194,9 @@ public class Localizations : MonoBehaviour
         instance = this;
 
         mcLanguage = "en";
+#if UNITY_EDITOR
+        mcLanguage = "en";
+#endif
     }
 
     void OnDestroy()

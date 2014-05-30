@@ -46,7 +46,7 @@ PlayerSettings:
   forceSingleInstance: 0
   resizableWindow: 0
   useMacAppStoreValidation: 0
-  gpuSkinning: 1
+  gpuSkinning: 0
   xboxPIXTextureCapture: 0
   xboxEnableAvatar: 0
   xboxEnableKinect: 0
@@ -76,7 +76,7 @@ PlayerSettings:
   iPhoneBundleIdentifier: com.testaluna.eu.fractionslab
   metroEnableIndependentInputSource: 0
   metroEnableLowLatencyPresentationAPI: 0
-  productGUID: b6ae4795282c09f409068d803d4139b4
+  productGUID: 8f856e84f049aab46a055b8e4eb631e5
   iPhoneBundleVersion: 1.0.1
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 9
@@ -158,7 +158,7 @@ PlayerSettings:
   flashStrippingLevel: 2
   spritePackerPolicy: 
   scriptingDefineSymbols: {}
-  metroPackageName: 01_test_shapes
+  metroPackageName: ITalk2Learn
   metroPackageLogo: 
   metroPackageVersion: 
   metroCertificatePath: 
@@ -166,13 +166,13 @@ PlayerSettings:
   metroCertificateSubject: 
   metroCertificateIssuer: 
   metroCertificateNotAfter: 0000000000000000
-  metroApplicationDescription: 01_test_shapes
+  metroApplicationDescription: ITalk2Learn
   metroTileLogo: 
   metroTileWideLogo: 
   metroTileSmallLogo: 
   metroTileShortName: 
   metroCommandLineArgsFile: 
-  metroTileShowName: 0
+  metroTileShowName: 1
   metroTileForegroundText: 1
   metroTileBackgroundColor: {r: 0, g: 0, b: 0, a: 1}
   metroSplashScreenImage: 

@@ -37,15 +37,15 @@ namespace taskDependentSupport
 			string eventType = "";
 			string eventName = "";
 			string evenType = "";
-			
-			if (args.Length>0) eventType = (string) args [0];
-			if (args.Length>1) eventName = (string) args [1];
-			if (args.Length>2) eventType = (string) args [2];
 
-			Debug.Log (" hier in SendMessageToSupport");
-			Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
-			Debug.Log (" hier in SendMessageToSupport eventName: "+eventName);
-			Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
+            if (args.Length > 0) eventType = args[0].ToString();
+            if (args.Length > 1) eventName = args[1].ToString();
+            if (args.Length > 2) eventType = args[2].ToString();
+
+			//Debug.Log (" hier in SendMessageToSupport");
+			//Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
+			//Debug.Log (" hier in SendMessageToSupport eventName: "+eventName);
+			//Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
 			
 			Analysis analyse = new Analysis();
 			analyse.analyseEvent(eventType, eventName, eventType);

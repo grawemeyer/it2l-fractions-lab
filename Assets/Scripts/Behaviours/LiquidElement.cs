@@ -24,21 +24,32 @@ public class LiquidElement : WSElement, IWSElement
     //protected float height = 0.0f;
     protected float strokeWidth = 0.06f;
     protected float lastElementScale = 1.0f;
-    protected GameObject root = null;
     #endregion
 
     #region Unity Callbacks
     void Awake()
     {
-        root = transform.parent.gameObject;
-    }
+        //root = transform.parent.gameObject;
 
-    void Update()
-    {
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                if (transform.GetChild(i).name.Equals("background"))
+                {
+                    bg = transform.GetChild(i).gameObject;
+                    bg.renderer.material = new Material(Shader.Find("Diffuse"));
+                    UpdateBG();
+                    break;
+                }
+            }
     }
     #endregion
 
     #region Public Methods
+    public override void SetRoot(GameObject r)
+    {
+        root = transform.parent.gameObject;
+    }
+
     public override SBSBounds GetBounds()
     {
         if (state == ElementsState.Fraction || state == ElementsState.Result)
@@ -61,6 +72,13 @@ public class LiquidElement : WSElement, IWSElement
             return bounds;
         }
     }
+
+    /*public override void SetColor(Color color)
+    {
+        bg = null;
+        //bg.renderer.material = new Material(Shader.Find("Diffuse"));
+        base.SetColor(color);
+    }*/
 
     public override void Draw(int zIndex)
     {
@@ -123,7 +141,7 @@ public class LiquidElement : WSElement, IWSElement
         return ((partDenominator % partitions == 0) && (partNumerator % partitions == 0));
     }
 
-    public override void IncreaseNumerator()
+    /*public override void IncreaseNumerator()
     {
         if (partitions == 1)
         {
@@ -171,9 +189,9 @@ public class LiquidElement : WSElement, IWSElement
         root.BroadcastMessage("SetPartNumerator", this.partNumerator);
 
         ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
-    }
+    }*/
 
-    public override void IncreaseDenominator()
+    /*public override void IncreaseDenominator()
     {
         this.denominator++;
         this.partDenominator = denominator * partitions;
@@ -208,9 +226,9 @@ public class LiquidElement : WSElement, IWSElement
 
             ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Denominator", root.name, partDenominator);
         }
-    }
+    }*/
 
-    public override void IncreasePartitions()
+    /*public override void IncreasePartitions()
     {
         this.partitions++;
 
@@ -234,7 +252,7 @@ public class LiquidElement : WSElement, IWSElement
         root.BroadcastMessage("SetPartitions", this.partitions);
 
         ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Partitions", root.name, partitions);
-    }
+    }*/
     #endregion
 
     #region Messages
@@ -264,6 +282,13 @@ public class LiquidElement : WSElement, IWSElement
             }
         }
         root.GetComponent<RootElement>().UpdateGraphics();
+    }
+
+    void SetContentColor(Color c)
+    {
+        color = c;
+        UpdateWater();
+        Draw(zIndex);
     }
 
     void SetSize(Vector2 size)
@@ -409,11 +434,15 @@ public class LiquidElement : WSElement, IWSElement
         {
             if (localPos.y > leftLocalPos.y)
             {
-                IncreaseNumerator();
+                if (partNumerator < partDenominator)
+                    Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().IncreaseNumerator(); //root.BroadcastMessage("IncreaseNumerator");
             }
             else
             {
-                DecreaseNumerator();
+                RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
+                int num = superRoot.elements.Count;
+                if (partNumerator < partDenominator || superRoot.elements[num - 1] == root)
+                    Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().DecreaseNumerator(); //root.BroadcastMessage("DecreaseNumerator");
             }
         }
         Draw(zIndex);
