@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 namespace taskDependentSupport.core
 {
 
@@ -9,20 +10,34 @@ namespace taskDependentSupport.core
 	
 		public void processEvent()
 		{
-			if ((StudentModel.getCurrentFractions() == 2) && (! StudentModel.getCompared())){
-				FeedbackStrategyModel.setMessage(1, "low");
-			}
-			
-			else if (StudentModel.getComparedResult()){
-				FeedbackStrategyModel.setMessage(2, "high");
-			}
-			
-			else if (StudentModel.getEquivalenceOpen() == 1){
-				FeedbackStrategyModel.setMessage(3, "low");
-			}
-			
-			else {
-				FeedbackStrategyModel.setMessage(0, "low");
+
+			bool correctSolution = false;
+			bool correctDenominator = false;
+			for (int i = 0; i < StudentModel.getCurrentFractions().Count; i++){
+				Fraction currentFraction = StudentModel.getCurrentFractions()[i];
+				int nominator = currentFraction.getNominator();
+				int denominator = currentFraction.getDenominator();
+				int partition = currentFraction.getPartition();
+
+				if (partition != 0){
+					nominator = nominator * partition;
+					denominator = denominator * partition;
+				}
+				if (denominator == 12) {
+					correctDenominator = true;
+					if (nominator == 9){
+						correctSolution = true;
+					}
+				}
+
+
+				if (correctSolution){
+					FeedbackStrategyModel.setMessage(2, "high");
+				}
+				else {
+					FeedbackStrategyModel.setMessage(0, "low");
+				}
+
 			}
 		}
 	}

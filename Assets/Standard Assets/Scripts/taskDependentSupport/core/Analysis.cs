@@ -7,8 +7,11 @@ namespace taskDependentSupport.core
 	public class Analysis {
 
 
-		public void analyseEvent(string type, string name, string id)
+
+		public void analyseEvent(string type, string name, string id, string value, int fractionsValue, string position, long time)
 		{
+			StudentModel.setEventTime(time);
+
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){
 					if (StudentModel.getEquivalenceOpen() == 0) StudentModel.setEquivalenceOpen(1);
@@ -16,12 +19,21 @@ namespace taskDependentSupport.core
 				}
 			}
 			if (type.Equals ("FractionGenerated")){
-				StudentModel.setCurrentFractions(StudentModel.getCurrentFractions() +1);
+				Fraction thisFraction = new Fraction();
+				thisFraction.setName(name);
+				thisFraction.setID(id);
+				StudentModel.addCurrentFractions(thisFraction);
 				StudentModel.setCompared(false);
 				StudentModel.setComparedResult(false);
 			}
+			if (type.Equals("FractionChange")){
+				if (name.Equals("Numerator")) StudentModel.setNumeratorAtFraction(id, fractionsValue);
+				if (name.Equals("Denominator")) StudentModel.setDenominatorAtFraction(id, fractionsValue);
+				if (name.Equals("Partitions")) StudentModel.setPartitionAtFraction(id, fractionsValue);
+			}
+
 			if (type.Equals ("FractionTrashed")){
-				StudentModel.setCurrentFractions(StudentModel.getCurrentFractions() -1);
+				StudentModel.removeFraction(id);
 				StudentModel.setCompared(false);
 				StudentModel.setComparedResult(false);
 			}
@@ -34,9 +46,10 @@ namespace taskDependentSupport.core
 					StudentModel.setComparedResult(false);
 				}
 			}
+
 		
 		}
 
-
+	
 	}
 }

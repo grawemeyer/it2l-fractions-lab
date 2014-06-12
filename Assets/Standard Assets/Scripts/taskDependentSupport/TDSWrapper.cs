@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 using taskDependentSupport.core;
+using System.Threading;
 
 namespace taskDependentSupport
 {
@@ -20,7 +22,9 @@ namespace taskDependentSupport
 		
 		#region Public Static Fields
 		public static GameObject eventManager = null;
-		public static bool intelligentSupportOff = false;
+		public static bool intelligentSupportOff = true;
+
+		private static Counter counter; 
 		#endregion
 		
 		#region Public Static Methods
@@ -28,57 +32,68 @@ namespace taskDependentSupport
 		{
 			Application.ExternalCall("newEvent", args);
 		}
-		
+
+		private static Thread t1;
+
 		public static void SendMessageToSupport(params object[] args)
 		{
-
 			if (intelligentSupportOff) return;
+
 
 			string eventType = "";
 			string eventName = "";
-			string evenType = "";
+			string objectID = "";
+			string objectValue = "";
+			string objectPosition = "";
+			int objectValueInt = 0;
 
-            if (args.Length > 0) eventType = args[0].ToString();
-            if (args.Length > 1) eventName = args[1].ToString();
-            if (args.Length > 2) eventType = args[2].ToString();
+			if (args.Length>0) eventType = (string) args [0];
+			if (args.Length>1) eventName = (string) args [1];
+			if (args.Length>2) objectID = (string) args [2];
 
-			//Debug.Log (" hier in SendMessageToSupport");
-			//Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
-			//Debug.Log (" hier in SendMessageToSupport eventName: "+eventName);
-			//Debug.Log (" hier in SendMessageToSupport eventType: "+eventType);
-			
+			if (args.Length > 3){
+				try {
+					objectValue = (string)args [3];
+				} catch (Exception ex) {
+					objectValueInt = (int)args[3];			
+				};
+			}
+			if (args.Length>4) objectPosition = (string) args [4];
+
+			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
+			ticks /= 10000000; //Convert windows ticks to seconds
+			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+" time: "+ticks);
 			Analysis analyse = new Analysis();
-			analyse.analyseEvent(eventType, eventName, eventType);
-
-			Reasoning reasoning = new Reasoning();
-			reasoning.processEvent();
-
-			Feedback feedback = new Feedback();
-			feedback.generateFeedbackMessage();
+			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
 
-			//string result = "";
-			//string test = (string) args [args.Length - 1];
+			if (counter == null) {
+				counter = new Counter ();
+				Thread counterThread = new Thread(new ThreadStart(counter.increaseCounter));
+				counterThread.Start();
+			}
 
-			//for (int i = 0; i < args.Length; i++) {
-			//	result += " "+args[i]; 
-				//result =args[i]; 
-			//}
-			//if (test.Equals ("Equivalence")) {
-				//System.Console.WriteLine ("Equivalence!!! ");
-				//if (eventManager != null) {
-				//	string message = "testing";
-				//	string json = "{\"method\": \"HighFeedback\", \"parameters\": {\"message\": \"" + message +"\"}}";
-					//u.getUnity().SendMessage("ExternalInterface", "SendEvent", json);
-				//	eventManager.SendMessage("SendEvent", json);
-				//}
-				//else {
-				//	System.Console.WriteLine ("eventManager == null");
-				//}
-			//}
-			
+			counter.resetCounter();
+		
+			Thread responseThread = new Thread (new ThreadStart (handleEvent));
+			responseThread.Start (); 
 
-			//System.Console.WriteLine("hier in wrapper "+result);
+		}
+
+		private static void handleEvent()
+		{
+			try {
+				while (counter.getValue ()< 400) {}
+
+				if (counter.getValue () >= 400) {
+					Reasoning reasoning = new Reasoning();
+					reasoning.processEvent();
+				
+					Feedback feedback = new Feedback();
+					feedback.generateFeedbackMessage();
+				}
+			} 
+			catch (ThreadAbortException e){}
 		}
 		#endregion
 		
