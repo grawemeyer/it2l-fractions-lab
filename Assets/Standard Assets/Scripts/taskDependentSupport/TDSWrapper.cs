@@ -2,6 +2,7 @@
 using System.Collections;
 using System;
 using taskDependentSupport.core;
+using System.Threading;
 
 namespace taskDependentSupport
 {
@@ -22,6 +23,8 @@ namespace taskDependentSupport
 		#region Public Static Fields
 		public static GameObject eventManager = null;
 		public static bool intelligentSupportOff = false;
+
+		private static Counter counter; 
 		#endregion
 		
 		#region Public Static Methods
@@ -29,7 +32,9 @@ namespace taskDependentSupport
 		{
 			Application.ExternalCall("newEvent", args);
 		}
-		
+
+		private static Thread t1;
+
 		public static void SendMessageToSupport(params object[] args)
 		{
 			if (intelligentSupportOff) return;
@@ -57,16 +62,38 @@ namespace taskDependentSupport
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
-				
+			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+" time: "+ticks);
 			Analysis analyse = new Analysis();
 			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
-			Reasoning reasoning = new Reasoning();
-			reasoning.processEvent();
 
-			Feedback feedback = new Feedback();
-			feedback.generateFeedbackMessage();
+			if (counter == null) {
+				counter = new Counter ();
+				Thread counterThread = new Thread(new ThreadStart(counter.increaseCounter));
+				counterThread.Start();
+			}
 
+			counter.resetCounter();
+		
+			Thread responseThread = new Thread (new ThreadStart (handleEvent));
+			responseThread.Start (); 
+
+		}
+
+		private static void handleEvent()
+		{
+			try {
+				while (counter.getValue ()< 400) {}
+
+				if (counter.getValue () >= 400) {
+					Reasoning reasoning = new Reasoning();
+					reasoning.processEvent();
+				
+					Feedback feedback = new Feedback();
+					feedback.generateFeedbackMessage();
+				}
+			} 
+			catch (ThreadAbortException e){}
 		}
 		#endregion
 		

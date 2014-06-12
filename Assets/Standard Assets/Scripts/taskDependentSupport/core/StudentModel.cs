@@ -12,6 +12,28 @@ namespace taskDependentSupport.core
 		private static bool compared = false;
 		private static bool comparedResult = false;
 		private static long time = 0;
+		private static int lastDisplayedMessageID = 0;
+		private static string lastDisplayedMessageType = ""; 
+
+		public static void setDisplayedMessageType(string value)
+		{
+			lastDisplayedMessageType = value;
+		}
+		
+		public static string getlastDisplayedMessageType()
+		{
+			return lastDisplayedMessageType;
+		}
+
+		public static void setDisplaydMessageID(int value)
+		{
+			lastDisplayedMessageID = value;
+		}
+		
+		public static int getlastDisplayedMessageID()
+		{
+			return lastDisplayedMessageID;
+		}
 
 		public static void setEventTime(long value)
 		{
