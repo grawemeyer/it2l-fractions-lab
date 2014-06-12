@@ -22,7 +22,7 @@ namespace taskDependentSupport
 		
 		#region Public Static Fields
 		public static GameObject eventManager = null;
-		public static bool intelligentSupportOff = false;
+		public static bool intelligentSupportOff = true;
 
 		private static Counter counter; 
 		#endregion
