@@ -36,18 +36,9 @@ public class Localizations : MonoBehaviour
     {
         get
         {
-            /*
-            Dictionary<SystemLanguage, string> l = new Dictionary<SystemLanguage, string>();
-
-            l.Add(SystemLanguage.English, "en");
-            l.Add(SystemLanguage.Italian, "it");
-            
-            if (l.ContainsKey(Application.systemLanguage))
-                return l[Application.systemLanguage]; //Languages.getLanguage(l[Application.systemLanguage]);
-            else
-                return "en"; //Languages.getLanguage("en_us");
-            */
-
+#if UNITY_EDITOR
+            return null;
+#else
             string[] srcValueStr = Application.srcValue.Split('?');
             string[] parStr;
 
@@ -57,22 +48,16 @@ public class Localizations : MonoBehaviour
 
                 foreach (string str in srcParamsStr)
                 {
-                    if (str.StartsWith("silentbay_lang"))
+                    if (str.StartsWith("language"))
                     {
                         parStr = str.Split('=');
                         return WWW.UnEscapeURL(parStr[1]);
-                    }
-
-                    if (str.StartsWith("lang_selector_type"))
-                    {
-                        parStr = str.Split('=');
-                        GameObject.FindGameObjectWithTag("Interface").SendMessage("SetLangSelector", parStr[1]);
-                        //return WWW.UnEscapeURL(parStr[1]);
                     }
                 }
 
             }
             return null;
+#endif
         }
     }
     #endregion
@@ -91,7 +76,7 @@ public class Localizations : MonoBehaviour
         }
     }
 
-    string[] validLanguages = { "en", "it", "es", "fr", "de", "ro", "br", "tr", "pl", "pt", "ru", "hu", "se" };
+    string[] validLanguages = { "en", "de" };
 
     public string CheckValidLanguage(string mcLang)
     {
@@ -119,10 +104,11 @@ public class Localizations : MonoBehaviour
 
     protected void chooseLanguage()
     {
-        if (null != embeddedLanguage)
-            mcLanguage = embeddedLanguage;
+        //if (null != embeddedLanguage)
+        //    mcLanguage = embeddedLanguage;
 
         currentLanguage = CheckValidLanguage(mcLanguage);
+
 
         foreach (GameObject listener in listeners)
             listener.SendMessage("OnLanguageChanged", currentLanguage, SendMessageOptions.DontRequireReceiver);
@@ -139,23 +125,6 @@ public class Localizations : MonoBehaviour
 
     public string getString(string identifier)
     {
-        //Debug.Log("getString " + identifier + " currentLanguage " + currentLanguage);
-        /*
-        Dictionary<string, string> items;
-        if (strings.TryGetValue(identifier, out items))
-            if (null == currentLanguage)
-            {
-                if (items.ContainsKey(currentLanguage))
-                    return items[currentLanguage];
-                else
-                    return items["en"];
-            }
-            else
-                return items[currentLanguage];
-        else
-            return "";
-        */
-
         Dictionary<string, string> items;
         if (strings.TryGetValue(currentLanguage, out items))
             if (items.ContainsKey(identifier))
@@ -193,10 +162,12 @@ public class Localizations : MonoBehaviour
             Debug.LogError("Translations component must be unique!");
         instance = this;
 
-        mcLanguage = "en";
-#if UNITY_EDITOR
-        mcLanguage = "en";
-#endif
+
+        if (Application.srcValue.Contains("language=de"))
+            mcLanguage = "de";
+        else
+            mcLanguage = "en";
+        chooseLanguage();
     }
 
     void OnDestroy()

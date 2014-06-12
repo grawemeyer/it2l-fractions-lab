@@ -119,20 +119,26 @@ public class Workspace : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
-            DestroyHighlight();
+        if (inputEnabled)
+        {
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+                DestroyHighlight();
+        }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        /*if (Input.GetKeyDown(KeyCode.Q))
         {
             if (null != ElementOnFocus)
                 Highlight(ElementOnFocus.name);
         }
 
+        if (Input.GetKeyDown(KeyCode.R))
+            Highlight("mcTrash");
+
         if (Input.GetKeyDown(KeyCode.W))
-            Highlight("mcFractionAdd");
+            Highlight("mcRepresentationBar");
 
         if (Input.GetKeyDown(KeyCode.E))
-            Highlight("btLines");
+            Highlight("mcHints");*/
     }
 
     void OnMouseDown()
@@ -791,13 +797,10 @@ public class Workspace : MonoBehaviour
                     switch (currentAction)
                     {
                         case (ActionType.Join):
-                            ExternalEventsManager.Instance.SendMessageToSupport("JoinError", firstCut.name, secondCut.name);
-                            break;
-                        case (ActionType.Compare):
-                            ExternalEventsManager.Instance.SendMessageToSupport("CompareError", firstCut.name, secondCut.name);
+                            ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "SumError", firstCut.name, secondCut.name);
                             break;
                         case (ActionType.TakingAway):
-                            ExternalEventsManager.Instance.SendMessageToSupport("TakingAwayError", firstCut.name, secondCut.name);
+                            ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "SubtractionError", firstCut.name, secondCut.name);
                             break;
                     }
                 }
@@ -813,13 +816,10 @@ public class Workspace : MonoBehaviour
             switch (currentAction)
             {
                 case (ActionType.Join):
-                    ExternalEventsManager.Instance.SendMessageToSupport("JoinError", firstCut.name, secondCut.name);
-                    break;
-                case (ActionType.Compare):
-                    ExternalEventsManager.Instance.SendMessageToSupport("CompareError", firstCut.name, secondCut.name);
+                    ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "SumError", firstCut.name, secondCut.name);
                     break;
                 case (ActionType.TakingAway):
-                    ExternalEventsManager.Instance.SendMessageToSupport("TakingAwayError", firstCut.name, secondCut.name);
+                    ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "SubtractionError", firstCut.name, secondCut.name);
                     break;
             }
         }
@@ -866,7 +866,7 @@ public class Workspace : MonoBehaviour
     #region Coroutines
     IEnumerator MakeProperJoin()
     {
-        ExternalEventsManager.Instance.SendMessageToSupport("ProperJoin", firstCut.name, secondCut.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "ProperSum", firstCut.name, secondCut.name);
         interfaces.SendMessage("ShowActionPopup");
 
         float gap = 0.1f;
@@ -972,7 +972,7 @@ public class Workspace : MonoBehaviour
 
     IEnumerator MakeProperTakingAway()
     {
-        ExternalEventsManager.Instance.SendMessageToSupport("ProperJoin", firstCut.name, secondCut.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "ProperSubtraction", firstCut.name, secondCut.name);
         interfaces.SendMessage("ShowActionPopup");
 
         float gap = 0.1f;
@@ -1199,13 +1199,10 @@ public class Workspace : MonoBehaviour
         switch (currentAction)
         {
             case (ActionType.Join):
-                ExternalEventsManager.Instance.SendMessageToSupport("ImproperJoin", firstCut.name, secondCut.name);
-                break;
-            case (ActionType.Compare):
-                ExternalEventsManager.Instance.SendMessageToSupport("ImproperCompare", firstCut.name, secondCut.name);
+                ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "ImproperSum", firstCut.name, secondCut.name);
                 break;
             case (ActionType.TakingAway):
-                ExternalEventsManager.Instance.SendMessageToSupport("ImproperTakingAway", firstCut.name, secondCut.name);
+                ExternalEventsManager.Instance.SendMessageToSupport("ActionEvent", "ImproperSubtraction", firstCut.name, secondCut.name);
                 break;
         }
         
@@ -1312,7 +1309,7 @@ public class Workspace : MonoBehaviour
         interfaces.SendMessage("InterfaceHighlightByName", name);
 
         if(transform.childCount > 0)
-            gameObject.BroadcastMessage("InitHighlight", name);
+            gameObject.BroadcastMessage("InitHighlight", name, SendMessageOptions.DontRequireReceiver);
     }
 
     public void DestroyHighlight()

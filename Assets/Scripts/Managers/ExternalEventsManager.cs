@@ -21,6 +21,7 @@ public class ExternalEventsManager : MonoBehaviour
     #endregion
 
     #region Protected Fields
+    protected GameObject workspace;
     protected GameObject interfaces;
     #endregion
 
@@ -58,6 +59,15 @@ public class ExternalEventsManager : MonoBehaviour
                         if (null != interfaces)
                             interfaces.SendMessage("ShowHighFeedback", jsonObj["parameters"]["message"].ToString(), SendMessageOptions.DontRequireReceiver);
                     break;
+                case ("Highlight"):
+                    if (jsonObj["parameters"].Contains("target"))
+                        if (null != workspace)
+                            workspace.SendMessage("Highlight", jsonObj["parameters"]["target"].ToString(), SendMessageOptions.DontRequireReceiver);
+                    break;
+                case ("RemoveHighlight"):
+                    if (null != workspace)
+                        workspace.SendMessage("DestroyHighlight", SendMessageOptions.DontRequireReceiver);
+                    break;
             }
         }
     }
@@ -75,6 +85,7 @@ public class ExternalEventsManager : MonoBehaviour
     void Start()
     {
         interfaces = GameObject.FindGameObjectWithTag("Interface");
+        workspace = GameObject.FindGameObjectWithTag("Workspace");
         TDSWrapper.eventManager = gameObject;
     }
     #endregion
