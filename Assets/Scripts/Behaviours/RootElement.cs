@@ -94,8 +94,8 @@ public class RootElement : WSElement, IWSElement
         hasDragged = false;
         initialMouseDownPos = Input.mousePosition;
 
-        if (mode == InteractionMode.Moving)
-        {
+        //if (mode == InteractionMode.Moving)
+        //{
             string typeString = "HRects";
             switch (type)
             {
@@ -117,7 +117,7 @@ public class RootElement : WSElement, IWSElement
                 ExternalEventsManager.Instance.SendMessageToSupport("PressCut", typeString, name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
             else
                 ExternalEventsManager.Instance.SendMessageToSupport("PressFraction", typeString, name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
-        }
+        //}
         
         if (mode == InteractionMode.Initializing)
         {
@@ -564,15 +564,15 @@ public class RootElement : WSElement, IWSElement
 
                     symbol.SendMessage("SetNumerator", this.numerator);
                     symbol.SendMessage("SetPartNumerator", this.partNumerator);
+                    ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
                 }
             }
             else
             {
                 root.BroadcastMessage("SetNumerator", this.numerator);
                 root.BroadcastMessage("SetPartNumerator", this.partNumerator);
+                ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
             }
-
-            ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
         }
     }
 
@@ -606,15 +606,15 @@ public class RootElement : WSElement, IWSElement
 
                     symbol.SendMessage("SetNumerator", this.numerator);
                     symbol.SendMessage("SetPartNumerator", this.partNumerator);
+                    ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
                 }
             }
             else
             {
                 root.BroadcastMessage("SetNumerator", this.numerator);
                 root.BroadcastMessage("SetPartNumerator", this.partNumerator);
-            }
-
-            ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
+                ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
+            }            
         }
     }
 
@@ -1348,6 +1348,7 @@ public class RootElement : WSElement, IWSElement
 
             symbol.SendMessage("SetNumerator", this.numerator);
             symbol.SendMessage("SetPartNumerator", this.partNumerator);
+            ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
 
             Workspace.Instance.RemoveEmptyChildren(gameObject);
         }
