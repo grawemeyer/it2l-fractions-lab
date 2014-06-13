@@ -11,7 +11,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.156";
+    public const string VER = "0.158";
 
     #region Protected Fields
     protected string SWFUtilsPath = "Flash/Utils.swf:";
@@ -137,8 +137,10 @@ public class InterfaceBehaviour : MonoBehaviour
         localizationUtils = GameObject.FindGameObjectWithTag("LevelRoot").GetComponent<LocalizationUtils>();
 
         Localizations.Instance.mcLanguage = "en";
-        if (Application.srcValue.Contains("language=de"))
-            Localizations.Instance.mcLanguage = "de";
+        //if (Application.srcValue.Contains("language=de"))
+        if (ExternalEventsManager.Instance.embeddingVariables.ContainsKey("language"))
+            if (ExternalEventsManager.Instance.embeddingVariables["language"].Equals("de"))
+                Localizations.Instance.mcLanguage = "de";
 
         Localizations.Instance.initialize();
         Localizations.Instance.listeners.Add(gameObject);
@@ -619,8 +621,12 @@ public class InterfaceBehaviour : MonoBehaviour
 		MovieClipOverlayCameraBehaviour.overlayCameraName = "UICamera";
 		stage = MovieClipOverlayCameraBehaviour.instance.stage;
 
-        string src = Application.srcValue;
-        if (src.Contains("showStartPage=false"))
+        bool showHud = false;
+        if (ExternalEventsManager.Instance.embeddingVariables.ContainsKey("showStartPage"))
+            if (ExternalEventsManager.Instance.embeddingVariables["showStartPage"].Equals("false"))
+                showHud = true;
+
+        if (showHud)
         {
             InitializeHUD();
         }

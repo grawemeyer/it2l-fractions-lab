@@ -21,6 +21,10 @@ public class ExternalEventsManager : MonoBehaviour
     #endregion
 
     #region Protected Fields
+    public Dictionary<string, string> embeddingVariables = new Dictionary<string, string>();
+    #endregion
+
+    #region Protected Fields
     protected GameObject workspace;
     protected GameObject interfaces;
     #endregion
@@ -78,9 +82,30 @@ public class ExternalEventsManager : MonoBehaviour
     void Awake()
     {
         if (instance != null)
+        {
             Debug.LogError("ExternalEventsManager component must be unique!");
+            return;
+        }
 
         instance = this;
+
+        embeddingVariables.Clear();
+        string src = Application.srcValue;
+        string[] srcSplit = src.Split('?');
+        if (srcSplit.Length == 2)
+        {
+            string[] paramsSplit = srcSplit[1].Split('&');
+            for (int i = 0; i < paramsSplit.Length; i++)
+            {
+                string[] valueSplit = paramsSplit[i].Split('=');
+                embeddingVariables.Add(valueSplit[0], valueSplit[1]);
+            }
+        }
+
+#if UNITY_EDITOR
+        //embeddingVariables.Add("language", "en");
+        //embeddingVariables.Add("showStartPage", "false");
+#endif
     }
 
     void Start()
@@ -88,6 +113,8 @@ public class ExternalEventsManager : MonoBehaviour
         interfaces = GameObject.FindGameObjectWithTag("Interface");
         workspace = GameObject.FindGameObjectWithTag("Workspace");
         TDSWrapper.eventManager = gameObject;
+        if (embeddingVariables.ContainsKey("idtask"))
+            TDSWrapper.setTaskID(embeddingVariables["idtask"]);
     }
     #endregion
 }
