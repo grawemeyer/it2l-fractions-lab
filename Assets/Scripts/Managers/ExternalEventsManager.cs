@@ -35,6 +35,7 @@ public class ExternalEventsManager : MonoBehaviour
 
     public void SendMessageToSupport(params object[] args)
     {
+        //Debug.Log(args[0].ToString() + " ---> " + args[1].ToString());
         TDSWrapper.SendMessageToSupport(args);
     }
     #endregion

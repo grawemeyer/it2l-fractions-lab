@@ -11,7 +11,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.154";
+    public const string VER = "0.156";
 
     #region Protected Fields
     protected string SWFUtilsPath = "Flash/Utils.swf:";
