@@ -23,6 +23,7 @@ namespace taskDependentSupport
 		#region Public Static Fields
 		public static GameObject eventManager = null;
 		public static bool intelligentSupportOff = true;
+		public static String taskID;
 
 		private static Counter counter; 
 		#endregion
@@ -33,7 +34,9 @@ namespace taskDependentSupport
 			Application.ExternalCall("newEvent", args);
 		}
 
-		private static Thread t1;
+		public static void setTaskID(object arg){
+			taskID = arg.ToString();
+		}
 
 		public static void SendMessageToSupport(params object[] args)
 		{
