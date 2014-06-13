@@ -63,7 +63,7 @@ namespace taskDependentSupport
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
-			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+" time: "+ticks);
+			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+"objectValue: "+objectValue+" objectValueInt: "+objectValueInt);
 			Analysis analyse = new Analysis();
 			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
@@ -75,17 +75,19 @@ namespace taskDependentSupport
 			}
 
 			counter.resetCounter();
-		
-			Thread responseThread = new Thread (new ThreadStart (handleEvent));
-			responseThread.Start (); 
+
+			if (eventType.Equals("FractionGenerated") || eventType.Equals("FractionChange")){
+				Thread responseThread = new Thread (new ThreadStart (handleEvent));
+				responseThread.Start (); 
+			}
 
 		}
+
 
 		private static void handleEvent()
 		{
 			try {
 				while (counter.getValue ()< 400) {}
-
 				if (counter.getValue () >= 400) {
 					Reasoning reasoning = new Reasoning();
 					reasoning.processEvent();
