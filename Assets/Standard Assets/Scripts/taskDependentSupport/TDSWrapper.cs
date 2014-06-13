@@ -47,18 +47,19 @@ namespace taskDependentSupport
 			string objectPosition = "";
 			int objectValueInt = 0;
 
-			if (args.Length>0) eventType = (string) args [0];
-			if (args.Length>1) eventName = (string) args [1];
-			if (args.Length>2) objectID = (string) args [2];
+			if (args.Length>0) eventType = args [0].ToString ();
+			if (args.Length>1) eventName = args [1].ToString ();
+			if (args.Length>2) objectID = args [2].ToString ();
 
 			if (args.Length > 3){
+				objectValue = args [3].ToString ();
 				try {
-					objectValue = (string)args [3];
+					objectValueInt = System.Convert.ToInt32(objectValue);	
 				} catch (Exception ex) {
-					objectValueInt = (int)args[3];			
+						
 				};
 			}
-			if (args.Length>4) objectPosition = (string) args [4];
+			if (args.Length>4) objectPosition = args [4].ToString ();
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
