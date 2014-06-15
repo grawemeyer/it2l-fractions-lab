@@ -33,6 +33,7 @@ namespace taskDependentSupport.core
 			var json = "{\"method\": \"HighFeedback\", \"parameters\": {\"message\": \"" + message +"\"}}";
 
 			taskDependentSupport.TDSWrapper.eventManager.SendMessage("SendEvent", json);
+			taskDependentSupport.TDSWrapper.PlaySound(message);
 		}
 		
 		
@@ -40,6 +41,7 @@ namespace taskDependentSupport.core
 		{
 			var json = "{\"method\": \"LowFeedback\", \"parameters\": {\"message\": \"" + message +"\"}}";
 			taskDependentSupport.TDSWrapper.eventManager.SendMessage("SendEvent", json);
+			taskDependentSupport.TDSWrapper.PlaySound(message);
 		}
 
 		private void highlightItem(string itemID)

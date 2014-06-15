@@ -34,6 +34,10 @@ namespace taskDependentSupport
 			Application.ExternalCall("newEvent", args);
 		}
 
+		public static void PlaySound(String message){
+			Application.ExternalCall("playSound", message);
+		}
+
 		public static void setTaskID(object arg){
 			taskID = arg.ToString();
 		}
