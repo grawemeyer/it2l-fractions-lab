@@ -38,6 +38,10 @@ namespace taskDependentSupport
 			Application.ExternalCall("playSound", message);
 		}
 
+		public static void SaveEvent(String message){
+			Application.ExternalCall("saveEvent", message);
+		}
+
 		public static void setTaskID(object arg){
 			taskID = arg.ToString();
 		}
@@ -71,6 +75,9 @@ namespace taskDependentSupport
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
 			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+"objectValue: "+objectValue+" objectValueInt: "+objectValueInt);
+
+			SaveEvent (ticks+";eventType:"+eventType+";eventName:"+eventName+";objectID:"+objectID+";objectValue:"+objectValue+";objectValueInt:"+objectValueInt+";objectPosition:"+objectPosition+";");
+
 			Analysis analyse = new Analysis();
 			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
