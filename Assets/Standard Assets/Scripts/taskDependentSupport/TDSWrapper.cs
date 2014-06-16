@@ -35,10 +35,12 @@ namespace taskDependentSupport
 		}
 
 		public static void PlaySound(String message){
+			Debug.Log ("playSound: "+message);
 			Application.ExternalCall("playSound", message);
 		}
 
 		public static void SaveEvent(String message){
+			Debug.Log ("saveEvent: "+message);
 			Application.ExternalCall("saveEvent", message);
 		}
 
@@ -78,6 +80,7 @@ namespace taskDependentSupport
 
 			SaveEvent (ticks+";eventType:"+eventType+";eventName:"+eventName+";objectID:"+objectID+";objectValue:"+objectValue+";objectValueInt:"+objectValueInt+";objectPosition:"+objectPosition+";");
 
+			Debug.Log ("taskID: "+taskID);
 
 			Analysis analyse = new Analysis ();
 			analyse.analyseEvent (eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
