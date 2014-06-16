@@ -24,6 +24,7 @@ namespace taskDependentSupport
 		public static GameObject eventManager = null;
 		public static bool intelligentSupportOff = false;
 		public static String taskID = "";
+		public static Thread responseThread;
 
 		private static Counter counter; 
 		#endregion
@@ -96,12 +97,13 @@ namespace taskDependentSupport
 			counter.resetCounter ();
 
 			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
-				Thread responseThread = new Thread (new ThreadStart (handleEvent));
-				responseThread.Start (); 
+				if (responseThread == null){
+					responseThread = new Thread (new ThreadStart (handleEvent));
+					responseThread.Start (); 
+				}
 			}
 
 		}
-
 
 		private static void handleEvent()
 		{
@@ -114,6 +116,8 @@ namespace taskDependentSupport
 				
 					Feedback feedback = new Feedback();
 					feedback.generateFeedbackMessage();
+
+					responseThread = null;
 				}
 			} 
 			catch (ThreadAbortException e){}
