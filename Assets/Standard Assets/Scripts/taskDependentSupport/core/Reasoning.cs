@@ -25,8 +25,7 @@ namespace taskDependentSupport.core
 				bool misconception2 = false;
 				bool misconception3 = false;
 				bool misconception4 = false;
-				Debug.Log ("count: "+StudentModel.getCurrentFractions().Count);
-
+			
 				//check if there is already a correct solution
 				Fraction inUseFraction = StudentModel.getCurrentFraction();
 				bool correctSolutionFound = false;
