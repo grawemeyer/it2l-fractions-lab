@@ -16,12 +16,35 @@ namespace taskDependentSupport.core
 		private static int lastDisplayedMessageID = 0;
 		private static string lastDisplayedMessageType = ""; 
 		private static int misconception = 0;
+		private static bool completed = false;
+		private static int doneButtonPressed = 0;
+
+		public static void resetDoneButtonPressed(){
+			doneButtonPressed = 0;
+		}
+
+		public static void setDoneButtonPressed(){
+			doneButtonPressed += 1;
+		}
+
+		public static bool firstDoneButtonPressed(){
+			if (doneButtonPressed <= 1)return true;
+			return false;
+		}
+
+		public static bool isTaskCompleted(){
+			return completed;
+		}
+
+		public static void setTaskCompleted(bool value){
+			completed = value;
+		}
 
 		public static void setMisconceptionNominatorForgotten(){
 			misconception = 1;
 		}
 
-		public bool isMisconceptionNominatorForgotten(){
+		public static bool isMisconceptionNominatorForgotten(){
 			if (misconception == 1) return true;
 			return false;
 		}

@@ -25,6 +25,8 @@ namespace taskDependentSupport
 		public static bool intelligentSupportOff = false;
 		public static String taskID = "";
 		public static Thread responseThread;
+		public static bool doneButtonEnabled = false;
+		public static bool arrowButtonEnabled = true;
 
 		private static Counter counter; 
 		#endregion
@@ -48,6 +50,24 @@ namespace taskDependentSupport
 		public static void setTaskID(object arg){
 			Debug.Log ("setTaskID: "+arg);
 			taskID = arg.ToString();
+			StudentModel.resetDoneButtonPressed();
+
+			if (taskID.Equals ("EQUIValence1")) {
+				DoneButtonEnable(true);
+				ArrowButtonEnable(false);
+			}
+		}
+
+		public static void DoneButtonEnable(bool value){
+			Debug.Log ("DoneButtonEnable: "+value);
+			Application.ExternalCall("doneButtonEnable", value);
+			doneButtonEnabled = value;
+		}
+
+		public static void ArrowButtonEnable(bool value){
+			Debug.Log ("ArrowButtonEnable: "+value);
+			Application.ExternalCall("arrowButtonEnable", value);
+			arrowButtonEnabled = value;
 		}
 
 		public static void SendMessageToSupport(params object[] args)
@@ -101,6 +121,17 @@ namespace taskDependentSupport
 					responseThread = new Thread (new ThreadStart (handleEvent));
 					responseThread.Start (); 
 				}
+			}
+
+			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && eventName.Equals ("doneButtonPressed")){
+				Debug.Log ("doneButtonPressed");
+				StudentModel.setDoneButtonPressed ();
+				Reasoning reasoning = new Reasoning();
+				reasoning.setTaskID(taskID);
+				reasoning.processDoneEvent();
+				
+				Feedback feedback = new Feedback();
+				feedback.generateFeedbackMessage();
 			}
 
 		}

@@ -14,6 +14,30 @@ namespace taskDependentSupport.core
 			taskID = value;
 		}
 
+		public void processDoneEvent(){
+			Debug.Log ("processDoneEvent");
+			if (StudentModel.isTaskCompleted ()) {
+				if (taskID.Equals ("EQUIValence1")) {
+					if (StudentModel.isMisconceptionNominatorForgotten ()) {
+						FeedbackStrategyModel.setMessage (10, "high");
+					} else {
+						FeedbackStrategyModel.setMessage (11, "high");
+					}
+				}
+				TDSWrapper.ArrowButtonEnable (true);
+				TDSWrapper.DoneButtonEnable (false);
+			} 
+			else {
+				if (StudentModel.firstDoneButtonPressed()){
+					FeedbackStrategyModel.setMessage (8, "high");
+				}
+				else {
+					FeedbackStrategyModel.setMessage (9, "high");
+					TDSWrapper.ArrowButtonEnable (true);
+				}
+			}
+		}
+
 		public void processEvent()
 		{
 
@@ -71,6 +95,7 @@ namespace taskDependentSupport.core
 							correctDenominator = true;
 							if (nominator == 9){
 								correctSolution = true;
+								StudentModel.setTaskCompleted(true);
 							}
 							else if (nominator == 3){
 								misconception1 = true;
