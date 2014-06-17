@@ -22,8 +22,8 @@ namespace taskDependentSupport
 		
 		#region Public Static Fields
 		public static GameObject eventManager = null;
-		public static bool intelligentSupportOff = true;
-		public static String taskID;
+		public static bool intelligentSupportOff = false;
+		public static String taskID = "";
 
 		private static Counter counter; 
 		#endregion
@@ -34,7 +34,18 @@ namespace taskDependentSupport
 			Application.ExternalCall("newEvent", args);
 		}
 
+		public static void PlaySound(String message){
+			Debug.Log ("playSound: "+message);
+			Application.ExternalCall("playSound", message);
+		}
+
+		public static void SaveEvent(String message){
+			Debug.Log ("saveEvent: "+message);
+			Application.ExternalCall("saveEvent", message);
+		}
+
 		public static void setTaskID(object arg){
+			Debug.Log ("setTaskID: "+arg);
 			taskID = arg.ToString();
 		}
 
@@ -67,19 +78,24 @@ namespace taskDependentSupport
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
 			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+"objectValue: "+objectValue+" objectValueInt: "+objectValueInt);
-			Analysis analyse = new Analysis();
-			analyse.analyseEvent(eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
+
+			SaveEvent (ticks+";eventType:"+eventType+";eventName:"+eventName+";objectID:"+objectID+";objectValue:"+objectValue+";objectValueInt:"+objectValueInt+";objectPosition:"+objectPosition+";");
+
+			Debug.Log ("taskID: "+taskID);
+
+			Analysis analyse = new Analysis ();
+			analyse.analyseEvent (eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
 
 			if (counter == null) {
 				counter = new Counter ();
-				Thread counterThread = new Thread(new ThreadStart(counter.increaseCounter));
-				counterThread.Start();
+				Thread counterThread = new Thread (new ThreadStart (counter.increaseCounter));
+				counterThread.Start ();
 			}
 
-			counter.resetCounter();
+			counter.resetCounter ();
 
-			if (eventType.Equals("FractionGenerated") || eventType.Equals("FractionChange")){
+			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
 				Thread responseThread = new Thread (new ThreadStart (handleEvent));
 				responseThread.Start (); 
 			}
@@ -93,6 +109,7 @@ namespace taskDependentSupport
 				while (counter.getValue ()< 400) {}
 				if (counter.getValue () >= 400) {
 					Reasoning reasoning = new Reasoning();
+					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
 				
 					Feedback feedback = new Feedback();

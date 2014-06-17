@@ -11,7 +11,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.158";
+    public const string VER = "0.162";
 
     #region Protected Fields
     protected string SWFUtilsPath = "Flash/Utils.swf:";
@@ -777,18 +777,19 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void EnableHUD()
     {
-        if (isOperationShown)
-            ShowOperationMenu(lastOperation);
+        //if (isOperationShown)
+        //    ShowOperationMenu(lastOperation);
 
         EnableBarOperations();
         EnableBarTools();
+        ShowSuggestion("");
+        Workspace.Instance.SendMessage("EnableInput");
     }
 
     void DisableHUD()
     {
-        isOperationShown = mcTopBottom.visible;
-
-        HideOperationMenu();
+        //isOperationShown = mcTopBottom.visible;
+        //HideOperationMenu();
         DisableBarOperations();
         DisableBarTools();
     }
@@ -866,7 +867,8 @@ public class InterfaceBehaviour : MonoBehaviour
 #if !UNITY_IPHONE
         if (elementSelected)
         {
-            Workspace.Instance.ElementOnFocus.SendMessage("ScaleDown");
+            if (Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().partDenominator > 0)
+                Workspace.Instance.ElementOnFocus.SendMessage("ScaleDown");
         }
         ShowHint("{hint_drag_eq}");
 #endif
@@ -877,7 +879,8 @@ public class InterfaceBehaviour : MonoBehaviour
 #if !UNITY_IPHONE
         if (elementSelected)
         {
-            Workspace.Instance.ElementOnFocus.SendMessage("ScaleUp");
+            if (Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().partDenominator > 0)
+                Workspace.Instance.ElementOnFocus.SendMessage("ScaleUp");
         }
 		ShowHint("");
 #endif
@@ -1427,10 +1430,13 @@ public class InterfaceBehaviour : MonoBehaviour
         bottomUI.camera.orthographic = true;
         bottomUI.camera.clearFlags = CameraClearFlags.SolidColor;
         bottomUI.camera.backgroundColor = Color.white;
-		bottomUI.AddComponent<MovieClipOverlayCameraBehaviour>();
+        MovieClipOverlayCameraBehaviour bMc = bottomUI.AddComponent<MovieClipOverlayCameraBehaviour>();
         bottomUI.camera.CopyFrom(MovieClipOverlayCameraBehaviour.instance.camera);
         bottomUI.camera.pixelRect = new Rect(0, 0, Screen.width, Screen.height);
-        bottomUI.camera.clearFlags = CameraClearFlags.Nothing;
+        bottomUI.camera.clearFlags = CameraClearFlags.SolidColor;
+        bottomUI.camera.backgroundColor = new Color(0.898f, 0.866f, 0.77f);
+        bottomUI.camera.depth = -2;
+        bMc.postRender = true;
 
         bottomUI.GetComponent<MovieClipOverlayCameraBehaviour>().stage.addChild(mcTopBottom);
         bottomUI.GetComponent<MovieClipOverlayCameraBehaviour>().stage.addChild(mcTrash);

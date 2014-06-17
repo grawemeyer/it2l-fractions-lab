@@ -44,6 +44,12 @@ namespace taskDependentSupport.core
 			if (messageID == 2) feedbackMessage = "Great! Well done.";
 			if (messageID == 3) feedbackMessage = "Drag two fractions here to test equivalence";
 
+			if (messageID == 4) feedbackMessage = "You have forgotten to change the numerator as well";
+			if (messageID == 5) feedbackMessage = "If you use the partition tool, what do you notice?";// Can you make a denominator of 12 using the partition tool?";
+			if (messageID == 6) feedbackMessage = "Make a fraction equivalent to 3/4. It should have 12 as a denominator";
+			if (messageID == 7) feedbackMessage = "You have made 12 the numerator. Make 12 the denominator";
+
+
 			return feedbackMessage;
 		}
 

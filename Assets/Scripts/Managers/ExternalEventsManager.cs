@@ -54,6 +54,10 @@ public class ExternalEventsManager : MonoBehaviour
         {
             switch (jsonObj["method"].ToString())
             {
+                case ("PlatformEvent"):
+                    if (jsonObj["parameters"].Contains("eventName"))
+                        SendMessageToSupport("PlatformEvent", jsonObj["parameters"]["eventName"].ToString());
+                    break;
                 case ("LowFeedback"):
                     if (jsonObj["parameters"].Contains("message"))
                         if (null != interfaces)
@@ -103,7 +107,7 @@ public class ExternalEventsManager : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        //embeddingVariables.Add("language", "en");
+        //embeddingVariables.Add("language", "de");
         //embeddingVariables.Add("showStartPage", "false");
 #endif
     }
