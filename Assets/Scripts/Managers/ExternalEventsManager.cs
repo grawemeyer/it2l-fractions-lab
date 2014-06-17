@@ -56,7 +56,7 @@ public class ExternalEventsManager : MonoBehaviour
             {
                 case ("PlatformEvent"):
                     if (jsonObj["parameters"].Contains("eventName"))
-                        SendMessageToSupport("PlatformEvent", jsonObj["parameters"]["event"].ToString());
+                        SendMessageToSupport("PlatformEvent", jsonObj["parameters"]["eventName"].ToString());
                     break;
                 case ("LowFeedback"):
                     if (jsonObj["parameters"].Contains("message"))
