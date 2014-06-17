@@ -27,6 +27,7 @@ namespace taskDependentSupport
 		public static Thread responseThread;
 		public static bool doneButtonEnabled = false;
 		public static bool arrowButtonEnabled = true;
+		public static bool needsNewThread = true;
 
 		private static Counter counter; 
 		#endregion
@@ -117,9 +118,10 @@ namespace taskDependentSupport
 			counter.resetCounter ();
 
 			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
-				if (responseThread == null){
+				if (needsNewThread || (responseThread == null)){
 					responseThread = new Thread (new ThreadStart (handleEvent));
 					responseThread.Start (); 
+					needsNewThread = false;
 				}
 			}
 
@@ -149,10 +151,13 @@ namespace taskDependentSupport
 					Feedback feedback = new Feedback();
 					feedback.generateFeedbackMessage();
 
-					responseThread = null;
+					needsNewThread = true;
+					//responseThread = null;
 				}
 			} 
-			catch (ThreadAbortException e){}
+			catch (ThreadAbortException e){
+				Debug.Log (e);
+			}
 		}
 		#endregion
 		
