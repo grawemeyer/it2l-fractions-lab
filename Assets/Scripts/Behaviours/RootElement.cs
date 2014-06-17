@@ -192,9 +192,15 @@ public class RootElement : WSElement, IWSElement
             float bottomMargin = -vMargin; // -marginOffset;
 
             Vector3 clampedMousePos = Input.mousePosition;
-            
-			if (Input.mousePosition.x > 220.0f * Screen.width / 800.0f && Input.mousePosition.x < 580.0f * Screen.width / 800.0f)
+
+            if (Input.mousePosition.x > 220.0f * Screen.width / 800.0f && Input.mousePosition.x < 580.0f * Screen.width / 800.0f)
+            {
                 clampedMousePos.y = Mathf.Clamp(Input.mousePosition.y, 0.0f, Screen.height - (100.0f * Screen.height / 600.0f));
+                /*if (partDenominator == 0)
+                {
+                    clampedMousePos.y = Mathf.Clamp(Input.mousePosition.y, 0.0f, Screen.height - (230.0f * Screen.height / 600.0f));
+                }*/
+            }
 
             clampedMousePos.x = Mathf.Clamp(Input.mousePosition.x, 0.0f, Screen.width);
 
