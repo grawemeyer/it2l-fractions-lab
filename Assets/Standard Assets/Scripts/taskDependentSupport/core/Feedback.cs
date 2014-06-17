@@ -21,15 +21,15 @@ namespace taskDependentSupport.core
 				StudentModel.setDisplayedMessageType(messageType);
 			}
 
-			if (messageType.Equals("low"))
-			{
-				taskDependentSupport.TDSWrapper.SaveEvent (ticks+";lowMessage:"+feedbackMessage+";");
-				sendLowMessage(feedbackMessage);
-			}
-			else if (messageType.Equals("high"))
-			{
-				taskDependentSupport.TDSWrapper.SaveEvent (ticks+";highMessage:"+feedbackMessage+";");
-				sendHighMessage(feedbackMessage);
+
+			if (!feedbackMessage.Equals ("")) {
+				if (messageType.Equals ("low")) {
+					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
+					sendLowMessage (feedbackMessage);
+				} else if (messageType.Equals ("high")) {
+					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
+					sendHighMessage (feedbackMessage);
+				}
 			}
 		}
 
