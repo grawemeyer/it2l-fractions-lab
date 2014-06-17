@@ -15,6 +15,16 @@ namespace taskDependentSupport.core
 		private static long time = 0;
 		private static int lastDisplayedMessageID = 0;
 		private static string lastDisplayedMessageType = ""; 
+		private static int misconception = 0;
+
+		public static void setMisconceptionNominatorForgotten(){
+			misconception = 1;
+		}
+
+		public bool isMisconceptionNominatorForgotten(){
+			if (misconception == 1) return true;
+			return false;
+		}
 
 		public static void setCurrentFraction(String id){
 			currentFraction = getFraction (id);

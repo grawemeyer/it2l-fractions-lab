@@ -74,6 +74,7 @@ namespace taskDependentSupport.core
 							}
 							else if (nominator == 3){
 								misconception1 = true;
+								StudentModel.setMisconceptionNominatorForgotten();
 							}
 						}
 						else if (nominator == 12){
