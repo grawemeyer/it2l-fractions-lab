@@ -60,13 +60,13 @@ namespace taskDependentSupport
 
 		public static void DoneButtonEnable(bool value){
 			Debug.Log ("DoneButtonEnable: "+value);
-			Application.ExternalCall("doneButtonEnable", value);
+			Application.ExternalCall("doneButtonEnable", value.ToString ());
 			doneButtonEnabled = value;
 		}
 
 		public static void ArrowButtonEnable(bool value){
 			Debug.Log ("ArrowButtonEnable: "+value);
-			Application.ExternalCall("arrowButtonEnable", value);
+			Application.ExternalCall("arrowButtonEnable", value.ToString ());
 			arrowButtonEnabled = value;
 		}
 
@@ -123,7 +123,8 @@ namespace taskDependentSupport
 				}
 			}
 
-			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && eventName.Equals ("doneButtonPressed")){
+			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
+			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
 				Debug.Log ("doneButtonPressed");
 				StudentModel.setDoneButtonPressed ();
 				Reasoning reasoning = new Reasoning();

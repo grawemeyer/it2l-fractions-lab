@@ -49,10 +49,10 @@ namespace taskDependentSupport.core
 			if (messageID == 6) feedbackMessage = "Make a fraction equivalent to 3/4. It should have 12 as a denominator";
 			if (messageID == 7) feedbackMessage = "You have made 12 the numerator. Make 12 the denominator";
 
-			if (messageID == 8)feedbackMessage = "It seems like you haven't completed the task";
-			if (messageID == 9)feedbackMessage = "If you need more help to finish the task, ask your teacher";
+			if (messageID == 8) feedbackMessage = "It seems like you haven't completed the task";
+			if (messageID == 9) feedbackMessage = "If you need more help to finish the task, ask your teacher";
 			if (messageID == 10) feedbackMessage = "What do you notice about the relationship between 4 and 12?";
-			if (messageID == 11) feedbackMessage = "What did you notice about the coloured parts and the uncoloured parts? What stayed the same and what changed?";
+			if (messageID == 11) feedbackMessage = "What did you notice about the coloured parts and the uncoloured parts?";// What stayed the same and what changed?";
 
 
 
