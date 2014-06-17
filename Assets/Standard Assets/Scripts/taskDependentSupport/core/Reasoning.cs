@@ -25,55 +25,84 @@ namespace taskDependentSupport.core
 				bool misconception2 = false;
 				bool misconception3 = false;
 				bool misconception4 = false;
-				for (int i = 0; i < StudentModel.getCurrentFractions().Count; i++){
-					Fraction currentFraction = StudentModel.getCurrentFractions()[i];
-					int nominator = currentFraction.getNominator();
-					int denominator = currentFraction.getDenominator();
-					int partition = currentFraction.getPartition();
+				Debug.Log ("count: "+StudentModel.getCurrentFractions().Count);
 
-					if (partition != 0){
-						nominator = nominator * partition;
-						denominator = denominator * partition;
-					}
+				//check if there is already a correct solution
+				Fraction inUseFraction = StudentModel.getCurrentFraction();
+				bool correctSolutionFound = false;
+				for (int j = 0; j < StudentModel.getCurrentFractions().Count; j++){
 
-					if((denominator == 0) && (nominator == 0)){
-						misconception3 = true;
-					}
-
-					else if (denominator == 12) {
-						correctDenominator = true;
-						if (nominator == 9){
-							correctSolution = true;
+					Fraction thisFraction = StudentModel.getCurrentFractions()[j];
+					if (!inUseFraction.getID().Equals(thisFraction.getID())){
+						int nominator = thisFraction.getNominator();
+						int denominator = thisFraction.getDenominator();
+						int partition = thisFraction.getPartition();
+						
+						if (partition != 0){
+							nominator = nominator * partition;
+							denominator = denominator * partition;
 						}
-						else if (nominator == 3){
-							misconception1 = true;
+
+						if ((denominator == 12) && (nominator == 9)){
+							correctSolutionFound = true;
+							FeedbackStrategyModel.setMessage(0, "low");
 						}
 					}
-					else if (nominator == 12){
-						misconception4 = true;
-					}
-					else {
-						misconception2 = true;
-					}
+
+				}
+
+				if (!correctSolutionFound) {
+					for (int i = 0; i < StudentModel.getCurrentFractions().Count; i++){
+						Fraction currentFraction = StudentModel.getCurrentFractions()[i];
+
+						int nominator = currentFraction.getNominator();
+						int denominator = currentFraction.getDenominator();
+						int partition = currentFraction.getPartition();
+
+						if (partition != 0){
+							nominator = nominator * partition;
+							denominator = denominator * partition;
+						}
+
+						if((denominator == 0) && (nominator == 0)){
+							misconception3 = true;
+						}
+
+						else if (denominator == 12) {
+							correctDenominator = true;
+							if (nominator == 9){
+								correctSolution = true;
+							}
+							else if (nominator == 3){
+								misconception1 = true;
+							}
+						}
+						else if (nominator == 12){
+							misconception4 = true;
+						}
+						else {
+							misconception2 = true;
+						}
 
 
-					if (correctSolution){
-						FeedbackStrategyModel.setMessage(2, "high");
-					}
-					else if (misconception1){
-						FeedbackStrategyModel.setMessage(4, "high");
-					}
-					else if (misconception2){
-						FeedbackStrategyModel.setMessage(5, "high");
-					}
-					else if (misconception3){
-						FeedbackStrategyModel.setMessage(6, "high");
-					}
-					else if (misconception4){
-						FeedbackStrategyModel.setMessage(7, "high");
-					}
-					else {
-						FeedbackStrategyModel.setMessage(0, "low");
+						if (correctSolution){
+							FeedbackStrategyModel.setMessage(2, "high");
+						}
+						else if (misconception1){
+							FeedbackStrategyModel.setMessage(4, "high");
+						}
+						else if (misconception2){
+							FeedbackStrategyModel.setMessage(5, "high");
+						}
+						else if (misconception3){
+							FeedbackStrategyModel.setMessage(6, "high");
+						}
+						else if (misconception4){
+							FeedbackStrategyModel.setMessage(7, "high");
+						}
+						else {
+							FeedbackStrategyModel.setMessage(0, "low");
+						}
 					}
 				}
 			}

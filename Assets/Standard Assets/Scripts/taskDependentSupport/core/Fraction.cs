@@ -5,7 +5,7 @@ namespace taskDependentSupport.core
 		public class Fraction
 		{
 
-			private static string id;
+			private string id;
 			private string name;
 			private int nominator;
 			private int denominator;

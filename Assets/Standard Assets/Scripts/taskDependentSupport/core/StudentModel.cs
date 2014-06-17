@@ -9,11 +9,20 @@ namespace taskDependentSupport.core
 	{
 		private static int equivalenceOpen = 0;
 		private static List<Fraction> currentFractions = new List<Fraction>();
+		private static Fraction currentFraction; 
 		private static bool compared = false;
 		private static bool comparedResult = false;
 		private static long time = 0;
 		private static int lastDisplayedMessageID = 0;
 		private static string lastDisplayedMessageType = ""; 
+
+		public static void setCurrentFraction(String id){
+			currentFraction = getFraction (id);
+		}
+
+		public static Fraction getCurrentFraction(){
+			return currentFraction;
+		}
 
 		public static void setDisplayedMessageType(string value)
 		{
@@ -81,23 +90,23 @@ namespace taskDependentSupport.core
 
 		public static void setNumeratorAtFraction(String id, int value)
 		{
-			Fraction current = getCurrentFraction(id);
+			Fraction current = getFraction(id);
 			current.setNominator (value);
 		}
 
 		public static void setDenominatorAtFraction(String id, int value)
 		{
-			Fraction current = getCurrentFraction(id);
+			Fraction current = getFraction(id);
 			current.setDenominator(value);
 		}
 
 		public static void setPartitionAtFraction(String id, int value)
 		{
-			Fraction current = getCurrentFraction(id);
+			Fraction current = getFraction(id);
 			current.setPartition(value);
 		}
 
-		private static Fraction getCurrentFraction(String id)
+		private static Fraction getFraction(String id)
 		{
 			for (int i = 0; i < currentFractions.Count; i++) {
 				Fraction current = currentFractions [i];
