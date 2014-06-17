@@ -156,6 +156,7 @@ namespace taskDependentSupport
 				}
 			} 
 			catch (ThreadAbortException e){
+				needsNewThread = true;
 				Debug.Log (e);
 			}
 		}
