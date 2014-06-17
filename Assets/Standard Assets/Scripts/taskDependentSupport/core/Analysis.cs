@@ -11,6 +11,7 @@ namespace taskDependentSupport.core
 		public void analyseEvent(string type, string name, string id, string value, int fractionsValue, string position, long time)
 		{
 			StudentModel.setEventTime(time);
+			StudentModel.setCurrentFraction(id);
 
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){
@@ -25,6 +26,7 @@ namespace taskDependentSupport.core
 				StudentModel.addCurrentFractions(thisFraction);
 				StudentModel.setCompared(false);
 				StudentModel.setComparedResult(false);
+
 			}
 			if (type.Equals("FractionChange")){
 				if (name.Equals("Numerator")) StudentModel.setNumeratorAtFraction(id, fractionsValue);
