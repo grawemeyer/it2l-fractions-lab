@@ -108,8 +108,8 @@ namespace taskDependentSupport
 			Analysis analyse = new Analysis ();
 			analyse.analyseEvent (eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
-
 			if (counter == null) {
+				Debug.Log ("counter == null");
 				counter = new Counter ();
 				Thread counterThread = new Thread (new ThreadStart (counter.increaseCounter));
 				counterThread.Start ();
@@ -118,6 +118,9 @@ namespace taskDependentSupport
 			counter.resetCounter ();
 
 			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
+				Debug.Log ("FractionGenerated ||  FractionChange");
+				Debug.Log ("needsNewThread "+needsNewThread);
+				Debug.Log ("responseThread "+responseThread);
 				if (needsNewThread || (responseThread == null)){
 					responseThread = new Thread (new ThreadStart (handleEvent));
 					responseThread.Start (); 
@@ -131,6 +134,7 @@ namespace taskDependentSupport
 				StudentModel.setDoneButtonPressed ();
 				Reasoning reasoning = new Reasoning();
 				reasoning.setTaskID(taskID);
+				reasoning.processEvent();
 				reasoning.processDoneEvent();
 				
 				Feedback feedback = new Feedback();
@@ -144,6 +148,7 @@ namespace taskDependentSupport
 			try {
 				while (counter.getValue ()< 400) {}
 				if (counter.getValue () >= 400) {
+					Debug.Log("counter > 400");
 					Reasoning reasoning = new Reasoning();
 					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
