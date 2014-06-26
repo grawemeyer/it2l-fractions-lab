@@ -121,6 +121,8 @@ namespace taskDependentSupport
 				Debug.Log ("FractionGenerated ||  FractionChange");
 				Debug.Log ("needsNewThread "+needsNewThread);
 				Debug.Log ("responseThread "+responseThread);
+				Debug.Log ("counter "+counter);
+				Debug.Log ("counter "+counter.getValue());
 				if (needsNewThread || (responseThread == null)){
 					responseThread = new Thread (new ThreadStart (handleEvent));
 					responseThread.Start (); 

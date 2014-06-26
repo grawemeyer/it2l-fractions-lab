@@ -40,9 +40,9 @@ namespace taskDependentSupport.core
 
 		public void processEvent()
 		{
-
+			Debug.Log ("processEvent");
 			if (taskID.Equals("EQUIValence1")){
-
+				Debug.Log ("EQUIValence1");
 				bool correctSolution = false;
 				bool correctDenominator = false;
 				bool misconception1 = false;
@@ -53,10 +53,11 @@ namespace taskDependentSupport.core
 				//check if there is already a correct solution
 				Fraction inUseFraction = StudentModel.getCurrentFraction();
 				bool correctSolutionFound = false;
+				Debug.Log ("inUseFraction: "+inUseFraction);
 				for (int j = 0; j < StudentModel.getCurrentFractions().Count; j++){
 
 					Fraction thisFraction = StudentModel.getCurrentFractions()[j];
-					if (!inUseFraction.getID().Equals(thisFraction.getID())){
+					if ((inUseFraction == null) || !inUseFraction.getID().Equals(thisFraction.getID())){
 						int nominator = thisFraction.getNominator();
 						int denominator = thisFraction.getDenominator();
 						int partition = thisFraction.getPartition();
@@ -75,6 +76,7 @@ namespace taskDependentSupport.core
 				}
 
 				if (!correctSolutionFound) {
+					Debug.Log ("NOT correctSolutionFound: ");
 					for (int i = 0; i < StudentModel.getCurrentFractions().Count; i++){
 						Fraction currentFraction = StudentModel.getCurrentFractions()[i];
 

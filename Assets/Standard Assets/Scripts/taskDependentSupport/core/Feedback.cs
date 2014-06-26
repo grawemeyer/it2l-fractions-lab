@@ -9,9 +9,12 @@ namespace taskDependentSupport.core
 	{
 
 		public void generateFeedbackMessage(){
+			Debug.Log ("generateFeedbackMessage");
 			string feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
 			string messageType = FeedbackStrategyModel.getMessageType();
 			int messageID = FeedbackStrategyModel.getMessageID();
+			Debug.Log ("messageID: "+messageID);
+			Debug.Log ("feedbackMessage: "+feedbackMessage);
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
