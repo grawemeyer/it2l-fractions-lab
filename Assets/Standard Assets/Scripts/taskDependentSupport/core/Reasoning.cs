@@ -55,7 +55,7 @@ namespace taskDependentSupport.core
 				bool correctSolutionFound = false;
 				Debug.Log ("inUseFraction: "+inUseFraction);
 				Debug.Log ("getCurrentFractions: "+StudentModel.getCurrentFractions());
-				Debug.Log ("count: "+StudentModel.getCurrentFractions().Count;);
+				Debug.Log ("count: "+StudentModel.getCurrentFractions().Count);
 				for (int j = 0; j < StudentModel.getCurrentFractions().Count; j++){
 
 					Fraction thisFraction = StudentModel.getCurrentFractions()[j];
