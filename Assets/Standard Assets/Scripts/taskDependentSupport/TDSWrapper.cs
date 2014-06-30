@@ -154,12 +154,12 @@ namespace taskDependentSupport
 					Reasoning reasoning = new Reasoning();
 					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
-				
+
 					Feedback feedback = new Feedback();
 					feedback.generateFeedbackMessage();
 
 					needsNewThread = true;
-					//responseThread = null;
+					responseThread = null;
 				}
 			} 
 			catch (ThreadAbortException e){

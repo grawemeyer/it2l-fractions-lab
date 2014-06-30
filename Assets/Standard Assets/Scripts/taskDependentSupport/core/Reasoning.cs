@@ -54,20 +54,26 @@ namespace taskDependentSupport.core
 				Fraction inUseFraction = StudentModel.getCurrentFraction();
 				bool correctSolutionFound = false;
 				Debug.Log ("inUseFraction: "+inUseFraction);
+				Debug.Log ("getCurrentFractions: "+StudentModel.getCurrentFractions());
+				Debug.Log ("count: "+StudentModel.getCurrentFractions().Count;);
 				for (int j = 0; j < StudentModel.getCurrentFractions().Count; j++){
 
 					Fraction thisFraction = StudentModel.getCurrentFractions()[j];
+					Debug.Log ("thisFraction: "+thisFraction);
 					if ((inUseFraction == null) || !inUseFraction.getID().Equals(thisFraction.getID())){
+						Debug.Log ("inUseFraction == null or inUse not current ");
 						int nominator = thisFraction.getNominator();
 						int denominator = thisFraction.getDenominator();
 						int partition = thisFraction.getPartition();
 						
 						if (partition != 0){
+							Debug.Log ("partition was used ");
 							nominator = nominator * partition;
 							denominator = denominator * partition;
 						}
 
 						if ((denominator == 12) && (nominator == 9)){
+							Debug.Log ("solution found ");
 							correctSolutionFound = true;
 							FeedbackStrategyModel.setMessage(0, "low");
 						}
