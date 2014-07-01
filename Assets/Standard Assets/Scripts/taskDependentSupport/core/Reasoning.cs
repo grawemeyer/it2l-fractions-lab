@@ -76,6 +76,7 @@ namespace taskDependentSupport.core
 							Debug.Log ("solution found ");
 							correctSolutionFound = true;
 							FeedbackStrategyModel.setMessage(0, "low");
+							StudentModel.setTaskCompleted(true);
 						}
 					}
 
