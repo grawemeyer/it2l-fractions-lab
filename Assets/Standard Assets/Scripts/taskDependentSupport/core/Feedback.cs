@@ -8,6 +8,12 @@ namespace taskDependentSupport.core
 	public class Feedback 
 	{
 
+		private string studentID="";
+		
+		public void setStudentID(string value){
+			studentID = value;
+		}
+
 		public void generateFeedbackMessage(){
 			Debug.Log ("generateFeedbackMessage");
 			string feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
@@ -26,7 +32,12 @@ namespace taskDependentSupport.core
 
 
 			if (!feedbackMessage.Equals ("")) {
-				if (messageType.Equals ("low")) {
+				if (studentID.Equals("student1") || studentID.Equals("Student1")){
+					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
+					taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
+				}
+
+				else if (messageType.Equals ("low")) {
 					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
 					sendLowMessage (feedbackMessage);
 				} else if (messageType.Equals ("high")) {
@@ -35,7 +46,6 @@ namespace taskDependentSupport.core
 				}
 			}
 		}
-
 
 		private void sendHighMessage(string message) 
 		{

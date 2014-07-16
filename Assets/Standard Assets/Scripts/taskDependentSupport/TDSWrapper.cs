@@ -24,6 +24,7 @@ namespace taskDependentSupport
 		public static GameObject eventManager = null;
 		public static bool intelligentSupportOff = false;
 		public static String taskID = "";
+		public static String studentID = "";
 		public static Thread responseThread;
 		public static bool doneButtonEnabled = false;
 		public static bool arrowButtonEnabled = true;
@@ -41,6 +42,11 @@ namespace taskDependentSupport
 			Application.ExternalCall("newEvent", args);
 		}
 
+		public static void SendMessageToLightBulb(String feedbacktext){
+			Debug.Log ("sendMessageToLightBulb: "+feedbacktext);
+			Application.ExternalCall("sendMessageToLightBulb", feedbacktext);
+		}
+
 		public static void PlaySound(String message){
 			Debug.Log ("playSound: "+message);
 			Application.ExternalCall("playSound", message);
@@ -53,7 +59,12 @@ namespace taskDependentSupport
 
 		public static void setTaskID(object arg){
 			Debug.Log ("setTaskID: "+arg);
-			taskID = arg.ToString();
+			String elem = arg.ToString ();
+			taskID = elem.Substring(0,12);
+			studentID = elem.Substring(12);
+			//taskID = arg.ToString();
+			Debug.Log ("taskID: "+taskID);
+			Debug.Log ("studentID: "+studentID);
 			StudentModel.resetDoneButtonPressed();
 
 			if (taskID.Equals ("EQUIValence1")) {
@@ -153,6 +164,7 @@ namespace taskDependentSupport
 				reasoning.processDoneEvent();
 				
 				Feedback feedback = new Feedback();
+				feedback.setStudentID(studentID);
 				feedback.generateFeedbackMessage();
 			}
 
@@ -169,6 +181,7 @@ namespace taskDependentSupport
 					reasoning.processEvent();
 
 					Feedback feedback = new Feedback();
+					feedback.setStudentID(studentID);
 					feedback.generateFeedbackMessage();
 
 					needsNewThread = true;
