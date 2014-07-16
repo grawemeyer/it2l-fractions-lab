@@ -30,6 +30,9 @@ namespace taskDependentSupport
 		public static bool needsNewThread = true;
 
 		private static Counter counter; 
+
+		//for testing:
+		private static Counter testCounter; 
 		#endregion
 		
 		#region Public Static Methods
@@ -116,6 +119,16 @@ namespace taskDependentSupport
 			}
 
 			counter.resetCounter ();
+
+			//for testing
+			/*if (taskID.Equals("EQUIValence1")){
+				if (testCounter == null) {
+					Debug.Log ("testCounter == null");
+					testCounter = new Counter ();
+					Thread testCounterThread = new Thread (new ThreadStart (testCounter.sendMessage));
+					testCounterThread.Start ();
+				}
+			}*/
 
 			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
 				Debug.Log ("FractionGenerated ||  FractionChange");
