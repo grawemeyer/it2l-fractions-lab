@@ -141,7 +141,7 @@ namespace taskDependentSupport
 				}
 			}*/
 
-			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
+			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange") || eventType.Equals ("OperationResult")) {
 				Debug.Log ("FractionGenerated ||  FractionChange");
 				Debug.Log ("needsNewThread "+needsNewThread);
 				Debug.Log ("responseThread "+responseThread);

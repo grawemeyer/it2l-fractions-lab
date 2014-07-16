@@ -54,8 +54,20 @@ namespace taskDependentSupport.core
 			if (messageID == 10) feedbackMessage = "What do you notice about the relationship between 4 and 12?";
 			if (messageID == 11) feedbackMessage = "What did you notice about the coloured parts and the uncoloured parts?";// What stayed the same and what changed?";
 
-
-
+			if (messageID == 12) feedbackMessage = "Make a fraction with 12 as denominator. The fraction should be equivalent to 3/4.";
+			if (messageID == 13) feedbackMessage = "Click the up arrow next to the empty fraction, to make the denominator 12.";
+			if (messageID == 14) feedbackMessage = "Check that your denominator is 12";
+			if (messageID == 15) feedbackMessage = "You have made the numerator 12. Please make the denominator 12 instead.";
+			if (messageID == 16) feedbackMessage = "How can you remember which part of the fraction is the denominator, and which part is the numerator?";
+			if (messageID == 17) feedbackMessage = "Check that your fraction equals 3/4. Make another fraction, this time 3/4. Then compare the two fractions.";
+			if (messageID == 18) feedbackMessage = "Compare your two fractions using the comparison box.";
+			if (messageID == 19) feedbackMessage = "What do you notice about these two fractions?";
+			if (messageID == 20) feedbackMessage = "Now change the numerator to make a fraction that is equivalent to 3/4.";
+			if (messageID == 21) feedbackMessage = "Use the partition tool to make the denominator 12.";
+			if (messageID == 22) feedbackMessage = "Right-click the representation and choose 'Show/hide partition'";
+			if (messageID == 23) feedbackMessage = "What has happened to the numerator and denominator? Have they been affected the same or differently?";
+			if (messageID == 24) feedbackMessage = "Why did you make the fraction 9/12? What did you do to the numerator and denominator of 3/4?";
+		
 			return feedbackMessage;
 		}
 

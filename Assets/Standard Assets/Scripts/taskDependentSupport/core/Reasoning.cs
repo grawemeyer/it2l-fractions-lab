@@ -18,10 +18,11 @@ namespace taskDependentSupport.core
 			Debug.Log ("processDoneEvent");
 			if (StudentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("EQUIValence1")) {
-					if (StudentModel.isMisconceptionNominatorForgotten ()) {
-						FeedbackStrategyModel.setMessage (10, "high");
-					} else {
-						FeedbackStrategyModel.setMessage (11, "high");
+					if (StudentModel.getParticitionUsed()){
+						FeedbackStrategyModel.setMessage (23, "high");
+					}
+					else {
+						FeedbackStrategyModel.setMessage (24, "high");
 					}
 				}
 				TDSWrapper.ArrowButtonEnable (true);
@@ -38,6 +39,28 @@ namespace taskDependentSupport.core
 			}
 		}
 
+		private bool problem1 = false;
+		private bool problem2 = false;
+		private bool problem3 = false;
+		private bool problem4 = false;
+		private bool problem5 = false;
+		private bool problem6 = false;
+		private bool problem7 = false;
+		private bool problem8 = false;
+		private bool reflect1 = false;
+		private bool reflect2 = false;
+
+		private void reset(){
+			problem1 = false;
+			problem2 = false;
+			problem3 = false;
+			problem4 = false;
+			problem5 = false;
+			problem6 = false;
+			problem7 = false;
+			problem8 = false;
+		}
+
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
@@ -45,10 +68,7 @@ namespace taskDependentSupport.core
 				Debug.Log ("EQUIValence1");
 				bool correctSolution = false;
 				bool correctDenominator = false;
-				bool misconception1 = false;
-				bool misconception2 = false;
-				bool misconception3 = false;
-				bool misconception4 = false;
+
 			
 				//check if there is already a correct solution
 				Fraction inUseFraction = StudentModel.getCurrentFraction();
@@ -70,12 +90,13 @@ namespace taskDependentSupport.core
 							Debug.Log ("partition was used ");
 							nominator = nominator * partition;
 							denominator = denominator * partition;
+							StudentModel.setPartitionUsed(true);
 						}
 
 						if ((denominator == 12) && (nominator == 9)){
 							Debug.Log ("solution found ");
 							correctSolutionFound = true;
-							FeedbackStrategyModel.setMessage(0, "low");
+							//FeedbackStrategyModel.setMessage(0, "low");
 							StudentModel.setTaskCompleted(true);
 						}
 					}
@@ -84,6 +105,8 @@ namespace taskDependentSupport.core
 
 				if (!correctSolutionFound) {
 					Debug.Log ("NOT correctSolutionFound: ");
+					bool denominatorOf12 = false;
+					bool threeQuaters = false;
 					for (int i = 0; i < StudentModel.getCurrentFractions().Count; i++){
 						Fraction currentFraction = StudentModel.getCurrentFractions()[i];
 
@@ -97,42 +120,89 @@ namespace taskDependentSupport.core
 						}
 
 						if((denominator == 0) && (nominator == 0)){
-							misconception3 = true;
+							problem1 = true;
+						}
+						else if ((denominator == 4) && (nominator == 3)){
+							problem8=true;
+							threeQuaters = true;
+							if (denominatorOf12) problem6=true;
 						}
 
 						else if (denominator == 12) {
 							correctDenominator = true;
+							denominatorOf12 = true;
+
+							if (StudentModel.getNominatorDenominatorMisconception()){
+								reflect1=true;
+								StudentModel.setNominatorDenominatorMisconception(false);
+							}
+
 							if (nominator == 9){
 								correctSolution = true;
 								StudentModel.setTaskCompleted(true);
 							}
-							else if (nominator == 3){
-								misconception1 = true;
-								StudentModel.setMisconceptionNominatorForgotten();
+							if (threeQuaters)problem6=true;
+							else if ((nominator == 3) || (nominator == 0)) problem7=true;
+							else{
+								problem5 = true;
+								StudentModel.setAskForComparison(true);
 							}
+
 						}
 						else if (nominator == 12){
-							misconception4 = true;
+							problem4 = true;
+							StudentModel.setNominatorDenominatorMisconception(true);
 						}
 						else {
-							misconception2 = true;
+							//denominator not 12
+							if (denominator ==0) problem2 = true;
+							else problem3=true;
 						}
 
+						if (denominatorOf12 && threeQuaters){
+							reset();
+							problem6=true;
+							StudentModel.setAskForComparison(true);
+						}
+
+						if (StudentModel.getAskForComparison() && StudentModel.getCompared()){
+							reflect1=false;
+							reflect2=true;
+							StudentModel.setAskForComparison(false);
+						}
 
 						if (correctSolution){
 							FeedbackStrategyModel.setMessage(2, "high");
 						}
-						else if (misconception1){
-							FeedbackStrategyModel.setMessage(4, "high");
+						else if (reflect1){
+							FeedbackStrategyModel.setMessage(16, "high");
 						}
-						else if (misconception2){
-							FeedbackStrategyModel.setMessage(5, "high");
+						else if (reflect2){
+							FeedbackStrategyModel.setMessage(19, "high");
 						}
-						else if (misconception3){
-							FeedbackStrategyModel.setMessage(6, "high");
+						else if (problem1){
+							FeedbackStrategyModel.setMessage(12, "high");
 						}
-						else if (misconception4){
-							FeedbackStrategyModel.setMessage(7, "high");
+						else if (problem2){
+							FeedbackStrategyModel.setMessage(13, "high");
+						}
+						else if (problem3){
+							FeedbackStrategyModel.setMessage(14, "high");
+						}
+						else if (problem4){
+							FeedbackStrategyModel.setMessage(15, "high");
+						}
+						else if (problem5){
+							FeedbackStrategyModel.setMessage(17, "high");
+						}
+						else if (problem6){
+							FeedbackStrategyModel.setMessage(18, "high");
+						}
+						else if (problem7){
+							FeedbackStrategyModel.setMessage(20, "high");
+						}
+						else if (problem8){
+							FeedbackStrategyModel.setMessage(21, "high");
 						}
 						else {
 							FeedbackStrategyModel.setMessage(0, "low");

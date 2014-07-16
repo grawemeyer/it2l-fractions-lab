@@ -18,6 +18,33 @@ namespace taskDependentSupport.core
 		private static int misconception = 0;
 		private static bool completed = false;
 		private static int doneButtonPressed = 0;
+		private static bool partitionUsed = false;
+		private static bool nominatorDenominatorMisconception = false;
+		private static bool askForComparison = false;
+
+		public static void setAskForComparison(bool value){
+			askForComparison = value;
+		}
+
+		public static bool getAskForComparison(){
+			return askForComparison;
+		}
+
+		public static void setNominatorDenominatorMisconception(bool value){
+			nominatorDenominatorMisconception = true;
+		}
+
+		public static bool getNominatorDenominatorMisconception(){
+			return nominatorDenominatorMisconception;
+		}
+
+		public static void setPartitionUsed(bool value){
+			partitionUsed = value;
+		}
+
+		public static bool getParticitionUsed(){
+			return partitionUsed;
+		}
 
 		public static void resetDoneButtonPressed(){
 			doneButtonPressed = 0;
