@@ -30,6 +30,8 @@ namespace taskDependentSupport
 		public static bool arrowButtonEnabled = true;
 		public static bool needsNewThread = true;
 
+		private static StudentModel studentModel;
+
 		private static Counter counter; 
 
 		//for testing:
@@ -65,7 +67,9 @@ namespace taskDependentSupport
 			//taskID = arg.ToString();
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
-			StudentModel.resetDoneButtonPressed();
+			//if (studentModel == null) 
+			studentModel = new StudentModel ();
+			studentModel.resetDoneButtonPressed();
 
 			if (taskID.Equals ("EQUIValence1")) {
 				DoneButtonEnable(true);
@@ -120,7 +124,7 @@ namespace taskDependentSupport
 			Debug.Log ("taskID: "+taskID);
 
 			Analysis analyse = new Analysis ();
-			analyse.analyseEvent (eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
+			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
 			if (counter == null) {
 				Debug.Log ("counter == null");
@@ -157,13 +161,15 @@ namespace taskDependentSupport
 			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
 			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
 				Debug.Log ("doneButtonPressed");
-				StudentModel.setDoneButtonPressed ();
+				studentModel.setDoneButtonPressed ();
 				Reasoning reasoning = new Reasoning();
+				reasoning.setStudentModel(studentModel);
 				reasoning.setTaskID(taskID);
 				reasoning.processEvent();
 				reasoning.processDoneEvent();
 				
 				Feedback feedback = new Feedback();
+				feedback.setStudentModel(studentModel);
 				feedback.setStudentID(studentID);
 				feedback.generateFeedbackMessage();
 			}
@@ -177,10 +183,12 @@ namespace taskDependentSupport
 				if (counter.getValue () >= 400) {
 					Debug.Log("counter > 400");
 					Reasoning reasoning = new Reasoning();
+					reasoning.setStudentModel(studentModel);
 					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
 
 					Feedback feedback = new Feedback();
+					feedback.setStudentModel(studentModel);
 					feedback.setStudentID(studentID);
 					feedback.generateFeedbackMessage();
 

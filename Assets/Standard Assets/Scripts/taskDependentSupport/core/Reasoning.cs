@@ -9,6 +9,12 @@ namespace taskDependentSupport.core
 	{
 
 		private string taskID="";
+		private StudentModel studentModel;
+
+		public void setStudentModel(StudentModel elem){
+			studentModel = elem;
+		}
+
 
 		public void setTaskID(string value){
 			taskID = value;
@@ -16,9 +22,9 @@ namespace taskDependentSupport.core
 
 		public void processDoneEvent(){
 			Debug.Log ("processDoneEvent");
-			if (StudentModel.isTaskCompleted ()) {
+			if (studentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("EQUIValence1")) {
-					if (StudentModel.getParticitionUsed()){
+					if (studentModel.getParticitionUsed()){
 						FeedbackStrategyModel.setMessage (23, "high");
 					}
 					else {
@@ -29,7 +35,7 @@ namespace taskDependentSupport.core
 				TDSWrapper.DoneButtonEnable (false);
 			} 
 			else {
-				if (StudentModel.firstDoneButtonPressed()){
+				if (studentModel.firstDoneButtonPressed()){
 					FeedbackStrategyModel.setMessage (8, "high");
 				}
 				else {
@@ -71,14 +77,14 @@ namespace taskDependentSupport.core
 
 			
 				//check if there is already a correct solution
-				Fraction inUseFraction = StudentModel.getCurrentFraction();
+				Fraction inUseFraction = studentModel.getCurrentFraction();
 				bool correctSolutionFound = false;
 				Debug.Log ("inUseFraction: "+inUseFraction);
-				Debug.Log ("getCurrentFractions: "+StudentModel.getCurrentFractions());
-				Debug.Log ("count: "+StudentModel.getCurrentFractions().Count);
-				for (int j = 0; j < StudentModel.getCurrentFractions().Count; j++){
+				Debug.Log ("getCurrentFractions: "+studentModel.getCurrentFractions());
+				Debug.Log ("count: "+studentModel.getCurrentFractions().Count);
+				for (int j = 0; j < studentModel.getCurrentFractions().Count; j++){
 
-					Fraction thisFraction = StudentModel.getCurrentFractions()[j];
+					Fraction thisFraction = studentModel.getCurrentFractions()[j];
 					Debug.Log ("thisFraction: "+thisFraction);
 					if ((inUseFraction == null) || !inUseFraction.getID().Equals(thisFraction.getID())){
 						Debug.Log ("inUseFraction == null or inUse not current ");
@@ -90,14 +96,14 @@ namespace taskDependentSupport.core
 							Debug.Log ("partition was used ");
 							nominator = nominator * partition;
 							denominator = denominator * partition;
-							StudentModel.setPartitionUsed(true);
+							studentModel.setPartitionUsed(true);
 						}
 
 						if ((denominator == 12) && (nominator == 9)){
 							Debug.Log ("solution found ");
 							correctSolutionFound = true;
 							//FeedbackStrategyModel.setMessage(0, "low");
-							StudentModel.setTaskCompleted(true);
+							studentModel.setTaskCompleted(true);
 						}
 					}
 
@@ -107,8 +113,8 @@ namespace taskDependentSupport.core
 					Debug.Log ("NOT correctSolutionFound: ");
 					bool denominatorOf12 = false;
 					bool threeQuaters = false;
-					for (int i = 0; i < StudentModel.getCurrentFractions().Count; i++){
-						Fraction currentFraction = StudentModel.getCurrentFractions()[i];
+					for (int i = 0; i < studentModel.getCurrentFractions().Count; i++){
+						Fraction currentFraction = studentModel.getCurrentFractions()[i];
 
 						int nominator = currentFraction.getNominator();
 						int denominator = currentFraction.getDenominator();
@@ -132,26 +138,26 @@ namespace taskDependentSupport.core
 							correctDenominator = true;
 							denominatorOf12 = true;
 
-							if (StudentModel.getNominatorDenominatorMisconception()){
+							if (studentModel.getNominatorDenominatorMisconception()){
 								reflect1=true;
-								StudentModel.setNominatorDenominatorMisconception(false);
+								studentModel.setNominatorDenominatorMisconception(false);
 							}
 
 							if (nominator == 9){
 								correctSolution = true;
-								StudentModel.setTaskCompleted(true);
+								studentModel.setTaskCompleted(true);
 							}
 							if (threeQuaters)problem6=true;
 							else if ((nominator == 3) || (nominator == 0)) problem7=true;
 							else{
 								problem5 = true;
-								StudentModel.setAskForComparison(true);
+								studentModel.setAskForComparison(true);
 							}
 
 						}
 						else if (nominator == 12){
 							problem4 = true;
-							StudentModel.setNominatorDenominatorMisconception(true);
+							studentModel.setNominatorDenominatorMisconception(true);
 						}
 						else {
 							//denominator not 12
@@ -162,13 +168,13 @@ namespace taskDependentSupport.core
 						if (denominatorOf12 && threeQuaters){
 							reset();
 							problem6=true;
-							StudentModel.setAskForComparison(true);
+							studentModel.setAskForComparison(true);
 						}
 
-						if (StudentModel.getAskForComparison() && StudentModel.getCompared()){
+						if (studentModel.getAskForComparison() && studentModel.getCompared()){
 							reflect1=false;
 							reflect2=true;
-							StudentModel.setAskForComparison(false);
+							studentModel.setAskForComparison(false);
 						}
 
 						if (correctSolution){

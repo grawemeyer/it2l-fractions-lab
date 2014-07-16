@@ -9,7 +9,12 @@ namespace taskDependentSupport.core
 	{
 
 		private string studentID="";
+		private StudentModel studentModel;
 		
+		public void setStudentModel(StudentModel elem){
+			studentModel = elem;
+		}
+
 		public void setStudentID(string value){
 			studentID = value;
 		}
@@ -26,8 +31,8 @@ namespace taskDependentSupport.core
 			ticks /= 10000000; //Convert windows ticks to seconds
 
 			if (messageID != 0) {
-				StudentModel.setDisplaydMessageID(messageID);
-				StudentModel.setDisplayedMessageType(messageType);
+				studentModel.setDisplaydMessageID(messageID);
+				studentModel.setDisplayedMessageType(messageType);
 			}
 
 

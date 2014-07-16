@@ -7,135 +7,137 @@ namespace taskDependentSupport.core
 {
 	public class StudentModel 
 	{
-		private static int equivalenceOpen = 0;
-		private static List<Fraction> currentFractions = new List<Fraction>();
-		private static Fraction currentFraction; 
-		private static bool compared = false;
-		private static bool comparedResult = false;
-		private static long time = 0;
-		private static int lastDisplayedMessageID = 0;
-		private static string lastDisplayedMessageType = ""; 
-		private static int misconception = 0;
-		private static bool completed = false;
-		private static int doneButtonPressed = 0;
-		private static bool partitionUsed = false;
-		private static bool nominatorDenominatorMisconception = false;
-		private static bool askForComparison = false;
+		private int equivalenceOpen = 0;
+		private List<Fraction> currentFractions = new List<Fraction>();
+		private Fraction currentFraction; 
+		private bool compared = false;
+		private bool comparedResult = false;
+		private long time = 0;
+		private int lastDisplayedMessageID = 0;
+		private string lastDisplayedMessageType = ""; 
+		private int misconception = 0;
+		private bool completed = false;
+		private int doneButtonPressed = 0;
+		private bool partitionUsed = false;
+		private bool nominatorDenominatorMisconception = false;
+		private bool askForComparison = false;
 
-		public static void setAskForComparison(bool value){
+
+
+		public void setAskForComparison(bool value){
 			askForComparison = value;
 		}
 
-		public static bool getAskForComparison(){
+		public bool getAskForComparison(){
 			return askForComparison;
 		}
 
-		public static void setNominatorDenominatorMisconception(bool value){
+		public void setNominatorDenominatorMisconception(bool value){
 			nominatorDenominatorMisconception = true;
 		}
 
-		public static bool getNominatorDenominatorMisconception(){
+		public bool getNominatorDenominatorMisconception(){
 			return nominatorDenominatorMisconception;
 		}
 
-		public static void setPartitionUsed(bool value){
+		public void setPartitionUsed(bool value){
 			partitionUsed = value;
 		}
 
-		public static bool getParticitionUsed(){
+		public bool getParticitionUsed(){
 			return partitionUsed;
 		}
 
-		public static void resetDoneButtonPressed(){
+		public void resetDoneButtonPressed(){
 			doneButtonPressed = 0;
 		}
 
-		public static void setDoneButtonPressed(){
+		public void setDoneButtonPressed(){
 			doneButtonPressed += 1;
 		}
 
-		public static bool firstDoneButtonPressed(){
+		public bool firstDoneButtonPressed(){
 			if (doneButtonPressed <= 1)return true;
 			return false;
 		}
 
-		public static bool isTaskCompleted(){
+		public bool isTaskCompleted(){
 			return completed;
 		}
 
-		public static void setTaskCompleted(bool value){
+		public void setTaskCompleted(bool value){
 			completed = value;
 		}
 
-		public static void setMisconceptionNominatorForgotten(){
+		public void setMisconceptionNominatorForgotten(){
 			misconception = 1;
 		}
 
-		public static bool isMisconceptionNominatorForgotten(){
+		public bool isMisconceptionNominatorForgotten(){
 			if (misconception == 1) return true;
 			return false;
 		}
 
-		public static void setCurrentFraction(String id){
+		public void setCurrentFraction(String id){
 			currentFraction = getFraction (id);
 		}
 
-		public static Fraction getCurrentFraction(){
+		public Fraction getCurrentFraction(){
 			return currentFraction;
 		}
 
-		public static void setDisplayedMessageType(string value)
+		public void setDisplayedMessageType(string value)
 		{
 			lastDisplayedMessageType = value;
 		}
 		
-		public static string getlastDisplayedMessageType()
+		public string getlastDisplayedMessageType()
 		{
 			return lastDisplayedMessageType;
 		}
 
-		public static void setDisplaydMessageID(int value)
+		public void setDisplaydMessageID(int value)
 		{
 			lastDisplayedMessageID = value;
 		}
 		
-		public static int getlastDisplayedMessageID()
+		public int getlastDisplayedMessageID()
 		{
 			return lastDisplayedMessageID;
 		}
 
-		public static void setEventTime(long value)
+		public void setEventTime(long value)
 		{
 			time = value;
 		}
 
-		public static long getEventTime()
+		public long getEventTime()
 		{
 			return time;
 		}
 
-		public static int getEquivalenceOpen()
+		public int getEquivalenceOpen()
 		{
 			return equivalenceOpen;
 		}
 		
-		public static void setEquivalenceOpen(int value)
+		public void setEquivalenceOpen(int value)
 		{
 			equivalenceOpen = value;
 		}
 
 
-		public static List<Fraction> getCurrentFractions()
+		public List<Fraction> getCurrentFractions()
 		{
 			return currentFractions;
 		}
 
-		public static void addCurrentFractions(Fraction value)
+		public void addCurrentFractions(Fraction value)
 		{
 			currentFractions.Add(value);
 		}
 
-		public static void removeFraction(String id)
+		public void removeFraction(String id)
 		{
 			for (int i = 0; i < currentFractions.Count; i++) 
 			{
@@ -148,25 +150,25 @@ namespace taskDependentSupport.core
 			}
 		}
 
-		public static void setNumeratorAtFraction(String id, int value)
+		public void setNumeratorAtFraction(String id, int value)
 		{
 			Fraction current = getFraction(id);
 			current.setNominator (value);
 		}
 
-		public static void setDenominatorAtFraction(String id, int value)
+		public void setDenominatorAtFraction(String id, int value)
 		{
 			Fraction current = getFraction(id);
 			current.setDenominator(value);
 		}
 
-		public static void setPartitionAtFraction(String id, int value)
+		public void setPartitionAtFraction(String id, int value)
 		{
 			Fraction current = getFraction(id);
 			current.setPartition(value);
 		}
 
-		private static Fraction getFraction(String id)
+		private Fraction getFraction(String id)
 		{
 			for (int i = 0; i < currentFractions.Count; i++) {
 				Fraction current = currentFractions [i];
@@ -175,22 +177,22 @@ namespace taskDependentSupport.core
 			return null;
 		}
 
-		public static bool getCompared()
+		public bool getCompared()
 		{
 			return compared;
 		}
 		
-		public static void setCompared(bool value)
+		public void setCompared(bool value)
 		{
 			compared = value;
 		}
 
-		public static bool getComparedResult()
+		public bool getComparedResult()
 		{
 			return comparedResult;
 		}
 		
-		public static void setComparedResult(bool value)
+		public void setComparedResult(bool value)
 		{
 			comparedResult = value;
 		}
