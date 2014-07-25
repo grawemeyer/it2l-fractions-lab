@@ -32,13 +32,20 @@ namespace taskDependentSupport
 
 		private static StudentModel studentModel;
 
-		private static Counter counter; 
+		public static Counter counter; 
 
 		//for testing:
 		private static Counter testCounter; 
 		#endregion
 		
 		#region Public Static Methods
+		public static void StopThreads(){
+			Debug.Log ("STOP THREADS");
+			responseThread = null;
+			counter = null;
+		}
+
+
 		public static void SendBrowserMessage(params object[] args)
 		{
 			Application.ExternalCall("newEvent", args);
@@ -89,6 +96,7 @@ namespace taskDependentSupport
 			arrowButtonEnabled = value;
 		}
 
+
 		public static void SendMessageToSupport(params object[] args)
 		{
 			if (intelligentSupportOff) return;
@@ -122,6 +130,8 @@ namespace taskDependentSupport
 			SaveEvent (ticks+";eventType:"+eventType+";eventName:"+eventName+";objectID:"+objectID+";objectValue:"+objectValue+";objectValueInt:"+objectValueInt+";objectPosition:"+objectPosition+";");
 
 			Debug.Log ("taskID: "+taskID);
+
+			if (studentModel == null) studentModel = new StudentModel ();
 
 			Analysis analyse = new Analysis ();
 			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
@@ -201,6 +211,7 @@ namespace taskDependentSupport
 				Debug.Log (e);
 			}
 		}
+
 		#endregion
 		
 		#region Protected Methods
