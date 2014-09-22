@@ -47,6 +47,7 @@ namespace fractionslab.behaviours
             {
                 case ElementsType.VRect:
                 case ElementsType.HRect:
+                case ElementsType.Set:
                     if (mode == InteractionMode.Freeze)
                         meshColor += new Color(0.4f, 0.4f, 0.4f);
 

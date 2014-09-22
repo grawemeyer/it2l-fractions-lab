@@ -11,7 +11,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.162";
+    public const string VER = "0.170";
 
     #region Protected Fields
     protected string SWFUtilsPath = "Flash/Utils.swf:";
@@ -71,6 +71,7 @@ public class InterfaceBehaviour : MonoBehaviour
     protected string lowFeedbackTxt = "";
 
     protected bool isPressingButton = false;
+    public bool isPressingOperation = false;
 
     protected GameObject elementOnFocus = null;
     protected GameObject actionsPopupBG = null;
@@ -234,6 +235,43 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void Update()
     {
+       // Debug.Log("Input.mousePosition.x " + Input.mousePosition.x + " Input.mousePosition.y " + Input.mousePosition.y);
+        if (null != Workspace.Instance.ElementOnFocus)
+        {
+            if ((Input.mousePosition.x > Screen.width || Input.mousePosition.x < 0) || (Input.mousePosition.y > Screen.height || Input.mousePosition.y < 0))
+            {
+                //Debug.Log("is out");
+                if (null != mcTopBottom)
+                {
+                    if (mcTopBottom.visible)
+                    {
+                        if (null != IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction1Area")))
+                        {
+                            if (IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction2Area")) || IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("ResultArea")) || IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction1Area")))
+                            {
+                                isMouseOut = true;
+                            }
+                        }
+                        else
+                        {
+                            if (IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction2Area")) || IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("ResultArea")))
+                            {
+                                isMouseOut = true;
+                            }
+                        }
+
+
+                    }
+                }
+            }
+            else
+            {
+               // Debug.Log("is in");
+                isMouseOut = false;
+            }
+        }
+       // Debug.Log("isMouseOut " + isMouseOut);
+
         if (mcMouseIcon != null)
         {
 #if !UNITY_IPHONE
@@ -319,6 +357,29 @@ public class InterfaceBehaviour : MonoBehaviour
     #endregion
 
     #region Functionalities
+
+    void CreateSet()
+    {
+        CreateSet(0, 0, 1, 0, 0);
+    }
+
+    void CreateSet(int numerator, int denominator, int partitions, int partNumerator, int partDenominator)
+    {
+        //Debug.Log("infacebehaviour CreateSet");
+        int r = UnityEngine.Random.Range(0, 10000) % startingPoints.Count;
+        Element element = new Element();
+        element.position = startingPoints[r];
+        element.color = Workspace.Instance.GetColor();
+        element.type = ElementsType.Set;
+        element.state = ElementsState.Fraction;
+        element.numerator = numerator;
+        element.denominator = denominator;
+        element.partitions = partitions;
+        element.partNumerator = partNumerator;
+        element.partDenominator = partDenominator;
+        Workspace.Instance.SendMessage("CreateSet", element);
+    }
+
     void CreateHRect()
     {
         CreateHRect(0, 0, 1, 0, 0);
@@ -472,9 +533,9 @@ public class InterfaceBehaviour : MonoBehaviour
         Workspace.Instance.SendMessage("DisableInput");
     }
 
-
     bool IsOverHUDElement(MovieClip element)
     {
+        
 		Vector2 elementPosition = new Vector2(element.x, element.y) * (Screen.width / 800.0f);
 		Vector2 elementSize = new Vector2(element.width, element.height) * (Screen.height / 600.0f);
         Vector3 mousePosition = Input.mousePosition;
@@ -488,13 +549,33 @@ public class InterfaceBehaviour : MonoBehaviour
         return lateralCheck && heigthCheck;
     }
 
+    bool IsFractionOverHUDElement(MovieClip element)
+    {
+        if (null != element && null != Workspace.Instance.ElementOnFocus)
+        {
+            Vector2 elementPosition = new Vector2(element.x, element.y) * (Screen.width / 800.0f);
+            Vector2 elementSize = new Vector2(element.width, element.height) * (Screen.height / 600.0f);
+            Camera camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            Vector3 fractionPosition = camera.WorldToScreenPoint(Workspace.Instance.ElementOnFocus.transform.position);
+            Vector3 mousePosition = Input.mousePosition;
+
+            elementPosition = element.localToGlobal(Vector2.zero);
+            bool heigthCheck = fractionPosition.y > Screen.height - elementPosition.y - elementSize.y * 0.5f && fractionPosition.y < Screen.height - elementPosition.y + elementSize.y * 0.5f;
+            bool lateralCheck = fractionPosition.x > elementPosition.x - elementSize.x * 0.5f && fractionPosition.x < elementPosition.x + elementSize.x * 0.5f;
+
+            return lateralCheck && heigthCheck;
+        }
+        return false;
+    }
     bool DragDropCheck(MovieClip element)
     {
+       // Debug.Log("IsOverHUDElement(element)" + IsOverHUDElement(element));
         return IsOverHUDElement(element);
     }
 
     void CheckDragDrop(MovieClip element)
     {
+        //Debug.Log("element name " + element.name + "check " + DragDropCheck(element));
         if (DragDropCheck(element))
             dropOverMc = element;
     }
@@ -862,13 +943,17 @@ public class InterfaceBehaviour : MonoBehaviour
     #endregion
 
     #region Top Functions
+
+    bool isMouseOut = false;
+
     void OnTopEnter(CEvent evt)
     {
+        GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
 #if !UNITY_IPHONE
         if (elementSelected)
         {
-            if (Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().partDenominator > 0)
-                Workspace.Instance.ElementOnFocus.SendMessage("ScaleDown");
+            if (elementOnFocus.GetComponent<RootElement>().partDenominator > 0 && elementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze && elementOnFocus.GetComponent<RootElement>().state != ElementsState.Cut)
+                elementOnFocus.SendMessage("ScaleDown");
         }
         ShowHint("{hint_drag_eq}");
 #endif
@@ -876,11 +961,12 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void OnTopLeave(CEvent evt)
 	{
+        GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
 #if !UNITY_IPHONE
         if (elementSelected)
         {
-            if (Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().partDenominator > 0)
-                Workspace.Instance.ElementOnFocus.SendMessage("ScaleUp");
+            if (elementOnFocus.GetComponent<RootElement>().partDenominator > 0 && elementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze && elementOnFocus.GetComponent<RootElement>().state != ElementsState.Cut)
+                elementOnFocus.SendMessage("ScaleUp");
         }
 		ShowHint("");
 #endif
@@ -1054,7 +1140,9 @@ public class InterfaceBehaviour : MonoBehaviour
         InitializeSingleMenuTool("Partition", menuTools.getChildByName<MovieClip>("btPartition"), Partition, menuTexts[2], toolsMenuButtonsBgWidth);
 
         SetBgWidth(menuTools.getChildByName<MovieClip>("mcBg"), toolsMenuButtonsBgWidth);
-        //DisableButton(menuTools.getChildByName<MovieClip>("btChangeColor"), menuTexts[2]);
+        if (Workspace.Instance.ElementOnFocus != null && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().type == ElementsType.Set)
+            DisableButton(menuTools.getChildByName<MovieClip>("btPartition"), menuTexts[2]);
+
         //DisableButton(menuTools.getChildByName<MovieClip>("btChangeSize"), menuTexts[1]);
     }
 
@@ -1100,7 +1188,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void MenuToolsCallback(string buttonName)
 	{
-		Debug.Log("MenuToolsCallback " + buttonName);
+	//	Debug.Log("MenuToolsCallback " + buttonName);
         for (int i = 0; i < menuToolsData.Count; ++i)
         {
             if (menuToolsData[i].button.name == buttonName)
@@ -1108,7 +1196,7 @@ public class InterfaceBehaviour : MonoBehaviour
                 MenuToolDelegate buttonDelegate = menuToolsData[i].callback;
                 if (buttonDelegate != null)
 				{
-					Debug.Log(buttonName + ": " + buttonDelegate.ToString());
+					//Debug.Log(buttonName + ": " + buttonDelegate.ToString());
                     buttonDelegate();
 				}
                 break;
@@ -1120,7 +1208,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         mcMenuAction.visible = false;
         Workspace.Instance.SendMessage("EnableInput");
-        ShowSuggestion("{hint_join2}");
+        ShowSuggestion("{hint_join}");
         //Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Wait);
 
         Workspace.Instance.SendMessage("SetCurrenAction", ActionType.Join);
@@ -1132,7 +1220,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         mcMenuAction.visible = false;
         Workspace.Instance.SendMessage("EnableInput");
-        ShowSuggestion("{hint_taking_away2}");
+        ShowSuggestion("{hint_taking_away}");
         //Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Wait);
 
         Workspace.Instance.SendMessage("SetCurrenAction", ActionType.TakingAway);
@@ -1231,6 +1319,7 @@ public class InterfaceBehaviour : MonoBehaviour
         //DisableButton(barTools.getChildByName<MovieClip>("btLines"));
         //DisableButton(barTools.getChildByName<MovieClip>("btContainers"));
         DisableButton(barTools.getChildByName<MovieClip>("btNumbers"));
+        // TODO 
         DisableButton(barTools.getChildByName<MovieClip>("btSets"));
     }
 
@@ -1384,6 +1473,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         SetButtonHider();
         InitializeSingleTool("Pies", mcBarTools.getChildByName<MovieClip>("btPies"), mcBarTools.getChildByName<MovieClip>("mcSubMenu1"));
+        //TODO
         //InitializeSingleTool("Sets", mcBarTools.getChildByName<MovieClip>("btSets"), mcBarTools.getChildByName<MovieClip>("mcSubMenu2"));
         InitializeSingleTool("Lines", mcBarTools.getChildByName<MovieClip>("btLines"), null);
         InitializeSingleTool("Containers", mcBarTools.getChildByName<MovieClip>("btContainers"), null);
@@ -1459,6 +1549,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void ShowOperationMenu(FractionsOperations currOperation)
     {
+        //Debug.Log("ShowOperationMenu");
         bool checkDifferentOperation = (lastOperation != currOperation);
         if (!mcTopBottom.visible || checkDifferentOperation)
         {
@@ -1497,7 +1588,7 @@ public class InterfaceBehaviour : MonoBehaviour
     void HideOperationMenu()
     {
         mcResultOperator = mcOperation.getChildByName<MovieClip>("mcResultOperator");
-        Debug.Log("mcOperation: " + mcOperation);
+       // Debug.Log("mcOperation: " + mcOperation);
         mcResultOperator.gotoAndStop("question");
         mcFeedback = mcOperation.getChildByName<MovieClip>("mcFeedback");
         mcFeedback.visible = false;
@@ -1630,9 +1721,6 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btCircles":
             case "btHRect":
             case "btVRect":
-            case "mcFractionAdd":
-            case "mcFractionSub":
-            case "mcFractionSearch":
             case "btChangeFraction":
             case "btChangeSize":
             case "btChangeColor":
@@ -1652,6 +1740,17 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btColorShape3":
             case "btColorShape4":
                 isPressingButton = true;
+                if(null !=  Workspace.Instance.ElementOnFocus)
+                    Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Moving;
+                    break;
+            case "mcFractionAdd":
+            case "mcFractionSub":
+            case "mcFractionSearch":
+                isPressingButton = true;
+                isPressingOperation = true;
+                  if(null !=  Workspace.Instance.ElementOnFocus)
+                    Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Moving;
+                Workspace.Instance.CheckOverlapActionMenu();
                 break;
             case "btPartition":
                 CheckNotificationWarning();
@@ -1682,7 +1781,11 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btNumbers":
                 break;
             case "btSets":
-                OpenToolSubmenu(mc.name);
+                /*todo uncomment to show submenu*/
+                //OpenToolSubmenu(mc.name);
+                CreateSet();
+                ShowSuggestion("{hint_denominator_first}");
+                DisableHUD();
                 break;
             case "btPies":
                 OpenToolSubmenu(mc.name);
@@ -1711,36 +1814,44 @@ public class InterfaceBehaviour : MonoBehaviour
                 break;
             case "btHearts":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sets/Hearts");
-                //CreateHRect();
+                CreateSet();
                 OpenToolSubmenu("btSets");
                 ShowSuggestion("{hint_denominator_first}");
                 DisableHUD();
                 break;
             case "btStars":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sets/Stars");
-                //CreateHRect();
+                CreateSet();
                 OpenToolSubmenu("btSets");
                 ShowSuggestion("{hint_denominator_first}");
                 DisableHUD();
                 break;
             case "btMoons":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sets/Moons");
-                //CreateHRect();
+                CreateSet();
                 OpenToolSubmenu("btSets");
                 ShowSuggestion("{hint_denominator_first}");
                 DisableHUD();
                 break;
             case "mcFractionAdd":
+                if (null != Workspace.Instance.ElementOnFocus)
+                    Workspace.Instance.ElementOnFocus.GetComponentInChildren<RootElement>().mode = InteractionMode.Moving;
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Sum");
                 ShowOperationMenu(FractionsOperations.ADDITION);
                 ResetOperationMenu();
                 break;
             case "mcFractionSub":
+                if (null != Workspace.Instance.ElementOnFocus)
+                    Workspace.Instance.ElementOnFocus.GetComponentInChildren<RootElement>().mode = InteractionMode.Moving;
+               // Debug.Log("fraction state in mcFractionSub " + Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode);
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Substraction");
                 ShowOperationMenu(FractionsOperations.SUBTRACTION);
                 ResetOperationMenu();
                 break;
             case "mcFractionSearch":
+                if (null != Workspace.Instance.ElementOnFocus)
+                    Workspace.Instance.ElementOnFocus.GetComponentInChildren<RootElement>().mode = InteractionMode.Moving;
+               // Debug.Log("fraction state in mcFractionSearch " + Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode);
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Equivalence");
                 ShowOperationMenu(FractionsOperations.FIND);
                 ResetOperationMenu();
@@ -1844,6 +1955,7 @@ public class InterfaceBehaviour : MonoBehaviour
 		}
 
 		isPressingButton = false;
+        isPressingOperation = false;
     }
 
     void OnBtnsEnter(CEvent evt)
@@ -2047,8 +2159,8 @@ public class InterfaceBehaviour : MonoBehaviour
 
     void OnElementReleased(GameObject element)
     {
-        GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
-        RootElement selElement = elementOnFocus.GetComponentInChildren<RootElement>();
+       //GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
+        RootElement selElement = element.GetComponentInChildren<RootElement>();
 
 		if (IsOverHUDElement(mcTrash) && isOnTrash)
         {
@@ -2089,6 +2201,9 @@ public class InterfaceBehaviour : MonoBehaviour
                     case (ElementsType.Liquid):
                         typeString = "LiquidMeasures";
                         break;
+                    case (ElementsType.Set):
+                        typeString = "Set";
+                        break;
                 }
 
                 string value = selElement.partNumerator + "/" + selElement.partDenominator;
@@ -2104,22 +2219,44 @@ public class InterfaceBehaviour : MonoBehaviour
             dropOverMc = null;
             if (null != mcOperation.getChildByName<MovieClip>("Fraction1Area"))
                 CheckDragDrop(mcOperation.getChildByName<MovieClip>("Fraction1Area"));
-
             CheckDragDrop(mcOperation.getChildByName<MovieClip>("Fraction2Area"));
             CheckDragDrop(mcOperation.getChildByName<MovieClip>("ResultArea"));
         }
-
         if (dropOverMc != null)
         {
-            if (selElement.denominator != 0 && selElement.mode == InteractionMode.Moving && (selElement.state == ElementsState.Fraction || selElement.state == ElementsState.Result))
+            if (selElement.denominator != 0 && (selElement.mode == InteractionMode.Moving || selElement.mode == InteractionMode.Changing) && (selElement.state == ElementsState.Fraction || selElement.state == ElementsState.Result))
             {
                 SetFractionValue(dropOverMc, selElement.partNumerator, selElement.partDenominator);
                 SendDropMessage(dropOverMc, selElement);
                 //elementOnFocus.SendMessage("ResetLastPosition");
             }
-            elementOnFocus.SendMessage("ResetLastPosition");
-            //Workspace.Instance.ElementOnFocus.SendMessage("ScaleUp");
+           // Debug.Log("dropOverMc != null");
+            element.SendMessage("ResetLastPosition");
         }
+        if (isMouseOut) 
+        {
+            //Debug.Log("OnElementRelease isMouseOut");
+            element.SendMessage("ResetLastPosition");
+        }
+
+        if (mcTopBottom.visible)
+        {
+            if (null != IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction1Area")))
+            {
+                if (IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction2Area")) || IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("ResultArea")) || IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction1Area")))
+                {
+                   element.transform.position = Vector3.zero;
+                }
+            }
+            else
+            {
+                if (IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("Fraction2Area")) || IsFractionOverHUDElement(mcOperation.getChildByName<MovieClip>("ResultArea")))
+                {
+                    element.transform.position = Vector3.zero;
+                }
+            }
+        }
+
         dropOverMc = null;
     }
 
@@ -2193,7 +2330,6 @@ public class InterfaceBehaviour : MonoBehaviour
     void OnShowActionsMenu(GameObject element)
     {
         elementOnFocus = element;
-
         Vector3 elementPos = mainCamera.WorldToScreenPoint(element.transform.position);
         float wGap = 0.0f; // mcMenuAction.width * 0.5f;
         if (elementPos.x > Screen.width * 0.5f)

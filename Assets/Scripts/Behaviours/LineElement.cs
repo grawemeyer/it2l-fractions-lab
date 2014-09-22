@@ -18,7 +18,7 @@ public class LineElement : WSElement, IWSElement
     }
     #endregion
 
-    #region Protected Fields
+    #region Public Fields
     public LinePositions linePosition = LinePositions.Alone;
     #endregion
 
@@ -315,6 +315,7 @@ public class LineElement : WSElement, IWSElement
 
     void OnClicked(Vector3 position)
     {
+       // Debug.Log("fraction state in Onclicked " + Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode);
         Vector3 localPos = root.transform.TransformPoint(position);
         int tickIndex = (partDenominator + 1) - partNumerator;
         if (partNumerator == 0)

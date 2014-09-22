@@ -39,6 +39,7 @@ public class Workspace : MonoBehaviour
     public Color greenResult = new Color(0.3373f, 0.5294f, 0.2392f, 1.0f);
     public Color greyResult = new Color(0.6863f, 0.6588f, 0.5569f, 1.0f);
     public GameObject liquidSource;
+    public GameObject setSource;
     public List<Color> colorList = new List<Color>();
     #endregion
 
@@ -108,7 +109,7 @@ public class Workspace : MonoBehaviour
         float widthSize = Camera.main.orthographicSize * 2.0f * Camera.main.aspect;
         float heightSize = widthSize / Camera.main.aspect;
         bounds = new SBSBounds(Vector3.zero, Vector3.right * widthSize + Vector3.up * heightSize + Vector3.forward * float.MaxValue);
-
+        
         colorList.Add(new Color(0.7373f, 0.0078f, 0.0078f, 0.5f));
         colorList.Add(new Color(1.0f, 0.7059f, 0.0f, 0.5f));
         colorList.Add(new Color(0.2431f, 0.6627f, 0.9882f, 0.5f));
@@ -190,6 +191,7 @@ public class Workspace : MonoBehaviour
 
     GameObject CreateContainer(GameObject f1, GameObject f2)
     {
+       // Debug.Log("CreateContainer");
         Element element = new Element();
         element.position = Vector3.zero;
         element.color = f1.GetComponent<RootElement>().color; //Workspace.Instance.greenResult;
@@ -209,6 +211,9 @@ public class Workspace : MonoBehaviour
                 break;
             case (ElementsType.VRect):
                 root = CreateVRect(element);
+                break;
+            case (ElementsType.Set):
+                root = CreateSet(element);
                 break;
             case (ElementsType.Line):
                 root = CreateNumberedLine(element);
@@ -248,6 +253,9 @@ public class Workspace : MonoBehaviour
                 break;
             case (ElementsType.VRect):
                 root = CreateVRect(element);
+                break;
+            case (ElementsType.Set):
+                root = CreateSet(element);
                 break;
             case (ElementsType.Line):
                 root = CreateNumberedLine(element);
@@ -356,8 +364,25 @@ public class Workspace : MonoBehaviour
     #endregion
 
     #region Messages
+
+    public void CheckOverlapActionMenu() 
+    {
+        Camera camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        Vector3 fractionPosition;
+        foreach (GameObject e in elements)
+        {
+            fractionPosition = camera.WorldToScreenPoint(e.transform.position);
+            if (fractionPosition.x > 205 && fractionPosition.x < 595 && fractionPosition.y > 407 && fractionPosition.y < 600) 
+            {
+                e.transform.position = new Vector3(e.transform.position.x, e.transform.position.y-7.0f, e.transform.position.z); 
+            }
+        }
+    }
+
+
     void CreateFractionsChildren(Element element, GameObject root, float gap, string label)
     {
+        //Debug.Log("createfractionchildren");
         float totalWidth = 0.0f;
         float totalHeight = 0.0f;
 
@@ -392,7 +417,6 @@ public class Workspace : MonoBehaviour
             }
             child.SendMessage("InitializeAs", element.type);
             child.SendMessage("SetEnableCollider", false);
-
             child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
 
             root.GetComponent<RootElement>().elements.Add(child);
@@ -430,6 +454,7 @@ public class Workspace : MonoBehaviour
         {
             case (ElementsType.HRect):
             case (ElementsType.VRect):
+            case (ElementsType.Set):
                 gap = 0.4f;
                 break;
             case (ElementsType.Liquid):
@@ -458,7 +483,7 @@ public class Workspace : MonoBehaviour
         }
         child.SendMessage("InitializeAs", element.type);
         child.SendMessage("SetEnableCollider", false);
-
+           
         child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
 
         root.GetComponent<RootElement>().elements.Add(child);
@@ -476,6 +501,8 @@ public class Workspace : MonoBehaviour
 
     public void RemoveEmptyChildren(GameObject root)
     {
+        //Debug.Log("RemoveEmptyChildren");
+
         if (root.GetComponent<RootElement>().elements.Count > 1)
         {
             int elemCount = root.GetComponent<RootElement>().elements.Count;
@@ -494,7 +521,7 @@ public class Workspace : MonoBehaviour
         }
     }
 
-    void RepositioningChildren(GameObject root)
+    public void RepositioningChildren(GameObject root)
     {
         float totalWidth = 0.0f;
         float totalHeight = 0.0f;
@@ -506,6 +533,7 @@ public class Workspace : MonoBehaviour
         {
             case (ElementsType.HRect):
             case (ElementsType.VRect):
+            case (ElementsType.Set):
                 gap = 0.4f;
                 break;
             case (ElementsType.Liquid):
@@ -533,6 +561,18 @@ public class Workspace : MonoBehaviour
             UpdateWS();
     }
 
+    GameObject CreateSet(Element element) 
+    {
+        string label = "set";
+        GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
+        CreateFractionsChildren(element, root, 0.4f, label);
+        elements.Push(root);
+        UpdateWS();
+        root.BroadcastMessage("SetRoot", root);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", "Set", root.name);
+        return root;
+    }
+
     GameObject CreateVRect(Element element)
     {
         string label = "vrect";
@@ -547,7 +587,7 @@ public class Workspace : MonoBehaviour
 
     GameObject CreateHRect(Element element)
     {
-        string label = "vrect";
+        string label = "hrect";
         GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
         CreateFractionsChildren(element, root, 0.4f, label);
         elements.Push(root);
@@ -603,15 +643,16 @@ public class Workspace : MonoBehaviour
         for (int i = 0; i < root.transform.childCount; i++)
             if (root.transform.GetChild(i).name.Equals("partition"))
                 Destroy(root.transform.GetChild(i).gameObject);
-
+        
         float xOffset = (root.transform.position.x > 0.0f) ? -1.0f : 1.0f;
         float yOffset = (root.transform.position.y > 0.0f) ? -1.0f : 1.0f;
         root.transform.position += new Vector3(xOffset, yOffset, 0.0f);
         root.BroadcastMessage("SetType", source.GetComponent<RootElement>().type, SendMessageOptions.DontRequireReceiver);
+        Debug.Log("before color counter"+ colorCounter);
         root.BroadcastMessage("SetColor", GetColor(), SendMessageOptions.DontRequireReceiver);
+        Debug.Log("after color counter"+ colorCounter);
         root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
-        root.GetComponent<RootElement>().UpdateGraphics();
-
+        root.GetComponent<RootElement>().UpdateGraphics();  
         elements.Push(root);
         UpdateWS();
 

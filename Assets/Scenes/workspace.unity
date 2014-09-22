@@ -123,6 +123,7 @@ MonoBehaviour:
   greenResult: {r: .337300003, g: .529399991, b: .239199996, a: 1}
   greyResult: {r: .68629998, g: .658800006, b: .556900024, a: 1}
   liquidSource: {fileID: 100002, guid: bba46cbd8988da94dbf958d240753555, type: 2}
+  setSource: {fileID: 100000, guid: d0e19cdd16e4aea488d435fb30d1eac6, type: 2}
   colorList: []
   currentAction: 0
   firstCut: {fileID: 0}

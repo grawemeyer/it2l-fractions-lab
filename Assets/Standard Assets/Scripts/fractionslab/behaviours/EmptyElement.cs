@@ -19,8 +19,8 @@ namespace fractionslab.behaviours
         #region Public Methods
         public override SBSBounds GetBounds()
         {
-            bounds = new SBSBounds(transform.position, new SBSVector3(width, height, 0.0f));
-            return bounds;
+           bounds = new SBSBounds(transform.position, new SBSVector3(Width, Height, 0.0f));
+           return bounds;
         }
         #endregion
 

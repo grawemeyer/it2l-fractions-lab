@@ -55,6 +55,7 @@ public class RootElement : WSElement, IWSElement
 
     protected Vector3 initialMouseDownPos = Vector3.zero;
     protected bool hasDragged = false;
+    protected bool isDragged = false;
 	protected float doubleTapTimer = -1.0f;
 
     protected bool partitionActive = false;
@@ -87,6 +88,8 @@ public class RootElement : WSElement, IWSElement
 
     void OnMouseDown()
     {
+        //Debug.Log("OnMouseDown");
+        isDragged = true;
         deltaTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         if (!inputEnabled)
             return;
@@ -144,10 +147,10 @@ public class RootElement : WSElement, IWSElement
                     SetMode(InteractionMode.Changing);
             }
         }
-        else if (mode == InteractionMode.Changing)
+       /* else if (mode == InteractionMode.Changing)
         {
-            //BroadcastMessage("OnClicked", Camera.main.ScreenToWorldPoint(Input.mousePosition), SendMessageOptions.DontRequireReceiver);
-        }
+            BroadcastMessage("OnClicked", Camera.main.ScreenToWorldPoint(Input.mousePosition), SendMessageOptions.DontRequireReceiver);
+        }*/
         else if (mode == InteractionMode.Freeze)
         {
             Workspace.Instance.SendMessage("CancelOperation");
@@ -158,8 +161,11 @@ public class RootElement : WSElement, IWSElement
         if (mode != InteractionMode.Wait)
             Workspace.Instance.interfaces.SendMessage("OnElementClicked");
 
-        if (!isSubFraction)
+        if (!isSubFraction) 
+        {
+           // Debug.Log("SAVED last x" + lastStillPosition.x + " y " + lastStillPosition.y + " z " + lastStillPosition.z);
             lastStillPosition = gameObject.transform.position;
+        }
 
         DestroyFindParentLine();
         Workspace.Instance.interfaces.SendMessage("ShowHint", "");
@@ -172,11 +178,12 @@ public class RootElement : WSElement, IWSElement
 
     void OnMouseDrag()
     {
-        if (!inputEnabled)
+       // Debug.Log("OnMouseDrag");
+        bool checkButtonOver = GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().isPressingOperation;
+        if (!inputEnabled || !isDragged || checkButtonOver)
             return;
 
-        //if (mode == InteractionMode.Moving || mode == InteractionMode.Initializing || mode == InteractionMode.Changing)
-        {
+        //if (mode == InteractionMode.Moving || mode == InteractionMode.Initializing || mode == InteractionMode.Changing){
             float hMargin = Camera.main.orthographicSize * Screen.width / Screen.height;
             float vMargin = Camera.main.orthographicSize;
             float marginOffset = -1.0f;
@@ -217,11 +224,12 @@ public class RootElement : WSElement, IWSElement
             transform.position = tmpPos;
 
             hasDragged = ((Input.mousePosition - initialMouseDownPos).magnitude > 0.0f);
-        }
+       // }
     }
 
     void OnMouseOver()
     {
+        //Debug.Log("OnMouseOver");
         if (!inputEnabled)
             return;
 
@@ -233,7 +241,7 @@ public class RootElement : WSElement, IWSElement
                 Workspace.Instance.interfaces.SendMessage("ShowHint", "{hint_oncut}");                
         }
 
-		if (denominator > 0 && Input.GetMouseButtonUp(1) && mode != InteractionMode.Freeze && mode != InteractionMode.Wait)
+        if (denominator > 0 && Input.GetMouseButtonUp(1) && mode != InteractionMode.Freeze && mode != InteractionMode.Wait && !Input.GetMouseButton(0))
         {
 			RightClick();
         }
@@ -241,6 +249,7 @@ public class RootElement : WSElement, IWSElement
 
 	void RightClick()
     {
+       // Debug.Log("righCLick");
         if (mode == InteractionMode.Moving)
         {
             string typeString = "HRects";
@@ -282,6 +291,7 @@ public class RootElement : WSElement, IWSElement
 
     void OnMouseExit()
     {
+       // Debug.Log("OnMouseExit");
         if (!inputEnabled)
             return;
         Workspace.Instance.interfaces.SendMessage("ShowHint", "");
@@ -289,6 +299,8 @@ public class RootElement : WSElement, IWSElement
 
     void OnMouseUp()
     {
+      //  Debug.Log("OnMouseUp");
+        isDragged = false;
         if (!inputEnabled)
             return;
 
@@ -316,14 +328,14 @@ public class RootElement : WSElement, IWSElement
             
         if (mode == InteractionMode.Changing && !hasDragged)
         {
-            BroadcastMessage("OnClicked", Camera.main.ScreenToWorldPoint(Input.mousePosition), SendMessageOptions.DontRequireReceiver);
+            //if (!(Input.mousePosition.x > 205 && Input.mousePosition.x < 595 && Input.mousePosition.y > 505 && Input.mousePosition.y < 600))
+                BroadcastMessage("OnClicked", Camera.main.ScreenToWorldPoint(Input.mousePosition), SendMessageOptions.DontRequireReceiver);
         }
             
         if (mode == InteractionMode.Freeze)
         {
             Workspace.Instance.SendMessage("SendBack", gameObject);
         }
-
         Workspace.Instance.interfaces.SendMessage("OnElementReleased", gameObject);
 
 //#if UNITY_IPHONE
@@ -417,6 +429,7 @@ public class RootElement : WSElement, IWSElement
 
         if (mode == InteractionMode.Scaling && isScaling)
         {
+           // Debug.Log("InteractionMode");
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3 diff = mousePos - initialMousePos;
             float diffGap = Vector3.Dot(diff, scaleDirection);
@@ -434,6 +447,7 @@ public class RootElement : WSElement, IWSElement
 
     public override void SetElementScale(float scale)
     {
+       // Debug.Log("SetElementScale");
         base.SetElementScale(scale);
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).SendMessage("SetElementScale", scale, SendMessageOptions.DontRequireReceiver);
@@ -471,6 +485,27 @@ public class RootElement : WSElement, IWSElement
         else
         {
             collider.size = (bounds.max - bounds.min);
+        }
+    }
+
+    public void UpdateWidth() 
+    {
+        if (isSubFraction)
+        {
+            width = transform.GetChild(0).GetComponent<SetElement>().width;
+            Width = width;
+            if(root != null)
+                root.SendMessage("UpdateWidth");
+        }
+        else 
+        {
+            width = 0;
+            for (int j = 0; j < transform.childCount; j++)
+            {
+                if (transform.GetChild(j).name.StartsWith("set_child"))
+                    width += transform.GetChild(j).GetComponent<RootElement>().width;
+            }
+            Workspace.Instance.RepositioningChildren(this.gameObject);
         }
     }
 
@@ -532,6 +567,7 @@ public class RootElement : WSElement, IWSElement
 
     public override void IncreaseNumerator()
     {
+       // Debug.Log("IncreaseNumerator");
         if (!isSubFraction)
         {
             this.partNumerator++;
@@ -554,7 +590,7 @@ public class RootElement : WSElement, IWSElement
 
             if (elements.Count > 1)
             {
-                if (type == ElementsType.HRect || type == ElementsType.VRect)
+                if (type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set)
                 {
                     if (!addedNew)
                         IncreaseNumeratorInChildren();
@@ -584,6 +620,7 @@ public class RootElement : WSElement, IWSElement
 
     public override void DecreaseNumerator()
     {
+       // Debug.Log("DecreaseNumerator");
         if (!isSubFraction)
         {
             this.partNumerator--;
@@ -594,7 +631,7 @@ public class RootElement : WSElement, IWSElement
 
             if (elements.Count > 1)
             {
-                if (type == ElementsType.HRect || type == ElementsType.VRect)
+                if (type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set)
                 {
                     DecreaseNumeratorInChildren();
                     UpdateByChildren();
@@ -685,7 +722,7 @@ public class RootElement : WSElement, IWSElement
                 int lastIndex = elements.Count - 1;
                 int lastNumerator = this.partNumerator - (this.partDenominator * lastIndex);
 
-                if (type == ElementsType.HRect || type == ElementsType.VRect)
+                if (type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set)
                 {
                     int wholes = Mathf.Max(1, Mathf.CeilToInt((float)this.partNumerator / (float)this.partDenominator));
                     lastIndex = wholes - 1;
@@ -802,7 +839,7 @@ public class RootElement : WSElement, IWSElement
                 ExternalEventsManager.Instance.SendMessageToSupport("CutGenerated", "HRects", name);
                 break;
             case (ElementsType.VRect):
-                ExternalEventsManager.Instance.SendMessageToSupport("CutGenerated", "HRects", name);
+                ExternalEventsManager.Instance.SendMessageToSupport("CutGenerated", "VRects", name);
                 break;
             case (ElementsType.Liquid):
                 ExternalEventsManager.Instance.SendMessageToSupport("CutGenerated", "LiquidMeasures", name);
@@ -949,6 +986,10 @@ public class RootElement : WSElement, IWSElement
             case (ElementsType.Liquid):
                 InitLiquid(type);
                 break;
+             case (ElementsType.Set):
+                InitSet(type);
+                break;
+
         }
     }
 
@@ -965,7 +1006,29 @@ public class RootElement : WSElement, IWSElement
             Tweener.StopAndDestroyAllTweens();
             isTweening = false;
             gameObject.transform.localScale = Vector3.one;
+            ResetScale();
+            if (mode == InteractionMode.Freeze)
+            {
+                Workspace.Instance.SendMessage("SendBack", gameObject);
+            }
+            //currentScaleTween = 1.0f;
         }
+    }
+
+   /* public void ResetPositionInCenter() 
+    {
+        gameObject.transform.position = Vector3.zero;
+        Tweener.StopAndDestroyAllTweens();
+        isTweening = false;
+        gameObject.transform.localScale = Vector3.one;
+        ResetScale();
+    }*/
+
+    void ResetScale()
+    {
+        tweenScaleQueue.Clear();
+        currentScaleTween = 1.0f;
+        tweenScaleQueue.Add(1.0f);
     }
 
     void OnSelectFractionPart(FractionPart part)
@@ -1018,7 +1081,6 @@ public class RootElement : WSElement, IWSElement
         {
             BroadcastMessage("DecreasePartitions");
         }
-
         Draw(zIndex);
     }
 
@@ -1033,23 +1095,32 @@ public class RootElement : WSElement, IWSElement
     
     void ScaleDown()
     {
-        //if (mode == InteractionMode.Moving)
-        tweenScaleQueue.Clear();
-        if (currentScaleTween != 0.25f)
-            tweenScaleQueue.Add(0.25f);
+        //return;
+      //  if (mode != InteractionMode.Freeze && state != ElementsState.Cut) 
+      //  {
+            tweenScaleQueue.Clear();
+            if (currentScaleTween != 0.25f)
+                tweenScaleQueue.Add(0.25f);      
+     //   }
+       
+
     }
 
     void ScaleUp()
     {
-        //if (mode == InteractionMode.Moving)
-        tweenScaleQueue.Clear();
-        if (currentScaleTween != 1.0f)
-            tweenScaleQueue.Add(1.0f);
+        //return;
+      //  if (mode != InteractionMode.Freeze &&  state != ElementsState.Cut)
+      //  {
+            tweenScaleQueue.Clear();
+            if (currentScaleTween != 1.0f)
+                tweenScaleQueue.Add(1.0f);     
+    //    }
     }
 
     protected float currentScaleTween = 0.0f;
     void CheckScaleTween()
     {
+       // Debug.Log("CheckScaleTween " + tweenScaleQueue.Count);
         if (!isTweening && tweenScaleQueue.Count > 0)
         {
             currentScaleTween = tweenScaleQueue[0];
@@ -1066,7 +1137,7 @@ public class RootElement : WSElement, IWSElement
     {
         if (!inputEnabled)
             return;
-
+       // Debug.Log("GrabToCenter");
         Tweener.CreateNewTween(deltaTouch, Vector3.zero, 0.1f, "easeOutCubic", 0.0f, TweenMoveS, TweenMoveU, TweenMoveC);
     }
 
@@ -1077,7 +1148,7 @@ public class RootElement : WSElement, IWSElement
 
     void OnPressScaleModifier(string modfierName)
     {
-        Debug.Log("OnPressScaleModifier " + modfierName);
+       // Debug.Log("OnPressScaleModifier " + modfierName);
         isScaling = true;
         initialMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         initialScale = elementScale;
@@ -1104,7 +1175,7 @@ public class RootElement : WSElement, IWSElement
 
     void OnReleaseScaleModifier(string modfierName)
     {
-        Debug.Log("OnReleaseScaleModifier " + modfierName);
+       // Debug.Log("OnReleaseScaleModifier " + modfierName);
         isScaling = false;
     }
 
@@ -1203,6 +1274,7 @@ public class RootElement : WSElement, IWSElement
 
     void MoveToCoord(float time)
     {
+     //   Debug.Log("MoveToCoord " + time);
         if (!isSubFraction)
         {
             cutTargetPos = popupCoord;
@@ -1236,7 +1308,7 @@ public class RootElement : WSElement, IWSElement
                 {
                     if (fraction.GetChild(j).gameObject.activeSelf)
                     {
-                        Debug.Log("SetActive(false) " + fraction.GetChild(j).gameObject.name);
+                       // Debug.Log("SetActive(false) " + fraction.GetChild(j).gameObject.name);
                         fraction.GetChild(j).gameObject.SetActive(false);
                         hasRemoved = true;
                         break;
@@ -1281,7 +1353,8 @@ public class RootElement : WSElement, IWSElement
             switch (type)
             {
                 case (ElementsType.HRect):
-                case (ElementsType.VRect):                       
+                case (ElementsType.VRect):
+                case (ElementsType.Set):                       
                     DecreaseRectNum();
                     break;
                 case (ElementsType.Line):
@@ -1299,12 +1372,25 @@ public class RootElement : WSElement, IWSElement
             RootElement item = elements[i].GetComponent<RootElement>();
             for (int j = 0; j < item.elements.Count; j++)
             {
-                RectangleElement elem = item.elements[j].GetComponent<RectangleElement>();
-                if (elem.partNumerator < elem.partDenominator)
+                if (type == ElementsType.Set)
                 {
-                    elem.partNumerator++;
-                    elem.numerator = elem.partNumerator / elem.partitions;
-                    return;
+                    SetElement elemSet = item.elements[j].GetComponent<SetElement>();
+                    if (elemSet.partNumerator < elemSet.partDenominator)
+                    {
+                        elemSet.partNumerator++;
+                        elemSet.numerator = elemSet.partNumerator / elemSet.partitions;
+                        return;
+                    }
+                }
+                else
+                {
+                    RectangleElement elem = item.elements[j].GetComponent<RectangleElement>();
+                    if (elem.partNumerator < elem.partDenominator)
+                    {
+                        elem.partNumerator++;
+                        elem.numerator = elem.partNumerator / elem.partitions;
+                        return;
+                    }
                 }
             }
         }
@@ -1317,12 +1403,25 @@ public class RootElement : WSElement, IWSElement
             RootElement item = elements[i].GetComponent<RootElement>();
             for (int j = 0; j < item.elements.Count; j++)
             {
-                RectangleElement elem = item.elements[j].GetComponent<RectangleElement>();
-                if (elem.partNumerator <= elem.partDenominator)
+                if (type == ElementsType.Set)
                 {
-                    elem.partNumerator--;
-                    elem.numerator = elem.partNumerator / elem.partitions;
-                    return;
+                    SetElement elemSet = item.elements[j].GetComponent<SetElement>();
+                    if (elemSet.partNumerator <= elemSet.partDenominator)
+                    {
+                        elemSet.partNumerator--;
+                        elemSet.numerator = elemSet.partNumerator / elemSet.partitions;
+                        return;
+                    }
+                }
+                else
+                {
+                    RectangleElement elem = item.elements[j].GetComponent<RectangleElement>();
+                    if (elem.partNumerator <= elem.partDenominator)
+                    {
+                        elem.partNumerator--;
+                        elem.numerator = elem.partNumerator / elem.partitions;
+                        return;
+                    }
                 }
             }
         }
@@ -1347,6 +1446,12 @@ public class RootElement : WSElement, IWSElement
                         item.numerator += elem.numerator;
                         item.partNumerator += elem.partNumerator;
                     }
+                    if (type == ElementsType.Set) 
+                    {
+                        SetElement elem = item.elements[j].GetComponent<SetElement>();
+                        item.numerator += elem.numerator;
+                        item.partNumerator += elem.partNumerator;
+                    }
                 }
                 this.numerator += item.numerator;
                 this.partNumerator += item.partNumerator;
@@ -1355,7 +1460,6 @@ public class RootElement : WSElement, IWSElement
             symbol.SendMessage("SetNumerator", this.numerator);
             symbol.SendMessage("SetPartNumerator", this.partNumerator);
             ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
-
             Workspace.Instance.RemoveEmptyChildren(gameObject);
         }
     }
@@ -1397,15 +1501,44 @@ public class RootElement : WSElement, IWSElement
     }
     protected void TweenMoveToCenterU(object v)
     {
+      //  Debug.Log("TweenMoveToCenterU");
         transform.position = (Vector3)v;
     }
     protected void TweenMoveToCenterC(object v)
     {
+      //  Debug.Log("TweenMoveToCenterC");
+
         transform.position = cutTargetPos;
         Tweener.StopAndDestroyAllTweens();
         isTweening = false;
     }
     #endregion
+
+
+    protected void InitSet(ElementsType type)
+    {
+        float scaleMult = 0.75f;
+        width = 2.5f * scaleMult;
+        height = 2.5f;
+
+        GameObject elem = new GameObject("fraction");
+        elem.transform.parent = transform;
+        elem.transform.position = transform.TransformPoint(Vector3.zero);
+        elem.AddComponent<SetElement>();
+        elem.SendMessage("SetMode", mode);
+        elem.SendMessage("SetType", type);
+        elem.SendMessage("SetSize", new Vector2(width, height));
+        elem.SendMessage("SetColor", color);
+        elem.SendMessage("SetElementState", state);
+        elem.SendMessage("SetNumerator", numerator);
+        elem.SendMessage("SetDenominator", denominator);
+        elem.SendMessage("SetPartitions", partitions);
+        elem.SendMessage("SetPartNumerator", partNumerator);
+        elem.SendMessage("SetPartDenominator", partDenominator);
+        elem.SendMessage("SetRoot", gameObject);
+        elem.SendMessage("Initialize");
+        elements.Add(elem);
+    }
 
     protected void InitRectangle(ElementsType type)
     {

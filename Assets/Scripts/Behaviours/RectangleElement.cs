@@ -65,6 +65,7 @@ public class RectangleElement : WSElement, IWSElement
     public override void Draw(int zIndex)
     {
         base.Draw(zIndex);
+        //Debug.Log("draw RectangleElement");
 
         Vector3 pos = transform.position;
         pos.z = zIndex;

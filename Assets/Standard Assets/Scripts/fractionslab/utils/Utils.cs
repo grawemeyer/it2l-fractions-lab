@@ -36,7 +36,8 @@ namespace fractionslab.utils
         Line,
         Liquid,
         Arrow,
-        Highlight
+        Highlight,
+        Set
     }
 
     public enum ElementsState
@@ -91,6 +92,7 @@ namespace fractionslab.utils
 
         public static iTweenAnimator CreateNewTween(Vector3 from, Vector3 to, float time, string easeType, float delay, Action<object> onStart, Action<object> onUpdate, Action<object> onComplete, bool reset = false)
         {
+           // Debug.Log("CreateNewTween "+ time);
             iTweenAnimator tween = CreateNewTween();
             tween.onStart = onStart;
             tween.onUpdate = onUpdate;
