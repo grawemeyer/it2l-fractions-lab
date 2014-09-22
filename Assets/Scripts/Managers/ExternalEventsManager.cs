@@ -112,6 +112,11 @@ public class ExternalEventsManager : MonoBehaviour
 #endif
     }
 
+	void OnDestroy()
+	{
+		TDSWrapper.StopThreads ();
+	}
+
     void Start()
     {
         interfaces = GameObject.FindGameObjectWithTag("Interface");

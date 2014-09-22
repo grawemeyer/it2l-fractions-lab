@@ -8,22 +8,41 @@ namespace taskDependentSupport.core
 	public class Feedback 
 	{
 
+		private string studentID="";
+		private StudentModel studentModel;
+		
+		public void setStudentModel(StudentModel elem){
+			studentModel = elem;
+		}
+
+		public void setStudentID(string value){
+			studentID = value;
+		}
+
 		public void generateFeedbackMessage(){
+			Debug.Log ("generateFeedbackMessage");
 			string feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
 			string messageType = FeedbackStrategyModel.getMessageType();
 			int messageID = FeedbackStrategyModel.getMessageID();
+			Debug.Log ("messageID: "+messageID);
+			Debug.Log ("feedbackMessage: "+feedbackMessage);
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
 
 			if (messageID != 0) {
-				StudentModel.setDisplaydMessageID(messageID);
-				StudentModel.setDisplayedMessageType(messageType);
+				studentModel.setDisplaydMessageID(messageID);
+				studentModel.setDisplayedMessageType(messageType);
 			}
 
 
 			if (!feedbackMessage.Equals ("")) {
-				if (messageType.Equals ("low")) {
+				if (studentID.Equals("student1") || studentID.Equals("Student1")){
+					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
+					taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
+				}
+
+				else if (messageType.Equals ("low")) {
 					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
 					sendLowMessage (feedbackMessage);
 				} else if (messageType.Equals ("high")) {
@@ -32,7 +51,6 @@ namespace taskDependentSupport.core
 				}
 			}
 		}
-
 
 		private void sendHighMessage(string message) 
 		{

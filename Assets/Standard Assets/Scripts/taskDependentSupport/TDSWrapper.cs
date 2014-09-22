@@ -24,15 +24,36 @@ namespace taskDependentSupport
 		public static GameObject eventManager = null;
 		public static bool intelligentSupportOff = false;
 		public static String taskID = "";
+		public static String studentID = "";
 		public static Thread responseThread;
+		public static bool doneButtonEnabled = false;
+		public static bool arrowButtonEnabled = true;
+		public static bool needsNewThread = true;
 
-		private static Counter counter; 
+		private static StudentModel studentModel;
+
+		public static Counter counter; 
+
+		//for testing:
+		private static Counter testCounter; 
 		#endregion
 		
 		#region Public Static Methods
+		public static void StopThreads(){
+			Debug.Log ("STOP THREADS");
+			responseThread = null;
+			counter = null;
+		}
+
+
 		public static void SendBrowserMessage(params object[] args)
 		{
 			Application.ExternalCall("newEvent", args);
+		}
+
+		public static void SendMessageToLightBulb(String feedbacktext){
+			Debug.Log ("sendMessageToLightBulb: "+feedbacktext);
+			Application.ExternalCall("sendMessageToLightBulb", feedbacktext);
 		}
 
 		public static void PlaySound(String message){
@@ -47,8 +68,34 @@ namespace taskDependentSupport
 
 		public static void setTaskID(object arg){
 			Debug.Log ("setTaskID: "+arg);
-			taskID = arg.ToString();
+			String elem = arg.ToString ();
+			taskID = elem.Substring(0,12);
+			studentID = elem.Substring(12);
+			//taskID = arg.ToString();
+			Debug.Log ("taskID: "+taskID);
+			Debug.Log ("studentID: "+studentID);
+			//if (studentModel == null) 
+			studentModel = new StudentModel ();
+			studentModel.resetDoneButtonPressed();
+
+			if (taskID.Equals ("EQUIValence1")) {
+				DoneButtonEnable(true);
+				ArrowButtonEnable(false);
+			}
 		}
+
+		public static void DoneButtonEnable(bool value){
+			Debug.Log ("DoneButtonEnable: "+value);
+			Application.ExternalCall("doneButtonEnable", value.ToString ());
+			doneButtonEnabled = value;
+		}
+
+		public static void ArrowButtonEnable(bool value){
+			Debug.Log ("ArrowButtonEnable: "+value);
+			Application.ExternalCall("arrowButtonEnable", value.ToString ());
+			arrowButtonEnabled = value;
+		}
+
 
 		public static void SendMessageToSupport(params object[] args)
 		{
@@ -84,11 +131,13 @@ namespace taskDependentSupport
 
 			Debug.Log ("taskID: "+taskID);
 
-			Analysis analyse = new Analysis ();
-			analyse.analyseEvent (eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
+			if (studentModel == null) studentModel = new StudentModel ();
 
+			Analysis analyse = new Analysis ();
+			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
 			if (counter == null) {
+				Debug.Log ("counter == null");
 				counter = new Counter ();
 				Thread counterThread = new Thread (new ThreadStart (counter.increaseCounter));
 				counterThread.Start ();
@@ -96,11 +145,43 @@ namespace taskDependentSupport
 
 			counter.resetCounter ();
 
-			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange")) {
-				if (responseThread == null){
+			//for testing
+			/*if (taskID.Equals("EQUIValence1")){
+				if (testCounter == null) {
+					Debug.Log ("testCounter == null");
+					testCounter = new Counter ();
+					Thread testCounterThread = new Thread (new ThreadStart (testCounter.sendMessage));
+					testCounterThread.Start ();
+				}
+			}*/
+
+			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange") || eventType.Equals ("OperationResult")) {
+				Debug.Log ("FractionGenerated ||  FractionChange");
+				Debug.Log ("needsNewThread "+needsNewThread);
+				Debug.Log ("responseThread "+responseThread);
+				Debug.Log ("counter "+counter);
+				Debug.Log ("counter "+counter.getValue());
+				if (needsNewThread || (responseThread == null)){
 					responseThread = new Thread (new ThreadStart (handleEvent));
 					responseThread.Start (); 
+					needsNewThread = false;
 				}
+			}
+
+			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
+			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
+				Debug.Log ("doneButtonPressed");
+				studentModel.setDoneButtonPressed ();
+				Reasoning reasoning = new Reasoning();
+				reasoning.setStudentModel(studentModel);
+				reasoning.setTaskID(taskID);
+				reasoning.processEvent();
+				reasoning.processDoneEvent();
+				
+				Feedback feedback = new Feedback();
+				feedback.setStudentModel(studentModel);
+				feedback.setStudentID(studentID);
+				feedback.generateFeedbackMessage();
 			}
 
 		}
@@ -110,18 +191,27 @@ namespace taskDependentSupport
 			try {
 				while (counter.getValue ()< 400) {}
 				if (counter.getValue () >= 400) {
+					Debug.Log("counter > 400");
 					Reasoning reasoning = new Reasoning();
+					reasoning.setStudentModel(studentModel);
 					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
-				
+
 					Feedback feedback = new Feedback();
+					feedback.setStudentModel(studentModel);
+					feedback.setStudentID(studentID);
 					feedback.generateFeedbackMessage();
 
+					needsNewThread = true;
 					responseThread = null;
 				}
 			} 
-			catch (ThreadAbortException e){}
+			catch (ThreadAbortException e){
+				needsNewThread = true;
+				Debug.Log (e);
+			}
 		}
+
 		#endregion
 		
 		#region Protected Methods

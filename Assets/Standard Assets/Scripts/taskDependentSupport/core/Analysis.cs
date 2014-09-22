@@ -8,44 +8,44 @@ namespace taskDependentSupport.core
 
 
 
-		public void analyseEvent(string type, string name, string id, string value, int fractionsValue, string position, long time)
+		public void analyseEvent(StudentModel studentModel, string type, string name, string id, string value, int fractionsValue, string position, long time)
 		{
-			StudentModel.setEventTime(time);
-			StudentModel.setCurrentFraction(id);
+			studentModel.setEventTime(time);
+			studentModel.setCurrentFraction(id);
 
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){
-					if (StudentModel.getEquivalenceOpen() == 0) StudentModel.setEquivalenceOpen(1);
-					else StudentModel.setEquivalenceOpen(0);
+					if (studentModel.getEquivalenceOpen() == 0) studentModel.setEquivalenceOpen(1);
+					else studentModel.setEquivalenceOpen(0);
 				}
 			}
 			if (type.Equals ("FractionGenerated")){
 				Fraction thisFraction = new Fraction();
 				thisFraction.setName(name);
 				thisFraction.setID(id);
-				StudentModel.addCurrentFractions(thisFraction);
-				StudentModel.setCompared(false);
-				StudentModel.setComparedResult(false);
+				studentModel.addCurrentFractions(thisFraction);
+				studentModel.setCompared(false);
+				studentModel.setComparedResult(false);
 
 			}
 			if (type.Equals("FractionChange")){
-				if (name.Equals("Numerator")) StudentModel.setNumeratorAtFraction(id, fractionsValue);
-				if (name.Equals("Denominator")) StudentModel.setDenominatorAtFraction(id, fractionsValue);
-				if (name.Equals("Partitions")) StudentModel.setPartitionAtFraction(id, fractionsValue);
+				if (name.Equals("Numerator")) studentModel.setNumeratorAtFraction(id, fractionsValue);
+				if (name.Equals("Denominator")) studentModel.setDenominatorAtFraction(id, fractionsValue);
+				if (name.Equals("Partitions")) studentModel.setPartitionAtFraction(id, fractionsValue);
 			}
 
 			if (type.Equals ("FractionTrashed")){
-				StudentModel.removeFraction(id);
-				StudentModel.setCompared(false);
-				StudentModel.setComparedResult(false);
+				studentModel.removeFraction(id);
+				studentModel.setCompared(false);
+				studentModel.setComparedResult(false);
 			}
 			if (type.Equals ("OperationResult")){
-				StudentModel.setCompared(true);
+				studentModel.setCompared(true);
 				if (name.Equals ("True")){
-					StudentModel.setComparedResult(true);
+					studentModel.setComparedResult(true);
 				}
 				else {
-					StudentModel.setComparedResult(false);
+					studentModel.setComparedResult(false);
 				}
 			}
 

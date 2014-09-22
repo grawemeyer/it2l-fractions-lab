@@ -40,6 +40,15 @@ namespace taskDependentSupport.core
 						value += 1;
 					}
 				}
+				
+				//for testing
+				public void sendMessage(){
+					while (true) {
+						Thread.Sleep (1000);
+						//TDSWrapper.PlaySound("testing");
+						TDSWrapper.SaveEvent("testing 2");
+					}
+				}
 			
 		}
 }
