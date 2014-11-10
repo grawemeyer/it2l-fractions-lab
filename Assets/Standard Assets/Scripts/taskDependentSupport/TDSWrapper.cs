@@ -77,6 +77,8 @@ namespace taskDependentSupport
 			//if (studentModel == null) 
 			studentModel = new StudentModel ();
 			studentModel.resetDoneButtonPressed();
+			//Debug.Log ("studentModel setFeedbackData 1 ");
+			//studentModel.setFeedbackData (new FeedbackData ());
 
 			if (taskID.Equals ("EQUIValence1")) {
 				DoneButtonEnable(true);
@@ -131,7 +133,11 @@ namespace taskDependentSupport
 
 			Debug.Log ("taskID: "+taskID);
 
-			if (studentModel == null) studentModel = new StudentModel ();
+			if (studentModel == null) {
+				studentModel = new StudentModel ();
+				//Debug.Log ("studentModel setFeedbackData 2 ");
+				//studentModel.setFeedbackData (new FeedbackData ());
+			}
 
 			Analysis analyse = new Analysis ();
 			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);

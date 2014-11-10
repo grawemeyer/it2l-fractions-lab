@@ -8,11 +8,22 @@ namespace taskDependentSupport.core
 	public class Reasoning 
 	{
 
+
+
 		private string taskID="";
 		private StudentModel studentModel;
+		private FeedbackData feedbackData;
+		private FeedbackElem currentFeedback;
+
+		public Reasoning(){
+			Debug.Log ("hier in REASONING and generate new feedbackdata!!!");
+			feedbackData = new FeedbackData ();
+			
+		}
 
 		public void setStudentModel(StudentModel elem){
 			studentModel = elem;
+			//studentModel.setFeedbackData (new FeedbackData ());
 		}
 
 
@@ -25,56 +36,162 @@ namespace taskDependentSupport.core
 			if (studentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("EQUIValence1")) {
 					if (studentModel.getParticitionUsed()){
-						FeedbackStrategyModel.setMessage (23, "high");
+						currentFeedback = feedbackData.R1;
 					}
 					else {
-						FeedbackStrategyModel.setMessage (24, "high");
+						currentFeedback = feedbackData.R2;
 					}
+					setNewFeedback();
 				}
 				TDSWrapper.ArrowButtonEnable (true);
 				TDSWrapper.DoneButtonEnable (false);
 			} 
 			else {
 				if (studentModel.firstDoneButtonPressed()){
-					FeedbackStrategyModel.setMessage (8, "high");
+					currentFeedback = feedbackData.O1;
 				}
 				else {
-					FeedbackStrategyModel.setMessage (9, "high");
+					currentFeedback = feedbackData.O2;
 					TDSWrapper.ArrowButtonEnable (true);
 				}
+				setNewFeedback();
 			}
+
 		}
 
-		private bool problem1 = false;
-		private bool problem2 = false;
-		private bool problem3 = false;
-		private bool problem4 = false;
-		private bool problem5 = false;
-		private bool problem6 = false;
-		private bool problem7 = false;
-		private bool problem8 = false;
-		private bool reflect1 = false;
-		private bool reflect2 = false;
+		private void setNewFeedback(){
+			int currentCounter = 0;
+			string currentFeedbackID = currentFeedback.getID();
+			string guidance = currentFeedback.getFeedbackMessage ().getGuidance ();
+			string socratic = currentFeedback.getFeedbackMessage ().getSocratic ();
+			string didacticConceptual = currentFeedback.getFeedbackMessage ().getDidacticConceptual ();
+			string didacticProcedural = currentFeedback.getFeedbackMessage ().getDidacticProcedural();
 
-		private void reset(){
-			problem1 = false;
-			problem2 = false;
-			problem3 = false;
-			problem4 = false;
-			problem5 = false;
-			problem6 = false;
-			problem7 = false;
-			problem8 = false;
+			Debug.Log ("setNewFeedback: "+currentFeedbackID);
+
+			FeedbackElem studentFeedbackElem = studentModel.getFeedbackData ().getFeedbackElem (currentFeedbackID);
+			Debug.Log ("studentFeedbackElem: "+studentFeedbackElem.getID());
+			int studentCounter = studentFeedbackElem.getCounter();
+			currentCounter = studentCounter;
+
+			Debug.Log ("studentCounter: "+studentCounter);
+
+			if (studentCounter == 0) {
+				if (guidance.Length>0) currentCounter = 1;
+				else if (socratic.Length>0) currentCounter =2;
+				else if (didacticConceptual.Length>0) currentCounter=3;
+				else if (didacticProcedural.Length>0) currentCounter = 4;
+			}
+			else if (studentCounter == 1){
+				if (socratic.Length>0) currentCounter =2;
+				else if (didacticConceptual.Length>0) currentCounter=3;
+				else if (didacticProcedural.Length>0) currentCounter = 4;
+			}
+			else if (studentCounter == 2){
+				if (didacticConceptual.Length>0) currentCounter=3;
+				else if (didacticProcedural.Length>0) currentCounter = 4;
+			}
+			else if (studentCounter == 3){
+				if (didacticProcedural.Length>0) currentCounter = 4;
+			}
+			Debug.Log ("currentCounter: "+currentCounter);
+			studentFeedbackElem.setCounter (currentCounter);
+			studentModel.setPreviousFeedback (currentFeedback);
+			studentModel.addFeedbackProvided (currentFeedback);
+			FeedbackStrategyModel.setCurrentFeedback (currentFeedback, currentCounter);
+			Debug.Log (" test elem: "+studentFeedbackElem.getID ()+" "+studentFeedbackElem.getCounter ());
 		}
+
+		private void checkForFeedbackFollowed(){
+			bool wasFeedbackFollowed = feedbackFollowed ();
+			studentModel.addFeedbackFollowed (wasFeedbackFollowed);
+		}
+
+		private bool feedbackFollowed(){
+			FeedbackElem previousFeedback = studentModel.getPreviousFeedback ();
+			Fraction feedbackNextSteps = previousFeedback.getNextStep ();
+			int feedbackNumerator = feedbackNextSteps.getNumerator();
+			int feedbackDenominator = feedbackNextSteps.getDenominator ();;
+			bool feedbackAnyValue = feedbackNextSteps.getAnyValye();
+			bool feedbackSpeech = feedbackNextSteps.getSpeech();
+			bool feedbackComparison = feedbackNextSteps.getComparison();
+
+			for (int i = 0; i < studentModel.getCurrentFractions().Count; i++) {
+				Fraction thisFraction = studentModel.getCurrentFractions()[i];
+				int numerator = thisFraction.getNumerator();
+				int denominator = thisFraction.getDenominator();
+				int partition = thisFraction.getPartition();
+				
+				if (partition != 0){
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+					studentModel.setPartitionUsed(true);
+				}
+
+				if (feedbackAnyValue){
+					if ((numerator != 0) || (denominator != 0)) return true;
+					else return false;
+				}
+
+				else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
+					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()) return true;
+					else return false;
+				}
+
+				else if (feedbackNumerator != 0){
+					if (feedbackDenominator !=0){
+						if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)) return true;
+						else return false;
+					}
+					if (feedbackNumerator == numerator) return true;
+					else return false;
+				}
+
+				else if (feedbackDenominator !=0){
+					if (feedbackDenominator == denominator) return true;
+					else return false;
+				}
+
+				else if (feedbackSpeech){
+					//need task-independent support for this
+					return true;
+				}
+				else if (feedbackComparison) {
+					return studentModel.getCompared();
+				}
+			}
+			return true;
+		}
+
+
 
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
-			if (taskID.Equals("EQUIValence1")){
-				Debug.Log ("EQUIValence1");
+			if (taskID.Equals("EQUIValence1") || taskID.Equals("EQUIValence2")){
+				checkForFeedbackFollowed();
+
+				Debug.Log ("EQUIValence1 or EQUIValence2");
 				bool correctSolution = false;
 				bool correctDenominator = false;
 
+				int startNumerator = 0;
+				int endNumerator = 0;
+				int startDenominator = 0;
+				int endDenominator = 0;
+
+				if (taskID.Equals("EQUIValence1")){
+					startNumerator = 3;
+					endNumerator = 9;
+					startDenominator = 4;
+					endDenominator = 12;
+				}
+				else if (taskID.Equals("EQUIValence2")){
+					startNumerator = 1;
+					endNumerator = 2;
+					startDenominator = 2;
+					endDenominator = 4;
+				}
 			
 				//check if there is already a correct solution
 				Fraction inUseFraction = studentModel.getCurrentFraction();
@@ -88,133 +205,108 @@ namespace taskDependentSupport.core
 					Debug.Log ("thisFraction: "+thisFraction);
 					if ((inUseFraction == null) || !inUseFraction.getID().Equals(thisFraction.getID())){
 						Debug.Log ("inUseFraction == null or inUse not current ");
-						int nominator = thisFraction.getNominator();
+						int numerator = thisFraction.getNumerator();
 						int denominator = thisFraction.getDenominator();
 						int partition = thisFraction.getPartition();
+
+						Debug.Log ("numerator: "+numerator+" denominator: "+denominator+" partition: "+partition);
 						
 						if (partition != 0){
 							Debug.Log ("partition was used ");
-							nominator = nominator * partition;
+							numerator = numerator * partition;
 							denominator = denominator * partition;
 							studentModel.setPartitionUsed(true);
 						}
 
-						if ((denominator == 12) && (nominator == 9)){
+						if ((denominator == endDenominator) && (numerator == endNumerator)){
 							Debug.Log ("solution found ");
 							correctSolutionFound = true;
-							//FeedbackStrategyModel.setMessage(0, "low");
 							studentModel.setTaskCompleted(true);
+							currentFeedback = feedbackData.E1;
 						}
 					}
 
 				}
 
+
 				if (!correctSolutionFound) {
-					Debug.Log ("NOT correctSolutionFound: ");
-					bool denominatorOf12 = false;
-					bool threeQuaters = false;
+
 					for (int i = 0; i < studentModel.getCurrentFractions().Count; i++){
 						Fraction currentFraction = studentModel.getCurrentFractions()[i];
-
-						int nominator = currentFraction.getNominator();
+						
+						int numerator = currentFraction.getNumerator();
 						int denominator = currentFraction.getDenominator();
 						int partition = currentFraction.getPartition();
-
+						
 						if (partition != 0){
-							nominator = nominator * partition;
+							numerator = numerator * partition;
 							denominator = denominator * partition;
 						}
 
-						if((denominator == 0) && (nominator == 0)){
-							problem1 = true;
+						if ((numerator == endNumerator) && (denominator == endDenominator)) {
+							Debug.Log ("solution found ");
+							correctSolutionFound = true;
+							studentModel.setTaskCompleted(true);
+							currentFeedback = feedbackData.E1;
 						}
-						else if ((denominator == 4) && (nominator == 3)){
-							problem8=true;
-							threeQuaters = true;
-							if (denominatorOf12) problem6=true;
+						else if ((denominator == 0) && (numerator == 0)){
+							currentFeedback = feedbackData.S3;
 						}
 
-						else if (denominator == 12) {
-							correctDenominator = true;
-							denominatorOf12 = true;
-
-							if (studentModel.getNominatorDenominatorMisconception()){
-								reflect1=true;
-								studentModel.setNominatorDenominatorMisconception(false);
-							}
-
-							if (nominator == 9){
-								correctSolution = true;
-								studentModel.setTaskCompleted(true);
-							}
-							if (threeQuaters)problem6=true;
-							else if ((nominator == 3) || (nominator == 0)) problem7=true;
-							else{
-								problem5 = true;
-								studentModel.setAskForComparison(true);
-							}
-
+						else if ((numerator != endNumerator) && (denominator == endDenominator) && 
+						         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID()) || 
+						 studentModel.getPreviousFeedback().getID().Equals(feedbackData.M2.getID ()))){
+							currentFeedback = feedbackData.M4;
 						}
-						else if (nominator == 12){
-							problem4 = true;
-							studentModel.setNominatorDenominatorMisconception(true);
+						
+						else if ((numerator != endNumerator) && (numerator == endDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID())){
+							currentFeedback = feedbackData.M5;
 						}
+
+						else if ((numerator == startNumerator) && (denominator == startDenominator)){
+							currentFeedback = feedbackData.M7;
+						}
+
+						else if ((numerator != endNumerator) && (denominator == endDenominator) && 
+						         studentModel.getPreviousFeedback().getID().Equals(feedbackData.M8.getID ())){
+							currentFeedback = feedbackData.M9;
+						}
+
+						else if ((numerator != endNumerator) && (denominator == endDenominator) && 
+						         (!studentModel.getReflectionForDenominatorShown())){
+							currentFeedback = feedbackData.M10;
+							studentModel.setReflectionForDenominatorShown(true);
+						}
+
+						else if ((numerator != endNumerator) && (denominator == endDenominator) && studentModel.getReflectionForDenominatorShown()){
+							currentFeedback = feedbackData.M8;
+						}
+
+						else if ((numerator != endNumerator) && 
+						         ((denominator == endDenominator) || (denominator == startDenominator))){
+							currentFeedback = feedbackData.M6;
+						}
+
+						else if ((denominator != endDenominator) && (denominator != startDenominator)){
+							currentFeedback = feedbackData.M1;
+						}
+
+						else if ((numerator == endDenominator) || (numerator == startDenominator)){
+							currentFeedback = feedbackData.M2;
+						}
+
+						else if (((numerator != startNumerator) || (denominator != startDenominator)) && ((numerator != endNumerator) || (denominator != endDenominator))){
+							currentFeedback = feedbackData.M3;
+						}
+					
 						else {
-							//denominator not 12
-							if (denominator ==0) problem2 = true;
-							else problem3=true;
+							currentFeedback = new FeedbackElem();
 						}
 
-						if (denominatorOf12 && threeQuaters){
-							reset();
-							problem6=true;
-							studentModel.setAskForComparison(true);
-						}
 
-						if (studentModel.getAskForComparison() && studentModel.getCompared()){
-							reflect1=false;
-							reflect2=true;
-							studentModel.setAskForComparison(false);
-						}
-
-						if (correctSolution){
-							FeedbackStrategyModel.setMessage(2, "high");
-						}
-						else if (reflect1){
-							FeedbackStrategyModel.setMessage(16, "high");
-						}
-						else if (reflect2){
-							FeedbackStrategyModel.setMessage(19, "high");
-						}
-						else if (problem1){
-							FeedbackStrategyModel.setMessage(12, "high");
-						}
-						else if (problem2){
-							FeedbackStrategyModel.setMessage(13, "high");
-						}
-						else if (problem3){
-							FeedbackStrategyModel.setMessage(14, "high");
-						}
-						else if (problem4){
-							FeedbackStrategyModel.setMessage(15, "high");
-						}
-						else if (problem5){
-							FeedbackStrategyModel.setMessage(17, "high");
-						}
-						else if (problem6){
-							FeedbackStrategyModel.setMessage(18, "high");
-						}
-						else if (problem7){
-							FeedbackStrategyModel.setMessage(20, "high");
-						}
-						else if (problem8){
-							FeedbackStrategyModel.setMessage(21, "high");
-						}
-						else {
-							FeedbackStrategyModel.setMessage(0, "low");
-						}
 					}
 				}
+				setNewFeedback();
 			}
 		}
 	}

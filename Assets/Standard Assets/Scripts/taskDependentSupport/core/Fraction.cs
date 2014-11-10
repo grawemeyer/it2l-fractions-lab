@@ -7,14 +7,49 @@ namespace taskDependentSupport.core
 
 			private string id;
 			private string name;
-			private int nominator;
-			private int denominator;
-			private int partition;
+			private int numerator = 0;
+			private int denominator = 0;
+			private int partition = 0;
+			private bool anyValue = false;
+			private bool speech = false;
+			private bool comparison = false;
 
 			public Fraction ()
 			{
 			}
 
+
+			public void setComparison(bool value)
+			{
+				comparison = value;
+			}
+
+			public bool getComparison()
+			{
+				return comparison;	
+			}
+
+
+			public void setSpeech(bool value)
+			{
+				speech = value;
+			}
+
+			public bool getSpeech()
+			{
+				return speech;	
+			}
+
+
+			public void setAnyValue(bool value)
+			{
+				anyValue = value;
+			}
+			
+			public bool getAnyValye()
+			{
+				return anyValue;
+			}
 
 			public void setID(string value)
 			{
@@ -26,9 +61,9 @@ namespace taskDependentSupport.core
 				name = value;	
 			}
 
-			public void setNominator(int value)
+			public void setNumerator(int value)
 			{
-				nominator = value;
+				numerator = value;
 			}
 
 			public void setDenominator(int value)
@@ -52,9 +87,9 @@ namespace taskDependentSupport.core
 				return name;
 			}
 
-			public int getNominator()
+			public int getNumerator()
 			{
-				return nominator;
+				return numerator;
 			}
 
 			public int getDenominator()
