@@ -76,7 +76,7 @@ namespace taskDependentSupport
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
 			//if (studentModel == null) 
-			studentModel = new StudentModel ();
+			studentModel = new StudentModel (taskID);
 			studentModel.resetDoneButtonPressed();
 			//Debug.Log ("studentModel setFeedbackData 1 ");
 			//studentModel.setFeedbackData (new FeedbackData ());
@@ -135,7 +135,7 @@ namespace taskDependentSupport
 			Debug.Log ("taskID: "+taskID);
 
 			if (studentModel == null) {
-				studentModel = new StudentModel ();
+				studentModel = new StudentModel (taskID);
 				//Debug.Log ("studentModel setFeedbackData 2 ");
 				//studentModel.setFeedbackData (new FeedbackData ());
 			}
@@ -179,9 +179,8 @@ namespace taskDependentSupport
 			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
 				Debug.Log ("doneButtonPressed");
 				studentModel.setDoneButtonPressed ();
-				Reasoning reasoning = new Reasoning();
+				Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
-				reasoning.setTaskID(taskID);
 				reasoning.processEvent();
 				reasoning.processDoneEvent();
 				
@@ -199,9 +198,8 @@ namespace taskDependentSupport
 				while (counter.getValue ()< 400) {}
 				if (counter.getValue () >= 400) {
 					Debug.Log("counter > 400");
-					Reasoning reasoning = new Reasoning();
+					Reasoning reasoning = new Reasoning(taskID);
 					reasoning.setStudentModel(studentModel);
-					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
 
 					Feedback feedback = new Feedback();

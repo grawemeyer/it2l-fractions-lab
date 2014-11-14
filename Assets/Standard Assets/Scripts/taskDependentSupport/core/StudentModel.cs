@@ -21,13 +21,15 @@ namespace taskDependentSupport.core
 		private bool partitionUsed = false;
 		private bool nominatorDenominatorMisconception = false;
 		private bool askForComparison = false;
-		private FeedbackData feedbackData = new FeedbackData();
+		private FeedbackData feedbackData;
 		private FeedbackElem previous = new FeedbackElem();
 		private bool reflectionForDenominatorShown = false;
 		private List<FeedbackElem> feedbackProvided = new List<FeedbackElem>();
 		private List<bool> feedbackFollowed = new List<bool>();
 
-
+		public StudentModel(String taskID){
+			feedbackData = new FeedbackData (taskID); 
+		}
 
 		public List<bool> getFeedbackFollowed(){
 			return feedbackFollowed;

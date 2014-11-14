@@ -10,7 +10,27 @@ namespace taskDependentSupport.core
 				
 		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, E1, E2, R1, R2, O1, O2;
 
-		public FeedbackData (){
+		public FeedbackData (String taskID){
+			Debug.Log (":::: FeedbackData taskID: "+taskID);
+
+			int startNumerator = 0;
+			int endNumerator = 0;
+			int startDenominator = 0;
+			int endDenominator = 0;
+			
+			if (taskID.Equals("EQUIValence1")){
+				startNumerator = 3;
+				endNumerator = 9;
+				startDenominator = 4;
+				endDenominator = 12;
+			}
+			else if (taskID.Equals("EQUIValence2")){
+				startNumerator = 1;
+				endNumerator = 2;
+				startDenominator = 2;
+				endDenominator = 4;
+			}
+
 			S1 = new FeedbackElem ();
 			S1.setID("S1");
 			FeedbackMessage S1M = new FeedbackMessage ();
@@ -41,13 +61,13 @@ namespace taskDependentSupport.core
 			S3M.setGuidance ("You can use the arrow buttons to change the fraction.");
 			S3M.setSocratic ("Good. What do you need to do now, to change the fraction?");
 			S3M.setDidacticConceptual ("Now click the up arrow next to the empty fraction, to make the denominator.");
-			S3M.setDidacticProcedural ("Click the up arrow next to the empty fraction, to make the denominator (the bottom part of the fraction) 12.");
+			S3M.setDidacticProcedural ("Click the up arrow next to the empty fraction, to make the denominator (the bottom part of the fraction) "+endDenominator+".");
 			S3M.setHighlighting(Highlighting.ArrowButtons);
 			S3.setFeedbackMessage (S3M);
 			S3.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepS3 = new Fraction ();
 			nextStepS3.setAnyValue (true);
-			S3.setNextStep (nextStepS2);
+			S3.setNextStep (nextStepS3);
 
 			M1 = new FeedbackElem ();
 			M1.setID ("M1");
@@ -55,12 +75,12 @@ namespace taskDependentSupport.core
 			M1M.setGuidance ("You can click the up arrow next to your fraction to change it.");
 			M1M.setSocratic ("Is the denominator in your fraction correct?");
 			M1M.setDidacticConceptual ("Check that the denominator in your fraction is correct.");
-			M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is 12.");
+			M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is "+endDenominator+".");
 			M1M.setHighlighting(Highlighting.ArrowButtons);
 			M1.setFeedbackMessage (M1M);
 			M1.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM1 = new Fraction ();
-			nextStepM1.setDenominator(12);
+			nextStepM1.setDenominator(endDenominator);
 			M1.setNextStep (nextStepM1);
 
 			M2 = new FeedbackElem ();
@@ -69,11 +89,11 @@ namespace taskDependentSupport.core
 			M2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
 			M2M.setSocratic ("Have you changed the numerator or the denominator?");
 			M2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
-			M2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is 12.");
+			M2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+endDenominator+".");
 			M2.setFeedbackMessage (M2M);
 			M2.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM2 = new Fraction ();
-			nextStepM2.setDenominator(12);
+			nextStepM2.setDenominator(endDenominator);
 			M2.setNextStep (nextStepM2);
 
 			M3 = new FeedbackElem ();
@@ -85,8 +105,8 @@ namespace taskDependentSupport.core
 			M3.setFeedbackMessage (M3M);
 			M3.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM3 = new Fraction ();
-			nextStepM3.setNumerator(9);
-			nextStepM3.setDenominator(12);
+			nextStepM3.setNumerator(endNumerator);
+			nextStepM3.setDenominator(endDenominator);
 			M3.setNextStep (nextStepM2);
 
 			M4 = new FeedbackElem ();
@@ -105,11 +125,11 @@ namespace taskDependentSupport.core
 			M5M.setGuidance ("The denominator is the bottom part of the fraction.");
 			M5M.setSocratic ("Have you changed the denominator or the numerator?");
 			M5M.setDidacticConceptual ("You changed the numerator. You need to change the denominator.");
-			M5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to 12.");
+			M5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+endDenominator+".");
 			M5.setFeedbackMessage (M5M);
 			M5.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM5 = new Fraction ();
-			nextStepM5.setDenominator(12);
+			nextStepM5.setDenominator(endDenominator);
 			M5.setNextStep (nextStepM2);
 
 			M6 = new FeedbackElem ();
@@ -118,12 +138,12 @@ namespace taskDependentSupport.core
 			M6M.setGuidance ("If you click near the top of your fraction, and click the arrow, you can change the numerator (the top part of the fraction).");
 			M6M.setSocratic ("Excellent. Now, how are you going to change the numerator?");
 			M6M.setDidacticConceptual ("You changed the denominator. Now, change the numerator.");
-			M6M.setDidacticProcedural ("Now, change the numerator. Remember, you need to make the fraction equivalent to 3/4.");
+			M6M.setDidacticProcedural ("Now, change the numerator. Remember, you need to make the fraction equivalent to "+startNumerator+"/"+startDenominator+".");
 			M6M.setHighlighting (Highlighting.ArrowButtons);
 			M6.setFeedbackMessage (M6M);
 			M6.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepM6 = new Fraction ();
-			nextStepM6.setNumerator(9);
+			nextStepM6.setNumerator(endNumerator);
 			M6.setNextStep (nextStepM6);
 
 			M7 = new FeedbackElem ();
@@ -132,19 +152,19 @@ namespace taskDependentSupport.core
 			M7M.setGuidance ("You could now copy the fraction and use the partition tool to make an equivalent fraction. To open the partition tool, right click the fraction.");
 			M7M.setSocratic ("Excellent. How about copying this and using the partition tool to make the equivalent fraction?");
 			M7M.setDidacticConceptual ("Excellent. Now copy this fraction and use the partition tool to change it.");
-			M7M.setDidacticProcedural ("Excellent. Now copy the fraction use the partition tool to change it to a fraction with a denominator of 12.");
+			M7M.setDidacticProcedural ("Excellent. Now copy the fraction use the partition tool to change it to a fraction with a denominator of "+endDenominator+".");
 			M7.setFeedbackMessage (M7M);
 			M7.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM7 = new Fraction ();
-			nextStepM7.setDenominator(12);
+			nextStepM7.setDenominator(endDenominator);
 			M7.setNextStep (nextStepM7);
 
 			M8 = new FeedbackElem ();
 			M8.setID ("M8");
 			FeedbackMessage M8M = new FeedbackMessage ();
-			M8M.setGuidance ("Think about the denominators in the two fractions. What is the relationship between them? What do you need to do to work out the correct numerator for your fraction?");
-			M8M.setSocratic ("How could you compare your fraction with 3/4?");
-			M8M.setDidacticConceptual ("Compare your fraction with 3/4 by using the compairson box.");
+			M8M.setGuidance ("Think about the denominators in the two fractions. What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?");
+			M8M.setSocratic ("How could you compare your fraction with "+startNumerator+"/"+startDenominator+"?");
+			M8M.setDidacticConceptual ("Compare your fraction with "+startNumerator+"/"+startDenominator+" by using the compairson box.");
 			M8M.setHighlighting (Highlighting.ComparisonBox);
 			M8.setFeedbackMessage (M8M);
 			M8.setFeedbackType (FeedbackType.problemSolving);
@@ -157,20 +177,20 @@ namespace taskDependentSupport.core
 			FeedbackMessage M9M = new FeedbackMessage ();
 			M9M.setGuidance ("In equivalent fractions, the two numerators must be the same multiple of each other as the two denominators.");
 			M9M.setSocratic ("What are you going to compare your fraction with?");
-			M9M.setDidacticConceptual ("First create another fraction, this time 3/4. Then compare your two fractions.");
+			M9M.setDidacticConceptual ("First create another fraction, this time "+startNumerator+"/"+startDenominator+". Then compare your two fractions.");
 			M9M.setHighlighting (Highlighting.RepresentationToolBox);
 			M9.setFeedbackMessage (M9M);
 			M9.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepM9 = new Fraction ();
-			nextStepM9.setNumerator (3);
-			nextStepM9.setDenominator (4);
+			nextStepM9.setNumerator (startNumerator);
+			nextStepM9.setDenominator (startDenominator);
 			nextStepM9.setComparison (true);
 			M9.setNextStep (nextStepM9);
 
 			M10 = new FeedbackElem ();
 			M10.setID ("M10");
 			FeedbackMessage M10M = new FeedbackMessage ();
-			M10M.setDidacticConceptual ("Excellent. Please explain why you made the denominator 12.");
+			M10M.setDidacticConceptual ("Excellent. Please explain why you made the denominator "+endDenominator+".");
 			M10.setFeedbackMessage (M10M);
 			M10.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepM10 = new Fraction ();
@@ -200,7 +220,7 @@ namespace taskDependentSupport.core
 			E2 = new FeedbackElem ();
 			E2.setID ("E2");
 			FeedbackMessage E2M = new FeedbackMessage ();
-			E2M.setDidacticConceptual ("Please explain what you did to the numerator and the denominator of 3/4 to make an equivalent fraction with 12 as the denominator.");
+			E2M.setDidacticConceptual ("Please explain what you did to the numerator and the denominator of "+startNumerator+"/"+startDenominator+" to make an equivalent fraction with "+endDenominator+" as the denominator.");
 			E2.setFeedbackMessage (E2M);
 			Fraction nextStepE2 = new Fraction ();
 			nextStepE2.setSpeech (true);
@@ -220,7 +240,7 @@ namespace taskDependentSupport.core
 			R2 = new FeedbackElem ();
 			R2.setID ("R2");
 			FeedbackMessage R2M = new FeedbackMessage ();
-			R2M.setDidacticConceptual ("Why did you make the fraction 9/12? What did you do to the numerator and denominator of 3/4?");
+			R2M.setDidacticConceptual ("Why did you make the fraction "+endNumerator+"/"+endDenominator+"? What did you do to the numerator and denominator of "+startNumerator+"/"+startDenominator+"?");
 			R2.setFeedbackMessage (R2M);
 			Fraction nextStepR2 = new Fraction ();
 			nextStepR2.setSpeech (true);
