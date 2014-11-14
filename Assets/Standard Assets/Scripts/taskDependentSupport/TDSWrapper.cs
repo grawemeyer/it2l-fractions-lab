@@ -67,6 +67,7 @@ namespace taskDependentSupport
 		}
 
 		public static void setTaskID(object arg){
+			Debug.Log ("!!!!!!!!!!! setTaskID: "+arg);
 			Debug.Log ("setTaskID: "+arg);
 			String elem = arg.ToString ();
 			taskID = elem.Substring(0,12);

@@ -34,7 +34,7 @@ namespace taskDependentSupport.core
 		public void processDoneEvent(){
 			Debug.Log ("processDoneEvent");
 			if (studentModel.isTaskCompleted ()) {
-				if (taskID.Equals ("EQUIValence1")) {
+				if (taskID.Equals ("EQUIValence1") || taskID.Equals("EQUIValence2")) {
 					if (studentModel.getParticitionUsed()){
 						currentFeedback = feedbackData.R1;
 					}
@@ -163,7 +163,15 @@ namespace taskDependentSupport.core
 			return true;
 		}
 
-
+		private bool currentSetIncludesFraction(int numerator, int denominator){
+			for (int i = 0; i< studentModel.getCurrentFractions().Count; i++){
+				Fraction current = studentModel.getCurrentFractions()[i];
+				if ((current.getNumerator() == numerator) && (current.getDenominator() == denominator)){
+					return true;
+				}
+			}
+			return false;
+		}
 
 		public void processEvent()
 		{
@@ -193,120 +201,95 @@ namespace taskDependentSupport.core
 					endDenominator = 4;
 				}
 			
-				//check if there is already a correct solution
-				Fraction inUseFraction = studentModel.getCurrentFraction();
-				bool correctSolutionFound = false;
-				Debug.Log ("inUseFraction: "+inUseFraction);
-				Debug.Log ("getCurrentFractions: "+studentModel.getCurrentFractions());
-				Debug.Log ("count: "+studentModel.getCurrentFractions().Count);
-				for (int j = 0; j < studentModel.getCurrentFractions().Count; j++){
 
-					Fraction thisFraction = studentModel.getCurrentFractions()[j];
-					Debug.Log ("thisFraction: "+thisFraction);
-					if ((inUseFraction == null) || !inUseFraction.getID().Equals(thisFraction.getID())){
-						Debug.Log ("inUseFraction == null or inUse not current ");
-						int numerator = thisFraction.getNumerator();
-						int denominator = thisFraction.getDenominator();
-						int partition = thisFraction.getPartition();
 
-						Debug.Log ("numerator: "+numerator+" denominator: "+denominator+" partition: "+partition);
+				Fraction currentFraction =studentModel.getCurrentFraction();
+
+				if (currentFraction == null){
+					currentFeedback = feedbackData.S1;
+				}
+				else {
 						
-						if (partition != 0){
-							Debug.Log ("partition was used ");
-							numerator = numerator * partition;
-							denominator = denominator * partition;
-							studentModel.setPartitionUsed(true);
-						}
-
-						if ((denominator == endDenominator) && (numerator == endNumerator)){
-							Debug.Log ("solution found ");
-							correctSolutionFound = true;
-							studentModel.setTaskCompleted(true);
-							currentFeedback = feedbackData.E1;
-						}
+					int numerator = currentFraction.getNumerator();
+					int denominator = currentFraction.getDenominator();
+					int partition = currentFraction.getPartition();
+						
+					if (partition != 0){
+						numerator = numerator * partition;
+						denominator = denominator * partition;
 					}
 
-				}
+					if (!studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
+						currentFeedback = feedbackData.M11;
+					}
 
+					else if (studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.E1;
+					}
 
-				if (!correctSolutionFound) {
+					else if ((numerator == endNumerator) && (denominator == endDenominator)) {
+						Debug.Log ("solution found ");
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.E1;
+					}
+					else if ((denominator == 0) && (numerator == 0)){
+						currentFeedback = feedbackData.S3;
+					}
 
-					for (int i = 0; i < studentModel.getCurrentFractions().Count; i++){
-						Fraction currentFraction = studentModel.getCurrentFractions()[i];
-						
-						int numerator = currentFraction.getNumerator();
-						int denominator = currentFraction.getDenominator();
-						int partition = currentFraction.getPartition();
-						
-						if (partition != 0){
-							numerator = numerator * partition;
-							denominator = denominator * partition;
-						}
-
-						if ((numerator == endNumerator) && (denominator == endDenominator)) {
-							Debug.Log ("solution found ");
-							correctSolutionFound = true;
-							studentModel.setTaskCompleted(true);
-							currentFeedback = feedbackData.E1;
-						}
-						else if ((denominator == 0) && (numerator == 0)){
-							currentFeedback = feedbackData.S3;
-						}
-
-						else if ((numerator != endNumerator) && (denominator == endDenominator) && 
-						         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID()) || 
+					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
+				         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID()) || 
 						 studentModel.getPreviousFeedback().getID().Equals(feedbackData.M2.getID ()))){
-							currentFeedback = feedbackData.M4;
-						}
+						currentFeedback = feedbackData.M4;
+					}
 						
-						else if ((numerator != endNumerator) && (numerator == endDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID())){
-							currentFeedback = feedbackData.M5;
-						}
+					else if ((numerator != endNumerator) && (numerator == endDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID())){
+						currentFeedback = feedbackData.M5;
+					}
 
-						else if ((numerator == startNumerator) && (denominator == startDenominator)){
-							currentFeedback = feedbackData.M7;
-						}
+					else if ((numerator == startNumerator) && (denominator == startDenominator)){
+						currentFeedback = feedbackData.M7;
+					}
 
-						else if ((numerator != endNumerator) && (denominator == endDenominator) && 
-						         studentModel.getPreviousFeedback().getID().Equals(feedbackData.M8.getID ())){
-							currentFeedback = feedbackData.M9;
-						}
+					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
+				         studentModel.getPreviousFeedback().getID().Equals(feedbackData.M8.getID ())){
+						currentFeedback = feedbackData.M9;
+					}
 
-						else if ((numerator != endNumerator) && (denominator == endDenominator) && 
-						         (!studentModel.getReflectionForDenominatorShown())){
-							currentFeedback = feedbackData.M10;
-							studentModel.setReflectionForDenominatorShown(true);
-						}
+					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
+				         (!studentModel.getReflectionForDenominatorShown())){
+						currentFeedback = feedbackData.M10;
+						studentModel.setReflectionForDenominatorShown(true);
+					}
 
-						else if ((numerator != endNumerator) && (denominator == endDenominator) && studentModel.getReflectionForDenominatorShown()){
-							currentFeedback = feedbackData.M8;
-						}
+					else if ((numerator != endNumerator) && (denominator == endDenominator) && studentModel.getReflectionForDenominatorShown()){
+						currentFeedback = feedbackData.M8;
+					}
 
-						else if ((numerator != endNumerator) && 
-						         ((denominator == endDenominator) || (denominator == startDenominator))){
-							currentFeedback = feedbackData.M6;
-						}
+					else if ((numerator != endNumerator) && 
+					        ((denominator == endDenominator) || (denominator == startDenominator))){
+						currentFeedback = feedbackData.M6;
+					}
 
-						else if ((denominator != endDenominator) && (denominator != startDenominator)){
-							currentFeedback = feedbackData.M1;
-						}
+					else if ((denominator != endDenominator) && (denominator != startDenominator)){
+						currentFeedback = feedbackData.M1;
+					}
 
-						else if ((numerator == endDenominator) || (numerator == startDenominator)){
-							currentFeedback = feedbackData.M2;
-						}
+					else if ((numerator == endDenominator) || (numerator == startDenominator)){
+						currentFeedback = feedbackData.M2;
+					}
 
-						else if (((numerator != startNumerator) || (denominator != startDenominator)) && ((numerator != endNumerator) || (denominator != endDenominator))){
-							currentFeedback = feedbackData.M3;
-						}
+					else if (((numerator != startNumerator) || (denominator != startDenominator)) && ((numerator != endNumerator) || (denominator != endDenominator))){
+						currentFeedback = feedbackData.M3;
+					}
 					
-						else {
-							currentFeedback = new FeedbackElem();
-						}
-
-
+					else {
+						currentFeedback = new FeedbackElem();
 					}
 				}
+
 				setNewFeedback();
+			
 			}
 		}
 	}

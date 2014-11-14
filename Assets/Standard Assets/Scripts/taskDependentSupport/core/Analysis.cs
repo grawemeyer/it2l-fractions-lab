@@ -40,8 +40,9 @@ namespace taskDependentSupport.core
 				studentModel.setComparedResult(false);
 			}
 			if (type.Equals ("OperationResult")){
+
 				studentModel.setCompared(true);
-				if (name.Equals ("True")){
+				if (id.Equals ("=")){
 					studentModel.setComparedResult(true);
 				}
 				else {
