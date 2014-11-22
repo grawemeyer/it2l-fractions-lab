@@ -12,6 +12,7 @@ namespace taskDependentSupport.core
 		private Fraction currentFraction; 
 		private bool compared = false;
 		private bool comparedResult = false;
+		private bool comparedFractions = false;
 		private long time = 0;
 		private int lastDisplayedMessageID = 0;
 		private string lastDisplayedMessageType = ""; 
@@ -29,6 +30,14 @@ namespace taskDependentSupport.core
 
 		public StudentModel(String taskID){
 			feedbackData = new FeedbackData (taskID); 
+		}
+
+		public void setComparedFractions(bool elem){
+			comparedFractions = elem;
+		}
+
+		public bool getComparedFractions(){
+			return comparedFractions;
 		}
 
 		public List<bool> getFeedbackFollowed(){

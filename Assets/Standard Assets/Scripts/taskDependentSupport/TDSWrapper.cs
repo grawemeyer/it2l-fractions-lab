@@ -69,9 +69,18 @@ namespace taskDependentSupport
 		public static void setTaskID(object arg){
 			Debug.Log ("!!!!!!!!!!! setTaskID: "+arg);
 			Debug.Log ("setTaskID: "+arg);
+			//Comp1, EQUIValence1 or EQUIValence2
 			String elem = arg.ToString ();
-			taskID = elem.Substring(0,12);
-			studentID = elem.Substring(12);
+			String checkTaskID = elem.Substring(0,4);
+			if (checkTaskID.Equals ("Comp")) {
+				taskID = elem.Substring(0,5);
+				studentID = elem.Substring(5);
+			}
+			else if (checkTaskID.Equals ("EQUI")){
+				taskID = elem.Substring(0,12);
+				studentID = elem.Substring(12);
+			}
+
 			//taskID = arg.ToString();
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
@@ -103,7 +112,6 @@ namespace taskDependentSupport
 		public static void SendMessageToSupport(params object[] args)
 		{
 			if (intelligentSupportOff) return;
-
 
 			string eventType = "";
 			string eventName = "";

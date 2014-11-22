@@ -20,7 +20,6 @@ namespace taskDependentSupport.core
 			taskID = taskIDvalue;
 			feedbackData = new FeedbackData (taskID);
 			taskID = taskIDvalue;
-			
 		}
 
 		public void setStudentModel(StudentModel elem){
@@ -91,6 +90,9 @@ namespace taskDependentSupport.core
 			}
 			else if (studentCounter == 3){
 				if (didacticProcedural.Length>0) currentCounter = 4;
+			}
+			else if (studentCounter ==4){
+				currentCounter = 1;
 			}
 			Debug.Log ("currentCounter: "+currentCounter);
 			studentFeedbackElem.setCounter (currentCounter);
@@ -171,9 +173,119 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
+		private bool sameRepresentations(){
+			if (studentModel.getCurrentFractions ().Count > 0) {
+				string firstRepresentation = studentModel.getCurrentFractions()[0].getName();
+				for (int i = 1; i< studentModel.getCurrentFractions().Count; i++){
+					string currentRepresentation = studentModel.getCurrentFractions()[i].getName();
+					if (!firstRepresentation.Equals(currentRepresentation)) return false;
+				}
+			}
+			return true;
+		}
+
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
+
+			if (taskID.Equals("Comp1")){
+				checkForFeedbackFollowed();
+
+				Debug.Log ("::::::  Comp1");
+
+				int firstNumerator = 1;
+				int firstDenominator = 3;
+				int secondNumerator = 1;
+				int secondDenominator = 5;
+
+				bool compared = false;
+
+				Fraction currentFraction =studentModel.getCurrentFraction();
+				
+				if (currentFraction == null){
+					currentFeedback = feedbackData.S1;
+				}
+				else {
+					
+					int numerator = currentFraction.getNumerator();
+					int denominator = currentFraction.getDenominator();
+					int partition = currentFraction.getPartition();
+					
+					if (partition != 0){
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+
+					if (!sameRepresentations()){
+						currentFeedback = feedbackData.CM7;
+					}
+
+					else if (studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
+					         && currentSetIncludesFraction(secondNumerator, secondDenominator)){
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.E1;
+					}
+					else if (!studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
+								&& currentSetIncludesFraction(secondNumerator, secondDenominator)){
+						//currentFeedback = feedbackData.M11;
+						currentFeedback = feedbackData.CM8;
+					}
+					else if ((numerator ==0) && (denominator ==0)){
+						currentFeedback = feedbackData.S3;
+					}
+					else if ((denominator != firstDenominator) && (denominator != secondDenominator) 
+					         && (numerator == 0)){
+						currentFeedback = feedbackData.M1;
+					}
+					else if ((denominator != firstDenominator) && (denominator != secondDenominator)
+					         && (numerator != firstNumerator) && (numerator != secondNumerator)){
+						currentFeedback = feedbackData.M3;
+					}
+					else if (numerator == firstDenominator){
+						currentFeedback = feedbackData.M2;
+					}
+					else if (numerator == secondDenominator){
+						currentFeedback = feedbackData.CM2;
+					}
+					else if ((denominator == firstDenominator)
+					         && (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())
+					    || studentModel.getPreviousFeedback().getID().Equals(feedbackData.M2.getID ()))){
+						currentFeedback = feedbackData.M4;	
+					}
+					else if ((denominator == secondDenominator)
+					         && (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())
+					    || studentModel.getPreviousFeedback().getID().Equals(feedbackData.CM2.getID ()))){
+						currentFeedback = feedbackData.M4;	
+					}
+					else if ((numerator == firstDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())){
+						currentFeedback = feedbackData.M5;	
+					}
+					else if ((numerator == secondDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())){
+						currentFeedback = feedbackData.CM5;	
+					}
+					else if ((numerator==firstNumerator) && (denominator == firstDenominator) 
+					        && !currentSetIncludesFraction(secondNumerator, secondDenominator)){
+						currentFeedback = feedbackData.CM6Second;	
+					}
+					else if ((numerator==secondNumerator) && (denominator == secondDenominator) 
+					         && !currentSetIncludesFraction(firstNumerator, firstDenominator)){
+						currentFeedback = feedbackData.CM6;	
+					}
+					else if (denominator==secondDenominator 
+					         && currentSetIncludesFraction(firstNumerator, firstDenominator)){
+						currentFeedback = feedbackData.CM12;	
+					}
+					else if (denominator==firstDenominator){
+						currentFeedback = feedbackData.CM11;	
+					}
+
+					else {
+						currentFeedback = new FeedbackElem();
+					}
+				}
+				setNewFeedback();
+			}
+
 			if (taskID.Equals("EQUIValence1") || taskID.Equals("EQUIValence2")){
 				checkForFeedbackFollowed();
 

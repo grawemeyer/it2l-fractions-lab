@@ -9,6 +9,7 @@ namespace taskDependentSupport.core
 	{
 				
 		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, E1, E2, R1, R2, O1, O2;
+		public FeedbackElem CM2, CM5, CM6, CM6Second, CM7, CM8, CM11, CM12, CE2;
 
 		public FeedbackData (String taskID){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -17,6 +18,10 @@ namespace taskDependentSupport.core
 			int endNumerator = 0;
 			int startDenominator = 0;
 			int endDenominator = 0;
+
+			if (taskID.Equals ("Comp1")) {
+				endDenominator = 3;
+			}
 			
 			if (taskID.Equals("EQUIValence1")){
 				startNumerator = 3;
@@ -96,6 +101,19 @@ namespace taskDependentSupport.core
 			nextStepM2.setDenominator(endDenominator);
 			M2.setNextStep (nextStepM2);
 
+			CM2 = new FeedbackElem ();
+			CM2.setID ("CM2");
+			FeedbackMessage CM2M = new FeedbackMessage ();
+			CM2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
+			CM2M.setSocratic ("Have you changed the numerator or the denominator?");
+			CM2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
+			CM2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+5+".");
+			CM2.setFeedbackMessage (CM2M);
+			CM2.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepCM2 = new Fraction ();
+			nextStepCM2.setDenominator(5);
+			CM2.setNextStep (nextStepCM2);
+
 			M3 = new FeedbackElem ();
 			M3.setID ("M3");
 			FeedbackMessage M3M = new FeedbackMessage ();
@@ -132,6 +150,19 @@ namespace taskDependentSupport.core
 			nextStepM5.setDenominator(endDenominator);
 			M5.setNextStep (nextStepM2);
 
+			CM5 = new FeedbackElem ();
+			CM5.setID ("CM5");
+			FeedbackMessage CM5M = new FeedbackMessage ();
+			CM5M.setGuidance ("The denominator is the bottom part of the fraction.");
+			CM5M.setSocratic ("Have you changed the denominator or the numerator?");
+			CM5M.setDidacticConceptual ("You changed the numerator. You need to change the denominator.");
+			CM5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+5+".");
+			CM5.setFeedbackMessage (M5M);
+			CM5.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepCM5 = new Fraction ();
+			nextStepCM5.setDenominator(5);
+			CM5.setNextStep (nextStepCM2);
+
 			M6 = new FeedbackElem ();
 			M6.setID ("M6");
 			FeedbackMessage M6M = new FeedbackMessage ();
@@ -146,6 +177,39 @@ namespace taskDependentSupport.core
 			nextStepM6.setNumerator(endNumerator);
 			M6.setNextStep (nextStepM6);
 
+
+			CM6 = new FeedbackElem ();
+			CM6.setID ("CM6");
+			FeedbackMessage CM6M = new FeedbackMessage ();
+			CM6M.setGuidance ("Now that you have made the first fraction, you need to compare it with the second fraction.");
+			CM6M.setSocratic ("Excellent. Now, how are you going to compare the fraction?");
+			CM6M.setDidacticConceptual ("You now need to compare the fraction with a second fraction.");
+			CM6M.setDidacticProcedural ("Now, create a second fraction using the same representation.");
+			CM6M.setHighlighting (Highlighting.ArrowButtons);
+			CM6.setFeedbackMessage (CM6M);
+			CM6.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepCM6 = new Fraction ();
+			nextStepCM6.setNumerator(1);
+			nextStepCM6.setDenominator(3);
+			nextStepCM6.sameRepresentation (true);
+			CM6.setNextStep (nextStepCM6);
+
+			CM6Second = new FeedbackElem ();
+			CM6Second.setID ("CM6Second");
+			FeedbackMessage CM6MSecond = new FeedbackMessage ();
+			CM6MSecond.setGuidance ("Now that you have made the first fraction, you need to compare it with the second fraction.");
+			CM6MSecond.setSocratic ("Excellent. Now, how are you going to compare the fraction?");
+			CM6MSecond.setDidacticConceptual ("You now need to compare the fraction with a second fraction.");
+			CM6MSecond.setDidacticProcedural ("Now, create a second fraction using the same representation.");
+			CM6MSecond.setHighlighting (Highlighting.ArrowButtons);
+			CM6Second.setFeedbackMessage (CM6MSecond);
+			CM6Second.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepCM6Second = new Fraction ();
+			nextStepCM6Second.setNumerator(1);
+			nextStepCM6Second.setDenominator(5);
+			nextStepCM6Second.sameRepresentation (true);
+			CM6Second.setNextStep (nextStepCM6Second);
+
 			M7 = new FeedbackElem ();
 			M7.setID ("M7");
 			FeedbackMessage M7M = new FeedbackMessage ();
@@ -159,6 +223,18 @@ namespace taskDependentSupport.core
 			nextStepM7.setDenominator(endDenominator);
 			M7.setNextStep (nextStepM7);
 
+			CM7 = new FeedbackElem ();
+			CM7.setID ("CM7");
+			FeedbackMessage CM7M = new FeedbackMessage ();
+			CM7M.setGuidance ("Please use the same representation for the second fraction.");
+			CM7M.setSocratic ("Why have you decided to use a different representation? What does the task ask you to do?");
+			CM7M.setDidacticProcedural ("Please create the second fraction using the same representation that you used for the first fraction.");
+			CM7.setFeedbackMessage (CM7M);
+			CM7.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepCM7 = new Fraction ();
+			nextStepCM7.sameRepresentation (true);
+			CM7.setNextStep (nextStepCM7);
+
 			M8 = new FeedbackElem ();
 			M8.setID ("M8");
 			FeedbackMessage M8M = new FeedbackMessage ();
@@ -171,6 +247,20 @@ namespace taskDependentSupport.core
 			Fraction nextStepM8 = new Fraction ();
 			nextStepM8.setComparison (true);
 			M8.setNextStep (nextStepM8);
+
+			CM8 = new FeedbackElem ();
+			CM8.setID ("CM8");
+			FeedbackMessage CM8M = new FeedbackMessage ();
+			CM8M.setGuidance ("You could now compare the fractions. Open the comparison tool at the top of the screen.");
+			CM8M.setSocratic ("Excellent. How using the comparison tool to compare the two fractions?");
+			CM8M.setDidacticConceptual ("Excellent. Now use the comparison tool.");
+			CM8M.setDidacticProcedural ("Excellent. Not open the comparison tool, at the top of the screen, and drag in the two fractions.");
+			CM8M.setHighlighting (Highlighting.ComparisonBox);
+			CM8.setFeedbackMessage (CM8M);
+			CM8.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepCM8 = new Fraction ();
+			nextStepCM8.setComparison (true);
+			CM8.setNextStep (nextStepCM8);
 
 			M9 = new FeedbackElem ();
 			M9.setID ("M9");
@@ -210,6 +300,26 @@ namespace taskDependentSupport.core
 			nextStepM11.setComparison (true);
 			M11.setNextStep (nextStepM11);
 
+			CM11 = new FeedbackElem ();
+			CM11.setID ("CM11");
+			FeedbackMessage CM11M = new FeedbackMessage ();
+			CM11M.setDidacticConceptual ("Excellent. Please explain why you made the denominator 3.");
+			CM11.setFeedbackMessage (CM11M);
+			CM11.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepCM11 = new Fraction ();
+			nextStepCM11.setSpeech (true);
+			CM11.setNextStep (nextStepCM11);
+
+			CM12 = new FeedbackElem ();
+			CM12.setID ("CM12");
+			FeedbackMessage CM12M = new FeedbackMessage ();
+			CM12M.setSocratic ("Excellent, what are you going to do now?");
+			CM12.setFeedbackMessage (CM12M);
+			CM12.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepCM12 = new Fraction ();
+			nextStepCM12.setSpeech (true);
+			CM12.setNextStep (nextStepCM12);
+
 			E1 = new FeedbackElem ();
 			E1.setID ("E1");
 			FeedbackMessage E1M = new FeedbackMessage ();
@@ -226,6 +336,16 @@ namespace taskDependentSupport.core
 			nextStepE2.setSpeech (true);
 			E2.setNextStep (nextStepE2);
 			E2.setFeedbackType (FeedbackType.reflection);
+
+			CE2 = new FeedbackElem ();
+			CE2.setID ("CE2");
+			FeedbackMessage CE2M = new FeedbackMessage ();
+			CE2M.setDidacticConceptual ("Please explain what you found by comparing 1/3 and 1/5.");
+			CE2.setFeedbackMessage (CE2M);
+			Fraction nextStepCE2 = new Fraction ();
+			nextStepCE2.setSpeech (true);
+			CE2.setNextStep (nextStepCE2);
+			CE2.setFeedbackType (FeedbackType.reflection);
 
 			R1 = new FeedbackElem ();
 			R1.setID ("R1");
