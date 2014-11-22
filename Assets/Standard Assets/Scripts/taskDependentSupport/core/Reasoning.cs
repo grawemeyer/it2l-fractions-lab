@@ -40,6 +40,9 @@ namespace taskDependentSupport.core
 					}
 					setNewFeedback();
 				}
+				else if (taskID.Equals ("Comp1")){
+					currentFeedback = feedbackData.CE2;
+				}
 				TDSWrapper.ArrowButtonEnable (true);
 				TDSWrapper.DoneButtonEnable (false);
 			} 
