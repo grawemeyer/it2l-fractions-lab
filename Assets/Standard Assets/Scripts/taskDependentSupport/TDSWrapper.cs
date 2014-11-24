@@ -197,6 +197,9 @@ namespace taskDependentSupport
 				feedback.setStudentID(studentID);
 				feedback.generateFeedbackMessage();
 			}
+			else if (eventType.Equals ("PlatformEvent") && (eventName.Equals ("lightBulbPressed") || eventName.Equals ("*lightBulbPressed*"))){
+				Debug.Log (":::: Light bulb pressed ::::");
+			}
 
 		}
 

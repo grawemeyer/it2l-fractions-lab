@@ -22,7 +22,17 @@ namespace taskDependentSupport.core
 
 		public void calculatePresentationOfFeedback(){
 			//needs to be set by the task-independent support
-			presentationMode = "high";
+			presentationMode = "lightBulb";
+
+			//if student did not follow the advice AND did not click on the light bulb 2 x
+			//then FRUSTEATION -> reflective prompt in pop-up window -> consequtive messages in pop-up as well?
+
+			//if student quickly went on light bulb several times (3x) 
+			//then CONFUSION -> prompts in pop-up window
+
+			//if student follows advice 2 x  
+			//then ENJOYMENT -> prompts as light bulb
+
 		}
 
 		public void generateFeedbackMessage(){
@@ -36,7 +46,7 @@ namespace taskDependentSupport.core
 			ticks /= 10000000; //Convert windows ticks to seconds
 
 			if (!feedbackMessage.Equals ("")) {
-				if (studentID.Equals("student1") || studentID.Equals("Student1")){
+				if (presentationMode.Equals ("lightBulb") || studentID.Equals("student1") || studentID.Equals("Student1")){
 					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
 					taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
 				}
