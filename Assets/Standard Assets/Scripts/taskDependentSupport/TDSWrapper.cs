@@ -67,16 +67,28 @@ namespace taskDependentSupport
 		}
 
 		public static void setTaskID(object arg){
+			Debug.Log ("!!!!!!!!!!! setTaskID: "+arg);
 			Debug.Log ("setTaskID: "+arg);
+			//Comp1, EQUIValence1 or EQUIValence2
 			String elem = arg.ToString ();
-			taskID = elem.Substring(0,12);
-			studentID = elem.Substring(12);
+			String checkTaskID = elem.Substring(0,4);
+			if (checkTaskID.Equals ("Comp")) {
+				taskID = elem.Substring(0,5);
+				studentID = elem.Substring(5);
+			}
+			else if (checkTaskID.Equals ("EQUI")){
+				taskID = elem.Substring(0,12);
+				studentID = elem.Substring(12);
+			}
+
 			//taskID = arg.ToString();
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
 			//if (studentModel == null) 
-			studentModel = new StudentModel ();
+			studentModel = new StudentModel (taskID);
 			studentModel.resetDoneButtonPressed();
+			//Debug.Log ("studentModel setFeedbackData 1 ");
+			//studentModel.setFeedbackData (new FeedbackData ());
 
 			if (taskID.Equals ("EQUIValence1")) {
 				DoneButtonEnable(true);
@@ -100,7 +112,6 @@ namespace taskDependentSupport
 		public static void SendMessageToSupport(params object[] args)
 		{
 			if (intelligentSupportOff) return;
-
 
 			string eventType = "";
 			string eventName = "";
@@ -131,7 +142,11 @@ namespace taskDependentSupport
 
 			Debug.Log ("taskID: "+taskID);
 
-			if (studentModel == null) studentModel = new StudentModel ();
+			if (studentModel == null) {
+				studentModel = new StudentModel (taskID);
+				//Debug.Log ("studentModel setFeedbackData 2 ");
+				//studentModel.setFeedbackData (new FeedbackData ());
+			}
 
 			Analysis analyse = new Analysis ();
 			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
@@ -172,9 +187,8 @@ namespace taskDependentSupport
 			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
 				Debug.Log ("doneButtonPressed");
 				studentModel.setDoneButtonPressed ();
-				Reasoning reasoning = new Reasoning();
+				Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
-				reasoning.setTaskID(taskID);
 				reasoning.processEvent();
 				reasoning.processDoneEvent();
 				
@@ -182,6 +196,9 @@ namespace taskDependentSupport
 				feedback.setStudentModel(studentModel);
 				feedback.setStudentID(studentID);
 				feedback.generateFeedbackMessage();
+			}
+			else if (eventType.Equals ("PlatformEvent") && (eventName.Equals ("lightBulbPressed") || eventName.Equals ("*lightBulbPressed*"))){
+				Debug.Log (":::: Light bulb pressed ::::");
 			}
 
 		}
@@ -192,9 +209,8 @@ namespace taskDependentSupport
 				while (counter.getValue ()< 400) {}
 				if (counter.getValue () >= 400) {
 					Debug.Log("counter > 400");
-					Reasoning reasoning = new Reasoning();
+					Reasoning reasoning = new Reasoning(taskID);
 					reasoning.setStudentModel(studentModel);
-					reasoning.setTaskID(taskID);
 					reasoning.processEvent();
 
 					Feedback feedback = new Feedback();

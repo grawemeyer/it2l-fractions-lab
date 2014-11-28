@@ -12,6 +12,7 @@ namespace taskDependentSupport.core
 		private Fraction currentFraction; 
 		private bool compared = false;
 		private bool comparedResult = false;
+		private bool comparedFractions = false;
 		private long time = 0;
 		private int lastDisplayedMessageID = 0;
 		private string lastDisplayedMessageType = ""; 
@@ -21,8 +22,64 @@ namespace taskDependentSupport.core
 		private bool partitionUsed = false;
 		private bool nominatorDenominatorMisconception = false;
 		private bool askForComparison = false;
+		private FeedbackData feedbackData;
+		private FeedbackElem previous = new FeedbackElem();
+		private bool reflectionForDenominatorShown = false;
+		private List<FeedbackElem> feedbackProvided = new List<FeedbackElem>();
+		private List<bool> feedbackFollowed = new List<bool>();
 
+		public StudentModel(String taskID){
+			feedbackData = new FeedbackData (taskID); 
+		}
 
+		public void setComparedFractions(bool elem){
+			comparedFractions = elem;
+		}
+
+		public bool getComparedFractions(){
+			return comparedFractions;
+		}
+
+		public List<bool> getFeedbackFollowed(){
+			return feedbackFollowed;
+		}
+		
+		public void addFeedbackFollowed (bool elem){
+			feedbackFollowed.Add (elem);
+		}
+
+		public List<FeedbackElem> getFeedbackProvided(){
+			return feedbackProvided;
+		}
+
+		public void addFeedbackProvided (FeedbackElem elem){
+			feedbackProvided.Add (elem);
+		}
+
+		public void setReflectionForDenominatorShown(bool elem){
+			reflectionForDenominatorShown = elem;
+		}
+
+		public bool getReflectionForDenominatorShown(){
+			return reflectionForDenominatorShown;
+		}
+
+		public void setPreviousFeedback(FeedbackElem elem){
+			previous = elem;
+		}
+
+		public FeedbackElem getPreviousFeedback(){
+			return previous;
+		}
+
+		public void setFeedbackData(FeedbackData elem){
+			Debug.Log (":::: student model -> setFeedbackData :::");
+			feedbackData = elem;
+		}
+
+		public FeedbackData getFeedbackData(){
+			return feedbackData;
+		}
 
 		public void setAskForComparison(bool value){
 			askForComparison = value;
@@ -153,7 +210,7 @@ namespace taskDependentSupport.core
 		public void setNumeratorAtFraction(String id, int value)
 		{
 			Fraction current = getFraction(id);
-			current.setNominator (value);
+			current.setNumerator (value);
 		}
 
 		public void setDenominatorAtFraction(String id, int value)
