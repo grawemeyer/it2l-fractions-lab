@@ -47,7 +47,11 @@ namespace fractionslab.utils
         Result,
         Improper
     }
-
+    public struct SliceVertex 
+    {
+        public int[] vertex;
+        public bool isColored;
+    }
     public struct BBExtend
     {
         public float left;

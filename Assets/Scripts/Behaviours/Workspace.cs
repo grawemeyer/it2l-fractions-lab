@@ -26,6 +26,7 @@ public class Workspace : MonoBehaviour
     public const int MAXVALUE = 3;
     public const float POPUPSIZE = 15.0f;
     public static int elemCounter = 0;
+    public const int MAXDRAWCOUNT = 20;
     #endregion
 
     #region Public Fields
@@ -56,6 +57,8 @@ public class Workspace : MonoBehaviour
     protected GameObject containerObject = null;
     [SerializeField]
     protected bool inputEnabled = true;
+    protected int operationCounter = 0;
+    
     #endregion
 
     #region Public Get/Set
@@ -124,6 +127,11 @@ public class Workspace : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
                 DestroyHighlight();
+        }
+       if (Input.GetKeyDown(KeyCode.G))
+        {
+            Resources.UnloadUnusedAssets();
+
         }
 
         /*if (Input.GetKeyDown(KeyCode.Q))
@@ -364,6 +372,18 @@ public class Workspace : MonoBehaviour
     #endregion
 
     #region Messages
+
+    public void DrawCounter() 
+    {
+        operationCounter++;
+      //  Debug.Log("*************************Increase Counter " + operationCounter);
+        if (operationCounter >= MAXDRAWCOUNT) 
+        {
+          //  Debug.Log("********************************Free Memory " + operationCounter);
+            Resources.UnloadUnusedAssets();  // free memory
+            operationCounter = 0;
+        }
+    }
 
     public void CheckOverlapActionMenu() 
     {
@@ -714,6 +734,7 @@ public class Workspace : MonoBehaviour
 
         Tweener.StopAndDestroyAllTweens();
         Destroy(element);
+    
         elements.Remove(element);
         UpdateWS();
     }
@@ -916,6 +937,7 @@ public class Workspace : MonoBehaviour
 
         BoxCollider firstBB = firstCut.GetComponent<BoxCollider>();
         BoxCollider secondBB = secondCut.GetComponent<BoxCollider>();
+        
 
         float totalWidth = firstBB.size.x + secondBB.size.x + gap;
         float scaleFactor = 1.0f;

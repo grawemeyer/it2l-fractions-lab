@@ -465,7 +465,10 @@ public class RootElement : WSElement, IWSElement
         else
         {
             for (int i = 0; i < elements.Count; i++)
+            {
+               // Debug.Log("elements[i] " + elements[i].gameObject.name + " elements[i].GetComponent<WSElement>().GetBounds() " + elements[i].GetComponent<WSElement>().GetBounds());
                 bounds.Encapsulate(elements[i].GetComponent<WSElement>().GetBounds());
+            }
         }
 
         bounds.min -= new SBSVector3(bbExtends.left, bbExtends.bottom, 0.0f);
@@ -511,6 +514,8 @@ public class RootElement : WSElement, IWSElement
 
     public override void Draw(int zIndex)
     {
+        if(!isSubFraction)
+            GameObject.FindGameObjectWithTag("Workspace").GetComponent<Workspace>().DrawCounter() ;
         base.Draw(zIndex);
 
         if (mode == InteractionMode.Changing && zIndex > 0)
@@ -1298,7 +1303,6 @@ public class RootElement : WSElement, IWSElement
         {
             if (roots[i].gameObject == gameObject)
                 continue;
-
             bool hasRemoved = false;
             Transform fraction = roots[i].transform.GetChild(0);
 
@@ -1322,6 +1326,40 @@ public class RootElement : WSElement, IWSElement
     }
 
 
+    void DecreaseNumR()
+    {
+        RootElement[] roots = GetComponentsInChildren<RootElement>();
+        for (int i = 0 ; i < roots.Length; i++)
+        {
+            if (roots[i].gameObject == gameObject)
+                continue;
+
+            Transform fraction = roots[i].transform.GetChild(0);
+
+            int num = 0;
+            if (type == ElementsType.Line)
+                num = fraction.gameObject.GetComponent<LineElement>().partNumerator;
+            else if (type == ElementsType.Liquid)
+                num = fraction.gameObject.GetComponent<LiquidElement>().partNumerator;
+            else if ((type == ElementsType.VRect || type == ElementsType.HRect) && fraction.gameObject.GetComponent<RectangleElement>().partitions > 1){
+                Debug.Log("partition > 1 " + num + " " + fraction.gameObject.GetComponent<RectangleElement>().partitions + " " + fraction.parent.name);
+                num = fraction.gameObject.GetComponent<RectangleElement>().partNumerator;}
+            else if ((type == ElementsType.VRect || type == ElementsType.HRect) && fraction.gameObject.GetComponent<RectangleElement>().partitions == 1)
+            {
+                num = fraction.gameObject.GetComponent<RectangleElement>().numerator;
+                Debug.Log("partition 1 " + num);
+            
+            }
+
+            if (num > 0)
+            {
+                fraction.gameObject.SendMessage("DecreaseCutNumerator");
+                break;
+            }
+        }
+    }
+
+
     void DecreaseNum()
     {
         RootElement[] roots = GetComponentsInChildren<RootElement>();
@@ -1337,6 +1375,8 @@ public class RootElement : WSElement, IWSElement
                 num = fraction.gameObject.GetComponent<LineElement>().partNumerator;
             else if (type == ElementsType.Liquid)
                 num = fraction.gameObject.GetComponent<LiquidElement>().partNumerator;
+            /*else if (type == ElementsType.VRect || type == ElementsType.HRect)
+                num = fraction.gameObject.GetComponent<RectangleElement>().partNumerator;*/
 
             if (num > 0)
             {
@@ -1352,10 +1392,13 @@ public class RootElement : WSElement, IWSElement
         {
             switch (type)
             {
-                case (ElementsType.HRect):
-                case (ElementsType.VRect):
+               
                 case (ElementsType.Set):                       
                     DecreaseRectNum();
+                    break;
+                case (ElementsType.HRect):
+                case (ElementsType.VRect):
+                     DecreaseNumR();
                     break;
                 case (ElementsType.Line):
                 case (ElementsType.Liquid):

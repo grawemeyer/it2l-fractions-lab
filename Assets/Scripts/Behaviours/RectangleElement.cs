@@ -55,8 +55,12 @@ public class RectangleElement : WSElement, IWSElement
             bounds.Reset();
             for (int i = 0; i < transform.childCount; i++)
             {
-                if (null != transform.GetChild(i).GetComponent<WSElement>())
-                    bounds.Encapsulate(transform.GetChild(i).GetComponent<WSElement>().GetBounds());
+                if (null != transform.GetChild(i).GetComponent<RectangleMeshElement>()) 
+                {
+                    bounds.Encapsulate(transform.GetChild(i).GetComponent<RectangleMeshElement>().GetBounds());
+                    //Debug.Log("ci entra " + transform.GetChild(i).gameObject.name);
+                }
+                
             }
             return bounds;
         }
@@ -259,24 +263,35 @@ public class RectangleElement : WSElement, IWSElement
         Draw(zIndex);
     }
 
+    public void DecreaseCutNumerator()
+    {
+        if (partitions > 1)
+            partNumerator--;
+        else
+        {
+            numerator--;
+            UpdateNumerator(numerator);
+        }
+        UpdateSlices();
+        Draw(0);
+    }
+
     void Cut()
     {
+        //Debug.Log("cut object " + gameObject.transform.parent.transform.parent.name);
+        selectedSlices.Sort();
+        selectedSlices.Reverse();
         for (int i = 0; i < transform.childCount; i++)
         {
-            if (transform.GetChild(i).name.Equals("background"))
+         //  Debug.Log("transform.GetChild(i).name " + transform.GetChild(i).name);
+            if (transform.GetChild(i).name.Equals("grid"))
             {
-                GameObject bg = transform.GetChild(i).gameObject;
-                bg.transform.parent = null;
-                Destroy(bg);
-            }
-
-            if (transform.GetChild(i).name.Equals("line_root"))
-            {
-                GameObject bg = transform.GetChild(i).gameObject;
-                bg.transform.parent = null;
-                Destroy(bg);
+              //  Debug.Log("transform.GetChild(i).name " + transform.GetChild(i).name);
+                Color strokeColor = new Color(1f, 1f, 1f, 0.0f);
+                transform.GetChild(i).GetComponent<RectangleMeshElement>().SendMessage("SetStrokeColor", strokeColor);
             }
         }
+                
         UpdateSlices();
         root.GetComponent<RootElement>().UpdateGraphics();
     }
@@ -289,22 +304,23 @@ public class RectangleElement : WSElement, IWSElement
 
     void Initialize()
     {
+        GameObject grid = new GameObject("grid");
+        grid.transform.parent = transform;
+        grid.AddComponent<RectangleMeshElement>();
+        grid.transform.position = transform.TransformPoint(Vector3.zero);
+        grid.GetComponent<MeshRenderer>().material = new Material(Shader.Find("Sprites/Default"));
+
+        grid.SendMessage("Initialize", mode);
+        grid.SendMessage("SetMode", mode);
+        grid.SendMessage("SetElementState", state);
+        grid.SendMessage("SetType", type);
+        grid.SendMessage("SetSize", new Vector2(width, height));
+        grid.SendMessage("SetColor", Workspace.Instance.white);
+        grid.SendMessage("SetStrokeWidth", 0.02f);
+        grid.GetComponent<RectangleMeshElement>().Draw();
         lastNumerator = numerator;
         lastDenominator = denominator;
         lastPartitions = partitions;
-
-        GameObject bg = new GameObject("background");
-        bg.transform.parent = transform;
-        bg.transform.position = transform.TransformPoint(Vector3.zero);
-        bg.AddComponent<MeshElement>();
-        bg.SendMessage("Initialize", mode);
-        bg.SendMessage("SetMode", mode);
-        bg.SendMessage("SetElementState", state);
-        bg.SendMessage("SetType", type);
-        bg.SendMessage("SetSize", new Vector2(width, height));
-        bg.SendMessage("SetColor", Workspace.Instance.white);
-        bg.SendMessage("SetStrokeDist", 0.2f);
-        bg.SendMessage("SetStrokeWidth", 0.02f);
 
         if (denominator > 0)
         {
@@ -312,13 +328,12 @@ public class RectangleElement : WSElement, IWSElement
             UpdateNumerator(numerator);
             UpdatePartitions(partitions);
             UpdateNumeratorByPartition(partitions, 0);
-
             UpdateSliceStructure();
             UpdateSlices();
         }
     }
 
-    void ClickSlice(int index)
+    public void ClickSlice(int index)
     {
         if (slices[index])
         {
@@ -350,7 +365,6 @@ public class RectangleElement : WSElement, IWSElement
     void UpdateNumerator(int value)
     {
         value = Mathf.Clamp(value, 0, slices.Count);
-
         int prevNum = 0;
         for (int i = 0; i < slices.Count; i++)
             if (slices[i]) prevNum++;
@@ -541,118 +555,148 @@ public class RectangleElement : WSElement, IWSElement
     void UpdatePartitions(int value)
     {
         selectedSlices.Sort();
+        selectedSlices.Reverse();
         UpdateSlices();
     }
 
-    void OnClicked(Vector3 position)
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Transform child = transform.GetChild(i);
-            if (child.name.StartsWith("slice"))
-            {
-                SBSBounds meshBounds = child.GetComponent<MeshElement>().GetBounds();
-                position.z = meshBounds.max.z;
-                if (meshBounds.ContainsPointXY(position))
-                {
-                    string n = child.name;
-                    int sliceIndex = int.Parse(n.Substring(n.Length - (n.Length - 5), (n.Length - 5)));
-                    ClickSlice(sliceIndex);
-                    Draw(zIndex);
-                    break;
-                }
-            }
-        }
-    }
+    /*void OnClicked(Vector3 position)
+{
+  for (int i = 0; i < transform.childCount; i++)
+ {
+     Transform child = transform.GetChild(i);
+     if (child.name.StartsWith("slice"))
+     {
+         SBSBounds meshBounds = child.GetComponent<MeshElement>().GetBounds();
+         position.z = meshBounds.max.z;
+         if (meshBounds.ContainsPointXY(position))
+         {
+             string n = child.name;
+             int sliceIndex = int.Parse(n.Substring(n.Length - (n.Length - 5), (n.Length - 5)));
+             ClickSlice(sliceIndex);
+             Draw(zIndex);
+             break;
+         }
+     }
+ }
+}*/
     #endregion
 
     #region Protected Methods
     protected void UpdateSlices()
     {
-        int sliceCounter = 0;
-        float basePosX = 0.0f;
-        float basePosY = 0.0f;
-        float baseSizeX = 0.0f;
-        float baseSizeY = 0.0f;
-        float sliceWidth = 0.0f;
-        float sliceHeight = 0.0f;
-        int sliceCount = slices.Count / partitions;
+        /*  int sliceCounter = 0;
+          float basePosX = 0.0f;
+          float basePosY = 0.0f;
+          float baseSizeX = 0.0f;
+          float baseSizeY = 0.0f;
+          float sliceWidth = 0.0f;
+          float sliceHeight = 0.0f;
+          int sliceCount = slices.Count / partitions;*/
 
         float elementScale = root.GetComponent<RootElement>().elementScale;
 
-        for (int i = 0; i < transform.childCount; i++)
+     /*   for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).name.StartsWith("slice"))
                 Destroy(transform.GetChild(i).gameObject);
-        }
-
-        if (type == ElementsType.VRect)
+        }*/
+        RectangleMeshElement grid;
+        for (int i = 0; i < gameObject.transform.childCount; i++)
         {
-            sliceWidth = width * elementScale / (float)sliceCount;
-            basePosX = -width * 0.5f + sliceWidth / elementScale * 0.5f;
-            baseSizeX = sliceWidth / elementScale;
-
-            sliceHeight = height * elementScale / (float)partitions;
-            basePosY = height * 0.5f - sliceHeight / elementScale * 0.5f;
-            baseSizeY = sliceHeight / elementScale;
-        }
-        else if (type == ElementsType.HRect)
-        {
-            sliceWidth = width * elementScale / (float)partitions;
-            basePosX = -width * 0.5f + sliceWidth / elementScale * 0.5f;
-            baseSizeX = sliceWidth / elementScale;
-
-            sliceHeight = height * elementScale / (float)sliceCount;
-            basePosY = height * 0.5f - sliceHeight / elementScale * 0.5f;
-            baseSizeY = sliceHeight / elementScale;
-        }
-
-        for (int p = 0; p < partitions; p++) 
-        {
-            for (int i = 0; i < sliceCount; i++) 
+            if (transform.GetChild(i).name.StartsWith("grid"))
             {
-                //int sliceIndex = (p * sliceCount + i);
-                int sliceIndex = (i * partitions + p);
-                if (slices[sliceIndex] || state != ElementsState.Cut)
+                grid = transform.GetChild(i).GetComponent<RectangleMeshElement>();
+                grid.partDenominator = partDenominator;
+                grid.partNumerator = partNumerator;
+                grid.partitions = partitions;
+               
+                 Color emptySliceColor = Workspace.Instance.white;
+                 if (state == ElementsState.Result)
+                     emptySliceColor = Workspace.Instance.greyResult;
+                grid.SendMessage("SetEmpyColor", emptySliceColor);
+
+                Color strokeColor = new Color(0.1098f, 0.2431f, 0.0353f);
+                if (mode == InteractionMode.Freeze)
                 {
-                    GameObject slice = new GameObject("slice" + sliceIndex);
-                    slice.transform.parent = transform;
-                    if (type == ElementsType.VRect)
-                        slice.transform.position = transform.TransformPoint(new Vector3(basePosX + baseSizeX * i, basePosY - baseSizeY * p, -0.2f));
-                    else if (type == ElementsType.HRect)
-                        slice.transform.position = transform.TransformPoint(new Vector3(basePosX + baseSizeX * p, basePosY - baseSizeY * i, -0.2f));
-
-                    slice.AddComponent<MeshElement>();
-                    slice.SendMessage("Initialize", mode);
-                    slice.SendMessage("SetMode", mode);
-                    slice.SendMessage("SetElementState", state);
-                    slice.SendMessage("SetType", type);
-
-
-                    if (state == ElementsState.Cut)
-                        slice.SendMessage("SetSize", new Vector2(sliceWidth - 0.1f, sliceHeight - 0.1f));
-                    else
-                        slice.SendMessage("SetSize", new Vector2(sliceWidth, sliceHeight));
-
-                    Color emptySliceColor = Workspace.Instance.white;
-                    if (state == ElementsState.Result)
-                        emptySliceColor = Workspace.Instance.greyResult;
-
-                    slice.SendMessage("SetColor", slices[sliceIndex] ? color : emptySliceColor);
-                    slice.SendMessage("SetStrokeDist", 0.2f);
-                    
-                    if (state == ElementsState.Cut)
-                        slice.SendMessage("SetStrokeWidth", 0.0f);
-                    else
-                        slice.SendMessage("SetStrokeWidth", 0.0f); //strokeWidth);
-
-                    sliceCounter++;
+                    strokeColor += new Color(0.4f, 0.4f, 0.4f);
+                    color.a = 0.4f;
                 }
+                else if (state == ElementsState.Result)
+                    strokeColor = Workspace.Instance.white;
+               // else if (state == ElementsState.Cut)
+                if (state != ElementsState.Cut)
+                    grid.SendMessage("SetStrokeColor", strokeColor);
+                grid.SendMessage("SetColor", color);
             }
         }
 
+        /* if (type == ElementsType.VRect)
+            {
+               sliceWidth = width * elementScale / (float)sliceCount;
+                basePosX = -width * 0.5f + sliceWidth / elementScale * 0.5f;
+                baseSizeX = sliceWidth / elementScale;
+
+                sliceHeight = height * elementScale / (float)partitions;
+                basePosY = height * 0.5f - sliceHeight / elementScale * 0.5f;
+                baseSizeY = sliceHeight / elementScale;
+            }
+            else if (type == ElementsType.HRect)
+            {
+                sliceWidth = width * elementScale / (float)partitions;
+                basePosX = -width * 0.5f + sliceWidth / elementScale * 0.5f;
+                baseSizeX = sliceWidth / elementScale;
+
+                sliceHeight = height * elementScale / (float)sliceCount;
+                basePosY = height * 0.5f - sliceHeight / elementScale * 0.5f;
+                baseSizeY = sliceHeight / elementScale;
+            }*/
+
+        /* for (int p = 0; p < partitions; p++) 
+         {
+             for (int i = 0; i < sliceCount; i++) 
+             {
+                 //int sliceIndex = (p * sliceCount + i);
+                 int sliceIndex = (i * partitions + p);
+                 if (slices[sliceIndex] || state != ElementsState.Cut)
+                 {
+                     GameObject slice = new GameObject("slice" + sliceIndex);
+                     slice.transform.parent = transform;
+                     if (type == ElementsType.VRect)
+                         slice.transform.position = transform.TransformPoint(new Vector3(basePosX + baseSizeX * i, basePosY - baseSizeY * p, -0.2f));
+                     else if (type == ElementsType.HRect)
+                         slice.transform.position = transform.TransformPoint(new Vector3(basePosX + baseSizeX * p, basePosY - baseSizeY * i, -0.2f));
+
+                     slice.AddComponent<MeshElement>();
+                     slice.SendMessage("Initialize", mode);
+                     slice.SendMessage("SetMode", mode);
+                     slice.SendMessage("SetElementState", state);
+                     slice.SendMessage("SetType", type);
+
+
+                     if (state == ElementsState.Cut)
+                         slice.SendMessage("SetSize", new Vector2(sliceWidth - 0.1f, sliceHeight - 0.1f));
+                     else
+                         slice.SendMessage("SetSize", new Vector2(sliceWidth, sliceHeight));
+
+                     Color emptySliceColor = Workspace.Instance.white;
+                     if (state == ElementsState.Result)
+                         emptySliceColor = Workspace.Instance.greyResult;
+
+                     slice.SendMessage("SetColor", slices[sliceIndex] ? color : emptySliceColor);
+                     slice.SendMessage("SetStrokeDist", 0.2f);
+                    
+                     if (state == ElementsState.Cut)
+                         slice.SendMessage("SetStrokeWidth", 0.0f);
+                     else
+                         slice.SendMessage("SetStrokeWidth", 0.0f); //strokeWidth);
+
+                     sliceCounter++;
+                 }
+             }
+         }
+
         if (state != ElementsState.Cut)
-            UpdateSlicesLines();
+            UpdateSlicesLines();*/
     }
 
     void UpdateSlicesLines()
