@@ -676,7 +676,7 @@ public class Workspace : MonoBehaviour
         elements.Push(root);
         UpdateWS();
 
-        ExternalEventsManager.Instance.SendBrowserMessage("FractionCopy", root.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionCopy", root.name);
     }
 
     void CutFraction(GameObject source)
@@ -703,7 +703,7 @@ public class Workspace : MonoBehaviour
         source.BroadcastMessage("SetMode", InteractionMode.Freeze);
         UpdateWS();
 
-        ExternalEventsManager.Instance.SendBrowserMessage("FractionCut", root.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionCut", root.name);
     }
 
     void SetFocusOn(GameObject elem)
