@@ -13,6 +13,7 @@ namespace taskDependentSupport.core
 			studentModel.setEventTime(time);
 			studentModel.setCurrentFraction(id);
 
+			Debug.Log ("::: ANAYLSE: "+type+" name: "+name+" id: "+id+" value: "+value+" fractionsValue: "+fractionsValue);
 
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){

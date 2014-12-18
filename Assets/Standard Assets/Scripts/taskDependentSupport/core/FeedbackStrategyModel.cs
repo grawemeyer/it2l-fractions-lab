@@ -17,10 +17,11 @@ namespace taskDependentSupport.core
 		public static string getFeedbackMessage()
 		{
 			if (currentFeedbackPointer == 1) {
-				return currentFeedback.getFeedbackMessage ().getGuidance ();
+				return currentFeedback.getFeedbackMessage ().getSocratic ();
 			}
 			else if (currentFeedbackPointer == 2) {
-				return currentFeedback.getFeedbackMessage ().getSocratic ();
+				return currentFeedback.getFeedbackMessage ().getGuidance ();
+
 			}
 			else if (currentFeedbackPointer == 3){
 				return currentFeedback.getFeedbackMessage ().getDidacticConceptual ();

@@ -26,16 +26,14 @@ namespace taskDependentSupport
 		public static String taskID = "";
 		public static String studentID = "";
 		public static Thread responseThread;
-		public static bool doneButtonEnabled = false;
-		public static bool arrowButtonEnabled = true;
+		public static bool doneButtonEnabled = true;
+		public static bool arrowButtonEnabled = false;
 		public static bool needsNewThread = true;
 
 		private static StudentModel studentModel;
 
 		public static Counter counter; 
 
-		//for testing:
-		private static Counter testCounter; 
 		#endregion
 		
 		#region Public Static Methods
@@ -52,7 +50,7 @@ namespace taskDependentSupport
 		}
 
 		public static void SendMessageToLightBulb(String feedbacktext){
-			Debug.Log ("sendMessageToLightBulb: "+feedbacktext);
+			Debug.Log ("TDSWRAPPER: sendMessageToLightBulb: "+feedbacktext);
 			Application.ExternalCall("sendMessageToLightBulb", feedbacktext);
 		}
 
@@ -81,15 +79,11 @@ namespace taskDependentSupport
 				studentID = elem.Substring(12);
 			}
 
-			//taskID = arg.ToString();
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
-			//if (studentModel == null) 
 			studentModel = new StudentModel (taskID);
 			studentModel.resetDoneButtonPressed();
-			//Debug.Log ("studentModel setFeedbackData 1 ");
-			//studentModel.setFeedbackData (new FeedbackData ());
-
+		
 			if (taskID.Equals ("EQUIValence1")) {
 				DoneButtonEnable(true);
 				ArrowButtonEnable(false);
@@ -97,13 +91,13 @@ namespace taskDependentSupport
 		}
 
 		public static void DoneButtonEnable(bool value){
-			Debug.Log ("DoneButtonEnable: "+value);
+			Debug.Log ("TDSWRAPPER: DoneButtonEnable: "+value);
 			Application.ExternalCall("doneButtonEnable", value.ToString ());
 			doneButtonEnabled = value;
 		}
 
 		public static void ArrowButtonEnable(bool value){
-			Debug.Log ("ArrowButtonEnable: "+value);
+			Debug.Log ("TDSWRAPPER: ArrowButtonEnable: "+value);
 			Application.ExternalCall("arrowButtonEnable", value.ToString ());
 			arrowButtonEnabled = value;
 		}
@@ -136,7 +130,6 @@ namespace taskDependentSupport
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
-			//Debug.Log ("EVENT: "+eventType+" name: "+eventName+" id: "+objectID+"objectValue: "+objectValue+" objectValueInt: "+objectValueInt);
 
 			SaveEvent (ticks+";eventType:"+eventType+";eventName:"+eventName+";objectID:"+objectID+";objectValue:"+objectValue+";objectValueInt:"+objectValueInt+";objectPosition:"+objectPosition+";");
 
@@ -144,12 +137,12 @@ namespace taskDependentSupport
 
 			if (studentModel == null) {
 				studentModel = new StudentModel (taskID);
-				//Debug.Log ("studentModel setFeedbackData 2 ");
-				//studentModel.setFeedbackData (new FeedbackData ());
 			}
 
 			Analysis analyse = new Analysis ();
 			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
+
+			Debug.Log ("eventType: "+eventType+" eventName:"+eventName);
 
 			if (counter == null) {
 				Debug.Log ("counter == null");
@@ -186,7 +179,6 @@ namespace taskDependentSupport
 			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
 			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
 				Debug.Log ("doneButtonPressed");
-				studentModel.setDoneButtonPressed ();
 				Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
 				reasoning.processEvent();
@@ -197,10 +189,25 @@ namespace taskDependentSupport
 				feedback.setStudentID(studentID);
 				feedback.generateFeedbackMessage();
 			}
-			else if (eventType.Equals ("PlatformEvent") && (eventName.Equals ("lightBulbPressed") || eventName.Equals ("*lightBulbPressed*"))){
-				Debug.Log (":::: Light bulb pressed ::::");
+			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedON*")){
+				Debug.Log (":::: Light bulb pressed ON::::");
+			
 			}
+			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedOFF*")){
+				Debug.Log (":::: Light bulb pressed OFF::::");
 
+				Reasoning reasoning = new Reasoning(taskID);
+				reasoning.setStudentModel(studentModel);
+				reasoning.processEvent();
+				
+				Feedback feedback = new Feedback();
+				feedback.setStudentModel(studentModel);
+				feedback.setStudentID(studentID);
+				feedback.generateFeedbackMessage();
+
+				needsNewThread = true;
+				responseThread = null;
+			}
 		}
 
 		private static void handleEvent()
@@ -227,6 +234,7 @@ namespace taskDependentSupport
 				Debug.Log (e);
 			}
 		}
+
 
 		#endregion
 		

@@ -29,22 +29,23 @@ namespace taskDependentSupport.core
 
 	
 		public void processDoneEvent(){
-			Debug.Log ("processDoneEvent");
 			if (studentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("EQUIValence1") || taskID.Equals("EQUIValence2")) {
 					if (studentModel.getParticitionUsed()){
+						Debug.Log (" currentFeedback = feedbackData.R1");
 						currentFeedback = feedbackData.R1;
 					}
 					else {
+						Debug.Log (" currentFeedback = feedbackData.R1");
 						currentFeedback = feedbackData.R2;
 					}
 					setNewFeedback();
 				}
 				else if (taskID.Equals ("Comp1")){
 					currentFeedback = feedbackData.CE2;
+					setNewFeedback();
 				}
 				TDSWrapper.ArrowButtonEnable (true);
-				TDSWrapper.DoneButtonEnable (false);
 			} 
 			else {
 				if (studentModel.firstDoneButtonPressed()){
@@ -54,6 +55,7 @@ namespace taskDependentSupport.core
 					currentFeedback = feedbackData.O2;
 					TDSWrapper.ArrowButtonEnable (true);
 				}
+				studentModel.setDoneButtonPressed ();
 				setNewFeedback();
 			}
 
@@ -67,6 +69,7 @@ namespace taskDependentSupport.core
 			string didacticConceptual = currentFeedback.getFeedbackMessage ().getDidacticConceptual ();
 			string didacticProcedural = currentFeedback.getFeedbackMessage ().getDidacticProcedural();
 
+
 			Debug.Log ("setNewFeedback: "+currentFeedbackID);
 
 			FeedbackElem studentFeedbackElem = studentModel.getFeedbackData ().getFeedbackElem (currentFeedbackID);
@@ -77,13 +80,13 @@ namespace taskDependentSupport.core
 			Debug.Log ("studentCounter: "+studentCounter);
 
 			if (studentCounter == 0) {
-				if (guidance.Length>0) currentCounter = 1;
-				else if (socratic.Length>0) currentCounter =2;
+				if (socratic.Length>0) currentCounter = 1;
+				else if (guidance.Length>0) currentCounter =2;
 				else if (didacticConceptual.Length>0) currentCounter=3;
 				else if (didacticProcedural.Length>0) currentCounter = 4;
 			}
 			else if (studentCounter == 1){
-				if (socratic.Length>0) currentCounter =2;
+				if (guidance.Length>0) currentCounter =2;
 				else if (didacticConceptual.Length>0) currentCounter=3;
 				else if (didacticProcedural.Length>0) currentCounter = 4;
 			}
@@ -97,12 +100,11 @@ namespace taskDependentSupport.core
 			else if (studentCounter ==4){
 				currentCounter = 1;
 			}
-			Debug.Log ("currentCounter: "+currentCounter);
+
 			studentFeedbackElem.setCounter (currentCounter);
 			studentModel.setPreviousFeedback (currentFeedback);
 			studentModel.addFeedbackProvided (currentFeedback);
 			FeedbackStrategyModel.setCurrentFeedback (currentFeedback, currentCounter);
-			Debug.Log (" test elem: "+studentFeedbackElem.getID ()+" "+studentFeedbackElem.getCounter ());
 		}
 
 		private void checkForFeedbackFollowed(){
@@ -194,8 +196,6 @@ namespace taskDependentSupport.core
 			if (taskID.Equals("Comp1")){
 				checkForFeedbackFollowed();
 
-				Debug.Log ("::::::  Comp1");
-
 				int firstNumerator = 1;
 				int firstDenominator = 3;
 				int secondNumerator = 1;
@@ -204,12 +204,8 @@ namespace taskDependentSupport.core
 				bool compared = false;
 
 				Fraction currentFraction =studentModel.getCurrentFraction();
-				
-				if (currentFraction == null){
-					currentFeedback = feedbackData.S1;
-				}
-				else {
-					
+
+				if (currentFraction != null){
 					int numerator = currentFraction.getNumerator();
 					int denominator = currentFraction.getDenominator();
 					int partition = currentFraction.getPartition();
@@ -286,6 +282,9 @@ namespace taskDependentSupport.core
 						currentFeedback = new FeedbackElem();
 					}
 				}
+				else {
+					currentFeedback = new FeedbackElem();
+				}
 				setNewFeedback();
 			}
 
@@ -318,19 +317,22 @@ namespace taskDependentSupport.core
 
 				Fraction currentFraction =studentModel.getCurrentFraction();
 
-				if (currentFraction == null){
-					currentFeedback = feedbackData.S1;
-				}
-				else {
+				Debug.Log ("currentFraction: "+currentFraction);
+
+				if (currentFraction != null){
 						
 					int numerator = currentFraction.getNumerator();
 					int denominator = currentFraction.getDenominator();
 					int partition = currentFraction.getPartition();
+
+
 						
 					if (partition != 0){
 						numerator = numerator * partition;
 						denominator = denominator * partition;
 					}
+
+					Debug.Log ("numerator: "+numerator+" denominator: "+denominator);
 
 					if (!studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
 						currentFeedback = feedbackData.M11;
@@ -399,6 +401,9 @@ namespace taskDependentSupport.core
 					else {
 						currentFeedback = new FeedbackElem();
 					}
+				}
+				else {
+					currentFeedback = new FeedbackElem();
 				}
 
 				setNewFeedback();

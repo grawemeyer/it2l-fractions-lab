@@ -78,7 +78,7 @@ namespace taskDependentSupport.core
 			M1.setID ("M1");
 			FeedbackMessage M1M = new FeedbackMessage ();
 			M1M.setSocratic ("Is the denominator in your fraction correct?");
-			M1M.setGuidance ("You can click the up arrow next to your fraction to change it.");
+			M1M.setGuidance ("You can click the up arrow next to your fraction to change the denominator.");
 			M1M.setDidacticConceptual ("Check that the denominator in your fraction is correct.");
 			M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is "+endDenominator+".");
 			M1M.setHighlighting(Highlighting.ArrowButtons);
@@ -290,7 +290,7 @@ namespace taskDependentSupport.core
 			M11 = new FeedbackElem ();
 			M11.setID ("M11");
 			FeedbackMessage M11M = new FeedbackMessage ();
-			M11M.setSocratic ("How can you check, using Fractions Lab tool, that your solution is correct?");
+			M11M.setSocratic ("How can you check, using a Fractions Lab tool, that your solution is correct?");
 			M11M.setGuidance ("You could use the comparison box to compare your fractions.");
 			M11M.setDidacticConceptual ("Compare the two fractions using the comparison box.");
 			M11M.setHighlighting (Highlighting.ComparisonBox);
@@ -378,10 +378,10 @@ namespace taskDependentSupport.core
 			O1.setFeedbackType (FeedbackType.other);
 
 			O2 = new FeedbackElem ();
-			O2.setID ("O1");
+			O2.setID ("O2");
 			FeedbackMessage O2M = new FeedbackMessage ();
 			O2M.setDidacticConceptual ("If you need more help to finish the task, ask your teacher.");
-			O2.setFeedbackMessage (O1M);
+			O2.setFeedbackMessage (O2M);
 			Fraction nextStepO2 = new Fraction ();
 			nextStepO2.setAnyValue (true);
 			O2.setNextStep (nextStepO2);

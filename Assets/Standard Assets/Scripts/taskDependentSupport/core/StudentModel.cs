@@ -73,7 +73,6 @@ namespace taskDependentSupport.core
 		}
 
 		public void setFeedbackData(FeedbackData elem){
-			Debug.Log (":::: student model -> setFeedbackData :::");
 			feedbackData = elem;
 		}
 
@@ -114,7 +113,7 @@ namespace taskDependentSupport.core
 		}
 
 		public bool firstDoneButtonPressed(){
-			if (doneButtonPressed <= 1)return true;
+			if (doneButtonPressed < 1)return true;
 			return false;
 		}
 
@@ -229,7 +228,7 @@ namespace taskDependentSupport.core
 		{
 			for (int i = 0; i < currentFractions.Count; i++) {
 				Fraction current = currentFractions [i];
-				if (current.getID () == id) return current;
+				if (current.getID ().Equals(id)) return current;
 			}
 			return null;
 		}
