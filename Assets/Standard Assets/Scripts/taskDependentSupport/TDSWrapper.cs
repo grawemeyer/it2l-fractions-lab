@@ -23,6 +23,7 @@ namespace taskDependentSupport
 		#region Public Static Fields
 		public static GameObject eventManager = null;
 		public static bool intelligentSupportOff = false;
+		public static bool TIS = true;
 		public static String taskID = "";
 		public static String studentID = "";
 		public static Thread responseThread;
@@ -47,6 +48,11 @@ namespace taskDependentSupport
 		public static void SendBrowserMessage(params object[] args)
 		{
 			Application.ExternalCall("newEvent", args);
+		}
+
+		public static void sendMessageToTIS(String feedbacktext, String currentFeedbackType, String previousFeedbackType, bool followed){
+			Debug.Log ("TDSWRAPPER: sendMessageToTIS: "+feedbacktext+" currentFeedbackType: "+currentFeedbackType+" previousFeedbackType: "+previousFeedbackType+" followed: "+followed);
+			Application.ExternalCall("sendMessageToTIS", feedbacktext, currentFeedbackType, previousFeedbackType, followed);
 		}
 
 		public static void SendMessageToLightBulb(String feedbacktext){

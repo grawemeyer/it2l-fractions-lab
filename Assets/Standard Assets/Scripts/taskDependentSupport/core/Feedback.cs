@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 namespace taskDependentSupport.core
@@ -24,15 +25,21 @@ namespace taskDependentSupport.core
 			//needs to be set by the task-independent support
 			presentationMode = "lightBulb";
 
-			//if student did not follow the advice AND did not click on the light bulb 2 x
-			//then FRUSTEATION -> reflective prompt in pop-up window -> consequtive messages in pop-up as well?
+			//if the student has completed the exercise then the affect boost should be 
+			//provided in pop-up
 
-			//if student quickly went on light bulb several times (3x) 
-			//then CONFUSION -> prompts in pop-up window
+			//the reflective prompt at the end of the task should be
+			//provided as pop-up
 
-			//if student follows advice 2 x  
-			//then ENJOYMENT -> prompts as light bulb
+		}
 
+		private String getFeedbackTypeAsString(int feedbackType){
+			String feedbackTypeString = "";
+			if ((feedbackType == 1) || (feedbackType == 3)) feedbackTypeString="PROBLEM_SOLVING";
+			else if (feedbackType == 2) feedbackTypeString="REFLECTION";
+			else if (feedbackType == 4) feedbackTypeString="AFFIRMATION";
+			else if (feedbackType == 5) feedbackTypeString="OTHER";
+			return feedbackTypeString;
 		}
 
 		public void generateFeedbackMessage(){
@@ -40,23 +47,44 @@ namespace taskDependentSupport.core
 			string feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
 			Debug.Log ("feedbackMessage: "+feedbackMessage);
 
-			calculatePresentationOfFeedback ();
+
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
 
 			if (!feedbackMessage.Equals ("")) {
-				if (presentationMode.Equals ("lightBulb") || studentID.Equals("student1") || studentID.Equals("Student1")){
-					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
-					taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
-				}
+				if (taskDependentSupport.TDSWrapper.TIS){
+					List<bool> feedbackFollowed = studentModel.getFeedbackFollowed();
+					bool followed = feedbackFollowed[feedbackFollowed.Count-1];
 
-				else if (presentationMode.Equals ("low")) {
-					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
-					sendLowMessage (feedbackMessage);
-				} else if (presentationMode.Equals ("high")) {
-					taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
-					sendHighMessage (feedbackMessage);
+					List<FeedbackElem> feedbackProvided = studentModel.getFeedbackProvided();
+					int feedbackProvidedLength = feedbackProvided.Count;
+					int previousFeedbackType =0;
+					if (feedbackProvidedLength > 1){
+						FeedbackElem previousFeedback = feedbackProvided[feedbackProvided.Count-2];
+						previousFeedbackType = previousFeedback.getFeedbackType();
+					}
+					FeedbackElem currentFeedback = feedbackProvided[feedbackProvided.Count-1];
+					int currentFeedbackType = currentFeedback.getFeedbackType();
+					String previousFeedbackTypeString = getFeedbackTypeAsString(previousFeedbackType);
+					String currentFeedbackTypeString = getFeedbackTypeAsString(currentFeedbackType);
+
+					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedbackMessage, currentFeedbackTypeString, previousFeedbackTypeString, followed);
+				}
+				else {
+					calculatePresentationOfFeedback ();
+					if (presentationMode.Equals ("lightBulb")){
+						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
+						taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
+					}
+
+					else if (presentationMode.Equals ("low")) {
+						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
+						sendLowMessage (feedbackMessage);
+					} else if (presentationMode.Equals ("high")) {
+						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
+						sendHighMessage (feedbackMessage);
+					}
 				}
 			}
 		}
