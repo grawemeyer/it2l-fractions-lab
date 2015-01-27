@@ -23,7 +23,9 @@ namespace taskDependentSupport.core
 
 		public void calculatePresentationOfFeedback(){
 			//needs to be set by the task-independent support
-			presentationMode = "lightBulb";
+			//presentationMode = "lightBulb";
+
+			presentationMode = "high";
 
 			//if the student has completed the exercise then the affect boost should be 
 			//provided in pop-up
@@ -83,6 +85,7 @@ namespace taskDependentSupport.core
 						sendLowMessage (feedbackMessage);
 					} else if (presentationMode.Equals ("high")) {
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
+						Debug.Log ("send HIGH message");
 						sendHighMessage (feedbackMessage);
 					}
 				}
@@ -103,6 +106,7 @@ namespace taskDependentSupport.core
 			var json = "{\"method\": \"LowFeedback\", \"parameters\": {\"message\": \"" + message +"\"}}";
 			taskDependentSupport.TDSWrapper.eventManager.SendMessage("SendEvent", json);
 			taskDependentSupport.TDSWrapper.PlaySound(message);
+			Debug.Log ("::::: sendLowMessage");
 		}
 
 		private void highlightItem(string itemID)

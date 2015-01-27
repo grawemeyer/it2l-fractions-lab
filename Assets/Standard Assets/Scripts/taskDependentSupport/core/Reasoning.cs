@@ -189,11 +189,48 @@ namespace taskDependentSupport.core
 			return true;
 		}
 
+		bool demo = true;
+
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
 
-			if (taskID.Equals("Comp1")){
+			if (demo){
+
+				Fraction cFraction =studentModel.getCurrentFraction();
+			
+				if (cFraction != null) {
+					int numerator = cFraction.getNumerator();
+					int denominator = cFraction.getDenominator();
+					int partition = cFraction.getPartition();
+
+					if ((denominator != 4) && (denominator !=12)){
+						FeedbackElem test = new FeedbackElem();
+						test.setID ("test1");
+						FeedbackMessage test1M = new FeedbackMessage ();
+						test1M.setSocratic ("Is the denominator in your fraction correct?");
+						test.setFeedbackMessage (test1M);
+						test.setFeedbackType (FeedbackType.problemSolving);
+						Fraction nextStepM1 = new Fraction ();
+						nextStepM1.setDenominator(12);
+						test.setNextStep (nextStepM1);
+
+						currentFeedback = test;
+					
+
+					}
+					else {
+						currentFeedback = new FeedbackElem();
+					}
+
+					setNewFeedback();
+			
+				}
+
+			}
+
+
+			else if (taskID.Equals("Comp1")){
 				checkForFeedbackFollowed();
 
 				int firstNumerator = 1;
