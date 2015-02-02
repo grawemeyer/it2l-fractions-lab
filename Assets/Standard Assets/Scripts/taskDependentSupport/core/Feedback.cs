@@ -23,9 +23,9 @@ namespace taskDependentSupport.core
 
 		public void calculatePresentationOfFeedback(){
 			//needs to be set by the task-independent support
-			//presentationMode = "lightBulb";
+			presentationMode = "lightBulb";
 
-			presentationMode = "high";
+			//presentationMode = "high";
 
 			//if the student has completed the exercise then the affect boost should be 
 			//provided in pop-up
