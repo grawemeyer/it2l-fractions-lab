@@ -120,6 +120,8 @@ namespace taskDependentSupport.core
 			bool feedbackAnyValue = feedbackNextSteps.getAnyValye();
 			bool feedbackSpeech = feedbackNextSteps.getSpeech();
 			bool feedbackComparison = feedbackNextSteps.getComparison();
+			bool differntRepresentation = feedbackNextSteps.getDifferentRepresentation ();
+			bool allSameValue = feedbackNextSteps.getAllSameValue ();
 
 			for (int i = 0; i < studentModel.getCurrentFractions().Count; i++) {
 				Fraction thisFraction = studentModel.getCurrentFractions()[i];
@@ -165,7 +167,15 @@ namespace taskDependentSupport.core
 					return studentModel.getCompared();
 				}
 			}
-			return true;
+			bool result = true;
+
+			if (differntRepresentation) {
+				result = !sameRepresentations();
+			}
+			if (allSameValue){
+				result = sameValues();
+			}
+			return result;
 		}
 
 		private bool currentSetIncludesFraction(int numerator, int denominator){
@@ -189,10 +199,87 @@ namespace taskDependentSupport.core
 			return true;
 		}
 
+		private bool sameValues(){
+			if (studentModel.getCurrentFractions ().Count > 0) {
+				Fraction firstFraction = studentModel.getCurrentFractions()[0];
+				int firstNumerator = firstFraction.getNumerator();
+				int firstDenominator = firstFraction.getDenominator();
+				int firstPartition = firstFraction.getPartition();
+				
+				if (firstPartition != 0){
+					firstNumerator = firstNumerator * firstPartition;
+					firstPartition = firstPartition * firstPartition;
+				}
+				for (int i = 1; i< studentModel.getCurrentFractions().Count; i++){
+					Fraction currentfraction = studentModel.getCurrentFractions()[i];
+					int numerator = currentfraction.getNumerator();
+					int denominator = currentfraction.getDenominator();
+					int partition = currentfraction.getPartition();
+					
+					if (partition != 0){
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+					if ((firstNumerator != numerator) || (firstDenominator != denominator)) return false;
+				}
+			}
+			return true;
+		}
+
+		private int createdReps(){
+			return studentModel.getCurrentFractions ().Count;
+		}
+
 
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
+			Debug.Log ("taskID: "+taskID);
+
+			if (taskID.Equals("familiarisation01")){
+				checkForFeedbackFollowed();
+
+				Fraction currentFraction =studentModel.getCurrentFraction();
+				if (currentFraction != null){
+					int numerator = currentFraction.getNumerator();
+					int denominator = currentFraction.getDenominator();
+					int partition = currentFraction.getPartition();
+
+					if (partition != 0){
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+
+					Debug.Log ("numerator="+numerator+" denominator="+denominator);
+
+					if ((numerator ==0) && (denominator ==0)){
+						Debug.Log ("numerator und denominator = 0");
+						currentFeedback = feedbackData.S3;
+					}
+					//else if (!sameRepresentations() && sameValues() && (createdReps() == 2)){
+					//	currentFeedback = feedbackData.FM10;
+					//}
+
+					else if (!sameRepresentations() && sameValues() && (createdReps() < 3)){
+						currentFeedback = feedbackData.FM11;
+					}
+					else if (!sameRepresentations() && sameValues() && (createdReps() == 3)){
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.FE1;
+					}
+
+					else if ((numerator !=0) || (denominator !=0)) {
+						currentFeedback = feedbackData.FM6;
+					}
+					else {
+						currentFeedback = new FeedbackElem();
+					}
+				}
+				else {
+					currentFeedback = new FeedbackElem();
+				}
+				setNewFeedback();
+			}
 
 			 if (taskID.Equals("Comp1")){
 				checkForFeedbackFollowed();

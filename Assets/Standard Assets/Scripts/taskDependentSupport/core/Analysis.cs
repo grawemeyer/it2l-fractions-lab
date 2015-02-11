@@ -34,6 +34,7 @@ namespace taskDependentSupport.core
 				studentModel.setCompared(false);
 				studentModel.setComparedResult(false);
 				studentModel.setComparedFractions(false);
+				studentModel.setCurrentFraction(id);
 
 			}
 			if (type.Equals("FractionChange")){

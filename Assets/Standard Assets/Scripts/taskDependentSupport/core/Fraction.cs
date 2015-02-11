@@ -14,9 +14,27 @@ namespace taskDependentSupport.core
 			private bool speech = false;
 			private bool comparison = false;
 			private bool sameRep = false; 
+			private bool differentRep=false;
+			private bool sameValue=false;
 
 			public Fraction ()
 			{
+			}
+
+			public void allSameValue(bool value){
+				sameValue = value;
+			}
+
+			public bool getAllSameValue(){
+				return sameValue;
+			}
+
+			public void differntRepresentation(bool value){
+				differentRep = value;
+			}
+
+			public bool getDifferentRepresentation(){
+				return differentRep;
 			}
 
 			public void sameRepresentation(bool value){

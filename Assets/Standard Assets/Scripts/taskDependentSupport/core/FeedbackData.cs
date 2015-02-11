@@ -10,6 +10,7 @@ namespace taskDependentSupport.core
 				
 		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, E1, E2, R1, R2, O1, O2;
 		public FeedbackElem CM2, CM5, CM6, CM6Second, CM7, CM8, CM11, CM12, CE2;
+		public FeedbackElem FM6, FM10, FM11, FE1, FE2;
 
 		public FeedbackData (String taskID){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -387,6 +388,60 @@ namespace taskDependentSupport.core
 			O2.setNextStep (nextStepO2);
 			O2.setFeedbackType (FeedbackType.other);
 
+			FM6 = new FeedbackElem ();
+			FM6.setID ("FM6");
+			FeedbackMessage MF6M = new FeedbackMessage ();
+			MF6M.setSocratic ("Excellent. Now, how are you going to use a different representation?");
+			MF6M.setGuidance ("Excellent, Now, click the representation toolbar and create another representation of exactly the same fraction.");
+			FM6.setFeedbackMessage (MF6M);
+			FM6.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepFM6 = new Fraction ();
+			nextStepFM6.differntRepresentation (true);
+			nextStepFM6.allSameValue(true);
+			FM6.setNextStep (nextStepFM6);
+
+			FM10 = new FeedbackElem ();
+			FM10.setID ("FM10");
+			FeedbackMessage MF10M = new FeedbackMessage ();
+			MF10M.setSocratic ("Excellent. How are your representations similar, and how are they different?");
+			FM10.setFeedbackMessage (MF10M);
+			FM10.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepFM10 = new Fraction ();
+			nextStepFM10.setSpeech (true);
+			FM10.setNextStep (nextStepFM10);
+
+			FM11 = new FeedbackElem ();
+			FM11.setID ("FM11");
+			FeedbackMessage MF11M = new FeedbackMessage ();
+			MF11M.setSocratic ("Excellent! Have you completed the task?");
+			MF11M.setGuidance ("Excellent! Keep going. Now make your fraction using a different representation.");
+			FM11.setFeedbackMessage (MF11M);
+			FM11.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepFM11 = new Fraction ();
+			nextStepFM11.differntRepresentation (true);
+			nextStepFM11.allSameValue(true);
+			FM11.setNextStep (nextStepFM11);
+
+			FE1 = new FeedbackElem ();
+			FE1.setID("FE1");
+			FeedbackMessage MFE1M = new FeedbackMessage ();
+			MFE1M.setDidacticConceptual ("Excellent, you have made your fraction using all the representations. Well done.");
+			FE1.setFeedbackMessage (MFE1M);
+			FE1.setFeedbackType (FeedbackType.affirmation);
+
+			FE2 = new FeedbackElem ();
+			FE2.setID("FE2");
+			FeedbackMessage MFE2M = new FeedbackMessage ();
+			MFE2M.setDidacticConceptual ("Excellent, you have made your fraction using all the representations. Well done.");
+			FE2.setFeedbackMessage (MFE1M);
+			FE2.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepFE2 = new Fraction ();
+			nextStepFE2.setSpeech (true);
+			FE2.setNextStep (nextStepFE2);
+
+
+
+
 		}
 
 
@@ -421,6 +476,12 @@ namespace taskDependentSupport.core
 			else if (CM11.getID ().Equals (id)) return CM11;
 			else if (CM12.getID ().Equals (id)) return CM12;
 			else if (CE2.getID ().Equals (id)) return CE2;
+			else if (FM6.getID ().Equals (id)) return FM6;
+			else if (FM10.getID ().Equals (id)) return FM10;
+			else if (FM11.getID ().Equals (id)) return FM11;
+			else if (FE1.getID ().Equals (id)) return FE1;
+			else if (FE2.getID ().Equals (id)) return FE2;
+
 			else return new FeedbackElem ();
 		}
 	}

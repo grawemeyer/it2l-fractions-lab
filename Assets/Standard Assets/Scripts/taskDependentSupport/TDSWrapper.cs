@@ -85,9 +85,12 @@ namespace taskDependentSupport
 				taskID = elem.Substring(0,5);
 				studentID = elem.Substring(5);
 			}
+			else if (checkTaskID.Equals ("fami")){
+				taskID = elem.Substring(0,17);
+				studentID = elem.Substring(17);
+			}
 			else if (checkTaskID.Equals ("EQUI")){
-				taskID = elem.Substring(0,12);
-				studentID = elem.Substring(12);
+			
 			}
 
 			Debug.Log ("taskID: "+taskID);
