@@ -116,12 +116,14 @@ namespace taskDependentSupport.core
 			FeedbackElem previousFeedback = studentModel.getPreviousFeedback ();
 			Fraction feedbackNextSteps = previousFeedback.getNextStep ();
 			int feedbackNumerator = feedbackNextSteps.getNumerator();
-			int feedbackDenominator = feedbackNextSteps.getDenominator ();;
+			int feedbackDenominator = feedbackNextSteps.getDenominator ();
+			int feedbackPartitionValue = feedbackNextSteps.getPartition ();
 			bool feedbackAnyValue = feedbackNextSteps.getAnyValye();
 			bool feedbackSpeech = feedbackNextSteps.getSpeech();
 			bool feedbackComparison = feedbackNextSteps.getComparison();
 			bool differntRepresentation = feedbackNextSteps.getDifferentRepresentation ();
 			bool allSameValue = feedbackNextSteps.getAllSameValue ();
+			bool numeratorAnyValue = feedbackNextSteps.getNumeratorAnyValue ();
 
 			for (int i = 0; i < studentModel.getCurrentFractions().Count; i++) {
 				Fraction thisFraction = studentModel.getCurrentFractions()[i];
@@ -137,6 +139,15 @@ namespace taskDependentSupport.core
 
 				if (feedbackAnyValue){
 					if ((numerator != 0) || (denominator != 0)) return true;
+					else return false;
+				}
+
+				else if (numeratorAnyValue){
+					if (numerator != 0) return true;
+					else return false;
+				}
+				else if (feedbackPartitionValue != 0){
+					if (feedbackPartitionValue == partition) return true;
 					else return false;
 				}
 
@@ -236,6 +247,62 @@ namespace taskDependentSupport.core
 			Debug.Log ("processEvent");
 			Debug.Log ("taskID: "+taskID);
 
+			if (taskID.Equals ("familiarisation02")) {
+				checkForFeedbackFollowed ();
+				
+				Fraction currentFraction = studentModel.getCurrentFraction ();
+
+				if (currentFraction != null) {
+					int numerator = currentFraction.getNumerator ();
+					int denominator = currentFraction.getDenominator ();
+					int partition = currentFraction.getPartition ();
+					
+					if (partition != 0) {
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+					
+					if ((numerator == 0) && (denominator == 0)) {
+						currentFeedback = feedbackData.S3;
+					}
+					else if ((denominator != 0) && (numerator == 0)){
+						currentFeedback = feedbackData.F2M1;
+					}
+					else if ((partition == 0)  && (denominator != 0) && (numerator != 0) && 
+					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.F2M1.getID ())){
+						currentFeedback = feedbackData.F2M4;
+					}
+					else if ((partition == 0)  && (denominator != 0) && (numerator != 0)){
+						currentFeedback = feedbackData.F2M6;
+					}
+					else if ((partition == 2)  && (denominator != 0) && (numerator != 0)){
+						currentFeedback = feedbackData.F2M7;
+					}
+
+					else if ((partition == 3)  && (denominator != 0) && (numerator != 0)){
+						currentFeedback = feedbackData.F2M7b;
+					}
+
+					else if ((partition == 4)  && (denominator != 0) && (numerator != 0)){
+						currentFeedback = feedbackData.F2M7c;
+					}
+
+					else if ((partition == 5)  && (denominator != 0) && (numerator != 0)){
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.F2E1;
+					}
+
+
+					else {
+						currentFeedback = new FeedbackElem();
+					}
+				}
+				else {
+					currentFeedback = new FeedbackElem();
+				}
+				setNewFeedback();
+			}
+
 			if (taskID.Equals("familiarisation01")){
 				checkForFeedbackFollowed();
 
@@ -250,10 +317,7 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
-					Debug.Log ("numerator="+numerator+" denominator="+denominator);
-
 					if ((numerator ==0) && (denominator ==0)){
-						Debug.Log ("numerator und denominator = 0");
 						currentFeedback = feedbackData.S3;
 					}
 					//else if (!sameRepresentations() && sameValues() && (createdReps() == 2)){

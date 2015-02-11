@@ -16,11 +16,20 @@ namespace taskDependentSupport.core
 			private bool sameRep = false; 
 			private bool differentRep=false;
 			private bool sameValue=false;
+			private bool numeratorAnyValue = false;
 
 			public Fraction ()
 			{
 			}
 
+			public void setNumeratorAnyValue(bool value){
+				numeratorAnyValue = value;
+			}
+
+			public bool getNumeratorAnyValue(){
+				return numeratorAnyValue;		
+			}
+			
 			public void allSameValue(bool value){
 				sameValue = value;
 			}

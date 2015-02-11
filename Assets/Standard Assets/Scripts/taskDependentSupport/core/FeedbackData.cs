@@ -11,6 +11,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, E1, E2, R1, R2, O1, O2;
 		public FeedbackElem CM2, CM5, CM6, CM6Second, CM7, CM8, CM11, CM12, CE2;
 		public FeedbackElem FM6, FM10, FM11, FE1, FE2;
+		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
 
 		public FeedbackData (String taskID){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -432,12 +433,126 @@ namespace taskDependentSupport.core
 			FE2 = new FeedbackElem ();
 			FE2.setID("FE2");
 			FeedbackMessage MFE2M = new FeedbackMessage ();
-			MFE2M.setDidacticConceptual ("Excellent, you have made your fraction using all the representations. Well done.");
+			MFE2M.setDidacticConceptual ("How are all your representations similar, and how are they different?");
 			FE2.setFeedbackMessage (MFE1M);
 			FE2.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepFE2 = new Fraction ();
 			nextStepFE2.setSpeech (true);
 			FE2.setNextStep (nextStepFE2);
+
+			F2M1 = new FeedbackElem ();
+			F2M1.setID ("F2M1");
+			FeedbackMessage F2M1M = new FeedbackMessage ();
+			F2M1M.setSocratic ("Good. What do you need to do now, to complete the fraction?");
+			F2M1M.setGuidance ("You can use the arrow buttons at the top of the fraction to complete your fraction.");
+			F2M1M.setDidacticConceptual ("Now click the up arrow next to the top of the fraction, to make the numerator.");
+			F2M1M.setDidacticProcedural ("Click the up arrow next to the top of the fraction, to make the numerator (the top part of the fraction).");
+			F2M1.setFeedbackMessage (F2M1M);
+			F2M1.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepF2M1 = new Fraction ();
+			nextStepF2M1.setNumeratorAnyValue (true);
+			F2M1.setNextStep (nextStepF2M1);
+
+			F2M4 = new FeedbackElem ();
+			F2M4.setID ("F2M4");
+			FeedbackMessage F2M4M = new FeedbackMessage ();
+			F2M4M.setSocratic ("“Excellent. What fraction have you made?");
+			F2M4.setFeedbackMessage (F2M4M);
+			F2M4.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepF2M4 = new Fraction ();
+			nextStepF2M4.setSpeech(true);
+			F2M4.setNextStep (nextStepF2M4);
+
+			F2M6 = new FeedbackElem ();
+			F2M6.setID ("F2M6");
+			FeedbackMessage F2M6M = new FeedbackMessage ();
+			F2M6M.setSocratic ("Excellent. Now, how are you going to partition the fraction?");
+			F2M6M.setGuidance ("Right click the fraction and partition the fraction into two.");
+			F2M6M.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into two.");
+			F2M6M.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into two.");
+			F2M6.setFeedbackMessage (F2M6M);
+			F2M6.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepF2M6 = new Fraction ();
+			nextStepF2M6.setPartition(2);
+			F2M6.setNextStep (nextStepF2M6);
+
+			F2M7 = new FeedbackElem ();
+			F2M7.setID ("F2M7");
+			FeedbackMessage F2M7M = new FeedbackMessage ();
+			F2M7M.setSocratic ("Excellent. Now, how are you going to partition the fraction into 3?");
+			F2M7M.setGuidance ("Right click the fraction and partition the fraction into 3.");
+			F2M7M.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into 3.");
+			F2M7M.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into 3.");
+			F2M7.setFeedbackMessage (F2M7M);
+			F2M7.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepF2M7 = new Fraction ();
+			nextStepF2M7.setPartition(3);
+			F2M7.setNextStep (nextStepF2M7);
+
+			F2M7b = new FeedbackElem ();
+			F2M7b.setID ("F2M7b");
+			FeedbackMessage F2M7bM = new FeedbackMessage ();
+			F2M7bM.setSocratic ("Excellent. Now, how are you going to partition the fraction into 4?");
+			F2M7bM.setGuidance ("Right click the fraction and partition the fraction into 4.");
+			F2M7bM.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into 4.");
+			F2M7bM.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into 4.");
+			F2M7b.setFeedbackMessage (F2M7bM);
+			F2M7b.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepF2M7b = new Fraction ();
+			nextStepF2M7b.setPartition(4);
+			F2M7b.setNextStep (nextStepF2M7b);
+
+			F2M7c = new FeedbackElem ();
+			F2M7c.setID ("F2M7c");
+			FeedbackMessage F2M7cM = new FeedbackMessage ();
+			F2M7cM.setSocratic ("Excellent. Now, how are you going to partition the fraction into 5?");
+			F2M7cM.setGuidance ("Right click the fraction and partition the fraction into 5.");
+			F2M7cM.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into 5.");
+			F2M7cM.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into 5.");
+			F2M7c.setFeedbackMessage (F2M7cM);
+			F2M7c.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepF2M7c = new Fraction ();
+			nextStepF2M7c.setPartition(5);
+			F2M7c.setNextStep (nextStepF2M7c);
+
+			F2M10 = new FeedbackElem ();
+			F2M10.setID ("F2M10");
+			FeedbackMessage F2M10M = new FeedbackMessage ();
+			F2M10M.setSocratic ("Excellent. Is your new fraction equivalent to your original fraction? What has happened to the denominator and what has happened to the numerator?");
+			F2M10.setFeedbackMessage (F2M10M);
+			F2M10.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepF2M10 = new Fraction ();
+			nextStepF2M10.setSpeech(true);
+			F2M10.setNextStep (nextStepF2M10);
+
+			F2M11 = new FeedbackElem ();
+			F2M11.setID ("F2M11");
+			FeedbackMessage F2M11M = new FeedbackMessage ();
+			F2M11M.setSocratic ("Excellent! Have you completed the task?");
+			F2M11M.setGuidance ("Keep going. Now partition your fraction further.");
+			F2M11.setFeedbackMessage (F2M11M);
+			F2M11.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepF2M11 = new Fraction ();
+			nextStepF2M11.setPartition(5);
+			F2M11.setNextStep (nextStepF2M11);
+
+			F2E1 = new FeedbackElem ();
+			F2E1.setID("F2E1");
+			FeedbackMessage MF2E1M = new FeedbackMessage ();
+			MF2E1M.setDidacticConceptual ("Excellent, you have partitioned your fraction 2, 3, 4 and 5 times. Well done.");
+			F2E1.setFeedbackMessage (MF2E1M);
+			F2E1.setFeedbackType (FeedbackType.affirmation);
+			
+			F2E2 = new FeedbackElem ();
+			F2E2.setID("F2E2");
+			FeedbackMessage MF2E2M = new FeedbackMessage ();
+			MF2E2M.setDidacticConceptual ("Were all your fractions equivalent? When you used the partition tool, what happened to the denominators and numerators?");
+			F2E2.setFeedbackMessage (MF2E2M);
+			F2E2.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepF2E2 = new Fraction ();
+			nextStepF2E2.setSpeech (true);
+			F2E2.setNextStep (nextStepF2E2);
+
 
 
 
@@ -481,6 +596,16 @@ namespace taskDependentSupport.core
 			else if (FM11.getID ().Equals (id)) return FM11;
 			else if (FE1.getID ().Equals (id)) return FE1;
 			else if (FE2.getID ().Equals (id)) return FE2;
+			else if (F2M1.getID ().Equals (id)) return F2M1;
+			else if (F2M4.getID ().Equals (id)) return F2M4;
+			else if (F2M6.getID ().Equals (id)) return F2M6;
+			else if (F2M7.getID ().Equals (id)) return F2M7;
+			else if (F2M7b.getID ().Equals (id)) return F2M7b;
+			else if (F2M7c.getID ().Equals (id)) return F2M7c;
+			else if (F2M10.getID ().Equals (id)) return F2M10;
+			else if (F2M11.getID ().Equals (id)) return F2M11;
+			else if (F2E1.getID ().Equals (id)) return F2E1;
+			else if (F2E2.getID ().Equals (id)) return F2E2;
 
 			else return new FeedbackElem ();
 		}
