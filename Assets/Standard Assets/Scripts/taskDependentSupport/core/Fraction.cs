@@ -17,9 +17,27 @@ namespace taskDependentSupport.core
 			private bool differentRep=false;
 			private bool sameValue=false;
 			private bool numeratorAnyValue = false;
+			private bool equivalentFraction = false;
+			private bool partitionBool = false;
 
 			public Fraction ()
 			{
+			}
+
+			public void setPartitionBool(bool value){
+				partitionBool = value;
+			}
+
+			public bool getPartitionBool(){
+				return partitionBool;
+			}
+
+			public void setEquivalentFraction(bool value){
+				equivalentFraction = value;
+			}
+
+			public bool getEquivalentFraction(){
+				return equivalentFraction;		
 			}
 
 			public void setNumeratorAnyValue(bool value){

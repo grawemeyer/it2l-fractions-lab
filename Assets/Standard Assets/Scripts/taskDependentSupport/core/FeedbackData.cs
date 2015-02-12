@@ -12,6 +12,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem CM2, CM5, CM6, CM6Second, CM7, CM8, CM11, CM12, CE2;
 		public FeedbackElem FM6, FM10, FM11, FE1, FE2;
 		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
+		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24E1, T24E2;
 
 		public FeedbackData (String taskID){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -20,6 +21,7 @@ namespace taskDependentSupport.core
 			int endNumerator = 0;
 			int startDenominator = 0;
 			int endDenominator = 0;
+			String representation = "area";
 
 			if (taskID.Equals ("Comp1")) {
 				endDenominator = 3;
@@ -37,6 +39,64 @@ namespace taskDependentSupport.core
 				startDenominator = 2;
 				endDenominator = 4;
 			}
+			else if (taskID.Equals("task2.4.setA.area")){
+				startNumerator = 1;
+				startDenominator = 2;
+			}
+			else if (taskID.Equals("task2.4.setB.area")){
+				startNumerator = 3;
+				startDenominator = 4;
+			}
+			else if (taskID.Equals("task2.4.setC.area")){
+				startNumerator = 7;
+				startDenominator = 3;
+			}
+			else if (taskID.Equals("task2.4.setA.numb")){
+				startNumerator = 1;
+				startDenominator = 2;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task2.4.setB.numb")){
+				startNumerator = 3;
+				startDenominator = 4;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task2.4.setC.numb")){
+				startNumerator = 7;
+				startDenominator = 3;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task2.4.setA.sets")){
+				startNumerator = 1;
+				startDenominator = 2;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task2.4.setB.sets")){
+				startNumerator = 3;
+				startDenominator = 4;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task2.4.setC.sets")){
+				startNumerator = 7;
+				startDenominator = 3;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task2.4.setA.liqu")){
+				startNumerator = 1;
+				startDenominator = 2;
+				representation = "liquid measures";
+			}
+			else if (taskID.Equals("task2.4.setB.liqu")){
+				startNumerator = 3;
+				startDenominator = 4;
+				representation = "liquid measures";
+			}
+			else if (taskID.Equals("task2.4.setC.liqu")){
+				startNumerator = 7;
+				startDenominator = 3;
+				representation = "liquid measures";
+			}
+
 
 			S1 = new FeedbackElem ();
 			S1.setID("S1");
@@ -554,6 +614,168 @@ namespace taskDependentSupport.core
 			F2E2.setNextStep (nextStepF2E2);
 
 
+			T24M1 = new FeedbackElem ();
+			T24M1.setID ("T24M1");
+			FeedbackMessage T24M1M = new FeedbackMessage ();
+			T24M1M.setSocratic ("Is the denominator in your fraction correct?");
+			T24M1M.setGuidance ("You can click the up arrow next to your fraction to change it.");
+			T24M1M.setDidacticConceptual ("Check that the denominator in your fraction is correct.");
+			T24M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is "+startDenominator+".");
+			T24M1M.setHighlighting (Highlighting.ArrowButtons);
+			T24M1.setFeedbackMessage (T24M1M);
+			T24M1.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT24M1 = new Fraction ();
+			nextStepT24M1.setDenominator(startDenominator);
+			T24M1.setNextStep (nextStepT24M1);
+
+			T24M2 = new FeedbackElem ();
+			T24M2.setID ("T24M2");
+			FeedbackMessage T24M2M = new FeedbackMessage ();
+			T24M2M.setSocratic ("Have you changed the numerator or denominator?");
+			T24M2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
+			T24M2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
+			T24M2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+startDenominator+".");
+			T24M2.setFeedbackMessage (T24M2M);
+			T24M2.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT24M2 = new Fraction ();
+			nextStepT24M2.setDenominator(startDenominator);
+			T24M2.setNextStep (nextStepT24M2);
+
+			T24M3 = new FeedbackElem ();
+			T24M3.setID ("T24M3");
+			FeedbackMessage T24M3M = new FeedbackMessage ();
+			T24M3M.setSocratic ("Is this the fraction you were planning to make?");
+			T24M3M.setGuidance ("Please read the task again carefully.");
+			T24M3M.setDidacticConceptual ("Re-read the task then check your fraction.");
+			T24M3.setFeedbackMessage (T24M3M);
+			T24M3.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT24M3 = new Fraction ();
+			nextStepT24M3.setNumerator(startNumerator);
+			nextStepT24M3.setDenominator(startDenominator);
+			T24M3.setNextStep (nextStepT24M3);
+
+			T24M4 = new FeedbackElem ();
+			T24M4.setID ("T24M4");
+			FeedbackMessage T24M4M = new FeedbackMessage ();
+			T24M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and ‘denominator’ are");
+			T24M4.setFeedbackMessage (T24M4M);
+			T24M4.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT24M4 = new Fraction ();
+			nextStepT24M4.setSpeech (true);
+			T24M4.setNextStep (nextStepT24M4);
+
+			T24M5 = new FeedbackElem ();
+			T24M5.setID ("T24M5");
+			FeedbackMessage T24M5M = new FeedbackMessage ();
+			T24M5M.setSocratic ("Have you changed the denominator or the numerator?");
+			T24M5M.setGuidance ("The denominator is the bottom part of the fraction.");
+			T24M5M.setDidacticConceptual ("You changed the numerator. You need to change the denominator.");
+			T24M5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+startDenominator+".");
+			T24M5.setFeedbackMessage (T24M5M);
+			T24M5.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT24M5 = new Fraction ();
+			nextStepT24M5.setDenominator(startDenominator);
+			T24M5.setNextStep (nextStepT24M5);
+
+			T24M6 = new FeedbackElem ();
+			T24M6.setID ("T24M6");
+			FeedbackMessage T24M6M = new FeedbackMessage ();
+			T24M6M.setSocratic ("Excellent. Now, how are you going to change the numerator?");
+			T24M6M.setGuidance ("If you click near the top of your fraction, and click the up arrow, you can change the numerator (the top part of the fraction).");
+			T24M6M.setDidacticConceptual ("You changed the denominator. Now, change the numerator.");
+			T24M6M.setDidacticProcedural ("Now, change the numerator. Remember, you need to make a fraction equivalent to "+startNumerator+"/"+startDenominator+".");
+			T24M6M.setHighlighting (Highlighting.ArrowButtons);
+			T24M6.setFeedbackMessage (T24M6M);
+			T24M6.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT24M6 = new Fraction ();
+			nextStepT24M6.setNumerator(startNumerator);
+			nextStepT24M6.setDenominator(startDenominator);
+			nextStepT24M6.setEquivalentFraction (true);
+			T24M6.setNextStep (nextStepT24M6);
+
+			T24M7 = new FeedbackElem ();
+			T24M7.setID ("T24M7");
+			FeedbackMessage T24M7M = new FeedbackMessage ();
+			T24M7M.setSocratic ("Excellent. How about copying this and using the partition tool to make the equivalent fraction?");
+			T24M7M.setGuidance ("You could now copy the fraction and use the partition tool to make an equivalent fraction. To open the partition tool, right-click the fraction.");
+			T24M7M.setDidacticConceptual ("Excellent. Now copy this fraction and use the partition tool to change it.");
+			T24M7M.setDidacticProcedural ("Excellent. Now copy the fraction use the partition tool to change it to an equivalent fraction.");
+			T24M7.setFeedbackMessage (T24M7M);
+			T24M7.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT24M7 = new Fraction ();
+			nextStepT24M7.setPartitionBool (true);
+			T24M7.setNextStep (nextStepT24M7);
+
+			T24M8 = new FeedbackElem ();
+			T24M8.setID ("T24M8");
+			FeedbackMessage T24M8M = new FeedbackMessage ();
+			T24M8M.setSocratic ("How could you compare your fraction with "+startNumerator+"/"+startDenominator+".");
+			T24M8M.setGuidance ("Think about the denominators in your fraction and in "+startNumerator+"/"+startDenominator+". What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?");
+			T24M8M.setDidacticConceptual ("Compare your fraction with "+startNumerator+"/"+startDenominator+" by using the comparison box.");
+			T24M8M.setHighlighting (Highlighting.ComparisonBox);
+			T24M8.setFeedbackMessage (T24M8M);
+			T24M8.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT24M8 = new Fraction ();
+			nextStepT24M8.setComparison (true);
+			T24M8.setNextStep (nextStepT24M8);
+
+			T24M9 = new FeedbackElem ();
+			T24M9.setID ("T24M9");
+			FeedbackMessage T24M9M = new FeedbackMessage ();
+			T24M9M.setSocratic ("What are you going to compare your fraction with?");
+			T24M9M.setGuidance ("In equivalent fractions, the two numerators must be the same multiple of each other as the two denominators.");
+			T24M9M.setDidacticConceptual ("First create another fraction, this time "+startNumerator+"/"+startDenominator+". Then compare your two fractions.");
+			T24M9M.setHighlighting (Highlighting.RepresentationToolBox);
+			T24M9.setFeedbackMessage (T24M9M);
+			T24M9.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT24M9 = new Fraction ();
+			nextStepT24M9.setComparison (true);
+			T24M9.setNextStep (nextStepT24M9);
+
+			T24M10 = new FeedbackElem ();
+			T24M10.setID ("T24M10");
+			FeedbackMessage T24M10M = new FeedbackMessage ();
+			T24M10M.setDidacticConceptual ("Excellent. Please explain why you made the denominator "+startDenominator+" or a multiple of "+startDenominator+".");
+			T24M10.setFeedbackMessage (T24M10M);
+			T24M10.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT24M10 = new Fraction ();
+			nextStepT24M10.setSpeech (true);
+			T24M10.setNextStep (nextStepT24M10);
+
+			T24M11 = new FeedbackElem ();
+			T24M11.setID ("T24M11");
+			FeedbackMessage T24M11M = new FeedbackMessage ();
+			T24M11M.setSocratic ("How can you check, using a Fractions Lab tool,  that your solution is correct?");
+			T24M11M.setGuidance ("You could use the comparison box to compare your fractions.");
+			T24M11M.setDidacticConceptual ("Compare the two fractions using the comparison box.");
+			T24M11M.setHighlighting (Highlighting.ComparisonBox);
+			T24M11.setFeedbackMessage (T24M11M);
+			T24M11.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT24M11 = new Fraction ();
+			nextStepT24M11.setComparison (true);
+			T24M11.setNextStep (nextStepT24M11);
+
+			T24E1 = new FeedbackElem ();
+			T24E1.setID ("T24E1");
+			FeedbackMessage T24E1M = new FeedbackMessage ();
+			T24E1M.setDidacticConceptual ("The way that you worked that out was excellent. Well done.");
+			T24E1.setFeedbackMessage (T24E1M);
+			T24E1.setFeedbackType (FeedbackType.affirmation);
+
+			T24E2 = new FeedbackElem ();
+			T24E2.setID ("T24E2");
+			FeedbackMessage T24E2M = new FeedbackMessage ();
+			T24E2M.setDidacticConceptual ("Please explain what you did to the numerator and denominator of "+startNumerator+"/"+startDenominator+" to make an equivalent fraction.");
+			T24E2.setFeedbackMessage (T24E2M);
+			T24E2.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT24E2 = new Fraction ();
+			nextStepT24E2.setSpeech (true);
+			T24E2.setNextStep (nextStepT24E2);
+
+
+
+
+
 
 
 
@@ -606,6 +828,19 @@ namespace taskDependentSupport.core
 			else if (F2M11.getID ().Equals (id)) return F2M11;
 			else if (F2E1.getID ().Equals (id)) return F2E1;
 			else if (F2E2.getID ().Equals (id)) return F2E2;
+			else if (T24M1.getID ().Equals (id)) return T24M1;
+			else if (T24M2.getID ().Equals (id)) return T24M2;
+			else if (T24M3.getID ().Equals (id)) return T24M3;
+			else if (T24M4.getID ().Equals (id)) return T24M4;
+			else if (T24M5.getID ().Equals (id)) return T24M5;
+			else if (T24M6.getID ().Equals (id)) return T24M6;
+			else if (T24M7.getID ().Equals (id)) return T24M7;
+			else if (T24M8.getID ().Equals (id)) return T24M8;
+			else if (T24M9.getID ().Equals (id)) return T24M9;
+			else if (T24M10.getID ().Equals (id)) return T24M10;
+			else if (T24M11.getID ().Equals (id)) return T24M11;
+			else if (T24E1.getID ().Equals (id)) return T24E1;
+			else if (T24E2.getID ().Equals (id)) return T24E2;
 
 			else return new FeedbackElem ();
 		}
