@@ -54,17 +54,28 @@ namespace taskDependentSupport.core
 				studentModel.setComparedFractions(false);
 
 			}
+
+
 			if (type.Equals ("OperationResult")){
-				studentModel.setCompared(true);
-				if (id.Equals ("=")){
-					studentModel.setComparedResult(true);
+				if (name.Equals("Sum")) {
+					Debug.Log (":::::: setAdditionBox ::::::");
+					studentModel.setAdditionBox(true);
 				}
-				else if (id.Equals (">") || id.Equals ("<")){
-					studentModel.setComparedFractions(true);
+				else if (name.Equals("Substraction")){
+					studentModel.setSubstractionBox(true);
 				}
 				else {
-					studentModel.setComparedResult(false);
-					studentModel.setComparedFractions(false);
+					studentModel.setCompared(true);
+					if (id.Equals ("=")){
+						studentModel.setComparedResult(true);
+					}
+					else if (id.Equals (">") || id.Equals ("<")){
+						studentModel.setComparedFractions(true);
+					}
+					else {
+						studentModel.setComparedResult(false);
+						studentModel.setComparedFractions(false);
+					}
 				}
 			}
 

@@ -21,9 +21,48 @@ namespace taskDependentSupport.core
 			private bool partitionBool = false;
 			private int[] denominators;
 			private int[] numerators;
+			private int numeratorAdd = 0;
+			private int denominatorAdd = 0;
+			private int numeratorAddEnd = 0;
+			private int denominatorAddEnd = 0;
+			private bool additionBox = false;
 
 			public Fraction ()
 			{
+			}
+
+			public void setAdditionBox(bool value){
+				additionBox = value;
+			}
+
+			public bool getAdditionBox(){
+				return additionBox;
+			}
+
+			public void setFractionForAdditionTaskEnd(int numerator, int denominator){
+				numeratorAddEnd = numerator;
+				denominatorAddEnd = denominator;
+			}
+
+			public int getNumeratorForAdditionTaskEnd(){
+				return numeratorAddEnd;
+			}
+		
+			public int getDenominatorForAdditionTaskEnd(){
+				return denominatorAddEnd;
+			}
+
+			public void setFractionForAdditionTask(int numerator, int denominator){
+				numeratorAdd = numerator;
+				denominatorAdd = denominator;
+			}
+
+			public int getNumeratorForAdditionTask(){
+				return numeratorAdd;
+			}
+
+			public int getDenominatorForAdditionTask(){
+				return denominatorAdd;
 			}
 
 			public void setNumerators(int[] values){

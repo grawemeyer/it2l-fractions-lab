@@ -27,9 +27,29 @@ namespace taskDependentSupport.core
 		private bool reflectionForDenominatorShown = false;
 		private List<FeedbackElem> feedbackProvided = new List<FeedbackElem>();
 		private List<bool> feedbackFollowed = new List<bool>();
+		private bool additionBox = false;
+		private bool substractionBox = false;
 
 		public StudentModel(String taskID){
 			feedbackData = new FeedbackData (taskID); 
+		}
+
+
+		public void setSubstractionBox(bool value){
+			substractionBox = value;
+		}
+		
+		public bool getSubstrationBox(){
+			return substractionBox;
+		}
+
+
+		public void setAdditionBox(bool value){
+			additionBox = value;
+		}
+
+		public bool getAdditionBox(){
+			return additionBox;
 		}
 
 		public void setComparedFractions(bool elem){

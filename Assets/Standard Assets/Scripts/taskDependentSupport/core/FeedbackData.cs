@@ -14,7 +14,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24E1, T24E2;
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M8, T26M10, T26M11, T26E1, T26E2;
-
+		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
 
 		public FeedbackData (String taskID){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -122,7 +122,66 @@ namespace taskDependentSupport.core
 				startDenominator = 3;
 				representation = "liquid measures";
 			}
-
+			else if (taskID.Equals("task3aPlus.1.setA.area")){
+				startNumerator = 3;
+				startDenominator = 5;
+				representation = "area";
+			}
+			else if (taskID.Equals("task3aPlus.1.setB.area")){
+				startNumerator = 4;
+				startDenominator = 7;
+				representation = "area";
+			}
+			else if (taskID.Equals("task3aPlus.1.setC.area")){
+				startNumerator = 12;
+				startDenominator = 9;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3aPlus.1.setA.numb")){
+				startNumerator = 3;
+				startDenominator = 5;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3aPlus.1.setB.numb")){
+				startNumerator = 4;
+				startDenominator = 7;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3aPlus.1.setC.numb")){
+				startNumerator = 12;
+				startDenominator = 9;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3aPlus.1.setA.sets")){
+				startNumerator = 3;
+				startDenominator = 5;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task3aPlus.1.setB.sets")){
+				startNumerator = 4;
+				startDenominator = 7;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task3aPlus.1.setC.sets")){
+				startNumerator = 12;
+				startDenominator = 9;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task3aPlus.1.setA.liqu")){
+				startNumerator = 3;
+				startDenominator = 5;
+				representation = "liquid measures";
+			}
+			else if (taskID.Equals("task3aPlus.1.setB.liqu")){
+				startNumerator = 4;
+				startDenominator = 7;
+				representation = "liquid measures";
+			}
+			else if (taskID.Equals("task3aPlus.1.setC.liqu")){
+				startNumerator = 12;
+				startDenominator = 9;
+				representation = "liquid measures";
+			}
 
 			S1 = new FeedbackElem ();
 			S1.setID("S1");
@@ -683,7 +742,7 @@ namespace taskDependentSupport.core
 			T24M4 = new FeedbackElem ();
 			T24M4.setID ("T24M4");
 			FeedbackMessage T24M4M = new FeedbackMessage ();
-			T24M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and ‘denominator’ are");
+			T24M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and `denominator' are");
 			T24M4.setFeedbackMessage (T24M4M);
 			T24M4.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepT24M4 = new Fraction ();
@@ -847,7 +906,7 @@ namespace taskDependentSupport.core
 			T26M4 = new FeedbackElem ();
 			T26M4.setID ("T26M4");
 			FeedbackMessage T26M4M = new FeedbackMessage ();
-			T26M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and ‘denominator’ are.");
+			T26M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and `denominator' are.");
 			T26M4.setFeedbackMessage (T26M4M);
 			T26M4.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepT26M4 = new Fraction ();
@@ -955,6 +1014,152 @@ namespace taskDependentSupport.core
 			nextStepT26E2.setSpeech (true);
 			T26E2.setNextStep (nextStepT26E2);
 
+			T3aP1M1 = new FeedbackElem ();
+			T3aP1M1.setID ("T3aP1M1");
+			FeedbackMessage T3aP1M1M = new FeedbackMessage ();
+			T3aP1M1M.setSocratic ("Is the denominator in your fraction correct?");
+			T3aP1M1M.setGuidance ("You can click the up arrow next to your fraction to change it.");
+			T3aP1M1M.setDidacticConceptual ("Check that the denominator in your fraction is correct.");
+			T3aP1M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is "+startDenominator+".");
+			T3aP1M1M.setHighlighting (Highlighting.ArrowButtons);
+			T3aP1M1.setFeedbackMessage (T3aP1M1M);
+			T3aP1M1.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3aP1M1 = new Fraction ();
+			nextStepT3aP1M1.setDenominator (startDenominator);
+			T3aP1M1.setNextStep (nextStepT3aP1M1);
+
+			T3aP1M2 = new FeedbackElem ();
+			T3aP1M2.setID ("T3aP1M2");
+			FeedbackMessage T3aP1M2M = new FeedbackMessage ();
+			T3aP1M2M.setSocratic ("Have you changed the numerator or denominator?");
+			T3aP1M2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
+			T3aP1M2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
+			T3aP1M2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+startDenominator+".");
+			T3aP1M2.setFeedbackMessage (T3aP1M2M);
+			T3aP1M2.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3aP1M2 = new Fraction ();
+			nextStepT3aP1M2.setDenominator (startDenominator);
+			T3aP1M2.setNextStep (nextStepT3aP1M2);
+
+			T3aP1M3 = new FeedbackElem ();
+			T3aP1M3.setID ("T3aP1M3");
+			FeedbackMessage T3aP1M3M = new FeedbackMessage ();
+			T3aP1M3M.setSocratic ("Is this the fraction you were planning to make?");
+			T3aP1M3M.setGuidance ("Please read the task again carefully.");
+			T3aP1M3M.setDidacticConceptual ("Re-read the task then check your fraction.");
+			T3aP1M3.setFeedbackMessage (T3aP1M3M);
+			T3aP1M3.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3aP1M3 = new Fraction ();
+			nextStepT3aP1M3.setFractionForAdditionTask(startDenominator, startNumerator);
+			T3aP1M3.setNextStep (nextStepT3aP1M3);
+
+			T3aP1M4 = new FeedbackElem ();
+			T3aP1M4.setID ("T3aP1M4");
+			FeedbackMessage T3aP1M4M = new FeedbackMessage ();
+			T3aP1M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and `denominator' are.");
+			T3aP1M4.setFeedbackMessage (T3aP1M4M);
+			T3aP1M4.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT3aP1M4 = new Fraction ();
+			nextStepT3aP1M4.setSpeech (true);
+			T3aP1M4.setNextStep (nextStepT3aP1M4);
+
+			T3aP1M5 = new FeedbackElem ();
+			T3aP1M5.setID ("T3aP1M5");
+			FeedbackMessage T3aP1M5M = new FeedbackMessage ();
+			T3aP1M5M.setSocratic ("Have you changed the denominator or the numerator?");
+			T3aP1M5M.setGuidance ("The denominator is the bottom part of the fraction.");
+			T3aP1M5M.setDidacticConceptual ("You changed the numerator. You need to change the denominator.");
+			T3aP1M5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+startDenominator+".");
+			T3aP1M5.setFeedbackMessage (T3aP1M5M);
+			T3aP1M5.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3aP1M5 = new Fraction ();
+			nextStepT3aP1M5.setDenominator (startDenominator);
+			T3aP1M5.setNextStep (nextStepT3aP1M5);
+
+			T3aP1M6 = new FeedbackElem ();
+			T3aP1M6.setID ("T3aP1M6");
+			FeedbackMessage T3aP1M6M = new FeedbackMessage ();
+			T3aP1M6M.setSocratic ("Excellent. Now, how are you going to change the numerator?");
+			T3aP1M6M.setGuidance ("If you click near the top of your fraction, and click the up arrow, you can change the numerator (the top part of the fraction).");
+			T3aP1M6M.setDidacticConceptual ("You changed the denominator.  Now, change the numerator.");
+			T3aP1M6M.setDidacticProcedural ("Now, change the numerator. Remember, you need to make two fractions that can be added together to make "+startNumerator+"/"+startDenominator+".");
+			T3aP1M6M.setHighlighting (Highlighting.ArrowButtons);
+			T3aP1M6.setFeedbackMessage (T3aP1M6M);
+			T3aP1M6.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3aP1M6 = new Fraction ();
+			nextStepT3aP1M6.setFractionForAdditionTask(startDenominator, startNumerator);
+			T3aP1M6.setNextStep (nextStepT3aP1M6);
+
+			T3aP1M7 = new FeedbackElem ();
+			T3aP1M7.setID ("T3aP1M7");
+			FeedbackMessage T3aP1M7M = new FeedbackMessage ();
+			T3aP1M7M.setSocratic ("Excellent. You've made one fraction. What do you need to do now, to complete the task?");
+			T3aP1M7M.setGuidance ("You now need to make a second fraction that, when added together with your first fraction, makes the fraction shown in the task.");
+			T3aP1M7.setFeedbackMessage (T3aP1M7M);
+			T3aP1M7.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3aP1M7 = new Fraction ();
+			nextStepT3aP1M7.setFractionForAdditionTaskEnd(startDenominator, startNumerator);
+			T3aP1M7.setNextStep (nextStepT3aP1M7);
+
+			T3aP1M8 = new FeedbackElem ();
+			T3aP1M8.setID ("T3aP1M8");
+			FeedbackMessage T3aP1M8M = new FeedbackMessage ();
+			T3aP1M8M.setSocratic ("Think about how you add two fractions together. What needs to be the same, and what do you need to add together?");
+			T3aP1M8M.setGuidance ("To add two fractions together, the denominators need to be the same. Then you add together the numerators.");
+			T3aP1M8.setFeedbackMessage (T3aP1M8M);
+			T3aP1M8.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3aP1M8 = new Fraction ();
+			nextStepT3aP1M8.setFractionForAdditionTaskEnd(startDenominator, startNumerator);
+			T3aP1M8.setNextStep (nextStepT3aP1M8);
+
+			T3aP1M9 = new FeedbackElem ();
+			T3aP1M9.setID ("T3aP1M9");
+			FeedbackMessage T3aP1M9M = new FeedbackMessage ();
+			T3aP1M9M.setHighlighting (Highlighting.RepresentationToolBox);
+			T3aP1M9.setFeedbackMessage (T3aP1M9M);
+			T3aP1M9.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3aP1M9 = new Fraction ();
+			nextStepT3aP1M9.setFractionForAdditionTaskEnd(startDenominator, startNumerator);
+			T3aP1M9.setNextStep (nextStepT3aP1M9);
+
+			T3aP1M10 = new FeedbackElem ();
+			T3aP1M10.setID ("T3aP1M10");
+			FeedbackMessage T3aP1M10M = new FeedbackMessage ();
+			T3aP1M10M.setDidacticConceptual ("Excellent. Please explain why you made the denominator "+startDenominator+".");
+			T3aP1M10.setFeedbackMessage (T3aP1M10M);
+			T3aP1M10.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT3aP1M10 = new Fraction ();
+			nextStepT3aP1M10.setSpeech(true);
+			T3aP1M10.setNextStep (nextStepT3aP1M10);
+
+			T3aP1M11 = new FeedbackElem ();
+			T3aP1M11.setID ("T3aP1M11");
+			FeedbackMessage T3aP1M11M = new FeedbackMessage ();
+			T3aP1M11M.setSocratic ("How can you check, using a Fractions Lab tool,  that your solution is correct?");
+			T3aP1M11M.setGuidance ("You could use the addition box to add your fractions.");
+			T3aP1M11M.setDidacticConceptual ("Add your two fractions using the addition box.");
+			T3aP1M11.setFeedbackMessage (T3aP1M11M);
+			T3aP1M11.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3aP1M11 = new Fraction ();
+			nextStepT3aP1M11.setAdditionBox (true);
+			T3aP1M11.setNextStep (nextStepT3aP1M11);
+
+			T3aP1E1 = new FeedbackElem ();
+			T3aP1E1.setID ("T3aP1E1");
+			FeedbackMessage T3aP1E1M = new FeedbackMessage ();
+			T3aP1E1M.setDidacticConceptual ("The way that you worked that out was excellent. Well done.");
+			T3aP1E1.setFeedbackMessage (T3aP1E1M);
+			T3aP1E1.setFeedbackType (FeedbackType.affirmation);
+
+			T3aP1E2 = new FeedbackElem ();
+			T3aP1E2.setID ("T3aP1E2");
+			FeedbackMessage T3aP1E2M = new FeedbackMessage ();
+			T3aP1E2M.setDidacticConceptual ("Please explain how you answered the task. Why did you make the fractions that you made?.");
+			T3aP1E2.setFeedbackMessage (T3aP1E1M);
+			T3aP1E2.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT3aPE2 = new Fraction ();
+			nextStepT3aPE2.setSpeech(true);
+			T3aP1E2.setNextStep (nextStepT3aPE2);
 
 
 		}
@@ -1032,6 +1237,20 @@ namespace taskDependentSupport.core
 			else if (T26M11.getID ().Equals (id)) return T26M11;
 			else if (T26E1.getID ().Equals (id)) return T26E1;
 			else if (T26E2.getID ().Equals (id)) return T26E2;
+
+			else if (T3aP1M1.getID ().Equals (id)) return T3aP1M1;
+			else if (T3aP1M2.getID ().Equals (id)) return T3aP1M2;
+			else if (T3aP1M3.getID ().Equals (id)) return T3aP1M3;
+			else if (T3aP1M4.getID ().Equals (id)) return T3aP1M4;
+			else if (T3aP1M5.getID ().Equals (id)) return T3aP1M5;
+			else if (T3aP1M6.getID ().Equals (id)) return T3aP1M6;
+			else if (T3aP1M7.getID ().Equals (id)) return T3aP1M7;
+			else if (T3aP1M8.getID ().Equals (id)) return T3aP1M8;
+			else if (T3aP1M9.getID ().Equals (id)) return T3aP1M9;
+			else if (T3aP1M10.getID ().Equals (id)) return T3aP1M10;
+			else if (T3aP1M11.getID ().Equals (id)) return T3aP1M11;
+			else if (T3aP1E1.getID ().Equals (id)) return T3aP1E1;
+			else if (T3aP1E2.getID ().Equals (id)) return T3aP1E2;
 
 			else return new FeedbackElem ();
 		}

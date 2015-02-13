@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 
 namespace taskDependentSupport.core
@@ -62,6 +65,13 @@ namespace taskDependentSupport.core
 						Debug.Log (" currentFeedback = feedbackData.R1");
 						currentFeedback = feedbackData.R2;
 					}
+					setNewFeedback();
+				}
+				else if (taskID.Equals("task3aPlus.1.setA.area") || taskID.Equals("task3aPlus.1.setB.area") || taskID.Equals("task3aPlus.1.setC.area") ||
+				         taskID.Equals("task3aPlus.1.setA.numb") || taskID.Equals("task3aPlus.1.setB.numb") || taskID.Equals("task3aPlus.1.setC.numb") ||
+				         taskID.Equals("task3aPlus.1.setA.sets") || taskID.Equals("task3aPlus.1.setB.sets") || taskID.Equals("task3aPlus.1.setC.sets") ||
+				         taskID.Equals("task3aPlus.1.setA.liqu") || taskID.Equals("task3aPlus.1.setB.liqu") || taskID.Equals("task3aPlus.1.setC.liqu") ){
+					currentFeedback = feedbackData.T3aP1E2;
 					setNewFeedback();
 				}
 				TDSWrapper.ArrowButtonEnable (true);
@@ -147,6 +157,11 @@ namespace taskDependentSupport.core
 			bool partitionBool = feedbackNextSteps.getPartitionBool ();
 			int[] denominators = feedbackNextSteps.getDenominators ();
 			int[] numerators = feedbackNextSteps.getNumerators ();
+			int numeratorAdd = feedbackNextSteps.getNumeratorForAdditionTask ();
+			int denominatorAdd = feedbackNextSteps.getDenominatorForAdditionTask ();
+			int numeratorAddEnd = feedbackNextSteps.getNumeratorForAdditionTaskEnd ();
+			int denominatorAddEnd = feedbackNextSteps.getDenominatorForAdditionTaskEnd ();
+			bool additionBox = feedbackNextSteps.getAdditionBox ();
 
 			bool result = false;
 
@@ -176,6 +191,10 @@ namespace taskDependentSupport.core
 				}
 				else if (partitionBool){
 					if (partition != 0) result= true;
+				}
+
+				else if (numeratorAdd != 0){
+					if ((denominator == denominatorAdd) && (numerator < numeratorAdd)) result = true;
 				}
 
 				else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
@@ -221,6 +240,13 @@ namespace taskDependentSupport.core
 				}
 			}
 
+			if (additionBox) {
+				result = studentModel.getAdditionBox();
+			}
+
+			if (numeratorAddEnd != 0) {
+				result = checkForAddedFraction(numeratorAddEnd, denominatorAddEnd);
+			}
 
 			if (differntRepresentation) {
 				result = !sameRepresentations();
@@ -229,6 +255,68 @@ namespace taskDependentSupport.core
 				result = sameValues();
 			}
 			return result;
+		}
+
+		private List<int> getNumeratorsWithCorrectDenominator(int finalNumerator, int finalDenominator){
+			List<int> result = new List<int>();
+
+			for (int i = 0; i < studentModel.getCurrentFractions().Count; i++) {
+				Fraction thisFraction = studentModel.getCurrentFractions()[i];
+				int numerator = thisFraction.getNumerator();
+				int denominator = thisFraction.getDenominator();
+				int partition = thisFraction.getPartition();
+				
+				if (partition != 0){
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+					studentModel.setPartitionUsed(true);
+				}
+
+				if ((denominator == finalDenominator) && (numerator != finalNumerator)){
+					result.Add(numerator);
+				}
+			}
+			return result;
+		}
+
+
+		private bool checkForAdditionResult(int numerator, List<int> numeratorsWithCorrectDenominator, int finalNumerator){
+			for (int i = 0; i< numeratorsWithCorrectDenominator.Count; i++){
+				int currentNumerator = numeratorsWithCorrectDenominator[i];
+				if ((numerator+currentNumerator) == finalNumerator){
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool correctNumeratorsAsAdditionAnswers(List<int> numeratorsWithCorrectDenominator, int finalNumerator){
+			if (numeratorsWithCorrectDenominator.Count == 1)return false;
+			int firstNumerator = numeratorsWithCorrectDenominator [0];
+			numeratorsWithCorrectDenominator.RemoveAt(0);
+			if (checkForAdditionResult (firstNumerator, numeratorsWithCorrectDenominator, finalNumerator)) {
+				return true;
+			} 
+			else {
+				correctNumeratorsAsAdditionAnswers(numeratorsWithCorrectDenominator, finalNumerator);
+			}
+			return false;
+		}
+
+		private bool checkForAddedFraction(int finalNumerator, int finalDenominator){
+			int addedNumerators = 0;
+			List<int> numeratorsWithCorrectDenominator = getNumeratorsWithCorrectDenominator (finalNumerator, finalDenominator);
+			int countNumerators = numeratorsWithCorrectDenominator.Count;
+
+			if (countNumerators < 2) {
+				return false;
+			}
+			else if (correctNumeratorsAsAdditionAnswers (numeratorsWithCorrectDenominator, finalNumerator)){
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 
 		private bool currentSetIncludesFraction(int numerator, int denominator){
@@ -357,12 +445,183 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
+		private bool onlyOneFractionCreatedForAddition(int finalNumerator, int finalDenominator){
+			if (studentModel.getCurrentFractions ().Count > 1) {
+				return false;
+			}
+			else {
+				Fraction currentfraction = studentModel.getCurrentFractions ()[0];
+				int numerator = currentfraction.getNumerator();
+				int denominator = currentfraction.getDenominator();
+				int partition = currentfraction.getPartition();
+				
+				if (partition != 0){
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+				}
+
+				if ((numerator < finalNumerator) && (denominator == finalDenominator)) return true;
+			}
+			return false;
+		}
+
+
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
 			Debug.Log ("taskID: "+taskID);
 
-			if (taskID.Equals("task2.6.setA") || taskID.Equals("task2.6.setB") || taskID.Equals("task2.6.setC")){
+			if (taskID.Equals("task3aPlus.1.setA.area") || taskID.Equals("task3aPlus.1.setB.area") || taskID.Equals("task3aPlus.1.setC.area") ||
+			    taskID.Equals("task3aPlus.1.setA.numb") || taskID.Equals("task3aPlus.1.setB.numb") || taskID.Equals("task3aPlus.1.setC.numb") ||
+			    taskID.Equals("task3aPlus.1.setA.sets") || taskID.Equals("task3aPlus.1.setB.sets") || taskID.Equals("task3aPlus.1.setC.sets") ||
+			    taskID.Equals("task3aPlus.1.setA.liqu") || taskID.Equals("task3aPlus.1.setB.liqu") || taskID.Equals("task3aPlus.1.setC.liqu") ){
+
+				checkForFeedbackFollowed ();
+
+				int startNumerator = 0;
+				int startDenominator = 0;
+				string representation = "area";
+
+				if (taskID.Equals("task3aPlus.1.setA.area")){
+					startNumerator = 3;
+					startDenominator = 5;
+					representation = "area";
+				}
+				else if (taskID.Equals("task3aPlus.1.setB.area")){
+					startNumerator = 4;
+					startDenominator = 7;
+					representation = "area";
+				}
+				else if (taskID.Equals("task3aPlus.1.setC.area")){
+					startNumerator = 12;
+					startDenominator = 9;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3aPlus.1.setA.numb")){
+					startNumerator = 3;
+					startDenominator = 5;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3aPlus.1.setB.numb")){
+					startNumerator = 4;
+					startDenominator = 7;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3aPlus.1.setC.numb")){
+					startNumerator = 12;
+					startDenominator = 9;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3aPlus.1.setA.sets")){
+					startNumerator = 3;
+					startDenominator = 5;
+					representation = "sets";
+				}
+				else if (taskID.Equals("task3aPlus.1.setB.sets")){
+					startNumerator = 4;
+					startDenominator = 7;
+					representation = "sets";
+				}
+				else if (taskID.Equals("task3aPlus.1.setC.sets")){
+					startNumerator = 12;
+					startDenominator = 9;
+					representation = "sets";
+				}
+				else if (taskID.Equals("task3aPlus.1.setA.liqu")){
+					startNumerator = 3;
+					startDenominator = 5;
+					representation = "liquid measures";
+				}
+				else if (taskID.Equals("task3aPlus.1.setB.liqu")){
+					startNumerator = 4;
+					startDenominator = 7;
+					representation = "liquid measures";
+				}
+				else if (taskID.Equals("task3aPlus.1.setC.liqu")){
+					startNumerator = 12;
+					startDenominator = 9;
+					representation = "liquid measures";
+				}
+
+				Fraction currentFraction = studentModel.getCurrentFraction ();
+				
+				if (currentFraction != null) {
+					int numerator = currentFraction.getNumerator ();
+					int denominator = currentFraction.getDenominator ();
+					int partition = currentFraction.getPartition ();
+
+
+					if (partition != 0) {
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+
+					if ((numerator == 0) && (denominator == 0)) {
+						currentFeedback = feedbackData.S3;
+					}
+
+					//needs to be removed when new rules that include a third fraction of the solution fraction has been added
+					else if (checkForAddedFraction(startNumerator, startDenominator)){
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.T3aP1E1;
+					}
+
+					else if (checkForAddedFraction(startNumerator, startDenominator) && studentModel.getAdditionBox()){
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.T3aP1E1;
+					}
+					else if (checkForAddedFraction(startNumerator, startDenominator) && (!studentModel.getAdditionBox())){
+						currentFeedback = feedbackData.T3aP1M11;
+					}
+
+					else if ((numerator == startDenominator) &&
+					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3aP1M1.getID ())){
+						currentFeedback = feedbackData.T3aP1M5;
+					}
+
+					else if ((denominator == startDenominator) &&
+					         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3aP1M1.getID ()) ||
+					 studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3aP1M2.getID ()))){
+						currentFeedback = feedbackData.T3aP1M4;
+					}
+
+					else if ((numerator == 0) && (denominator == startDenominator)){
+						currentFeedback = feedbackData.T3aP1M6;
+					}
+
+					else if (onlyOneFractionCreatedForAddition(startNumerator, startDenominator)){
+						currentFeedback = feedbackData.T3aP1M7;
+					}
+
+					//(numerator >= startNumerato) needs to get changed (>) for new rules that include a third fraction of the solution fraction
+					else if ((denominator == startDenominator) && (numerator >= startNumerator)){
+						currentFeedback = feedbackData.T3aP1M8;
+					}
+					//(numerator >= startNumerato) needs to get changed (>) for new rules that include a third fraction of the solution fraction
+					else if ((denominator != startDenominator) && (numerator >= startNumerator)){
+						currentFeedback = feedbackData.T3aP1M3;
+					}
+
+					else if (numerator == startDenominator){
+						currentFeedback = feedbackData.T3aP1M2;
+					}
+
+					else if (denominator != startDenominator){
+						currentFeedback = feedbackData.T3aP1M1;
+					}
+
+					else {
+						currentFeedback = new FeedbackElem();
+					}
+				}
+				else {
+					currentFeedback = new FeedbackElem();
+				}
+				setNewFeedback();
+
+			}
+
+			else if (taskID.Equals("task2.6.setA") || taskID.Equals("task2.6.setB") || taskID.Equals("task2.6.setC")){
 
 				checkForFeedbackFollowed ();
 

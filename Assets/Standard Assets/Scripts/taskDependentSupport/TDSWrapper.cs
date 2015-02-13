@@ -105,7 +105,11 @@ namespace taskDependentSupport
 				taskID = elem.Substring(0,12);
 				studentID = elem.Substring(12);
 			}
-
+			else if (checkTaskID.Equals ("task3aP")){
+				taskID = elem.Substring(0,22);
+				studentID = elem.Substring(22);
+			}
+			//task3aPlus.1.setA.area
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
 			studentModel = new StudentModel (taskID);
