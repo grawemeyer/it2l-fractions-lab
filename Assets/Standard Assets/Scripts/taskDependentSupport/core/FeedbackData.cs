@@ -13,6 +13,8 @@ namespace taskDependentSupport.core
 		public FeedbackElem FM6, FM10, FM11, FE1, FE2;
 		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24E1, T24E2;
+		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M8, T26M10, T26M11, T26E1, T26E2;
+
 
 		public FeedbackData (String taskID){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -23,21 +25,45 @@ namespace taskDependentSupport.core
 			int endDenominator = 0;
 			String representation = "area";
 
-			if (taskID.Equals ("Comp1")) {
+			if (taskID.Equals ("task1.1setA")) {
 				endDenominator = 3;
 			}
 			
-			if (taskID.Equals("EQUIValence1")){
+			if (taskID.Equals("task2.7.setA")){
+				startNumerator = 1;
+				endNumerator = 3;
+				startDenominator = 6;
+				endDenominator = 18;
+			}
+			else if (taskID.Equals("task2.7.setB")){
 				startNumerator = 3;
 				endNumerator = 9;
 				startDenominator = 4;
 				endDenominator = 12;
 			}
-			else if (taskID.Equals("EQUIValence2")){
-				startNumerator = 1;
-				endNumerator = 2;
-				startDenominator = 2;
-				endDenominator = 4;
+			else if (taskID.Equals("task2.7.setC")){
+				startNumerator = 7;
+				endNumerator = 28;
+				startDenominator = 3;
+				endDenominator = 12;
+			}
+			else if (taskID.Equals("task2.6.setA")){
+				startNumerator = 3;
+				startDenominator = 4;
+				endNumerator = 1;
+				endDenominator = 12;
+			}
+			else if (taskID.Equals("task2.6.setB")){
+				startNumerator = 2;
+				startDenominator = 5;
+				endNumerator = 1;
+				endDenominator = 10;
+			}
+			else if (taskID.Equals("task2.6.setC")){
+				startNumerator = 7;
+				startDenominator = 3;
+				endNumerator = 1;
+				endDenominator = 21;
 			}
 			else if (taskID.Equals("task2.4.setA.area")){
 				startNumerator = 1;
@@ -773,9 +799,161 @@ namespace taskDependentSupport.core
 			T24E2.setNextStep (nextStepT24E2);
 
 
+			T26M1 = new FeedbackElem ();
+			T26M1.setID ("T26M1");
+			FeedbackMessage T26M1M = new FeedbackMessage ();
+			T26M1M.setGuidance ("You can click the up arrow next to your fraction to change it.");
+			T26M1M.setSocratic ("Is the denominator in your fraction correct?");
+			T26M1M.setDidacticConceptual ("Check that the denominator in your fraction is correct.");
+			T26M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is "+startDenominator+" or "+endDenominator+".");
+			T26M1M.setHighlighting (Highlighting.ArrowButtons);
+			T26M1.setFeedbackMessage (T26M1M);
+			T26M1.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT26M1 = new Fraction ();
+			int[] values = new int[2] {startDenominator, endDenominator};
+			nextStepT26M1.setDenominators (values);
+			T26M1.setNextStep (nextStepT26M1);
 
+			T26M2 = new FeedbackElem ();
+			T26M2.setID ("T26M2");
+			FeedbackMessage T26M2M = new FeedbackMessage ();
+			T26M2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
+			T26M2M.setSocratic ("Have you changed the numerator or denominator?");
+			T26M2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
+			T26M2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+startDenominator+" or "+endDenominator+".");
+			T26M2M.setHighlighting (Highlighting.ArrowButtons);
+			T26M2.setFeedbackMessage (T26M2M);
+			T26M2.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT26M2 = new Fraction ();
+			int[] values2 = new int[2] {startDenominator, endDenominator};
+			nextStepT26M2.setDenominators (values2);
+			T26M2.setNextStep (nextStepT26M2);
 
+			T26M3 = new FeedbackElem ();
+			T26M3.setID ("T26M3");
+			FeedbackMessage T26M3M = new FeedbackMessage ();
+			T26M3M.setGuidance ("Please read the task again carefully.");
+			T26M3M.setSocratic ("Is this the fraction you were planning to make?");
+			T26M3M.setDidacticConceptual ("Re-read the task then check your fraction.");
+			T26M3.setFeedbackMessage (T26M3M);
+			T26M3.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT26M3 = new Fraction ();
+			int[] values3 = new int[2] {startDenominator, endDenominator};
+			int[] values4 = new int[2] {startNumerator, endNumerator};
+			nextStepT26M3.setNumerators (values4);
+			nextStepT26M3.setDenominators (values3);
+			T26M3.setNextStep (nextStepT26M3);
 
+			T26M4 = new FeedbackElem ();
+			T26M4.setID ("T26M4");
+			FeedbackMessage T26M4M = new FeedbackMessage ();
+			T26M4M.setDidacticConceptual ("Excellent. Please explain what the 'numerator' and ‘denominator’ are.");
+			T26M4.setFeedbackMessage (T26M4M);
+			T26M4.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT26M4 = new Fraction ();
+			nextStepT26M4.setSpeech (true);
+			T26M4.setNextStep (nextStepT26M4);
+
+			T26M5 = new FeedbackElem ();
+			T26M5.setID ("T26M5");
+			FeedbackMessage T26M5M = new FeedbackMessage ();
+			T26M5M.setGuidance ("The denominator is the bottom part of the fraction.");
+			T26M5M.setSocratic ("Have you changed the denominator or the numerator?");
+			T26M5M.setDidacticConceptual ("You changed the numerator. You need to change the denominator.");
+			T26M5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+startDenominator+" or "+endDenominator+".");
+			T26M5.setFeedbackMessage (T26M5M);
+			T26M5.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT26M5 = new Fraction ();
+			int[] valuesM5 = new int[2] {startDenominator, endDenominator};
+			nextStepT26M5.setDenominators (valuesM5);
+			T26M5.setNextStep (nextStepT26M5);
+
+			T26M6 = new FeedbackElem ();
+			T26M6.setID ("T26M6");
+			FeedbackMessage T26M6M = new FeedbackMessage ();
+			T26M6M.setGuidance ("If you click near the top of your fraction, and click the up arrow, you can change the numerator (the top part of the fraction).");
+			T26M6M.setSocratic ("Excellent. Now, how are you going to change the numerator?");
+			T26M6M.setDidacticConceptual ("You changed the denominator.  Now, change the numerator.");
+			T26M6M.setDidacticProcedural ("Now, change the numerator. Remember, you need to make the fraction "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".");
+			T26M6M.setHighlighting (Highlighting.ArrowButtons);
+			T26M6.setFeedbackMessage (T26M6M);
+			T26M6.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT26M6 = new Fraction ();
+			int[] valuesM6num = new int[2] {startNumerator, endNumerator};
+			int[] valuesM6den = new int[2] {startDenominator, endDenominator};
+			nextStepT26M6.setNumerators (valuesM6num);
+			nextStepT26M6.setDenominators (valuesM6den);
+			T26M6.setNextStep (nextStepT26M6);
+
+			T26M7 = new FeedbackElem ();
+			T26M7.setID ("T26M7");
+			FeedbackMessage T26M7M = new FeedbackMessage ();
+			T26M7M.setGuidance ("There are two fractions in this task.  You can make another fraction by using the representation tool.");
+			T26M7M.setSocratic ("Excellent. How are you going to make the second fraction?");
+			T26M7M.setDidacticConceptual ("Please make the other fraction.");
+			T26M7M.setDidacticProcedural ("You have made "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".");
+			T26M7M.setHighlighting (Highlighting.ArrowButtons);
+			T26M7.setFeedbackMessage (T26M7M);
+			T26M7.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT26M7 = new Fraction ();
+			int[] valuesM7num = new int[2] {startNumerator, endNumerator};
+			int[] valuesM7den = new int[2] {startDenominator, endDenominator};
+			nextStepT26M7.setNumerators (valuesM6num);
+			nextStepT26M7.setDenominators (valuesM6den);
+			T26M7.setNextStep (nextStepT26M7);
+
+			T26M8 = new FeedbackElem ();
+			T26M8.setID ("T26M8");
+			FeedbackMessage T26M8M = new FeedbackMessage ();
+			T26M8M.setGuidance ("It is easier to compare fractions when they are represented the same way.");
+			T26M8M.setSocratic ("Can you think of a clearer way to represent the fractions?");
+			T26M8M.setDidacticConceptual ("Please change one of your fractions so they use the same representation.");
+			T26M8M.setHighlighting (Highlighting.ComparisonBox);
+			T26M8.setFeedbackMessage (T26M8M);
+			T26M8.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT26M8 = new Fraction ();
+			nextStepT26M8.sameRepresentation (true);
+			T26M8.setNextStep (nextStepT26M8);
+
+			T26M10 = new FeedbackElem ();
+			T26M10.setID ("T26M10");
+			FeedbackMessage T26M10M = new FeedbackMessage ();
+			T26M10M.setDidacticConceptual ("Great. Please explain why you made these fractions.");
+			T26M10.setFeedbackMessage (T26M10M);
+			T26M10.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT26M10 = new Fraction ();
+			nextStepT26M10.setSpeech (true);
+			T26M10.setNextStep (nextStepT26M10);
+
+			T26M11 = new FeedbackElem ();
+			T26M11.setID ("T26M11");
+			FeedbackMessage T26M11M = new FeedbackMessage ();
+			T26M11M.setGuidance ("You could use the comparison box to compare your fractions.");
+			T26M11M.setSocratic ("How can you check, using a Fractions Lab tool,  that your solution is correct?");
+			T26M11M.setDidacticConceptual ("Compare the two fractions using the comparison box.");
+			T26M11M.setHighlighting (Highlighting.ComparisonBox);
+			T26M11.setFeedbackMessage (T26M11M);
+			T26M11.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT26M11 = new Fraction ();
+			nextStepT26M11.setComparison (true);
+			T26M11.setNextStep (nextStepT26M11);
+
+			T26E1 = new FeedbackElem ();
+			T26E1.setID ("T26E1");
+			FeedbackMessage T26E1M = new FeedbackMessage ();
+			T26E1M.setDidacticConceptual ("The way that you worked that out was excellent. Well done.");
+			T26E1.setFeedbackMessage (T26E1M);
+			T26E1.setFeedbackType (FeedbackType.affirmation);
+
+			T26E2 = new FeedbackElem ();
+			T26E2.setID ("T26E2");
+			FeedbackMessage T26E2M = new FeedbackMessage ();
+			T26E2M.setDidacticConceptual ("Please explain why you agree or disagree.");
+			T26E2.setFeedbackMessage (T26E2M);
+			T26E2.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT26E2 = new Fraction ();
+			nextStepT26E2.setSpeech (true);
+			T26E2.setNextStep (nextStepT26E2);
 
 
 
@@ -841,6 +1019,19 @@ namespace taskDependentSupport.core
 			else if (T24M11.getID ().Equals (id)) return T24M11;
 			else if (T24E1.getID ().Equals (id)) return T24E1;
 			else if (T24E2.getID ().Equals (id)) return T24E2;
+
+			else if (T26M1.getID ().Equals (id)) return T26M1;
+			else if (T26M2.getID ().Equals (id)) return T26M2;
+			else if (T26M3.getID ().Equals (id)) return T26M3;
+			else if (T26M4.getID ().Equals (id)) return T26M4;
+			else if (T26M5.getID ().Equals (id)) return T26M5;
+			else if (T26M6.getID ().Equals (id)) return T26M6;
+			else if (T26M7.getID ().Equals (id)) return T26M7;
+			else if (T26M8.getID ().Equals (id)) return T26M8;
+			else if (T26M10.getID ().Equals (id)) return T26M10;
+			else if (T26M11.getID ().Equals (id)) return T26M11;
+			else if (T26E1.getID ().Equals (id)) return T26E1;
+			else if (T26E2.getID ().Equals (id)) return T26E2;
 
 			else return new FeedbackElem ();
 		}

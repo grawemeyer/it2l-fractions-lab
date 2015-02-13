@@ -19,9 +19,27 @@ namespace taskDependentSupport.core
 			private bool numeratorAnyValue = false;
 			private bool equivalentFraction = false;
 			private bool partitionBool = false;
+			private int[] denominators;
+			private int[] numerators;
 
 			public Fraction ()
 			{
+			}
+
+			public void setNumerators(int[] values){
+				numerators = values;
+			}
+		
+			public int[] getNumerators(){
+				return numerators;
+			}
+
+			public void setDenominators(int[] values){
+				denominators = values;
+			}
+
+			public int[] getDenominators(){
+				return denominators;
 			}
 
 			public void setPartitionBool(bool value){
