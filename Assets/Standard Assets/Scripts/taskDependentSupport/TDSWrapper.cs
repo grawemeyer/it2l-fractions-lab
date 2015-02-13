@@ -78,19 +78,32 @@ namespace taskDependentSupport
 		public static void setTaskID(object arg){
 			Debug.Log ("!!!!!!!!!!! setTaskID: "+arg);
 			Debug.Log ("setTaskID: "+arg);
-			//Comp1, EQUIValence1 or EQUIValence2
+
 			String elem = arg.ToString ();
-			String checkTaskID = elem.Substring(0,4);
-			if (checkTaskID.Equals ("Comp")) {
-				taskID = elem.Substring(0,5);
-				studentID = elem.Substring(5);
+				String checkTaskID = elem.Substring(0,7);
+			if (checkTaskID.Equals ("task1.1")) {
+				taskID = elem.Substring(0,11);
+				studentID = elem.Substring(11);
 			}
-			else if (checkTaskID.Equals ("fami")){
+			else if (checkTaskID.Equals ("task2.1")) {
+				taskID = elem.Substring(0,7);
+				studentID = elem.Substring(7);
+			}
+			else if (checkTaskID.Equals ("task2.2")){
+				taskID = elem.Substring(0,7);
+				studentID = elem.Substring(7);
+			}
+			else if (checkTaskID.Equals ("task2.4")){
 				taskID = elem.Substring(0,17);
 				studentID = elem.Substring(17);
 			}
-			else if (checkTaskID.Equals ("EQUI")){
-			
+			else if (checkTaskID.Equals ("task2.6")){
+				taskID = elem.Substring(0,12);
+				studentID = elem.Substring(12);
+			}
+			else if (checkTaskID.Equals ("task2.7")){
+				taskID = elem.Substring(0,12);
+				studentID = elem.Substring(12);
 			}
 
 			Debug.Log ("taskID: "+taskID);
@@ -98,7 +111,8 @@ namespace taskDependentSupport
 			studentModel = new StudentModel (taskID);
 			studentModel.resetDoneButtonPressed();
 		
-			if (taskID.Equals ("EQUIValence1")) {
+			if (checkTaskID.Equals ("task2.7")) {
+				//needs to be checked if these buttons have to be set for all tasks
 				DoneButtonEnable(true);
 				ArrowButtonEnable(false);
 			}
