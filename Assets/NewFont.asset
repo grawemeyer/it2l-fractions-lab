@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05c7e6b2338363440b49a9b20ab93ad3, type: 3}
+  m_Name: NewFont
+  m_EditorClassIdentifier: 
+  characters:
+  - code: 48
+    sprite: {fileID: 21300000, guid: 5f7067e6ef1a52b4fb636ba51c6bf0de, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 49
+    sprite: {fileID: 21300000, guid: 9d8b02e00dc263045a1f68e06acc4131, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 50
+    sprite: {fileID: 21300000, guid: 40f6bc3d183542f4c9aabfdaff4e6ac6, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 51
+    sprite: {fileID: 21300000, guid: db0f4912b09da2049a2efd7268eba061, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 52
+    sprite: {fileID: 21300000, guid: 55e24ef5427d5f04eb72292bb8db9e46, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 53
+    sprite: {fileID: 21300000, guid: ed92b08e01c12c0479da2290581da0f3, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 54
+    sprite: {fileID: 21300000, guid: c80d0641320dd4e468bd56b8a74b4726, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 55
+    sprite: {fileID: 21300000, guid: 6245df153cfb13f4c9bf9d37a68dc0f0, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 56
+    sprite: {fileID: 21300000, guid: e2d459ec4711d4f4791cd6b16638f3cc, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  - code: 57
+    sprite: {fileID: 21300000, guid: 6793dc7b9922ec1438f703d8ad13ac85, type: 3}
+    offset: {x: 0, y: 0}
+    width: 50
+    height: 60
+    xAdvance: 50
+  kernings: []
+  lineHeight: 0
+  extraSpacing: 0

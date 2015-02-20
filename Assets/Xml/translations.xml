@@ -1,0 +1,244 @@
+<languages>
+	<language id="en" type="latin">
+		<change_colour><![CDATA[CHANGE COLOUR]]></change_colour>
+		<copy><![CDATA[COPY]]></copy>
+		<show_partition><![CDATA[SHOW PARTITION]]></show_partition>
+		<hide_partition><![CDATA[HIDE PARTITION]]></hide_partition>
+		<popup_pause_text><![CDATA[PAUSE]]></popup_pause_text>
+		<hint_set_menu><![CDATA[Set models: click to choose a representation]]></hint_set_menu>
+		<hint_create_heart><![CDATA[Heart shape: click to create]]></hint_create_heart>
+		<hint_create_moon><![CDATA[Moon shape: click to create]]></hint_create_moon>
+		<hint_create_star><![CDATA[Star shape: click to create]]></hint_create_star>
+		<hint_shape_menu><![CDATA[Shape models: click to choose a representation]]></hint_shape_menu>
+		<hint_create_horizontal><![CDATA[Horizontal rectangle: click to create]]></hint_create_horizontal>
+		<hint_create_vertical><![CDATA[Vertical rectangle: click to create]]></hint_create_vertical>
+		<hint_trash><![CDATA[Bin: drag an object here to remove it from workspace]]></hint_trash>
+		<hint_find_eq><![CDATA[Compare button: compare two fractions]]></hint_find_eq>
+		<hint_drag_eq><![CDATA[Drag a representation here to compare]]></hint_drag_eq>
+		<hint_onshape><![CDATA[Left click and drag to move, Right click to open tools menu]]></hint_onshape>
+		<hint_change_fraction><![CDATA[Click to change denominator or numerator]]></hint_change_fraction>
+		<hint_showhide><![CDATA[Click to show/hide fraction symbol]]></hint_showhide>
+		<hint_partition><![CDATA[Click to partition the fraction representation]]></hint_partition>
+		<hint_denominator_first><![CDATA[Set the denominator first]]></hint_denominator_first>
+		<hint_denominator><![CDATA[Set the denominator]]></hint_denominator>
+		<hint_numerator><![CDATA[Set the numerator]]></hint_numerator>
+		<hint_create_lines><![CDATA[Number line: click to create]]></hint_create_lines>
+		<hint_create_liquid><![CDATA[Liquid measure: click to create]]></hint_create_liquid>
+		<hint_copy><![CDATA[Click to create a copy of the fraction]]></hint_copy>
+		<join><![CDATA[ADD]]></join>
+		<taking_away><![CDATA[SUBTRACT]]></taking_away>
+		<hint_join><![CDATA[Join these fractions together]]></hint_join>
+		<hint_taking_away><![CDATA[Take the fraction away ]]></hint_taking_away>
+		<action_not_valid><![CDATA[This action is not valid in Fractions Lab]]></action_not_valid>
+		<rep_greater_3><![CDATA[You can't make numbers greater than 3 wholes in Fractions Lab]]></rep_greater_3>
+		<start><![CDATA[START]]></start>
+		<ok><![CDATA[OK]]></ok>
+		<hint_hide_side_menu><![CDATA[Click to hide representation toolbar]]></hint_hide_side_menu>
+		<hint_show_side_menu><![CDATA[Click to show representation toolbar]]></hint_show_side_menu>
+		<hint_change_colour><![CDATA[Click to change the color]]></hint_change_colour>
+		<hint_partition_num><![CDATA[Set the partition]]></hint_partition_num>
+		<hint_find_sum><![CDATA[Addition button: check an addition sum]]></hint_find_sum>
+		<hint_find_sub><![CDATA[Subtraction button: check a subtraction]]></hint_find_sub>
+		<hint_oncut><![CDATA[Left click and drag to move]]></hint_oncut>
+		<designer_mode><![CDATA[DESIGNER MODE]]></designer_mode>
+		<error_login><![CDATA[The username or password you entered is incorrect. ]]></error_login>
+		<username><![CDATA[Username]]></username>
+		<password><![CDATA[Password]]></password>
+		<re-type_password><![CDATA[Re-type password]]></re-type_password>
+		<login><![CDATA[LOGIN]]></login>
+		<register><![CDATA[REGISTER]]></register>
+		<logout><![CDATA[Logout]]></logout>
+		<are_you_teacher><![CDATA[Are you a task designer?]]></are_you_teacher>
+		<are_you_student><![CDATA[Are you a student?]]></are_you_student>
+		<register_explanation><![CDATA[Create a Fractions Lab account]]></register_explanation>
+		<error_register_pwd><![CDATA[Passwords  do not match]]></error_register_pwd>
+		<error_register_user><![CDATA[Username already exists]]></error_register_user>
+		<error_register_fill><![CDATA[Please fill all fields]]></error_register_fill>
+		<load><![CDATA[LOAD]]></load>
+		<new><![CDATA[NEW]]></new>
+		<load_instruction><![CDATA[Choose among different tasks]]></load_instruction>
+		<new_instruction><![CDATA[Start with a blank workspace]]></new_instruction>
+		<visited_task><![CDATA[Visited]]></visited_task>
+		<new_task><![CDATA[New Task]]></new_task>
+		<locked_task><![CDATA[Locked]]></locked_task>
+		<drag_window><![CDATA[YOU CAN DRAG ME]]></drag_window>
+		<title_here><![CDATA[Title here]]></title_here>
+		<text_here><![CDATA[Text here]]></text_here>
+		<task_description_Explanation><![CDATA[INSERT A TITLE AND A DESCRIPTION FOR THE TASK]]></task_description_Explanation>
+		<save_as_explanation><![CDATA[INSERT A NEW NAME FOR THE TASK]]></save_as_explanation>
+		<tool_customization_explanation><![CDATA[CHOOSE WHAT FUNCTIONALITIES WILL BE ACTIVE IN THIS TASK]]></tool_customization_explanation>
+		<confirm_home><![CDATA[Are you sure you want to leave the workspace?]]></confirm_home>
+		<confirm_logout><![CDATA[Are you sure you want to log out?]]></confirm_logout>
+		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
+		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
+		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
+		<hint_show_lab><![CDATA[Click to show the laboratory]]></hint_show_lab>
+		<hint_highlight><![CDATA[Click to show/hide fraction highlight ]]></hint_highlight>
+		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
+		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
+		<zoom><![CDATA[zoom]]></zoom>
+	</language>
+	<language id="de" type="latin">
+		<change_colour><![CDATA[FARBE ÄNDERN]]></change_colour>
+		<copy><![CDATA[KOPIEREN]]></copy>
+		<show_partition><![CDATA[ZEIGE DIE TEILUNG ]]></show_partition>
+		<hide_partition><![CDATA[VERBERGE DIE TEILUNG]]></hide_partition>
+		<popup_pause_text><![CDATA[PAUSE]]></popup_pause_text>
+		<hint_set_menu><![CDATA[Klicke hier, um ein Bilddiagramm auszuwählen]]></hint_set_menu>
+		<hint_create_heart><![CDATA[ Klicke hier, um ein herzform zu erstellen]]></hint_create_heart>
+		<hint_create_moon><![CDATA[Klicke hier, um ein mondform zu erstellen]]></hint_create_moon>
+		<hint_create_star><![CDATA[Klicke hier, um ein sternform zu erstellen]]></hint_create_star>
+		<hint_shape_menu><![CDATA[Klicke hier, um ein Bilddiagramm auszuwählen]]></hint_shape_menu>
+		<hint_create_horizontal><![CDATA[ Klicke hier, um ein horizontales Rechteck zu erstellen]]></hint_create_horizontal>
+		<hint_create_vertical><![CDATA[Klicke hier, um ein vertikales Rechteck zu erstellen]]></hint_create_vertical>
+		<hint_trash><![CDATA[Papierkorb: Um ein Objekt zu löschen, ziehe es vom Arbeitsbereich hier hinein.
+]]></hint_trash>
+		<hint_find_eq><![CDATA[Vergleichscheckbox: Vergleiche zwei Brüche]]></hint_find_eq>
+		<hint_drag_eq><![CDATA[Ziehe einen Bruch hier hinein, um ihn zu vergleichen
+]]></hint_drag_eq>
+		<hint_onshape><![CDATA[Klicke mit links, um ein Objekt zu bewegen. Klicke mit rechts, um das Menü zu öffnen.]]></hint_onshape>
+		<hint_change_fraction><![CDATA[Klicke hier, um den Nenner oder Zähler zu ändern
+]]></hint_change_fraction>
+		<hint_showhide><![CDATA[Klicke hier, um den Bruch zu zeigen/verbergen
+]]></hint_showhide>
+		<hint_partition><![CDATA[Klicke hier, um die Bilddarstellung zu teilen
+]]></hint_partition>
+		<hint_denominator_first><![CDATA[Bestimme zuerst den Nenner]]></hint_denominator_first>
+		<hint_denominator><![CDATA[Bestimme den Nenner]]></hint_denominator>
+		<hint_numerator><![CDATA[Bestimme den Zähler]]></hint_numerator>
+		<hint_create_lines><![CDATA[ Klicke hier, um einen Zahlenstrahl zu erstellen]]></hint_create_lines>
+		<hint_create_liquid><![CDATA[ Klicke hier, um einen Messbecher zu erstellen]]></hint_create_liquid>
+		<hint_copy><![CDATA[Klicke hier, um eine Kopie des Bruchs zu erstellen]]></hint_copy>
+		<join><![CDATA[ADDIERE]]></join>
+		<taking_away><![CDATA[SUBTRAHIERE]]></taking_away>
+		<hint_join><![CDATA[Verbinde diese Brüche miteiander]]></hint_join>
+		<hint_taking_away><![CDATA[Verschiebe den Bruch]]></hint_taking_away>
+		<action_not_valid><![CDATA[Im Fractions Lab ist diese Aktion ist nicht möglich]]></action_not_valid>
+		<rep_greater_3><![CDATA[Im Fractions Lab kannst du keine Zahlen erstellen, die größer als 3 Ganze sind]]></rep_greater_3>
+		<start><![CDATA[START]]></start>
+		<ok><![CDATA[OK]]></ok>
+		<hint_hide_side_menu><![CDATA[Klicke hier, um die Symbolleiste der Bilddarstellungen zu verbergen]]></hint_hide_side_menu>
+		<hint_show_side_menu><![CDATA[Klicke hier, um die Symbolleiste der Bilddarstellungen zu zeigen]]></hint_show_side_menu>
+		<hint_change_colour><![CDATA[Klicke hier, um die Farbe zu ändern]]></hint_change_colour>
+		<hint_partition_num><![CDATA[Bestimme die Teilung]]></hint_partition_num>
+		<hint_find_sum><![CDATA[Additionscheckbox: Überprüfe eine Summe]]></hint_find_sum>
+		<hint_find_sub><![CDATA[Subtraktionscheckbox: Überprüfe eine Differenz]]></hint_find_sub>
+		<hint_oncut><![CDATA[Klicke mit links und ziehe das Objekt in gewünschte Richtung]]></hint_oncut>
+		<designer_mode><![CDATA[DESIGNER MODE]]></designer_mode>
+		<error_login><![CDATA[The username or password you entered is incorrect. ]]></error_login>
+		<username><![CDATA[Username]]></username>
+		<password><![CDATA[Password]]></password>
+		<re-type_password><![CDATA[Re-type password]]></re-type_password>
+		<login><![CDATA[LOGIN]]></login>
+		<register><![CDATA[REGISTER]]></register>
+		<logout><![CDATA[Logout]]></logout>
+		<are_you_teacher><![CDATA[Are you a task designer?]]></are_you_teacher>
+		<are_you_student><![CDATA[Are you a student?]]></are_you_student>
+		<register_explanation><![CDATA[Create a Fractions Lab account]]></register_explanation>
+		<error_register_pwd><![CDATA[Passwords  do not match]]></error_register_pwd>
+		<error_register_user><![CDATA[Username already exists]]></error_register_user>
+		<error_register_fill><![CDATA[Please fill all fields]]></error_register_fill>
+		<load><![CDATA[LOAD]]></load>
+		<new><![CDATA[NEW]]></new>
+		<load_instruction><![CDATA[Choose among different tasks]]></load_instruction>
+		<new_instruction><![CDATA[Start with a blank workspace]]></new_instruction>
+		<visited_task><![CDATA[Visited]]></visited_task>
+		<new_task><![CDATA[New Task]]></new_task>
+		<locked_task><![CDATA[Locked]]></locked_task>
+		<drag_window><![CDATA[YOU CAN DRAG ME]]></drag_window>
+		<title_here><![CDATA[Title here]]></title_here>
+		<text_here><![CDATA[Text here]]></text_here>
+		<task_description_Explanation><![CDATA[INSERT A TITLE AND A DESCRIPTION FOR THE TASK]]></task_description_Explanation>
+		<save_as_explanation><![CDATA[INSERT A NEW NAME FOR THE TASK]]></save_as_explanation>
+		<tool_customization_explanation><![CDATA[CHOOSE WHAT FUNCTIONALITIES WILL BE ACTIVE IN THIS TASK]]></tool_customization_explanation>
+		<confirm_home><![CDATA[Are you sure you want to leave the workspace?]]></confirm_home>
+		<confirm_logout><![CDATA[Are you sure you want to log out?]]></confirm_logout>
+		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
+		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
+		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
+		<hint_show_lab><![CDATA[Click to show the laboratory]]></hint_show_lab>
+		<hint_highlight><![CDATA[Click to show/hide fraction highlight]]></hint_highlight>
+		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
+		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
+		<zoom><![CDATA[zoom]]></zoom>
+	</language>
+	<language id="es" type="latin">
+		<change_colour><![CDATA[CAMBIA COLOR]]></change_colour>
+		<copy><![CDATA[COPIAR]]></copy>
+		<show_partition><![CDATA[MOSTRAR PARTICION]]></show_partition>
+		<hide_partition><![CDATA[OCULTAR PARTICION]]></hide_partition>
+		<popup_pause_text><![CDATA[PAUSA]]></popup_pause_text>
+		<hint_set_menu><![CDATA[Haz clic para elegir una figura]]></hint_set_menu>
+		<hint_create_heart><![CDATA[Haz clic para crear un corazón]]></hint_create_heart>
+		<hint_create_moon><![CDATA[Haz clic para crear una luna]]></hint_create_moon>
+		<hint_create_star><![CDATA[Haz clic para crear una estrella]]></hint_create_star>
+		<hint_shape_menu><![CDATA[Haz clic para elegir una figura]]></hint_shape_menu>
+		<hint_create_horizontal><![CDATA[Haz clic para crear un rectángulo horizontal]]></hint_create_horizontal>
+		<hint_create_vertical><![CDATA[Haz clic para crear un rectángulo vertical]]></hint_create_vertical>
+		<hint_trash><![CDATA[Basurero: arastra un objecto aqui para borarlo]]></hint_trash>
+		<hint_find_eq><![CDATA[Comparar dos fracciones]]></hint_find_eq>
+		<hint_drag_eq><![CDATA[Arrastre una representación aquí para comparar]]></hint_drag_eq>
+		<hint_onshape><![CDATA[Haz clic izquierdo y arrastra para mover, haz clic derecho para abrir el menú]]></hint_onshape>
+		<hint_change_fraction><![CDATA[Haz clic para cambiar el denominador o numerador]]></hint_change_fraction>
+		<hint_showhide><![CDATA[Haz clic para mostrar / ocultar la fracción]]></hint_showhide>
+		<hint_partition><![CDATA[Haz clic para particionar la fracción]]></hint_partition>
+		<hint_denominator_first><![CDATA[Ajusta el denominador primero]]></hint_denominator_first>
+		<hint_denominator><![CDATA[Ajusta el denominador]]></hint_denominator>
+		<hint_numerator><![CDATA[Ajusta el numerador]]></hint_numerator>
+		<hint_create_lines><![CDATA[Línea de los números: haz clic para crear]]></hint_create_lines>
+		<hint_create_liquid><![CDATA[Medida del líquido: haz clic para crear]]></hint_create_liquid>
+		<hint_copy><![CDATA[Haz clic aquí para crear una copia de la fracción]]></hint_copy>
+		<join><![CDATA[AÑADIR]]></join>
+		<taking_away><![CDATA[SUBSTRAER]]></taking_away>
+		<hint_join><![CDATA[Úne estas fracciones]]></hint_join>
+		<hint_taking_away><![CDATA[Resta la fracción ]]></hint_taking_away>
+		<action_not_valid><![CDATA[Esta acción no es válida en Fractions Lab]]></action_not_valid>
+		<rep_greater_3><![CDATA[No puedes hacer un número mayor que 3 enteros en Fractions Lab]]></rep_greater_3>
+		<start><![CDATA[INICIO]]></start>
+		<ok><![CDATA[OK]]></ok>
+		<hint_hide_side_menu><![CDATA[Haz clic para ocultar la barra de herramientas]]></hint_hide_side_menu>
+		<hint_show_side_menu><![CDATA[Haz clic para mostrar la barra de herramientas]]></hint_show_side_menu>
+		<hint_change_colour><![CDATA[Haz clic para cambiar el color]]></hint_change_colour>
+		<hint_partition_num><![CDATA[Ajusta la partición]]></hint_partition_num>
+		<hint_find_sum><![CDATA[Botón de Suma: checa una adición]]></hint_find_sum>
+		<hint_find_sub><![CDATA[Botón de Resta: checa una substracción]]></hint_find_sub>
+		<hint_oncut><![CDATA[Haz clic izquierdo y arrastra para mover]]></hint_oncut>
+		<designer_mode><![CDATA[DESIGNER MODE]]></designer_mode>
+		<error_login><![CDATA[The username or password you entered is incorrect. ]]></error_login>
+		<username><![CDATA[Username]]></username>
+		<password><![CDATA[Password]]></password>
+		<re-type_password><![CDATA[Re-type password]]></re-type_password>
+		<login><![CDATA[LOGIN]]></login>
+		<register><![CDATA[REGISTER]]></register>
+		<logout><![CDATA[Logout]]></logout>
+		<are_you_teacher><![CDATA[Are you a task designer?]]></are_you_teacher>
+		<are_you_student><![CDATA[Are you a student?]]></are_you_student>
+		<register_explanation><![CDATA[Create a Fractions Lab account]]></register_explanation>
+		<error_register_pwd><![CDATA[Passwords  do not match]]></error_register_pwd>
+		<error_register_user><![CDATA[Username already exists]]></error_register_user>
+		<error_register_fill><![CDATA[Please fill all fields]]></error_register_fill>
+		<load><![CDATA[LOAD]]></load>
+		<new><![CDATA[NEW]]></new>
+		<load_instruction><![CDATA[Choose among different tasks]]></load_instruction>
+		<new_instruction><![CDATA[Start with a blank workspace]]></new_instruction>
+		<visited_task><![CDATA[Visited]]></visited_task>
+		<new_task><![CDATA[New Task]]></new_task>
+		<locked_task><![CDATA[Locked]]></locked_task>
+		<drag_window><![CDATA[YOU CAN DRAG ME]]></drag_window>
+		<title_here><![CDATA[Title here]]></title_here>
+		<text_here><![CDATA[Text here]]></text_here>
+		<task_description_Explanation><![CDATA[INSERT A TITLE AND A DESCRIPTION FOR THE TASK]]></task_description_Explanation>
+		<save_as_explanation><![CDATA[INSERT A NEW NAME FOR THE TASK]]></save_as_explanation>
+		<tool_customization_explanation><![CDATA[CHOOSE WHAT FUNCTIONALITIES WILL BE ACTIVE IN THIS TASK]]></tool_customization_explanation>
+		<confirm_home><![CDATA[Are you sure you want to leave the workspace?]]></confirm_home>
+		<confirm_logout><![CDATA[Are you sure you want to log out?]]></confirm_logout>
+		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
+		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
+		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
+		<hint_show_lab><![CDATA[Click to show the laboratory]]></hint_show_lab>
+		<hint_highlight><![CDATA[Click to show/hide fraction highlight]]></hint_highlight>
+		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
+		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
+		<zoom><![CDATA[zoom]]></zoom>
+	</language>
+</languages>
