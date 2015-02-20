@@ -116,9 +116,9 @@ public class ExternalEventsManager : MonoBehaviour
 
 #if UNITY_EDITOR
         //embeddingVariables.Add("language", "es");
-        embeddingVariables.Add("showStartPage", "false");
-        embeddingVariables.Add("username", "Pippo01");
-        embeddingVariables.Add("tip", "http://172.19.6.254/italk2learn/tip/EmptyTask.tip");
+       // embeddingVariables.Add("showStartPage", "false");
+       // embeddingVariables.Add("username", "Pippo01");
+       // embeddingVariables.Add("tip", "http://172.19.6.254/italk2learn/tip/EmptyTask.tip");
 #endif
     }
 

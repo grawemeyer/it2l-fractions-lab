@@ -543,7 +543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fontInUse: {fileID: 12800000, guid: ac7548a072f6f15488d417f5040fa4a5, type: 3}
   interfaces: {fileID: 2071698764}
-  skin: {fileID: 0}
+  skin: {fileID: 11400000, guid: bf87284d984b0794bb7c7228fb88decc, type: 2}
   systemColor: {r: .549000025, g: .584299982, b: .529399991, a: 1}
   grey: {r: .549000025, g: .584299982, b: .529399991, a: 1}
   white: {r: 1, g: 1, b: 1, a: 1}
@@ -29099,6 +29099,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 933f9f20529878a4bb77284ff627cdec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 4
+  selectedCamera: {fileID: 0}
+  MINSCALE: 2
+  MAXSCALE: 5
+  minPinchSpeed: 5
+  varianceInDistances: 5
 --- !u!1 &1553408433
 GameObject:
   m_ObjectHideFlags: 0
