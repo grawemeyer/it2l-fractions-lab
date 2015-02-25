@@ -40,7 +40,7 @@ public class ExternalEventsManager : MonoBehaviour
     public void SendMessageToSupport(params object[] args)
     {
 #if UNITY_WEBPLAYER && !UNITY_EDITOR
-        if (Debug.isDebugBuild())
+        if (Debug.isDebugBuild)
         {
             string tmp = "";
             foreach (object ob in args)
