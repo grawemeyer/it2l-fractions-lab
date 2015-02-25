@@ -123,11 +123,11 @@ namespace taskDependentSupport
 			}
 		}
 
-        public static void SetTaskInformationPackage(String _tip) 
-        {
-            taskInformationPackage = _tip;
-        }
-
+		public static void SetTaskInformationPackage(String _tip) 
+		{
+			taskInformationPackage = _tip;
+		}
+		
 		public static void DoneButtonEnable(bool value){
 			Debug.Log ("TDSWRAPPER: DoneButtonEnable: "+value);
 			Application.ExternalCall("doneButtonEnable", value.ToString ());
