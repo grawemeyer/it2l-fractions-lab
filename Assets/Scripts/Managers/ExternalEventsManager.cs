@@ -40,14 +40,17 @@ public class ExternalEventsManager : MonoBehaviour
     public void SendMessageToSupport(params object[] args)
     {
 #if UNITY_WEBPLAYER && !UNITY_EDITOR
-        string tmp = "";
-        foreach (object ob in args)
-            tmp += ob.ToString() + " "; 
+        if (Debug.isDebugBuild())
+        {
+            string tmp = "";
+            foreach (object ob in args)
+                tmp += ob.ToString() + " "; 
 
-        Application.ExternalCall("ShowMessage", tmp);
+            Application.ExternalCall("ShowMessage", tmp);
+        }
 #endif
-        //Debug.Log(args[0].ToString() + " ---> " + args[1].ToString());
-        return; //TODO to avoid error in copy
+        //Debug.LogWarning("********** SendMessageToSupport disabled for testing support **********");
+        //return;
         TDSWrapper.SendMessageToSupport(args); 
     }
     #endregion
