@@ -522,7 +522,7 @@ namespace taskDependentSupport.core
 			Fraction nextStepO1 = new Fraction ();
 			nextStepO1.setAnyValue (true);
 			O1.setNextStep (nextStepO1);
-			O1.setFeedbackType (FeedbackType.other);
+			O1.setFeedbackType (FeedbackType.taskNotFinished);
 
 			O2 = new FeedbackElem ();
 			O2.setID ("O2");
@@ -532,7 +532,7 @@ namespace taskDependentSupport.core
 			Fraction nextStepO2 = new Fraction ();
 			nextStepO2.setAnyValue (true);
 			O2.setNextStep (nextStepO2);
-			O2.setFeedbackType (FeedbackType.other);
+			O2.setFeedbackType (FeedbackType.taskNotFinished);
 
 			FM6 = new FeedbackElem ();
 			FM6.setID ("FM6");

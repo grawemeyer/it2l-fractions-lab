@@ -15,7 +15,7 @@ namespace taskDependentSupport.core
 		private bool comparedFractions = false;
 		private long time = 0;
 		private int lastDisplayedMessageID = 0;
-		private string lastDisplayedMessageType = ""; 
+		private int lastDisplayedMessageType = 0; 
 		private int misconception = 0;
 		private bool completed = false;
 		private int doneButtonPressed = 0;
@@ -162,12 +162,12 @@ namespace taskDependentSupport.core
 			return currentFraction;
 		}
 
-		public void setDisplayedMessageType(string value)
+		public void setDisplayedMessageType(int value)
 		{
 			lastDisplayedMessageType = value;
 		}
 		
-		public string getlastDisplayedMessageType()
+		public int getlastDisplayedMessageType()
 		{
 			return lastDisplayedMessageType;
 		}

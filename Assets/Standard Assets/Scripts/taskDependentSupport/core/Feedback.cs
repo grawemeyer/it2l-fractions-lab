@@ -21,26 +21,35 @@ namespace taskDependentSupport.core
 			studentID = value;
 		}
 
-		public void calculatePresentationOfFeedback(){
-			//needs to be set by the task-independent support
+		public void calculatePresentationOfFeedback(int feedbackType){
 			presentationMode = "lightBulb";
 
-			//presentationMode = "high";
-
-			//if the student has completed the exercise then the affect boost should be 
-			//provided in pop-up
-
-			//the reflective prompt at the end of the task should be
-			//provided as pop-up
-
+			if ((feedbackType == FeedbackType.affirmation) || (feedbackType == FeedbackType.taskNotFinished)) {
+				presentationMode = "high";
+			}
 		}
+
 
 		private String getFeedbackTypeAsString(int feedbackType){
 			String feedbackTypeString = "";
-			if ((feedbackType == 1) || (feedbackType == 3)) feedbackTypeString="PROBLEM_SOLVING";
-			else if (feedbackType == 2) feedbackTypeString="REFLECTION";
-			else if (feedbackType == 4) feedbackTypeString="AFFIRMATION";
-			else if (feedbackType == 5) feedbackTypeString="OTHER";
+			if (feedbackType == FeedbackType.problemSolving) {
+				feedbackTypeString = FeedbackType.problemSolvingString;
+			}
+			else if (feedbackType == FeedbackType.nextStep) {
+				feedbackTypeString = FeedbackType.nextStepString;
+			}
+			else if (feedbackType == FeedbackType.affirmation) {
+				feedbackTypeString = FeedbackType.affirmationString;
+			}
+			else if (feedbackType == FeedbackType.reflection) {
+				feedbackTypeString = FeedbackType.reflectionString;
+			}
+			else if (feedbackType == FeedbackType.other) {
+				feedbackTypeString = FeedbackType.otherString;
+			}
+			else if (feedbackType == FeedbackType.taskNotFinished) {
+				feedbackTypeString = FeedbackType.taskNotFinishedString;
+			}
 			return feedbackTypeString;
 		}
 
@@ -74,7 +83,7 @@ namespace taskDependentSupport.core
 					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedbackMessage, currentFeedbackTypeString, previousFeedbackTypeString, followed);
 				}
 				else {
-					calculatePresentationOfFeedback ();
+					calculatePresentationOfFeedback (studentModel.getlastDisplayedMessageType());
 					if (presentationMode.Equals ("lightBulb")){
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
 						taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
