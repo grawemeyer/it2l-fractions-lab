@@ -954,10 +954,10 @@ namespace taskDependentSupport.core
 					//	currentFeedback = feedbackData.FM10;
 					//}
 
-					else if (!sameRepresentations() && sameValues() && (createdReps() < 3)){
+					else if (!sameRepresentations() && sameValues() && (createdReps() < 4)){
 						currentFeedback = feedbackData.FM11;
 					}
-					else if (!sameRepresentations() && sameValues() && (createdReps() == 3)){
+					else if (!sameRepresentations() && sameValues() && (createdReps() == 4)){
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.FE1;
 					}
