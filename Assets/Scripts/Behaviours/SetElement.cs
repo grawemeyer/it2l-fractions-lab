@@ -60,35 +60,9 @@ public class SetElement : WSElement, IWSElement
 
     public override SBSBounds GetBounds()
     {
-        /*float scalefactorW = 1;
-        float scalefactorH = 1;
-        float scalefactor = 1;
-        if (denominator * singleWidth > maxWidth)
+        if (state == ElementsState.Fraction || state == ElementsState.Result || state == ElementsState.Equivalence)
         {
-            scalefactorW = (singleWidth) / ((denominator * singleWidth) * singleWidth / maxWidth);
-            width = maxWidth;
-            //Debug.Log("scalefactorW " + scalefactorW);
-        }
-        else
-        {
-            scalefactorW = 1;
-        }
-
-        if (partitions * singleHeight > maxHeight)
-        {
-            scalefactorH = singleHeight / ((partitions * singleHeight) / maxHeight);
-            height = maxHeight;
-            // Debug.Log("scalefactorH " + scalefactorH);
-        }
-        else
-        {
-            scalefactorH = 1;
-        }
-        scalefactor = Mathf.Min(scalefactorH, scalefactorW);
-        */
-        if (state == ElementsState.Fraction || state == ElementsState.Result)
-        {
-            bounds = new SBSBounds(new Vector3(transform.position.x - ((width) / 2) + ((singleWidth) / 2), transform.position.y, transform.position.z), new SBSVector3(width, height, 0.0f));
+            bounds = new SBSBounds(new Vector3(transform.position.x - ((width) / 2) + ((singleWidth) / 2)-0.20f, transform.position.y, transform.position.z), new SBSVector3(width, height, 0.0f));
             return bounds;
         }
         else if (state == ElementsState.Cut)
@@ -110,7 +84,6 @@ public class SetElement : WSElement, IWSElement
     public override void Draw(int zIndex)
     {
         base.Draw(zIndex);
-
         Vector3 pos = transform.position;
         pos.z = zIndex;
         transform.position = pos;
@@ -219,23 +192,18 @@ public class SetElement : WSElement, IWSElement
                 Destroy(bg);
             }
         }
-        //UpdateSlices();
         root.GetComponent<RootElement>().UpdateGraphics();
     }
 
     void SetSize(Vector2 size)
     {
-        //Debug.Log(gameObject.name + " set size x " + size.x + " y " +size.y);
         Width = size.x;
         Height = size.y;
     }
 
     void SetMode(InteractionMode mode) 
     {
-       // Debug.Log("S");
         base.SetMode(mode);
-      //  Workspace.Instance.ElementOnFocus.BroadcastMessage("UpdateWidth");
-       // Draw(zIndex);
     }
 
     void UpdateSize()
@@ -246,7 +214,6 @@ public class SetElement : WSElement, IWSElement
 
     void Initialize()
     {
-     //   Debug.Log("root name " + root.name + " type" + type);
         shape = root.GetComponent<RootElement>().shape;
         lastNumerator = numerator;
         lastDenominator = denominator;
@@ -274,7 +241,6 @@ public class SetElement : WSElement, IWSElement
         element.BroadcastMessage("SetType", type, SendMessageOptions.DontRequireReceiver);
         element.BroadcastMessage("SetSize", new Vector2(width, height), SendMessageOptions.DontRequireReceiver);
 
-        //Debug.LogError("prefab elem_0");
         for (int i = 0; i < element.transform.childCount; i++)
         {
             if (element.transform.GetChild(i).tag == "filling")
@@ -315,7 +281,6 @@ public class SetElement : WSElement, IWSElement
         {
             if (transform.GetChild(i).name.Equals(strokeName))
             {
-               // Debug.Log("destroy " + transform.GetChild(i).name);
                 Destroy(transform.GetChild(i).gameObject);
                 strokeRect = null;
             }
@@ -354,29 +319,17 @@ public class SetElement : WSElement, IWSElement
             partNumerator++;
             numerator = partNumerator / partitions;
         }
-
-        /*  if (isSelected)
-          {
-              partNumerator--;
-              if (partNumerator < 0)
-                  partNumerator = 0;
-              numerator = partNumerator / partitions;
-          }
-          else
-          {
-              partNumerator++;
-              numerator = partNumerator / partitions;            
-          }*/
-
         if (partitions == 1)
             lastNumerator = numerator;
         else
             lastNumerator = partNumerator;
-        Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().UpdateByChildren();
+        root.transform.parent.GetComponent<RootElement>().UpdateByChildren();
     }
 
     void UpdateNumerator(int value)
     {
+       // Debug.Log("UpdateNumerator " + root.transform.parent.name);
+
         value = Mathf.Clamp(value, 0, isSelected.Count);
 
         int prevNum = 0;
@@ -420,7 +373,8 @@ public class SetElement : WSElement, IWSElement
 
     void UpdateNumeratorByPartition(int partition, int lastPartition)
     {
-        selectedElement.RemoveAll(item => item % lastPartitions != 0);
+
+       /* selectedElement.RemoveAll(item => item % lastPartitions != 0);
 
         if (lastPartition > 0)
         {
@@ -440,35 +394,59 @@ public class SetElement : WSElement, IWSElement
         for (int i = 0; i < isSelected.Count; i++)
             isSelected[i] = selectedElement.Contains(i);
 
-        //hack
         if (selectedElement.Count > 0 && selectedElement.Count < partNumerator)
         {
-            //Debug.Log(root.name + ", " + selectedElement.Count + " < " + partNumerator);
             for (int i = 0; i < isSelected.Count; i++)
                 if (!isSelected[i] && selectedElement.Count < partNumerator)
                 {
                     isSelected[i] = true;
                     selectedElement.Add(i);
                 }
+        }*/
+
+        if (state != ElementsState.Equivalence)
+            return;
+
+       // selectedElement.RemoveAll(item => item >= numerator);   
+        List<int> tmp = new List<int>();
+
+        /*if (lastPartition == 0)
+            step = partition;
+        else
+            step = lastPartition;*/
+
+        for (int i = 0; i < selectedElement.Count; i = i+(lastPartition))
+        {
+            tmp.Add(selectedElement[i]);
         }
 
-        UpdateElements(lastDenominator, lastNumerator);
+        for (int i = 0; i < tmp.Count; i++)
+            tmp[i] /= (lastPartition);
 
-        /*
-        List<int> tmp = new List<int>(selectedSlices);
-        selectedSlices.Clear();
-        for (int j = 0; j < partition; j++)
+        //RootElement superRoot = root.transform.parent.GetComponent<RootElement>().parentEqRef.GetComponent<RootElement>();
+
+       /* foreach (SetElement SetEle in superRoot.GetComponentsInChildren<SetElement>())
         {
-            int n = Mathf.Min(numerator, denominator);
-            for (int i = 0; i < n; i++)
+            if (SetEle.root.name == root.name)
             {
-                slices[tmp[i] + j * denominator] = true;
-                selectedSlices.Add(tmp[i] + j * denominator);
+                tmp = new List<int>(SetEle.selectedElement);
+            }
+        }*/
+
+        selectedElement = new List<int>();
+
+        for (int i = 0; i < tmp.Count; i++)
+        {
+            for (int j = (tmp[i] * partitions); j < ((tmp[i] * partitions) + partition); j++)
+            {
+                selectedElement.Add(j);
             }
         }
 
-        UpdateSlices();
-        */
+        for (int i = 0; i < isSelected.Count; i++)
+            isSelected[i] = selectedElement.Contains(i);
+
+        UpdateElements(lastDenominator, lastNumerator);
     }
 
     /*todo*/
@@ -491,8 +469,27 @@ public class SetElement : WSElement, IWSElement
         UpdateElements(lastDenominator, lastNumerator);
     }
 
+    public void DecreaseCutNumeratorPartitions()
+    {
+        if (partitions > 1)
+        {
+            partNumerator = partNumerator-partitions;
+            UpdateNumerator(partNumerator);
+
+        }
+        else
+        {
+            numerator--;
+            UpdateNumerator(numerator);
+        }
+        UpdateElements(denominator, numerator);
+        // Draw(0);
+    }
+
     public void DecreaseCutNumerator()
     {
+
+
         if (partitions > 1)
         {
             partNumerator--;
@@ -521,20 +518,8 @@ public class SetElement : WSElement, IWSElement
             int diff = (value - prevDen);
             if (diff < 0)
             {
-                //Debug.Log("name " + transform.parent.name);
                 int startSlice = partitions * (denominator - 1);
-                /*for (int j = (partitions - 1); j >= 0; j--)
-                {
-					int lastPos = startSlice + j;
-                    if (isSelected[lastPos])
-                    {
-                        //int freeIdx = isSelected.FindLastIndex(lastPos, p => p.Equals(false));
-                        int freeIdx = isSelected.FindIndex(j * (denominator + 1), denominator + 1, p => p.Equals(false));
-                        if (freeIdx >= 0)
-                            isSelected[freeIdx] = true;
-                    } 
-                    isSelected.RemoveAt(lastPos);
-                }*/
+           
                 for (int j = 0; j < partitions; j++)
                 {
                     int lastPos = startSlice + j;
@@ -576,61 +561,101 @@ public class SetElement : WSElement, IWSElement
 
         width = singleWidth * value;
 
-        //Width = singleWidth * value;
         lastDenominator = value;
         UpdateElements(lastDenominator, lastNumerator);
-        if (null != Workspace.Instance.ElementOnFocus)
-            Workspace.Instance.ElementOnFocus.BroadcastMessage("UpdateWidth");
-        //root.BroadcastMessage("UpdateWidth");
+        if (null != root.transform.parent.GetComponent<RootElement>())
+            root.transform.parent.GetComponent<RootElement>().BroadcastMessage("UpdateWidth");
     }
 
     /*todo*/
     void UpdatePartitions(int value)
     {
-        // height *= 
+ 
     }
 
     void OnClicked(Vector3 position)
     {
-        //Debug.Log("child " + transform.childCount);
         if (mode == InteractionMode.Initializing)
             return;
         int elementCount = 0;
-        for (int i = 0; i < transform.childCount; i++)
-        {
+        Vector3 localPos;
+        RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
 
+        if (state != ElementsState.Equivalence)
+            localPos = root.transform.InverseTransformPoint(position);
+        else
+            localPos = position;
+
+        if (state != ElementsState.Equivalence)
+        {
+            if (null != superRoot.equivalences && superRoot.equivalences.Count > 0)
+            {
+                foreach (GameObject eq in superRoot.equivalences)
+                {
+                    foreach (SetElement st in eq.GetComponentsInChildren<SetElement>()) 
+                    {
+                        if(st.root.name == root.name)
+                            st.SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                    }         
+                }
+            }
+        }
+
+        elementCount = 0;
+        //Debug.Log("name "+ root.transform.parent.name  + "gameObject.transform.childCount " + gameObject.transform.childCount);
+        for (int i = 0; i < gameObject.transform.childCount; i++)
+        {
             Transform child = transform.GetChild(i);
             if (child.name.StartsWith("elem"))
             {
                 SBSBounds meshBounds = child.GetComponent<EmptyElement>().GetBounds();
+                meshBounds.max = transform.InverseTransformPoint(meshBounds.max);
+                meshBounds.min = transform.InverseTransformPoint(meshBounds.min);
                 position.z = meshBounds.max.z;
-                //  Debug.Log("child " + transform.GetChild(i).name + "meshBounds " + meshBounds.);
-                if (meshBounds.ContainsPointXY(position))
+
+                if (meshBounds.ContainsPointXY(localPos))
                 {
-                    Renderer tmpRender = null;
-                    for (int j = 0; j < child.transform.childCount; j++)
+                    if (state != ElementsState.Equivalence || (state == ElementsState.Equivalence && partitions == 1))
                     {
-                        //Debug.Log("Tag child " + child.transform.GetChild(j).tag);
-                        if (child.transform.GetChild(j).tag == "filling")
-                            tmpRender = child.transform.GetChild(j).renderer;
-                    }
-                    /* ClickElement(child.renderer.material.color != Workspace.Instance.white);*/
-                    if (!isSelected[elementCount])
-                    {
-                        // Debug.Log("isSelected " + elementCount);
-                        tmpRender.material.color = color;
+                        //Debug.Log(" i " + i);
+                        ClickedOnSingleElement(elementCount, i);
                     }
                     else
-                        tmpRender.material.color = Workspace.Instance.white;
-                    ClickElement(elementCount);
+                    {
+                        for (int j = ((Mathf.FloorToInt((i-1) / partitions)) * partitions)+1; j <= ((Mathf.FloorToInt(i / partitions) * partitions) + partitions); j++)
+                        {
+                            //Debug.Log("j " + j + " i " + i + " isSelect.count " + isSelected.Count);
+                            ClickedOnSingleElement(j, j);
+                        }
 
+                    }
                     Draw(zIndex);
                     break;
                 }
                 elementCount++;
             }
-
         }
+    }
+
+    private void ClickedOnSingleElement(int index, int i)
+    {
+        Renderer tmpRender = null;
+        Transform child = transform.GetChild(i);
+       // Debug.Log("ISSELECTED " +isSelected.Count);
+        for (int j = 0; j < child.transform.childCount; j++)
+        {
+            if (child.transform.GetChild(j).tag == "filling")
+                tmpRender = child.transform.GetChild(j).renderer;
+        }
+
+        if (!isSelected[i-1])
+        {
+            tmpRender.material.color = color;
+        }
+        else
+            tmpRender.material.color = Workspace.Instance.white;
+
+        ClickElement(i-1);
     }
     #endregion
 
@@ -638,6 +663,8 @@ public class SetElement : WSElement, IWSElement
 
     protected void UpdateElements(int den, int num)
     {
+        //Debug.Log("UpdateElements " + root.name);
+
         internalBounds.Reset();
         float scalefactorW = 1;
         float scalefactorH = 1;
@@ -706,6 +733,10 @@ public class SetElement : WSElement, IWSElement
                     element = GameObject.Instantiate(prefab) as GameObject;
                     element.transform.localScale = element.transform.lossyScale * scalefactor;
                     element.name = "elem_" + (k + (den * j));
+                   /* element.AddComponent<Rigidbody>();
+                    element.GetComponent<Rigidbody>().useGravity = false;
+                    element.gameObject.isStatic = true;*/
+
                     element.transform.parent = transform;
                     element.transform.position = transform.TransformPoint(new Vector3(-((den - 1) * (singleWidth * scalefactorW)) + (k * (singleWidth * scalefactorW)), startingY - (j * (1.0f * (scalefactor / scalefactorCut))), 0));
 

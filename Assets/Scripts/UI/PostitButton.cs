@@ -51,19 +51,33 @@ public class PostitButton : MonoBehaviour {
 
     public void ChildUp()
     {
-        
+        /*if (interfaceB.isStudent)
+            GetComponent<Image>().sprite = bgSpriteStudent[0];
+        else
+            GetComponent<Image>().sprite = bgSpriteTeacher[0];
+        */
+       // GetComponent<Button>();
         if (interfaceB.isStudent)
         {
-            icon.sprite = iconsStudent[0];
-            title.color = InterfaceBehaviour.ClearGreen;
-            desc.color = InterfaceBehaviour.ClearGreen;
+           /* if (!Input.GetMouseButton(0))
+            {*/
+               // Debug.Log("input mouse down" + Input.GetMouseButton(0));
+                icon.sprite = iconsStudent[0];
+                title.color = InterfaceBehaviour.ClearGreen;
+                desc.color = InterfaceBehaviour.ClearGreen;
+           // }
            
         }
         else
         {
-            icon.sprite = iconsTeacher[0];
-            title.color = InterfaceBehaviour.Orange;
-            desc.color = InterfaceBehaviour.Orange;
+           // Button bt;
+          //  if (!Input.GetMouseButton(0))
+          //  {
+               // Debug.Log("input mouse down" + Input.GetMouseButton(0));
+                icon.sprite = iconsTeacher[0];
+                title.color = InterfaceBehaviour.Orange;
+                desc.color = InterfaceBehaviour.Orange;
+          //  }
         }
         pin.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);
         icon.GetComponent<RectTransform>().localScale = new Vector3(1.0f, 1.0f, 1.0f);

@@ -38,32 +38,84 @@ namespace fractionslab.behaviours
     protected List<bool> sliceIndex = new List<bool>();
     protected List<SliceVertex> sliceFace = new List<SliceVertex>();
 
+    void SetContentColor(Color c)
+    {
+        color = c;
+        Draw(zIndex);
+    }
 
     void OnClicked(Vector3 position)
     {
-        //  Debug.Log("CLICKED " + ((tmpCol * TileGridWidth) + (TileGridHeight - tmpRig)));
+       // Debug.Log("CLICKED " + ((tmpCol * TileGridWidth) + (TileGridHeight - tmpRig)));
         int tmpCol, tmpRig;
         SBSBounds meshBounds = GetBounds();
+        meshBounds.max = transform.InverseTransformPoint(meshBounds.max);
+        meshBounds.min = transform.InverseTransformPoint(meshBounds.min);
         position.z = meshBounds.max.z;
-        Vector3 tmp =  transform.InverseTransformPoint(position);
-       // Debug.Log("x " + tmp.x + "y " + tmp.y);
+        Vector3 localPos;
 
-        if (meshBounds.ContainsPointXY(position))
+        if(state != ElementsState.Equivalence)
+            localPos = transform.InverseTransformPoint(position);
+        else
+            localPos = position;
+
+        RootElement superRoot = gameObject.transform.parent.GetComponent<RectangleElement>().root.transform.parent.GetComponent<RootElement>();
+
+        if (state != ElementsState.Equivalence)
         {
-            tmpCol = (int)((tmp.x + (Width / 2) - wBorderLine) / (TileHeight + wVerLine));
-            tmpRig = (int)((tmp.y + (Height / 2) - wBorderLine) / (TileWidth + wHorLine));
+            if (null != superRoot.equivalences && superRoot.equivalences.Count > 0)
+            {
+                foreach (GameObject eq in superRoot.equivalences)
+                {
+                    //eq.GetComponentInChildren<RectangleMeshElement>().SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                    foreach (RectangleMeshElement st in eq.GetComponentsInChildren<RectangleMeshElement>())
+                    {
+                        if (st.gameObject.transform.parent.GetComponent<RectangleElement>().root.name == gameObject.transform.parent.GetComponent<RectangleElement>().root.name)
+                            st.SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                    }   
+                }
+            }
+        }
+        if (meshBounds.ContainsPointXY(localPos))
+        {
+            tmpCol = (int)((localPos.x + (Width / 2) - wBorderLine) / (TileHeight + wVerLine));
+            tmpRig = (int)((localPos.y + (Height / 2) - wBorderLine) / (TileWidth + wHorLine));
             if (type == ElementsType.HRect && partDenominator != 0) 
             {
                 tmpRig = TileGridWidth - tmpRig - 1;
                 int index = Mathf.Clamp(((tmpRig * TileGridHeight) + tmpCol), 0 , gameObject.transform.parent.GetComponent<RectangleElement>().slices.Count-1);
-                gameObject.transform.parent.GetComponent<RectangleElement>().ClickSlice(index);
+                if (state != ElementsState.Equivalence || (state == ElementsState.Equivalence && partitions == 1))
+                {
+                    gameObject.transform.parent.GetComponent<RectangleElement>().ClickSlice(index);
+                }
+                else
+                {
+                    for (int i = 0; i < partitions; i++)
+                    {
+                        index = Mathf.Clamp(((tmpRig * TileGridHeight) + i), 0, gameObject.transform.parent.GetComponent<RectangleElement>().slices.Count - 1);
+                        gameObject.transform.parent.GetComponent<RectangleElement>().ClickSlice(index);
+                    }
+                    
+                }
+
             }
             if (type == ElementsType.VRect && partDenominator != 0) 
             {
                 int index = Mathf.Clamp((((tmpCol * TileGridWidth) + (TileGridWidth - tmpRig)) -1),0 , gameObject.transform.parent.GetComponent<RectangleElement>().slices.Count-1);
-                gameObject.transform.parent.GetComponent<RectangleElement>().ClickSlice(index);
+                if (state != ElementsState.Equivalence || (state == ElementsState.Equivalence && partitions == 1))
+                    gameObject.transform.parent.GetComponent<RectangleElement>().ClickSlice(index);
+                else
+                {
+                    for (int i = 0; i < partitions; i++)
+                    {
+                        index = Mathf.Clamp((((tmpCol * TileGridWidth) + (TileGridWidth - i)) - 1), 0, gameObject.transform.parent.GetComponent<RectangleElement>().slices.Count - 1);
+                        gameObject.transform.parent.GetComponent<RectangleElement>().ClickSlice(index);
+                    }
+
+                }
              }
           }
+
         Draw();
     }
 

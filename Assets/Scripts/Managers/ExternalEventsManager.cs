@@ -49,9 +49,9 @@ public class ExternalEventsManager : MonoBehaviour
             Application.ExternalCall("ShowMessage", tmp);
         }
 #endif
-        //Debug.LogWarning("********** SendMessageToSupport disabled for testing support **********");
-        //return;
-        TDSWrapper.SendMessageToSupport(args); 
+        //Debug.LogWarning("******** SendMessageToSupport disabled for testing support *********");
+        return;
+        TDSWrapper.SendMessageToSupport(args);
     }
     #endregion
 
@@ -119,9 +119,9 @@ public class ExternalEventsManager : MonoBehaviour
 
 #if UNITY_EDITOR
         //embeddingVariables.Add("language", "es");
-       // embeddingVariables.Add("showStartPage", "false");
+        //embeddingVariables.Add("showStartPage", "false");
        // embeddingVariables.Add("username", "Pippo01");
-       // embeddingVariables.Add("tip", "http://172.19.6.254/italk2learn/tip/EmptyTask.tip");
+        //embeddingVariables.Add("tip", "http://172.19.6.254/italk2learn/tip/Task01.tip");
 #endif
     }
 

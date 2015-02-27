@@ -2,9 +2,6 @@
 	<language id="en" type="latin">
 		<change_colour><![CDATA[CHANGE COLOUR]]></change_colour>
 		<copy><![CDATA[COPY]]></copy>
-		<show_partition><![CDATA[SHOW PARTITION]]></show_partition>
-		<hide_partition><![CDATA[HIDE PARTITION]]></hide_partition>
-		<popup_pause_text><![CDATA[PAUSE]]></popup_pause_text>
 		<hint_set_menu><![CDATA[Set models: click to choose a representation]]></hint_set_menu>
 		<hint_create_heart><![CDATA[Heart shape: click to create]]></hint_create_heart>
 		<hint_create_moon><![CDATA[Moon shape: click to create]]></hint_create_moon>
@@ -13,12 +10,8 @@
 		<hint_create_horizontal><![CDATA[Horizontal rectangle: click to create]]></hint_create_horizontal>
 		<hint_create_vertical><![CDATA[Vertical rectangle: click to create]]></hint_create_vertical>
 		<hint_trash><![CDATA[Bin: drag an object here to remove it from workspace]]></hint_trash>
-		<hint_find_eq><![CDATA[Compare button: compare two fractions]]></hint_find_eq>
 		<hint_drag_eq><![CDATA[Drag a representation here to compare]]></hint_drag_eq>
 		<hint_onshape><![CDATA[Left click and drag to move, Right click to open tools menu]]></hint_onshape>
-		<hint_change_fraction><![CDATA[Click to change denominator or numerator]]></hint_change_fraction>
-		<hint_showhide><![CDATA[Click to show/hide fraction symbol]]></hint_showhide>
-		<hint_partition><![CDATA[Click to partition the fraction representation]]></hint_partition>
 		<hint_denominator_first><![CDATA[Set the denominator first]]></hint_denominator_first>
 		<hint_denominator><![CDATA[Set the denominator]]></hint_denominator>
 		<hint_numerator><![CDATA[Set the numerator]]></hint_numerator>
@@ -37,8 +30,6 @@
 		<hint_show_side_menu><![CDATA[Click to show representation toolbar]]></hint_show_side_menu>
 		<hint_change_colour><![CDATA[Click to change the color]]></hint_change_colour>
 		<hint_partition_num><![CDATA[Set the partition]]></hint_partition_num>
-		<hint_find_sum><![CDATA[Addition button: check an addition sum]]></hint_find_sum>
-		<hint_find_sub><![CDATA[Subtraction button: check a subtraction]]></hint_find_sub>
 		<hint_oncut><![CDATA[Left click and drag to move]]></hint_oncut>
 		<designer_mode><![CDATA[DESIGNER MODE]]></designer_mode>
 		<error_login><![CDATA[The username or password you entered is incorrect. ]]></error_login>
@@ -72,18 +63,20 @@
 		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
 		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
 		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
-		<hint_show_lab><![CDATA[Click to show the laboratory]]></hint_show_lab>
+		<hint_open_lab><![CDATA[Click to open the laboratory]]></hint_open_lab>
+		<hint_close_lab><![CDATA[Click to close the laboratory]]></hint_close_lab>
 		<hint_highlight><![CDATA[Click to show/hide fraction highlight ]]></hint_highlight>
 		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
 		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
 		<zoom><![CDATA[zoom]]></zoom>
+		<hint_find_parent><![CDATA[Click to find parent fraction]]></hint_find_parent>
+		<hint_find_equivalence><![CDATA[Click to find an equivalent fraction]]></hint_find_equivalence>
+		<findParent><![CDATA[FIND PARENT]]></findParent>
+		<findEquivalence><![CDATA[FIND EQUIVALENT]]></findEquivalence>
 	</language>
 	<language id="de" type="latin">
 		<change_colour><![CDATA[FARBE ÄNDERN]]></change_colour>
 		<copy><![CDATA[KOPIEREN]]></copy>
-		<show_partition><![CDATA[ZEIGE DIE TEILUNG ]]></show_partition>
-		<hide_partition><![CDATA[VERBERGE DIE TEILUNG]]></hide_partition>
-		<popup_pause_text><![CDATA[PAUSE]]></popup_pause_text>
 		<hint_set_menu><![CDATA[Klicke hier, um ein Bilddiagramm auszuwählen]]></hint_set_menu>
 		<hint_create_heart><![CDATA[ Klicke hier, um ein herzform zu erstellen]]></hint_create_heart>
 		<hint_create_moon><![CDATA[Klicke hier, um ein mondform zu erstellen]]></hint_create_moon>
@@ -93,16 +86,9 @@
 		<hint_create_vertical><![CDATA[Klicke hier, um ein vertikales Rechteck zu erstellen]]></hint_create_vertical>
 		<hint_trash><![CDATA[Papierkorb: Um ein Objekt zu löschen, ziehe es vom Arbeitsbereich hier hinein.
 ]]></hint_trash>
-		<hint_find_eq><![CDATA[Vergleichscheckbox: Vergleiche zwei Brüche]]></hint_find_eq>
 		<hint_drag_eq><![CDATA[Ziehe einen Bruch hier hinein, um ihn zu vergleichen
 ]]></hint_drag_eq>
 		<hint_onshape><![CDATA[Klicke mit links, um ein Objekt zu bewegen. Klicke mit rechts, um das Menü zu öffnen.]]></hint_onshape>
-		<hint_change_fraction><![CDATA[Klicke hier, um den Nenner oder Zähler zu ändern
-]]></hint_change_fraction>
-		<hint_showhide><![CDATA[Klicke hier, um den Bruch zu zeigen/verbergen
-]]></hint_showhide>
-		<hint_partition><![CDATA[Klicke hier, um die Bilddarstellung zu teilen
-]]></hint_partition>
 		<hint_denominator_first><![CDATA[Bestimme zuerst den Nenner]]></hint_denominator_first>
 		<hint_denominator><![CDATA[Bestimme den Nenner]]></hint_denominator>
 		<hint_numerator><![CDATA[Bestimme den Zähler]]></hint_numerator>
@@ -121,8 +107,6 @@
 		<hint_show_side_menu><![CDATA[Klicke hier, um die Symbolleiste der Bilddarstellungen zu zeigen]]></hint_show_side_menu>
 		<hint_change_colour><![CDATA[Klicke hier, um die Farbe zu ändern]]></hint_change_colour>
 		<hint_partition_num><![CDATA[Bestimme die Teilung]]></hint_partition_num>
-		<hint_find_sum><![CDATA[Additionscheckbox: Überprüfe eine Summe]]></hint_find_sum>
-		<hint_find_sub><![CDATA[Subtraktionscheckbox: Überprüfe eine Differenz]]></hint_find_sub>
 		<hint_oncut><![CDATA[Klicke mit links und ziehe das Objekt in gewünschte Richtung]]></hint_oncut>
 		<designer_mode><![CDATA[DESIGNER MODE]]></designer_mode>
 		<error_login><![CDATA[The username or password you entered is incorrect. ]]></error_login>
@@ -156,18 +140,20 @@
 		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
 		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
 		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
-		<hint_show_lab><![CDATA[Click to show the laboratory]]></hint_show_lab>
+		<hint_open_lab><![CDATA[Click to open the laboratory]]></hint_open_lab>
+		<hint_close_lab><![CDATA[Click to close the laboratory]]></hint_close_lab>
 		<hint_highlight><![CDATA[Click to show/hide fraction highlight]]></hint_highlight>
 		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
 		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
 		<zoom><![CDATA[zoom]]></zoom>
+		<hint_find_parent><![CDATA[Click to find parent fraction]]></hint_find_parent>
+		<hint_find_equivalence><![CDATA[Click to find an equivalent fraction]]></hint_find_equivalence>
+		<findParent><![CDATA[FIND PARENT]]></findParent>
+		<findEquivalence><![CDATA[FIND EQUIVALENT]]></findEquivalence>
 	</language>
 	<language id="es" type="latin">
 		<change_colour><![CDATA[CAMBIA COLOR]]></change_colour>
 		<copy><![CDATA[COPIAR]]></copy>
-		<show_partition><![CDATA[MOSTRAR PARTICION]]></show_partition>
-		<hide_partition><![CDATA[OCULTAR PARTICION]]></hide_partition>
-		<popup_pause_text><![CDATA[PAUSA]]></popup_pause_text>
 		<hint_set_menu><![CDATA[Haz clic para elegir una figura]]></hint_set_menu>
 		<hint_create_heart><![CDATA[Haz clic para crear un corazón]]></hint_create_heart>
 		<hint_create_moon><![CDATA[Haz clic para crear una luna]]></hint_create_moon>
@@ -176,12 +162,8 @@
 		<hint_create_horizontal><![CDATA[Haz clic para crear un rectángulo horizontal]]></hint_create_horizontal>
 		<hint_create_vertical><![CDATA[Haz clic para crear un rectángulo vertical]]></hint_create_vertical>
 		<hint_trash><![CDATA[Basurero: arastra un objecto aqui para borarlo]]></hint_trash>
-		<hint_find_eq><![CDATA[Comparar dos fracciones]]></hint_find_eq>
 		<hint_drag_eq><![CDATA[Arrastre una representación aquí para comparar]]></hint_drag_eq>
 		<hint_onshape><![CDATA[Haz clic izquierdo y arrastra para mover, haz clic derecho para abrir el menú]]></hint_onshape>
-		<hint_change_fraction><![CDATA[Haz clic para cambiar el denominador o numerador]]></hint_change_fraction>
-		<hint_showhide><![CDATA[Haz clic para mostrar / ocultar la fracción]]></hint_showhide>
-		<hint_partition><![CDATA[Haz clic para particionar la fracción]]></hint_partition>
 		<hint_denominator_first><![CDATA[Ajusta el denominador primero]]></hint_denominator_first>
 		<hint_denominator><![CDATA[Ajusta el denominador]]></hint_denominator>
 		<hint_numerator><![CDATA[Ajusta el numerador]]></hint_numerator>
@@ -200,8 +182,6 @@
 		<hint_show_side_menu><![CDATA[Haz clic para mostrar la barra de herramientas]]></hint_show_side_menu>
 		<hint_change_colour><![CDATA[Haz clic para cambiar el color]]></hint_change_colour>
 		<hint_partition_num><![CDATA[Ajusta la partición]]></hint_partition_num>
-		<hint_find_sum><![CDATA[Botón de Suma: checa una adición]]></hint_find_sum>
-		<hint_find_sub><![CDATA[Botón de Resta: checa una substracción]]></hint_find_sub>
 		<hint_oncut><![CDATA[Haz clic izquierdo y arrastra para mover]]></hint_oncut>
 		<designer_mode><![CDATA[DESIGNER MODE]]></designer_mode>
 		<error_login><![CDATA[The username or password you entered is incorrect. ]]></error_login>
@@ -235,10 +215,15 @@
 		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
 		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
 		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
-		<hint_show_lab><![CDATA[Click to show the laboratory]]></hint_show_lab>
+		<hint_open_lab><![CDATA[Click to open the laboratory]]></hint_open_lab>
+		<hint_close_lab><![CDATA[Click to close the laboratory]]></hint_close_lab>
 		<hint_highlight><![CDATA[Click to show/hide fraction highlight]]></hint_highlight>
 		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
 		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
 		<zoom><![CDATA[zoom]]></zoom>
+		<hint_find_parent><![CDATA[Click to find parent fraction]]></hint_find_parent>
+		<hint_find_equivalence><![CDATA[Click to find an equivalent fraction]]></hint_find_equivalence>
+		<findParent><![CDATA[FIND PARENT]]></findParent>
+		<findEquivalence><![CDATA[FIND EQUIVALENT]]></findEquivalence>
 	</language>
 </languages>

@@ -316,8 +316,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 120, y: 121, z: .100000001}
-  m_Center: {x: 3, y: 1, z: .300000012}
+  m_Size: {x: 85.2714844, y: 121.000008, z: .100000024}
+  m_Center: {x: -14.3642464, y: .999998987, z: .300000012}
 --- !u!65 &6591796
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -735,8 +735,8 @@ MonoBehaviour:
   m_Script: {fileID: 1301386320, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ignoreReversedGraphics: 1
-  blockingObjects: 0
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295

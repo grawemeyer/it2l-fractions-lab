@@ -58,7 +58,7 @@ public class ToolCustomizationWindow : MonoBehaviour {
 
     public void CleanStateToggle() 
     {
-        Debug.Log("cleanstatetoggle");
+      //  Debug.Log("cleanstatetoggle");
         foreach (Toggle tg in GetComponentsInChildren<Toggle>(true))
         {
             if (tg.interactable)

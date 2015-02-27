@@ -57,7 +57,7 @@ public class LineElement : WSElement, IWSElement
 
     public override SBSBounds GetBounds()
     {
-        if (state == ElementsState.Fraction || state == ElementsState.Result)
+        if (state == ElementsState.Fraction || state == ElementsState.Result || state == ElementsState.Equivalence)
         {
             bounds = new SBSBounds(transform.position, new SBSVector3(width, height, 0.0f));
             return bounds;
@@ -315,18 +315,42 @@ public class LineElement : WSElement, IWSElement
 
     void OnClicked(Vector3 position)
     {
-       // Debug.Log("fraction state in Onclicked " + Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode);
-        Vector3 localPos = root.transform.TransformPoint(position);
+        //RootElement elementOnfocus = Workspace.Instance.ElementOnFocus.GetComponent<RootElement>();
+        RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
+        Vector3 localPos;
+       // root.transform.tra
+        if (state != ElementsState.Equivalence)
+            localPos = root.transform.InverseTransformPoint(position);
+        else
+            localPos = position;
+        //Debug.Log()
+        if (state != ElementsState.Equivalence)
+        {
+            if (null != superRoot.equivalences && superRoot.equivalences.Count > 0)
+            {
+                foreach (GameObject eq in superRoot.equivalences)
+                {
+                    foreach (LineElement st in eq.GetComponentsInChildren<LineElement>())
+                    {
+                        if (st.root.name == root.name)
+                            st.SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                    }    
+                   // eq.GetComponentInChildren<LineElement>().SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
+
         int tickIndex = (partDenominator + 1) - partNumerator;
         if (partNumerator == 0)
             tickIndex = 0;
         float xPos = 0.0f;
 
+
         for (int i = 0; i < transform.childCount; i++)
         {
             if (transform.GetChild(i).name.Equals("tick" + tickIndex))
             {
-                xPos = root.transform.TransformPoint(transform.GetChild(i).transform.position).x;
+                xPos = root.transform.InverseTransformPoint(transform.GetChild(i).transform.position).x;
                 break;
             }
         }
@@ -334,16 +358,17 @@ public class LineElement : WSElement, IWSElement
         if (localPos.x >= xPos)
         {
             if (partNumerator < partDenominator)
-                Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().IncreaseNumerator(); //root.BroadcastMessage("IncreaseNumerator");
+            {
+                superRoot.IncreaseNumerator(); //root.BroadcastMessage("IncreaseNumerator");     
+            }
         }
         else
         {
-            RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
             int num = superRoot.elements.Count;
             if (partNumerator < partDenominator || superRoot.elements[num - 1] == root)
             {
-                Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().DecreaseNumerator(); //root.BroadcastMessage("DecreaseNumerator");
-                Workspace.Instance.ElementOnFocus.BroadcastMessage("ForceDraw", SendMessageOptions.DontRequireReceiver);
+                superRoot.DecreaseNumerator(); //root.BroadcastMessage("DecreaseNumerator");
+                superRoot.BroadcastMessage("ForceDraw", SendMessageOptions.DontRequireReceiver);
             }
         }
 
@@ -598,6 +623,26 @@ public class LineElement : WSElement, IWSElement
         UpdateSlice();
         UpdateTicks();
         Draw(0);
+    }
+
+    public void DecreaseCutNumeratorPartitions()
+    {
+
+        if (partitions > 1)
+            partNumerator = partNumerator - partitions;
+        else
+        {
+            numerator--;
+            UpdateNumerator(numerator);
+        }
+        UpdateSlice();
+        UpdateTicks();
+        Draw(0);
+
+        /* partNumerator--;
+         UpdateSlice();
+         UpdateTicks();
+         Draw(0);*/
     }
 
     public void SetLinePosition(LinePositions pos)

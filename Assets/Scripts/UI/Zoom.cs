@@ -142,13 +142,25 @@ public class Zoom : MonoBehaviour
     public void CheckBound()
     {
         if (slider.value == slider.minValue)
-            minus.GetComponent<UIButton>().DisableBtn(false);
+        {
+            if(minus.GetComponent<Button>().IsInteractable())
+                minus.GetComponent<UIButton>().DisableBtn(false);
+        }
         else
-            minus.GetComponent<UIButton>().EnableBtn(false);
+        {
+           // if (minus.GetComponent<Button>().IsInteractable())
+                minus.GetComponent<UIButton>().EnableBtn(false);
+        }
         if (slider.value == slider.maxValue)
-            plus.GetComponent<UIButton>().DisableBtn(false);
+        {
+            if (plus.GetComponent<Button>().IsInteractable())
+                plus.GetComponent<UIButton>().DisableBtn(false);
+        }
         else
-            plus.GetComponent<UIButton>().EnableBtn(false);
+        {
+           // if (plus.GetComponent<Button>().IsInteractable())
+                plus.GetComponent<UIButton>().EnableBtn(false);
+        }
     }
 
     void Update()
@@ -253,7 +265,8 @@ public class Zoom : MonoBehaviour
             newOrthoSize = maincamera.orthographicSize;
             touchZero = new Touch();
             touchOne = new Touch();
+            Workspace.Instance.RescaleFractionModifier(slider.value / 100);
         }
-        CheckBound();
+        //CheckBound();
     }
 }

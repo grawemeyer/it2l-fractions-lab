@@ -45,7 +45,7 @@ public class RectangleElement : WSElement, IWSElement
 
     public override SBSBounds GetBounds()
     {
-        if (state == ElementsState.Fraction || state == ElementsState.Result)
+        if (state == ElementsState.Fraction || state == ElementsState.Result || state == ElementsState.Equivalence)
         {
             bounds = new SBSBounds(transform.position, new SBSVector3(width, height, 0.0f));
             return bounds;
@@ -101,6 +101,7 @@ public class RectangleElement : WSElement, IWSElement
         {
             if (partNumerator != lastNumerator)
             {
+              //  Debug.Log("Draw of partitions");
                 UpdateNumerator(partNumerator);
                 lastNumerator = partNumerator;
             }
@@ -112,7 +113,7 @@ public class RectangleElement : WSElement, IWSElement
             lastElementScale = elementScale;
         }
 
-        if (state == ElementsState.Fraction || state == ElementsState.Result)
+        if (state == ElementsState.Fraction || state == ElementsState.Result || state == ElementsState.Equivalence)
             UpdateSlices();
 
         for (int i = 0; i < transform.childCount; i++)
@@ -265,6 +266,7 @@ public class RectangleElement : WSElement, IWSElement
     #region Messages
     void SetContentColor(Color c)
     {
+       // Debug.Log("SETCONTENTCOLOR");
         color = c;
         Draw(zIndex);
     }
@@ -273,6 +275,19 @@ public class RectangleElement : WSElement, IWSElement
     {
         if (partitions > 1)
             partNumerator--;
+        else
+        {
+            numerator--;
+            UpdateNumerator(numerator);
+        }
+        UpdateSlices();
+        Draw(0);
+    }
+
+    public void DecreaseCutNumeratorPartitions()
+    {
+        if (partitions > 1)
+            partNumerator = partNumerator - partitions;
         else
         {
             numerator--;
@@ -364,11 +379,12 @@ public class RectangleElement : WSElement, IWSElement
         else
             lastNumerator = partNumerator;
         UpdateSlices();
-        Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().UpdateByChildren();
+        root.transform.parent.GetComponent<RootElement>().UpdateByChildren();
     }
 
     void UpdateNumerator(int value)
     {
+
         value = Mathf.Clamp(value, 0, slices.Count);
         int prevNum = 0;
         for (int i = 0; i < slices.Count; i++)
@@ -409,55 +425,45 @@ public class RectangleElement : WSElement, IWSElement
 
     void UpdateNumeratorByPartition(int partition, int lastPartition)
     {
-        selectedSlices.RemoveAll(item => item % lastPartitions != 0);
-
-        if (lastPartition > 0)
+        if (state != ElementsState.Equivalence)
+            return;
+        //Debug.Log("partition " + partition + " lastpartition " + lastPartition + " partitions " + partitions);
+        List<int> tmp = new List<int>();
+        int step;
+        if (lastPartition == 0)
+            step = partition;
+        else
+            step = lastPartition;
+        for (int i = 0; i <= selectedSlices.Count - 1; i = i + (step))
         {
-            for (int i = 0; i < selectedSlices.Count; i++)
-                selectedSlices[i] /= lastPartition;
+            tmp.Add(selectedSlices[i]);
         }
 
-        for (int i = 0; i < selectedSlices.Count; i++)
-            selectedSlices[i] *= partition;
-
-        List<int> tmp = new List<int>(selectedSlices);
-
         for (int i = 0; i < tmp.Count; i++)
-            for (int j = 0; j < Mathf.Min(partNumerator - 1, partition - 1); j++)
-                selectedSlices.Add(tmp[i] + (j + 1));
+            tmp[i] /= (step);
+
+        selectedSlices = new List<int>();
+
+        for (int i = tmp.Count - 1; i >= 0; i--)
+        {
+            for (int j = (tmp[i] * partitions); j < ((tmp[i] * partitions) + partition); j++)
+            {
+                if (type == ElementsType.HRect)
+                {
+                    selectedSlices.Add(j);
+                }
+                else if (type == ElementsType.VRect)
+                {
+                    selectedSlices.Add(j);
+                }
+
+            }
+        }
 
         for (int i = 0; i < slices.Count; i++)
             slices[i] = selectedSlices.Contains(i);
 
-        //hack
-        if (selectedSlices.Count > 0 && selectedSlices.Count < partNumerator)
-        {
-            Debug.Log(root.name + ", " + selectedSlices.Count + " < " + partNumerator);
-            for (int i = 0; i < slices.Count; i++)
-                if (!slices[i] && selectedSlices.Count < partNumerator)
-                {
-                    slices[i] = true;
-                    selectedSlices.Add(i);
-                }
-        }
-
         UpdateSlices();
-
-        /*
-        List<int> tmp = new List<int>(selectedSlices);
-        selectedSlices.Clear();
-        for (int j = 0; j < partition; j++)
-        {
-            int n = Mathf.Min(numerator, denominator);
-            for (int i = 0; i < n; i++)
-            {
-                slices[tmp[i] + j * denominator] = true;
-                selectedSlices.Add(tmp[i] + j * denominator);
-            }
-        }
-
-        UpdateSlices();
-        */
     }
 
     void UpdateDenominatorByPartition(int partition)
@@ -500,20 +506,6 @@ public class RectangleElement : WSElement, IWSElement
                     }
                     slices.RemoveAt(lastPos);
                 }
-                /*for (int j = partitions - 1; j >= 0; j--)
-                {
-                    for (int i = 0; i < Mathf.Abs(diff); i++)
-                    {
-                        int lastPos = (denominator + 1) * (j + 1) - 1;
-                        if (slices[lastPos])
-                        {
-                            int freeIdx = slices.FindIndex(j * (denominator + 1), denominator + 1, p => p.Equals(false));
-                            if (freeIdx >= 0)
-                                slices[freeIdx] = true;
-                        }
-                        slices.RemoveAt(lastPos);
-                    }
-                }*/
             }
             else
             {
@@ -522,7 +514,6 @@ public class RectangleElement : WSElement, IWSElement
                     for (int i = 0; i < Mathf.Abs(diff); i++)
                     {
                         slices.Add(false);
-                        //slices.Insert(denominator * (j + 1) - 1, false);
                     }
                 }
             }
@@ -537,17 +528,6 @@ public class RectangleElement : WSElement, IWSElement
                     selectedSlices.Add(k);
                 }
             }
-            /*
-            //hack
-            if (this.numerator == this.denominator)
-            {
-                this.partNumerator = this.numerator * partitions;
-                n = this.partNumerator;
-            }
-
-            root.BroadcastMessage("SetPartNumerator", n);
-            //root.BroadcastMessage("SetPartDenominator", partDenominator);
-            */
         }
         else if (value == 0)
         {
@@ -564,47 +544,12 @@ public class RectangleElement : WSElement, IWSElement
         UpdateSlices();
     }
 
-    /*void OnClicked(Vector3 position)
-{
-  for (int i = 0; i < transform.childCount; i++)
- {
-     Transform child = transform.GetChild(i);
-     if (child.name.StartsWith("slice"))
-     {
-         SBSBounds meshBounds = child.GetComponent<MeshElement>().GetBounds();
-         position.z = meshBounds.max.z;
-         if (meshBounds.ContainsPointXY(position))
-         {
-             string n = child.name;
-             int sliceIndex = int.Parse(n.Substring(n.Length - (n.Length - 5), (n.Length - 5)));
-             ClickSlice(sliceIndex);
-             Draw(zIndex);
-             break;
-         }
-     }
- }
-}*/
     #endregion
 
     #region Protected Methods
     protected void UpdateSlices()
     {
-        /*  int sliceCounter = 0;
-          float basePosX = 0.0f;
-          float basePosY = 0.0f;
-          float baseSizeX = 0.0f;
-          float baseSizeY = 0.0f;
-          float sliceWidth = 0.0f;
-          float sliceHeight = 0.0f;
-          int sliceCount = slices.Count / partitions;*/
-
         float elementScale = root.GetComponent<RootElement>().elementScale;
-
-     /*   for (int i = 0; i < transform.childCount; i++)
-        {
-            if (transform.GetChild(i).name.StartsWith("slice"))
-                Destroy(transform.GetChild(i).gameObject);
-        }*/
         RectangleMeshElement grid;
         for (int i = 0; i < gameObject.transform.childCount; i++)
         {
@@ -625,89 +570,18 @@ public class RectangleElement : WSElement, IWSElement
                 if (mode == InteractionMode.Freeze)
                 {
                     strokeColor += new Color(0.4f, 0.4f, 0.4f);
-                    //color.a = 0.4f;
                 }
                 else if (state == ElementsState.Result)
                     strokeColor = Workspace.Instance.white;
-               // else if (state == ElementsState.Cut)
                 if (state != ElementsState.Cut)
                     grid.SendMessage("SetStrokeColor", strokeColor);
                 grid.SendMessage("SetColor", color);
             }
         }
-
-        /* if (type == ElementsType.VRect)
-            {
-               sliceWidth = width * elementScale / (float)sliceCount;
-                basePosX = -width * 0.5f + sliceWidth / elementScale * 0.5f;
-                baseSizeX = sliceWidth / elementScale;
-
-                sliceHeight = height * elementScale / (float)partitions;
-                basePosY = height * 0.5f - sliceHeight / elementScale * 0.5f;
-                baseSizeY = sliceHeight / elementScale;
-            }
-            else if (type == ElementsType.HRect)
-            {
-                sliceWidth = width * elementScale / (float)partitions;
-                basePosX = -width * 0.5f + sliceWidth / elementScale * 0.5f;
-                baseSizeX = sliceWidth / elementScale;
-
-                sliceHeight = height * elementScale / (float)sliceCount;
-                basePosY = height * 0.5f - sliceHeight / elementScale * 0.5f;
-                baseSizeY = sliceHeight / elementScale;
-            }*/
-
-        /* for (int p = 0; p < partitions; p++) 
-         {
-             for (int i = 0; i < sliceCount; i++) 
-             {
-                 //int sliceIndex = (p * sliceCount + i);
-                 int sliceIndex = (i * partitions + p);
-                 if (slices[sliceIndex] || state != ElementsState.Cut)
-                 {
-                     GameObject slice = new GameObject("slice" + sliceIndex);
-                     slice.transform.parent = transform;
-                     if (type == ElementsType.VRect)
-                         slice.transform.position = transform.TransformPoint(new Vector3(basePosX + baseSizeX * i, basePosY - baseSizeY * p, -0.2f));
-                     else if (type == ElementsType.HRect)
-                         slice.transform.position = transform.TransformPoint(new Vector3(basePosX + baseSizeX * p, basePosY - baseSizeY * i, -0.2f));
-
-                     slice.AddComponent<MeshElement>();
-                     slice.SendMessage("Initialize", mode);
-                     slice.SendMessage("SetMode", mode);
-                     slice.SendMessage("SetElementState", state);
-                     slice.SendMessage("SetType", type);
-
-
-                     if (state == ElementsState.Cut)
-                         slice.SendMessage("SetSize", new Vector2(sliceWidth - 0.1f, sliceHeight - 0.1f));
-                     else
-                         slice.SendMessage("SetSize", new Vector2(sliceWidth, sliceHeight));
-
-                     Color emptySliceColor = Workspace.Instance.white;
-                     if (state == ElementsState.Result)
-                         emptySliceColor = Workspace.Instance.greyResult;
-
-                     slice.SendMessage("SetColor", slices[sliceIndex] ? color : emptySliceColor);
-                     slice.SendMessage("SetStrokeDist", 0.2f);
-                    
-                     if (state == ElementsState.Cut)
-                         slice.SendMessage("SetStrokeWidth", 0.0f);
-                     else
-                         slice.SendMessage("SetStrokeWidth", 0.0f); //strokeWidth);
-
-                     sliceCounter++;
-                 }
-             }
-         }
-
-        if (state != ElementsState.Cut)
-            UpdateSlicesLines();*/
     }
 
     void UpdateSlicesLines()
     {
-        //float elementScale = 1.0f;
         string rootName = "line_root";
 
         for (int i = 0; i < transform.childCount; i++)

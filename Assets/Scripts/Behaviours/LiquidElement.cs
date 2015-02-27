@@ -52,7 +52,7 @@ public class LiquidElement : WSElement, IWSElement
 
     public override SBSBounds GetBounds()
     {
-        if (state == ElementsState.Fraction || state == ElementsState.Result)
+        if (state == ElementsState.Fraction || state == ElementsState.Result || state == ElementsState.Equivalence)
         {
             bounds = new SBSBounds(transform.position, new SBSVector3(width, height, 0.0f));
             return bounds;
@@ -427,23 +427,48 @@ public class LiquidElement : WSElement, IWSElement
 
     void OnClicked(Vector3 position)
     {
-        Vector3 localPos = root.transform.TransformPoint(position);
-        Vector3 leftLocalPos = root.transform.TransformPoint(leftMarker.transform.position);
-        Vector3 rightLocalPos = root.transform.TransformPoint(rightMarker.transform.position);
+        Vector3 localPos;
+
+        if (state != ElementsState.Equivalence)
+            localPos = root.transform.InverseTransformPoint(position);
+        else
+            localPos = position;
+
+        Vector3 leftLocalPos = root.transform.InverseTransformPoint(leftMarker.transform.position);
+        Vector3 rightLocalPos = root.transform.InverseTransformPoint(rightMarker.transform.position);
+
+        RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
+
+        if (state != ElementsState.Equivalence)
+        {
+            if (null != superRoot.equivalences && superRoot.equivalences.Count > 0)
+            {
+                foreach (GameObject eq in superRoot.equivalences)
+                {
+                    foreach (LiquidElement st in eq.GetComponentsInChildren<LiquidElement>())
+                    {
+                        if (st.root.name == root.name)
+                            st.SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                    }   
+                    //eq.GetComponentInChildren<LiquidElement>().SendMessage("OnClicked", localPos, SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
 
         if (localPos.x > leftLocalPos.x && localPos.x < rightLocalPos.x)
         {
+            //Debug.Log("localPos.y " + localPos.y + " leftLocalPos.y " + leftLocalPos.y);
             if (localPos.y > leftLocalPos.y)
             {
                 if (partNumerator < partDenominator)
-                    Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().IncreaseNumerator(); //root.BroadcastMessage("IncreaseNumerator");
+                    superRoot.IncreaseNumerator(); //root.BroadcastMessage("IncreaseNumerator");
             }
             else
             {
-                RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
+                //RootElement superRoot = root.transform.parent.GetComponent<RootElement>();
                 int num = superRoot.elements.Count;
                 if (partNumerator < partDenominator || superRoot.elements[num - 1] == root)
-                    Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().DecreaseNumerator(); //root.BroadcastMessage("DecreaseNumerator");
+                    superRoot.DecreaseNumerator(); //root.BroadcastMessage("DecreaseNumerator");
             }
         }
         Draw(zIndex);
@@ -537,10 +562,26 @@ public class LiquidElement : WSElement, IWSElement
 
     public void DecreaseCutNumerator()
     {
-        partNumerator--;
+         partNumerator--;
         UpdateWater();
         UpdateTicks();
         Draw(0);
     }
+
+
+    public void DecreaseCutNumeratorPartitions()
+    {
+        if (partitions > 1)
+            partNumerator = partNumerator - partitions;
+        else
+        {
+            numerator--;
+            UpdateNumerator(numerator);
+        }
+        UpdateWater();
+        UpdateTicks();
+        Draw(0);
+    }
+
     #endregion
 }

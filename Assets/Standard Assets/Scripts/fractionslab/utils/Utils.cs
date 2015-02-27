@@ -15,7 +15,8 @@ namespace fractionslab.utils
         liquids,
         change_color,
         copy,
-        partition,
+        find_equivalence,
+        find_parent,
         highlight,
         add,
         subtract
@@ -66,6 +67,7 @@ namespace fractionslab.utils
         Fraction = 0,
         Cut,
         Result,
+        Equivalence,
         Improper
     }
 

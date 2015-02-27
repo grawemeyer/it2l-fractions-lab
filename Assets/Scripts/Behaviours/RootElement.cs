@@ -15,6 +15,9 @@ public class RootElement : WSElement, IWSElement
 
     #region Public Fields
     public GameObject parentRef = null;
+    public bool isFatherEquivalent;
+    public GameObject parentEqRef = null;
+    public List<GameObject> equivalences = null;
     public GameObject cutRef = null;
     public List<GameObject> elements = new List<GameObject>();
     public BBExtend bbExtends = new BBExtend(0.0f, 0.0f, 0.0f, 0.0f);
@@ -125,11 +128,12 @@ public class RootElement : WSElement, IWSElement
         deltaTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         initialMouseDownPos = Input.mousePosition;
         Workspace.Instance.interfaces.SendMessage("ShowHint", "");
+        if (mode != InteractionMode.Wait)
+            Workspace.Instance.interfaces.SendMessage("OnElementClicked");
 
-        if (inputByChild)
-            return;
+        
     
-        if (mode == InteractionMode.Initializing)
+        if (mode == InteractionMode.Initializing && !inputByChild)
         {
             Workspace.Instance.SendMessage("SetFocusOn", gameObject);
             Draw(zIndex);
@@ -148,8 +152,9 @@ public class RootElement : WSElement, IWSElement
             Workspace.Instance.SendMessage("CancelOperation");
             Workspace.Instance.SendMessage("SetFocusOn", gameObject);
         }
-        if (mode != InteractionMode.Wait)
-            Workspace.Instance.interfaces.SendMessage("OnElementClicked");
+
+       /* if (inputByChild)
+            return;*/
 
         if (!isSubFraction)
         {
@@ -184,6 +189,8 @@ public class RootElement : WSElement, IWSElement
 
         if (state == ElementsState.Cut)
             ExternalEventsManager.Instance.SendMessageToSupport("PressCut", typeString, name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
+        else if(state == ElementsState.Improper)
+            ExternalEventsManager.Instance.SendMessageToSupport("PressFraction", "Improper", name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
         else
             ExternalEventsManager.Instance.SendMessageToSupport("PressFraction", typeString, name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
         
@@ -283,8 +290,9 @@ public class RootElement : WSElement, IWSElement
         if (!inputEnabled)
             return;
 
-        if (mode == InteractionMode.Changing && !hasDragged && !inputByChild)
+        if (mode == InteractionMode.Changing && !hasDragged && !inputByChild && state != ElementsState.Equivalence)
         {
+            //Debug.Log("rootelement message onclicked");
             BroadcastMessage("OnClicked", Camera.main.ScreenToWorldPoint(Input.mousePosition), SendMessageOptions.DontRequireReceiver);
         }
         if (mode == InteractionMode.Freeze)
@@ -294,14 +302,22 @@ public class RootElement : WSElement, IWSElement
         Workspace.Instance.interfaces.SendMessage("OnElementReleased", gameObject);
 
         //#if UNITY_IPHONE
-        if (state == ElementsState.Fraction)
+       // Debug.Log("onmouseup " + name);
+        if (state == ElementsState.Fraction || state == ElementsState.Equivalence)
         {
+           // Debug.Log("onmouseup if1");
+
             if (!hasDragged)
             {
-                if (!inputByChild)
-                {
+                //Debug.Log("onmouseup if1 " +doubleTapTimer);
+
+               // Debug.Log("doubleTapTimer " + doubleTapTimer);
+               // if (!inputByChild)
+                //{
                     if (doubleTapTimer < 0.0)
                     {
+
+                       // Debug.Log("if doubleTapTimer " + doubleTapTimer);
                         doubleTapTimer = Time.time;
                     }
                     else if (Time.time - doubleTapTimer > 0.1f && Time.time - doubleTapTimer < 0.4f)
@@ -309,16 +325,18 @@ public class RootElement : WSElement, IWSElement
                         doubleTapTimer = Time.time;
                         if (denominator > 0 && mode == InteractionMode.Moving && !GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().isMouseOnZoom())
                         {
+                            //Debug.Log("onmouseup cut");
+
                             //RightClick();
                             CutFraction();
                         }
                     }
                     else
                     {
-
+                        //Debug.Log("else doubleTapTimer " + doubleTapTimer);
                         doubleTapTimer = Time.time;
                     }
-                }
+               // }
             }
             else
             {
@@ -334,7 +352,7 @@ public class RootElement : WSElement, IWSElement
         if (inputByChild)
         {
             inputByChild = false;
-            return;
+           // return;
         }
 
         string typeString = "HRects";
@@ -365,6 +383,8 @@ public class RootElement : WSElement, IWSElement
         }
         if (state == ElementsState.Cut)
             ExternalEventsManager.Instance.SendMessageToSupport("ReleaseCut", typeString, name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
+        else if(state == ElementsState.Improper)
+            ExternalEventsManager.Instance.SendMessageToSupport("ReleaseFraction", "Improper", name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
         else
             ExternalEventsManager.Instance.SendMessageToSupport("ReleaseFraction", typeString, name, partNumerator + "/" + partDenominator, "(" + transform.position.x + ", " + transform.position.y + ")");
 
@@ -407,7 +427,7 @@ public class RootElement : WSElement, IWSElement
         mode = InteractionMode.Moving;
         BroadcastMessage("SetMode", InteractionMode.Moving);
 
-        if (state == ElementsState.Fraction || state == ElementsState.Result)
+        if (state == ElementsState.Fraction || state == ElementsState.Result || state == ElementsState.Equivalence)
             Workspace.Instance.interfaces.SendMessage("OnShowContextMenu", gameObject);
         if (state != ElementsState.Cut)
             Workspace.Instance.interfaces.SendMessage("OnElementReleased", gameObject);
@@ -458,7 +478,7 @@ public class RootElement : WSElement, IWSElement
             lastMode = mode;
         }
 
-        if (mode == InteractionMode.Moving && !isSubFraction && state == ElementsState.Fraction)
+        if (mode == InteractionMode.Moving && !isSubFraction &&( state == ElementsState.Fraction || state == ElementsState.Equivalence))
         {
             if (null == symbol)
                 AttachModifierSymbol();
@@ -479,7 +499,7 @@ public class RootElement : WSElement, IWSElement
         Time.time - longTapTimer > 0.6f &&
         !hasDragged &&
         !GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().isDragWindow &&
-        !GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().zoom &&
+        !GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().isZoomActive &&
         !GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().isBlockingOperation)
         {
 
@@ -505,6 +525,7 @@ public class RootElement : WSElement, IWSElement
         root = r;
     }
 
+
     public override void SetElementScale(float scale)
     {
         base.SetElementScale(scale);
@@ -525,6 +546,7 @@ public class RootElement : WSElement, IWSElement
         {
             for (int i = 0; i < elements.Count; i++)
             {
+                //Debug.Log("name" + name +" element " + elements[i].GetComponent<WSElement>().GetBounds());
                 bounds.Encapsulate(elements[i].GetComponent<WSElement>().GetBounds());
             }
         }
@@ -539,8 +561,13 @@ public class RootElement : WSElement, IWSElement
     {
 
         SBSVector3 pos = transform.position;
+        //Debug.Log(" collider.center " + collider.center + " bounds max " + bounds.max + " bounds min " + bounds.min);
         collider.center = ((bounds.max + bounds.min) * 0.5f) - pos;
         collider.center = new Vector3(collider.center.x, collider.center.y, 0.0f);
+        /* if (type == ElementsType.HeartSet ||type == ElementsType.MoonSet || type == ElementsType.StarSet)
+         {
+             collider.center = new Vector3(collider.center.x-0.20f, collider.center.y, 0.0f);
+         }*/
         if (state == ElementsState.Cut || state == ElementsState.Result)
         {
             collider.size = (bounds.max - bounds.min);
@@ -549,6 +576,11 @@ public class RootElement : WSElement, IWSElement
         {
             collider.size = (bounds.max - bounds.min);
         }
+        if (ActualfactorScale < 1.88f)
+            collider.size = new Vector3(collider.size.x, collider.size.y / ActualfactorScale, collider.size.z);
+        else
+            collider.size = new Vector3(collider.size.x, collider.size.y / 1.88f, collider.size.z);
+        //Debug.Log("actua" + ActualfactorScale);
     }
 
     public void UpdateWidth()
@@ -565,7 +597,6 @@ public class RootElement : WSElement, IWSElement
             width = GetComponent<BoxCollider>().size.x;
             Workspace.Instance.RepositioningChildren(this.gameObject);
         }
-
     }
 
     public override void Draw(int zIndex)
@@ -574,9 +605,9 @@ public class RootElement : WSElement, IWSElement
             GameObject.FindGameObjectWithTag("Workspace").GetComponent<Workspace>().DrawCounter();
         base.Draw(zIndex);
 
-        if (mode == InteractionMode.Changing && zIndex > 0)
+        if (mode == InteractionMode.Changing && zIndex > 0 && state != ElementsState.Equivalence)
         {
-            //Debug.Log("Draw " + name);
+           // Debug.Log("Draw " + name);
             mode = InteractionMode.Moving;
             BroadcastMessage("SetMode", mode);
         }
@@ -606,9 +637,32 @@ public class RootElement : WSElement, IWSElement
               InitHighlight(name, true);
     }
 
-    public override void SetMode(InteractionMode mode)
+    public override void SetMode(InteractionMode _mode)
     {
-        base.SetMode(mode);
+        
+        if (_mode == InteractionMode.Changing && null != equivalences && equivalences.Count > 0) 
+        {
+            if (null != equivalences)
+            {
+                foreach (GameObject eq in equivalences)
+                {
+                    if (null == eq.GetComponent<RootElement>().cutRef)
+                        eq.GetComponent<RootElement>().BroadcastMessage("SetMode", InteractionMode.Changing, SendMessageOptions.DontRequireReceiver);
+                }
+            }
+        }
+
+       /* if (_mode == InteractionMode.Changing && state == ElementsState.Equivalence) 
+        {
+            Debug.Log("qui lo cambia per " + root.name);
+        }
+       */
+        base.SetMode(_mode);
+       /* if (mode == InteractionMode.Freeze && _mode == InteractionMode.Changing && state == ElementsState.Equivalence)
+        {
+            Debug.Log("setMode");
+            base.SetMode(InteractionMode.Freeze);
+        }*/
     }
 
     public override bool CheckCut()
@@ -631,16 +685,27 @@ public class RootElement : WSElement, IWSElement
 
     public override void IncreaseNumerator()
     {
-        //Debug.Log("IncreaseNumerator");
+       
        /* if (!inputEnabled)
             return;*/
         if (!isSubFraction)
         {
-            this.partNumerator++;
+            if(partitions > 1)
+                this.partNumerator = this.partNumerator + partitions;
+            else
+                this.partNumerator++;
+
+
             if ((float)this.partNumerator / (float)this.partDenominator > Workspace.MAXVALUE)
             {
-                this.partNumerator--;
-                Workspace.Instance.interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + Workspace.MAXVALUE + "}");
+                //Debug.Log("Max");
+                if (partitions > 1)
+                    this.partNumerator = this.partNumerator - partitions;
+                else
+                    this.partNumerator--;
+
+                if(state != ElementsState.Equivalence)
+                    Workspace.Instance.interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + Workspace.MAXVALUE + "}");
                 return;
             }
 
@@ -653,9 +718,11 @@ public class RootElement : WSElement, IWSElement
             }
 
             this.numerator = this.partNumerator / this.partitions;
+           // Debug.Log("Element count " + elements.Count);
             if (elements.Count > 1)
             {
-                if (type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set || type == ElementsType.HeartSet || type == ElementsType.MoonSet || type == ElementsType.StarSet)
+                //Debug.Log("in elementcount > 1");
+                if ((type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set || type == ElementsType.HeartSet || type == ElementsType.MoonSet || type == ElementsType.StarSet) /*&& state != ElementsState.Equivalence*/)
                 {
                     if (!addedNew)
                         IncreaseNumeratorInChildren();
@@ -665,6 +732,82 @@ public class RootElement : WSElement, IWSElement
                 {
                     int lastIndex = elements.Count - 1;
                     int lastNumerator = this.partNumerator - (this.partDenominator * lastIndex);
+                    
+                   // Debug.Log(state + " lastnumerator " + lastNumerator + " partitions " + this.partitions + " setnumerator " + (lastNumerator / this.partitions));
+                    
+                    elements[lastIndex].BroadcastMessage("SetNumerator", lastNumerator / this.partitions);
+                    elements[lastIndex].BroadcastMessage("SetPartNumerator", lastNumerator);
+
+                    symbol.SendMessage("SetNumerator", this.numerator);
+                    symbol.SendMessage("SetPartNumerator", this.partNumerator);
+                    ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
+                }
+            }
+            else
+            {
+               // Debug.Log("2 " + state + " this.numerator " + this.numerator + " partnumerator " + this.partNumerator);
+
+                root.BroadcastMessage("SetNumerator", this.numerator);
+                root.BroadcastMessage("SetPartNumerator", this.partNumerator);
+                ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
+            }
+            //Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB Increase num "+state + " partNumerator " + this.partNumerator + " numerator " + this.numerator);
+
+           /* if (null != equivalences)
+            {
+                foreach (GameObject eq in equivalences)
+                {
+                    eq.GetComponent<RootElement>().SendMessage("IncreaseNumerator");
+                }
+            }*/
+        }
+    }
+
+    public void IncreaseResultNumerator()
+    {
+
+        /* if (!inputEnabled)
+             return;*/
+        if (!isSubFraction)
+        {
+                this.partNumerator++;
+
+
+            if ((float)this.partNumerator / (float)this.partDenominator > Workspace.MAXVALUE)
+            {
+                //Debug.Log("Max");
+                this.partNumerator--;
+
+                if (state != ElementsState.Equivalence)
+                    Workspace.Instance.interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + Workspace.MAXVALUE + "}");
+                return;
+            }
+
+            bool addedNew = false;
+            if (this.partNumerator > this.partDenominator * elements.Count)
+            {
+                addedNew = true;
+                Workspace.Instance.AddResultFractionsChildren(gameObject);
+                //this.partNumerator = this.partDenominator * elements.Count;
+            }
+
+            this.numerator = this.partNumerator / this.partitions;
+            // Debug.Log("Element count " + elements.Count);
+            if (elements.Count > 1)
+            {
+                //Debug.Log("in elementcount > 1");
+                if ((type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set || type == ElementsType.HeartSet || type == ElementsType.MoonSet || type == ElementsType.StarSet) /*&& state != ElementsState.Equivalence*/)
+                {
+                    if (!addedNew)
+                        IncreaseResultNumeratorInChildren();
+                    UpdateByChildren();
+                }
+                else
+                {
+                    int lastIndex = elements.Count - 1;
+                    int lastNumerator = this.partNumerator - (this.partDenominator * lastIndex);
+
+                    // Debug.Log(state + " lastnumerator " + lastNumerator + " partitions " + this.partitions + " setnumerator " + (lastNumerator / this.partitions));
 
                     elements[lastIndex].BroadcastMessage("SetNumerator", lastNumerator / this.partitions);
                     elements[lastIndex].BroadcastMessage("SetPartNumerator", lastNumerator);
@@ -676,19 +819,35 @@ public class RootElement : WSElement, IWSElement
             }
             else
             {
+                // Debug.Log("2 " + state + " this.numerator " + this.numerator + " partnumerator " + this.partNumerator);
+
                 root.BroadcastMessage("SetNumerator", this.numerator);
                 root.BroadcastMessage("SetPartNumerator", this.partNumerator);
                 ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
             }
+            //Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB Increase num "+state + " partNumerator " + this.partNumerator + " numerator " + this.numerator);
+
+            /* if (null != equivalences)
+             {
+                 foreach (GameObject eq in equivalences)
+                 {
+                     eq.GetComponent<RootElement>().SendMessage("IncreaseNumerator");
+                 }
+             }*/
         }
     }
+
 
     public override void DecreaseNumerator()
     {
         // Debug.Log("DecreaseNumerator");
         if (!isSubFraction)
         {
-            this.partNumerator--;
+            if (partitions > 1)
+                this.partNumerator = this.partNumerator - partitions;
+            else
+                this.partNumerator--;
+
             if (this.partNumerator < 0)
                 this.partNumerator = 0;
 
@@ -696,7 +855,7 @@ public class RootElement : WSElement, IWSElement
 
             if (elements.Count > 1)
             {
-                if (type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set || type == ElementsType.HeartSet || type == ElementsType.MoonSet || type == ElementsType.StarSet)
+                if ((type == ElementsType.HRect || type == ElementsType.VRect || type == ElementsType.Set || type == ElementsType.HeartSet || type == ElementsType.MoonSet || type == ElementsType.StarSet) && state != ElementsState.Equivalence)
                 {
                     DecreaseNumeratorInChildren();
                     UpdateByChildren();
@@ -749,7 +908,6 @@ public class RootElement : WSElement, IWSElement
                     int numPart = Mathf.Min(currentPartNum, this.partDenominator);
                     elements[i].BroadcastMessage("SetNumerator", num);
                     elements[i].BroadcastMessage("SetPartNumerator", numPart);
-
                     currentNum -= this.denominator;
                     currentPartNum -= this.partDenominator;
                 }
@@ -758,13 +916,18 @@ public class RootElement : WSElement, IWSElement
 
             symbol.SendMessage("SetNumerator", this.numerator);
             symbol.SendMessage("SetPartNumerator", this.partNumerator);
+           /* if (null != equivalences)
+            {
+                foreach (GameObject eq in equivalences)
+                {
+                    eq.GetComponent<RootElement>().SendMessage("IncreaseDenominator");
+                }
+            }*/
         }
     }
 
     public override void DecreaseDenominator()
     {
-       /* if (!inputEnabled)
-            return;*/
         if (!isSubFraction)
         {
             if (this.denominator > 0)
@@ -776,7 +939,8 @@ public class RootElement : WSElement, IWSElement
                 if ((float)this.partNumerator / ((float)this.denominator * (float)this.partitions) > Workspace.MAXVALUE)
                 {
                     this.denominator++;
-                    Workspace.Instance.interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + Workspace.MAXVALUE + "}");
+                    if (state != ElementsState.Equivalence)
+                        Workspace.Instance.interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + Workspace.MAXVALUE + "}");
                     return;
                 }
 
@@ -793,7 +957,6 @@ public class RootElement : WSElement, IWSElement
                     int wholes = Mathf.Max(1, Mathf.CeilToInt((float)this.partNumerator / (float)this.partDenominator));
                     lastIndex = wholes - 1;
                     lastNumerator = this.partNumerator - (this.partDenominator * lastIndex);
-                    //Debug.Log("Root " + root.name + " this " + gameObject.name + "lastNumerator " + lastNumerator);
                     int newRepNum = 0;
                     if (wholes > elements.Count)
                         newRepNum = wholes - elements.Count;
@@ -815,15 +978,11 @@ public class RootElement : WSElement, IWSElement
                             {
                                 elements[i].BroadcastMessage("SetNumerator", this.denominator);
                                 elements[i].BroadcastMessage("SetPartNumerator", this.partDenominator);
-                                // Debug.Log("1root " + gameObject.name + " SetNumerator " + this.denominator + " SetPartNumerator " + this.partDenominator);
                             }
                             else
                             {
                                 elements[i].BroadcastMessage("SetNumerator", lastNumerator / this.partitions);
                                 elements[i].BroadcastMessage("SetPartNumerator", lastNumerator);
-                                //elements[i].BroadcastMessage("Draw", elements[i].transform.position.z);
-                                // Debug.Log("2root " + gameObject.name + " SetNumerator " + (lastNumerator / this.partitions) + " SetPartNumerator " + lastNumerator);
-
                             }
                         }
 
@@ -860,16 +1019,22 @@ public class RootElement : WSElement, IWSElement
                 Workspace.Instance.RemoveEmptyChildren(gameObject);
                 ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Denominator", root.name, partDenominator);
             }
+          /*  if (null != equivalences)
+            {
+                foreach (GameObject eq in equivalences)
+                {
+                    eq.GetComponent<RootElement>().SendMessage("DecreaseDenominator");
+                }
+            }*/
         }
     }
 
     public override void IncreasePartitions()
     {
-        //Debug.Log("IncreasePartitions");
+        //Debug.Log("IncreasePartitions " + name);
         if (!isSubFraction)
         {
             this.partitions++;
-
             this.partNumerator = numerator * partitions;
             this.partDenominator = denominator * partitions;
 
@@ -913,6 +1078,7 @@ public class RootElement : WSElement, IWSElement
 
     public void Cut()
     {
+        //Debug.Log("cutgenerated");
         isSymbolShown = false;
         DetachModifierSymbol();
 
@@ -952,6 +1118,19 @@ public class RootElement : WSElement, IWSElement
     {
         color = c;
         BroadcastMessage("SetContentColor", color);
+
+       // Debug.Log("change color of "+ name + " " + equivalences.Count);
+
+        if (null != equivalences && equivalences.Count > 0) 
+        {
+            foreach (GameObject eq in equivalences) 
+            {
+               // Debug.Log("eq " + eq.name);
+                eq.GetComponent<RootElement>().SendMessage("DeleteCut", SendMessageOptions.DontRequireReceiver);
+                eq.GetComponent<RootElement>().SendMessage("SetMode", InteractionMode.Moving, SendMessageOptions.DontRequireReceiver);
+                eq.GetComponent<RootElement>().BroadcastMessage("ChangeColor" , color, SendMessageOptions.DontRequireReceiver);
+            }
+        }
     }
 
     public void UpdateGraphics()
@@ -1064,6 +1243,7 @@ public class RootElement : WSElement, IWSElement
             highlight.GetComponent<RectTransform>().anchoredPosition = (Vector3)b.center;//new Vector2(center.x - m.transform.position.x, 0.0f);
             highlight.GetComponent<RectTransform>().sizeDelta = new Vector2((totalWidth / highlight.GetComponent<RectTransform>().localScale.x) + widthOffeset, (totalHeight + heightOffset) / highlight.GetComponent<RectTransform>().localScale.y);
             highlight.transform.parent = gameObject.transform;
+            highlight.GetComponent<HighlighManager>().Initialize(this, highlight.GetComponent<RectTransform>().sizeDelta);
         }
     }
 
@@ -1148,8 +1328,6 @@ public class RootElement : WSElement, IWSElement
 
     public void OnClickArrowUp(int _selectedFractionPart)
     {
-        if (mode == InteractionMode.LookAt)
-            return;
         if (mode == InteractionMode.Changing || mode == InteractionMode.Initializing)
         {
             selectedFractionPart = (FractionPart)_selectedFractionPart;
@@ -1167,19 +1345,26 @@ public class RootElement : WSElement, IWSElement
                 IncreaseDenominator();
             }
             //BroadcastMessage("IncreaseDenominator");
+            if (null != equivalences)
+            {
+                foreach (GameObject eq in equivalences)
+                {
+                   // Debug.Log("Call of onclickArrowUp of " + eq.name);
+                    eq.GetComponent<RootElement>().SendMessage("DeleteCut", SendMessageOptions.DontRequireReceiver);
+                    eq.GetComponent<RootElement>().SendMessage("SetMode", InteractionMode.Changing, SendMessageOptions.DontRequireReceiver);
+                    eq.GetComponent<RootElement>().SendMessage("OnClickArrowUp", _selectedFractionPart);
+                }
+            }
         }
         else if (mode == InteractionMode.Partitioning)
         {
             BroadcastMessage("IncreasePartitions");
         }
-
         Draw(zIndex);
     }
 
     public void OnClickArrowDown(int _selectedFractionPart)
     {
-        if (mode == InteractionMode.LookAt)
-            return;
         if (mode == InteractionMode.Changing || mode == InteractionMode.Initializing)
         {
             selectedFractionPart = (FractionPart)_selectedFractionPart;
@@ -1189,13 +1374,32 @@ public class RootElement : WSElement, IWSElement
             if (_selectedFractionPart == (int)FractionPart.Numerator)
                 DecreaseNumerator();
             else if (_selectedFractionPart == (int)FractionPart.Denominator)
+            {
+                if (denominator == 0)
+                    return;
                 DecreaseDenominator();
+            }
+            if (null != equivalences)
+            {
+                foreach (GameObject eq in equivalences)
+                {
+                    eq.GetComponent<RootElement>().SendMessage("DeleteCut", SendMessageOptions.DontRequireReceiver);
+                    eq.GetComponent<RootElement>().SendMessage("SetMode", InteractionMode.Changing, SendMessageOptions.DontRequireReceiver);
+                    eq.GetComponent<RootElement>().SendMessage("OnClickArrowDown", _selectedFractionPart);
+                }
+            }
         }
         else if (mode == InteractionMode.Partitioning)
         {
             BroadcastMessage("DecreasePartitions");
         }
-        Draw(zIndex);
+        Draw(zIndex); 
+    }
+
+    void DeleteCut() 
+    {
+        if (null != cutRef)
+            Workspace.Instance.SendMessage("DeleteElement", cutRef);
     }
 
     void ScaleDown()
@@ -1282,7 +1486,7 @@ public class RootElement : WSElement, IWSElement
         Workspace.Instance.SendMessage("CreateCopy", gameObject);
     }
 
-    void FindParent()
+   /* void FindParent()
     {
         /*if (null != parentRef)
         {
@@ -1301,8 +1505,8 @@ public class RootElement : WSElement, IWSElement
             isParentLineShown = true;
 
             ExternalEventsManager.Instance.SendMessageToSupport("FindParent", name);
-        }*/
-    }
+        }
+    }*/
 
     void DestroyFindParentLine()
     {
@@ -1445,7 +1649,7 @@ public class RootElement : WSElement, IWSElement
 
             if (num > 0)
             {
-                fraction.gameObject.SendMessage("DecreaseCutNumerator");
+                 fraction.gameObject.SendMessage("DecreaseCutNumerator");
                 break;
             }
         }
@@ -1475,6 +1679,7 @@ public class RootElement : WSElement, IWSElement
 
             if (num > 0)
             {
+
                 fraction.gameObject.SendMessage("DecreaseCutNumerator");
                 break;
             }
@@ -1508,6 +1713,37 @@ public class RootElement : WSElement, IWSElement
     }
 
     public void IncreaseNumeratorInChildren()
+    {
+        for (int i = 0; i < elements.Count; i++)
+        {
+            RootElement item = elements[i].GetComponent<RootElement>();
+            for (int j = 0; j < item.elements.Count; j++)
+            {
+                if (type == ElementsType.Set || type == ElementsType.HeartSet || type == ElementsType.StarSet || type == ElementsType.MoonSet)
+                {
+                    SetElement elemSet = item.elements[j].GetComponent<SetElement>();
+                    if (elemSet.partNumerator < elemSet.partDenominator)
+                    {
+                        elemSet.partNumerator = elemSet.partNumerator + partitions;
+                        elemSet.numerator = elemSet.partNumerator / elemSet.partitions;
+                        return;
+                    }
+                }
+                else
+                {
+                    RectangleElement elem = item.elements[j].GetComponent<RectangleElement>();
+                    if (elem.partNumerator < elem.partDenominator)
+                    {
+                        elem.partNumerator = elem.partNumerator+ partitions;
+                        elem.numerator = elem.partNumerator / elem.partitions;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    public void IncreaseResultNumeratorInChildren()
     {
         for (int i = 0; i < elements.Count; i++)
         {
@@ -1595,6 +1831,7 @@ public class RootElement : WSElement, IWSElement
                         item.partNumerator += elem.partNumerator;
                     }
                 }
+               // Debug.Log("***************************item.numerator " + item.numerator + " item.partnumerator " + item.partNumerator);
                 this.numerator += item.numerator;
                 this.partNumerator += item.partNumerator;
             }
@@ -1825,18 +2062,15 @@ public class RootElement : WSElement, IWSElement
 #if UNITY_IPHONE || UNITY_ANDROID
                 partMod = GameObject.Instantiate(partition_root_mobile) as GameObject;
 #endif
-                partMod.transform.parent = transform;
+                partMod.transform.SetParent(transform);
                 Vector3 pos = GetSymbolPosition(true);
                 partMod.transform.position = transform.TransformPoint(new Vector3(pos.x, pos.y, pos.z));
                 partMod.GetComponent<RectTransform>().localScale = symbol.GetComponent<RectTransform>().localScale;
                 partMod.GetComponent<RectTransform>().localPosition = GetSymbolPosition(true, Workspace.Instance.actualFactorScale);
 
             }
-            if (mode != InteractionMode.LookAt)
-            {
-                AttachButtons(CheckPartition());
-                PlaceButtons((int)selectedFractionPart);
-            }
+            AttachButtons(CheckPartition());
+            PlaceButtons((int)selectedFractionPart);
             AttachSymbol(true);
         }
         else
@@ -1881,7 +2115,7 @@ public class RootElement : WSElement, IWSElement
 #if UNITY_IPHONE || UNITY_ANDROID
             symbol = GameObject.Instantiate(symbol_root_mobile) as GameObject;
 #endif
-            symbol.transform.parent = transform;
+            symbol.transform.SetParent(transform);
             initialScaleModifier = symbol.GetComponent<RectTransform>().localScale;
             Vector3 pos = GetSymbolPosition(false);
             symbol.transform.position = transform.TransformPoint(new Vector3(pos.x, pos.y, pos.z));
@@ -1910,7 +2144,10 @@ public class RootElement : WSElement, IWSElement
             return;
         if (mode == InteractionMode.Changing || mode == InteractionMode.Initializing)
         {
-            symbol.GetComponent<SingleFractionMCElement>().ChangeStateButtons(isEnabled);
+            if(state == ElementsState.Equivalence)
+                symbol.GetComponent<SingleFractionMCElement>().ChangeStateButtons(false);
+            else
+                symbol.GetComponent<SingleFractionMCElement>().ChangeStateButtons(isEnabled);
         }
         else if (mode == InteractionMode.Partitioning)
         {
@@ -1954,6 +2191,66 @@ public class RootElement : WSElement, IWSElement
     
     }
 
+    void CreateEquivalence()
+    {
+       // Debug.Log("CreateEquivalence");
+        if (null == equivalences)
+            equivalences = new List<GameObject>();
+        GameObject son = Workspace.Instance.CreateEquivalence(gameObject);
+        equivalences.Add(son);
+        son.GetComponent<RootElement>().equivalences = null;
+        son.GetComponent<RootElement>().parentEqRef = gameObject;     
+    }
+
+    public void FindParent() 
+    {
+        if (null != parentEqRef)
+        {
+            Workspace.Instance.Highlight(parentEqRef.name);
+            string typeString = "HRects";
+            switch (parentEqRef.GetComponent<RootElement>().type)
+            {
+                case (ElementsType.HRect):
+                    typeString = "HRects";
+                    break;
+                case (ElementsType.VRect):
+                    typeString = "VRects";
+                    break;
+                case (ElementsType.Line):
+                    typeString = "NumberedLines";
+                    break;
+                case (ElementsType.Liquid):
+                    typeString = "LiquidMeasures";
+                    break;
+                case (ElementsType.Set):
+                    typeString = "Set";
+                    break;
+                case (ElementsType.HeartSet):
+                    typeString = "HeartSets";
+                    break;
+                case (ElementsType.MoonSet):
+                    typeString = "MoonSets";
+                    break;
+                case (ElementsType.StarSet):
+                    typeString = "StarSets";
+                    break;
+            }
+            ExternalEventsManager.Instance.SendMessageToSupport("SystemHighlight", typeString, parentEqRef.name);
+        }
+    }
+
+    void DeleteEquivalence(GameObject eq) 
+    {
+        if (isSubFraction)
+            return;
+
+        for (int i = 0; i < equivalences.Count; i++ )
+        {
+            if (equivalences[i] == eq)
+                equivalences.Remove(eq);
+        }
+    }
+
     void SetHighlight()
     {
         if (isHighlighted)
@@ -1969,7 +2266,7 @@ public class RootElement : WSElement, IWSElement
             if (null == highlight)
                 highlight = GameObject.Instantiate(Workspace.Instance.highlight_prefab) as GameObject;
             InitHighlight(name, true);
-            Debug.Log("Sethighlight");
+           // Debug.Log("Sethighlight");
         }
     }
 
@@ -1981,7 +2278,7 @@ public class RootElement : WSElement, IWSElement
         /*  if( btnDown == null || btnUp == null)
               this.AttachButtons(true);*/
 
-        if (mode == InteractionMode.Changing || mode == InteractionMode.Initializing)
+       /* if (mode == InteractionMode.Changing || mode == InteractionMode.Initializing)
         {
             if (_selectedFractionPart == (int)FractionPart.Denominator)
             {
@@ -1989,15 +2286,18 @@ public class RootElement : WSElement, IWSElement
                 //  btnDown.transform.position = symbol.transform.TransformPoint(new Vector3(0.9f, -0.9f, 0.0f));
                 if (mode != InteractionMode.Initializing)
                     Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "{hint_denominator}");
+                Debug.Log("hint den");
             }
             if (_selectedFractionPart == (int)FractionPart.Numerator)
             {
                 // btnUp.transform.position = symbol.transform.TransformPoint(new Vector3(0.9f, 0.8f, 0.0f));
                 // btnDown.transform.position = symbol.transform.TransformPoint(new Vector3(0.9f, 0.2f, 0.0f));
                 Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "{hint_numerator}");
+                Debug.Log("hint den");
+
             }
         }
-        else if (mode == InteractionMode.Partitioning)
+        else*/ if (mode == InteractionMode.Partitioning)
         {
             // btnUp.transform.position = partMod.transform.TransformPoint(new Vector3(0.9f, 0.3f, 0.0f));
             // btnDown.transform.position = partMod.transform.TransformPoint(new Vector3(0.9f, -0.3f, 0.0f));
@@ -2154,6 +2454,11 @@ public class RootElement : WSElement, IWSElement
             partMod.GetComponent<RectTransform>().localScale = new Vector3(0.03333334f / factorScale, 0.03333334f / factorScale, 1.0f);
             partMod.GetComponent<RectTransform>().localPosition = GetSymbolPosition(true, factorScale);
 
+        }
+        if (type != ElementsType.Liquid && type != ElementsType.HRect && type != ElementsType.VRect)
+        {
+            BoxCollider bc = GetComponent<BoxCollider>();
+            bc.size = new Vector3(bc.size.x, bc.size.y * factorScale, bc.size.z);
         }
         Draw(zIndex);
     }
