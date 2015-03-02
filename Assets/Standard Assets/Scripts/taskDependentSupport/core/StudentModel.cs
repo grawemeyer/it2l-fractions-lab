@@ -29,11 +29,37 @@ namespace taskDependentSupport.core
 		private List<bool> feedbackFollowed = new List<bool>();
 		private bool additionBox = false;
 		private bool substractionBox = false;
+		private FeedbackElem currentFeedback = new FeedbackElem ();
+		private int currentFeedbackLevel = 0;
+		private bool previousViewed = false;
 
 		public StudentModel(String taskID){
 			feedbackData = new FeedbackData (taskID); 
 		}
 
+		public void setPreviousViewed(bool value){
+			previousViewed = value;
+		}
+
+		public bool getPreviousViewed(){
+			return previousViewed;
+		}
+
+		public int getCurrentFeedbackLevel(){
+			return currentFeedbackLevel;
+		}
+
+		public void setCurrentFeedbackLevel(int value){
+			currentFeedbackLevel = value;
+		}
+
+		public void setCurrentFeedback(FeedbackElem value){
+			currentFeedback = value;
+		}
+
+		public FeedbackElem getCurrentFeedback(){
+			return currentFeedback;
+		}
 
 		public void setSubstractionBox(bool value){
 			substractionBox = value;

@@ -3,6 +3,9 @@ using System.Collections;
 using System;
 using taskDependentSupport.core;
 using System.Threading;
+using System.Collections.Generic;
+
+
 
 namespace taskDependentSupport
 {
@@ -56,9 +59,10 @@ namespace taskDependentSupport
 			Application.ExternalCall("SendHighMessage", feedbacktext);
 		}
 
-		public static void sendMessageToTIS(String feedbacktext, String currentFeedbackType, String previousFeedbackType, bool followed){
-			Debug.Log ("TDSWRAPPER: sendMessageToTIS: "+feedbacktext+" currentFeedbackType: "+currentFeedbackType+" previousFeedbackType: "+previousFeedbackType+" followed: "+followed);
-			Application.ExternalCall("sendMessageToTIS", feedbacktext, currentFeedbackType, previousFeedbackType, followed);
+		public static void sendMessageToTIS(List<String> feedback, String currentFeedbackType, int level, bool followed, bool viewed){
+			String feedbackString = feedback [0];
+			Debug.Log ("TDSWRAPPER: sendMessageToTIS:"+ feedbackString+" currentFeedbackType: "+currentFeedbackType+" level: "+level+" followed: "+followed+" viewed: "+viewed);
+			Application.ExternalCall("sendMessageToTIS", feedback, currentFeedbackType, level, followed, viewed);
 		}
 
 		public static void SendMessageToLightBulb(String feedbacktext){
@@ -229,6 +233,7 @@ namespace taskDependentSupport
 			}
 			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedON*")){
 				Debug.Log (":::: Light bulb pressed ON::::");
+				studentModel.setPreviousViewed(true);
 			
 			}
 			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedOFF*")){
