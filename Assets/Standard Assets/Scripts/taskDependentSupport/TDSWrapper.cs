@@ -144,6 +144,13 @@ namespace taskDependentSupport
 			arrowButtonEnabled = value;
 		}
 
+		private static void switchTISon(){
+			TIS = true;
+		}
+
+		private static void switchTISoff(){
+			TIS = false;
+		}
 
 		public static void SendMessageToSupport(params object[] args)
 		{
@@ -250,6 +257,12 @@ namespace taskDependentSupport
 
 				needsNewThread = true;
 				responseThread = null;
+			}
+			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISOFF*")){
+				switchTISoff();
+			}
+			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISON*")){
+				switchTISon();
 			}
 		}
 
