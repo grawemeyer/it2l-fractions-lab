@@ -517,7 +517,7 @@ namespace taskDependentSupport.core
 			O1 = new FeedbackElem ();
 			O1.setID ("O1");
 			FeedbackMessage O1M = new FeedbackMessage ();
-			O1M.setDidacticConceptual ("It seems like you haven't completed the task.");
+			O1M.setDidacticConceptual ("You don't appear to have completed the task.");
 			O1.setFeedbackMessage (O1M);
 			Fraction nextStepO1 = new Fraction ();
 			nextStepO1.setAnyValue (true);
@@ -527,7 +527,7 @@ namespace taskDependentSupport.core
 			O2 = new FeedbackElem ();
 			O2.setID ("O2");
 			FeedbackMessage O2M = new FeedbackMessage ();
-			O2M.setDidacticConceptual ("If you need more help to finish the task, ask your teacher.");
+			O2M.setDidacticConceptual ("If you need more help to finish the task, you could ask your teacher.");
 			O2.setFeedbackMessage (O2M);
 			Fraction nextStepO2 = new Fraction ();
 			nextStepO2.setAnyValue (true);
