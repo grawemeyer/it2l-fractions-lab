@@ -53,12 +53,26 @@ namespace taskDependentSupport.core
 			return feedbackTypeString;
 		}
 
+		private List<String> getFeedbackAsList(FeedbackElem currentFeedback){
+			List<String> result = new List<String>();
+			FeedbackMessage feedback = currentFeedback.getFeedbackMessage ();
+			String guidance = feedback.getGuidance ();
+			String socratic = feedback.getSocratic ();
+			String didacticConceptual = feedback.getDidacticConceptual ();
+			String didacticProcedural = feedback.getDidacticProcedural ();
+
+			result.Add (socratic);
+			result.Add (guidance);
+			result.Add (didacticConceptual);
+			result.Add (didacticProcedural);
+		
+			return result;
+		}
+
 		public void generateFeedbackMessage(){
 			Debug.Log ("generateFeedbackMessage");
 			string feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
 			Debug.Log ("feedbackMessage: "+feedbackMessage);
-
-
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
@@ -67,20 +81,13 @@ namespace taskDependentSupport.core
 				if (taskDependentSupport.TDSWrapper.TIS){
 					List<bool> feedbackFollowed = studentModel.getFeedbackFollowed();
 					bool followed = feedbackFollowed[feedbackFollowed.Count-1];
+					bool previousViewed = studentModel.getPreviousViewed();
+					int level = studentModel.getCurrentFeedbackLevel();
+					FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
+					List<String> feedback = getFeedbackAsList(currentFeedback);
+					String feedbackType = getFeedbackTypeAsString(currentFeedback.getFeedbackType());
 
-					List<FeedbackElem> feedbackProvided = studentModel.getFeedbackProvided();
-					int feedbackProvidedLength = feedbackProvided.Count;
-					int previousFeedbackType =0;
-					if (feedbackProvidedLength > 1){
-						FeedbackElem previousFeedback = feedbackProvided[feedbackProvided.Count-2];
-						previousFeedbackType = previousFeedback.getFeedbackType();
-					}
-					FeedbackElem currentFeedback = feedbackProvided[feedbackProvided.Count-1];
-					int currentFeedbackType = currentFeedback.getFeedbackType();
-					String previousFeedbackTypeString = getFeedbackTypeAsString(previousFeedbackType);
-					String currentFeedbackTypeString = getFeedbackTypeAsString(currentFeedbackType);
-
-					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedbackMessage, currentFeedbackTypeString, previousFeedbackTypeString, followed);
+					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedback, feedbackType, level, followed, previousViewed);
 				}
 				else {
 					calculatePresentationOfFeedback (studentModel.getlastDisplayedMessageType());
@@ -98,6 +105,7 @@ namespace taskDependentSupport.core
 						sendHighMessage (feedbackMessage);
 					}
 				}
+				studentModel.setPreviousViewed (false);
 			}
 		}
 
@@ -116,16 +124,6 @@ namespace taskDependentSupport.core
 			taskDependentSupport.TDSWrapper.eventManager.SendMessage("SendEvent", json);
 			taskDependentSupport.TDSWrapper.PlaySound(message);
 			Debug.Log ("::::: sendLowMessage");
-		}
-
-		private void highlightItem(string itemID)
-		{
-		
-		}
-
-		private void playSound(string message)
-		{
-		
 		}
 
 	}

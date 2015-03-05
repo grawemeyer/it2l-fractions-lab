@@ -93,6 +93,7 @@ namespace taskDependentSupport.core
 
 
 		private void setNewFeedback(){
+			studentModel.setCurrentFeedback (currentFeedback);
 			int currentCounter = 0;
 			string currentFeedbackID = currentFeedback.getID();
 			string guidance = currentFeedback.getFeedbackMessage ().getGuidance ();
@@ -132,6 +133,7 @@ namespace taskDependentSupport.core
 				currentCounter = 1;
 			}
 
+			studentModel.setCurrentFeedbackLevel (currentCounter);
 			studentFeedbackElem.setCounter (currentCounter);
 			studentModel.setPreviousFeedback (currentFeedback);
 			studentModel.addFeedbackProvided (currentFeedback);
