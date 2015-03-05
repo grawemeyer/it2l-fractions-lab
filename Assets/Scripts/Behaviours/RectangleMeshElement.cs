@@ -18,7 +18,7 @@ namespace fractionslab.behaviours
     public int TileGridHeight = 3; //colonne
     public float wHorLine = 0.02f;
     public float wVerLine = 0.02f;
-    public float wBorderLine = 0.02f;
+    public float wBorderLine = 0.035f;
     public float wPartLine = 0.04f;
     public float wSepLine = 0.1f;
     public Color colorLine = new Color(0.1098f, 0.2431f, 0.0353f, 1.0f);
@@ -47,6 +47,16 @@ namespace fractionslab.behaviours
     void OnClicked(Vector3 position)
     {
        // Debug.Log("CLICKED " + ((tmpCol * TileGridWidth) + (TileGridHeight - tmpRig)));
+
+        RootElement superRoot = gameObject.transform.parent.GetComponent<RectangleElement>().root.transform.parent.GetComponent<RootElement>();
+
+        int wholes = Mathf.Max(1, Mathf.CeilToInt((float)superRoot.partNumerator / (float)superRoot.partDenominator));
+
+        //  Debug.Log(root.name.Substring(root.name.Length - 1, 1) + " " + wholes.ToString());
+        if (gameObject.transform.parent.GetComponent<RectangleElement>().root.name.Substring(gameObject.transform.parent.GetComponent<RectangleElement>().root.name.Length - 1, 1) != wholes.ToString())
+            return;
+
+
         int tmpCol, tmpRig;
         SBSBounds meshBounds = GetBounds();
         meshBounds.max = transform.InverseTransformPoint(meshBounds.max);
@@ -59,7 +69,7 @@ namespace fractionslab.behaviours
         else
             localPos = position;
 
-        RootElement superRoot = gameObject.transform.parent.GetComponent<RectangleElement>().root.transform.parent.GetComponent<RootElement>();
+       
 
         if (state != ElementsState.Equivalence)
         {
@@ -136,11 +146,17 @@ namespace fractionslab.behaviours
     }
 
     void Start() 
-    {   
+    {
+      /*  if (Application.platform == RuntimePlatform.OSXWebPlayer)
+            wBorderLine = 0.035f;
+        else
+            wBorderLine = 0.02f;*/
+
         Draw();
+
     }
 
-    /* void Update()
+   /*  void Update()
      {
          if (Input.GetKeyDown(KeyCode.C)) 
          {
@@ -161,14 +177,18 @@ namespace fractionslab.behaviours
              TileGridWidth++;
              Draw();
          }
-         if (Input.GetKeyDown(KeyCode.T))
+
+         if (Input.GetKeyDown(KeyCode.O))
          {
-             if (TileGridWidth > 1) 
-             {
-                 TileGridWidth--;
-                 Draw();
-             }
+             wBorderLine += 0.005f;
+             Draw();
          }
+     }*/
+
+    /* void OnGUI()
+     {
+         GUI.skin = Workspace.Instance.skin;
+         GUI.Label(new Rect(170.0f, 2.0f, 100, 20), "Rect " + wBorderLine);
      }*/
 
     void UpdateSliceIndex() 

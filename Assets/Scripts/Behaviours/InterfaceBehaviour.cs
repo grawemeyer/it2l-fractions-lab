@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.264";
+    public const string VER = "0.274";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -738,6 +738,7 @@ public class InterfaceBehaviour : MonoBehaviour
     //OK
     void ShowHint(string text)
     {
+        //Debug.Log("ShowHint " + text);
         if (lowFeedbackTxt.Length == 0 && suggestionTxt.Length == 0)
         {
 #if !UNITY_IPHONE && !UNITY_ANDROID
@@ -1035,6 +1036,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     public void OnTopLeave()
     {
+        Debug.Log("onTopLeave");
         indexFractionArea = -1;
         GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
         if (elementSelected && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().hasDragged)
@@ -1945,6 +1947,7 @@ public class InterfaceBehaviour : MonoBehaviour
     public void OnBtnExit()
     {
         Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
+        ShowSuggestion("");
         ShowHint("");
         isPressingButton = false;
     }
@@ -2203,8 +2206,9 @@ public class InterfaceBehaviour : MonoBehaviour
         if (element.GetComponent<RootElement>().state == ElementsState.Equivalence)
             menu = contextMenuEquivalence; 
         else
-            menu = contextMenu; 
+            menu = contextMenu;
 
+        menu.SetActive(true);
         Vector3 menuPos = Vector3.zero;
         GameObject back = null;
         for (int i = 0; i < menu.transform.childCount; i++)
@@ -2243,13 +2247,14 @@ public class InterfaceBehaviour : MonoBehaviour
             menuPos.y = elementPos.y - hGap; // Input.mousePosition.y - hGap;//menuPos.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) - hGap);
         else
             menuPos.y = elementPos.y + hGap; //Input.mousePosition.y + hGap;//menuPos.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) + hGap);
-        back.GetComponent<RectTransform>().position = menuPos;
+
+        back.GetComponent<RectTransform>().anchoredPosition = menuPos;
 
         menu.GetComponent<ContextMenuManager>().ChangeTextHighlight(element.GetComponent<RootElement>().isHighlighted);
-        if (element.GetComponent<RootElement>().type == ElementsType.HeartSet || element.GetComponent<RootElement>().type == ElementsType.StarSet || element.GetComponent<RootElement>().type == ElementsType.MoonSet && element.GetComponent<RootElement>().state != ElementsState.Equivalence)
+       /* if (element.GetComponent<RootElement>().type == ElementsType.HeartSet || element.GetComponent<RootElement>().type == ElementsType.StarSet || element.GetComponent<RootElement>().type == ElementsType.MoonSet && element.GetComponent<RootElement>().state != ElementsState.Equivalence)
             menu.GetComponent<ContextMenuManager>().DisableFindEquivalence(true);
         else if( element.GetComponent<RootElement>().state != ElementsState.Equivalence)
-            menu.GetComponent<ContextMenuManager>().DisableFindEquivalence(false);
+            menu.GetComponent<ContextMenuManager>().DisableFindEquivalence(false);*/
 
             
         if (element.GetComponent<RootElement>().state == ElementsState.Equivalence)
@@ -2260,7 +2265,7 @@ public class InterfaceBehaviour : MonoBehaviour
         CheckNotificationWarning();
         Workspace.Instance.SendMessage("DisableInput");
 
-        menu.SetActive(true);
+       
     }
 
     //OK
@@ -2316,6 +2321,7 @@ public class InterfaceBehaviour : MonoBehaviour
             Workspace.Instance.SendMessage("EnableInput");
         }
         //isMenuActive = false;
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
 
     //OK
@@ -2330,6 +2336,7 @@ public class InterfaceBehaviour : MonoBehaviour
             // }
         }
         //isMenuActive = false;
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
     //OK
     void OnHideSubMenus()
@@ -2341,6 +2348,7 @@ public class InterfaceBehaviour : MonoBehaviour
                 sm.SetActive(false);
             }
         }
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
 
     //TODOUI
@@ -2365,6 +2373,7 @@ public class InterfaceBehaviour : MonoBehaviour
         Workspace.Instance.SendMessage("TerminateCurrentAction");
         Workspace.Instance.SendMessage("EnableInput");
         EnableHUD();
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
     #endregion
 

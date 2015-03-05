@@ -8,6 +8,7 @@ namespace fractionslab.behaviours
 {
     public class EmptyElement : WSElement, IWSElement
     {
+        public GameObject parent;
         #region Protected Fields
         protected float width;
         protected float height;

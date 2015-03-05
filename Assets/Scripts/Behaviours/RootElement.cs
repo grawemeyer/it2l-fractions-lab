@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 public class RootElement : WSElement, IWSElement
 {
 
-
     #region Public Fields
     public GameObject parentRef = null;
     public bool isFatherEquivalent;
@@ -128,6 +127,7 @@ public class RootElement : WSElement, IWSElement
         deltaTouch = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         initialMouseDownPos = Input.mousePosition;
         Workspace.Instance.interfaces.SendMessage("ShowHint", "");
+        Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "");
         if (mode != InteractionMode.Wait)
             Workspace.Instance.interfaces.SendMessage("OnElementClicked");
 
@@ -257,7 +257,7 @@ public class RootElement : WSElement, IWSElement
 
         if (mode == InteractionMode.Moving && !Input.GetMouseButton(0))
         {
-            if (state == ElementsState.Fraction)
+            if (state == ElementsState.Fraction || state == ElementsState.Equivalence)
                 Workspace.Instance.interfaces.SendMessage("ShowHint", "{hint_onshape}");
             else
                 Workspace.Instance.interfaces.SendMessage("ShowHint", "{hint_oncut}");
@@ -279,6 +279,8 @@ public class RootElement : WSElement, IWSElement
         if (hasDragged)
             return;
         Workspace.Instance.interfaces.SendMessage("ShowHint", "");
+        Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "");
+
     }
 
     public void OnMouseUp()
@@ -424,6 +426,8 @@ public class RootElement : WSElement, IWSElement
 
         Workspace.Instance.SendMessage("SetFocusOn", gameObject);
         Workspace.Instance.interfaces.SendMessage("ShowHint", "");
+        Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "");
+
         mode = InteractionMode.Moving;
         BroadcastMessage("SetMode", InteractionMode.Moving);
 
@@ -765,17 +769,11 @@ public class RootElement : WSElement, IWSElement
 
     public void IncreaseResultNumerator()
     {
-
-        /* if (!inputEnabled)
-             return;*/
         if (!isSubFraction)
         {
-                this.partNumerator++;
-
-
+            this.partNumerator++;
             if ((float)this.partNumerator / (float)this.partDenominator > Workspace.MAXVALUE)
             {
-                //Debug.Log("Max");
                 this.partNumerator--;
 
                 if (state != ElementsState.Equivalence)
@@ -788,9 +786,9 @@ public class RootElement : WSElement, IWSElement
             {
                 addedNew = true;
                 Workspace.Instance.AddResultFractionsChildren(gameObject);
+                root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
                 //this.partNumerator = this.partDenominator * elements.Count;
             }
-
             this.numerator = this.partNumerator / this.partitions;
             // Debug.Log("Element count " + elements.Count);
             if (elements.Count > 1)
@@ -806,12 +804,8 @@ public class RootElement : WSElement, IWSElement
                 {
                     int lastIndex = elements.Count - 1;
                     int lastNumerator = this.partNumerator - (this.partDenominator * lastIndex);
-
-                    // Debug.Log(state + " lastnumerator " + lastNumerator + " partitions " + this.partitions + " setnumerator " + (lastNumerator / this.partitions));
-
                     elements[lastIndex].BroadcastMessage("SetNumerator", lastNumerator / this.partitions);
                     elements[lastIndex].BroadcastMessage("SetPartNumerator", lastNumerator);
-
                     symbol.SendMessage("SetNumerator", this.numerator);
                     symbol.SendMessage("SetPartNumerator", this.partNumerator);
                     ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
@@ -819,11 +813,11 @@ public class RootElement : WSElement, IWSElement
             }
             else
             {
-                // Debug.Log("2 " + state + " this.numerator " + this.numerator + " partnumerator " + this.partNumerator);
-
-                root.BroadcastMessage("SetNumerator", this.numerator);
+                root.BroadcastMessage("SetNumerator", (this.partNumerator / this.partitions));
                 root.BroadcastMessage("SetPartNumerator", this.partNumerator);
                 ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, partNumerator);
+                //root.BroadcastMessage("Draw", zIndex, SendMessageOptions.DontRequireReceiver);
+                //Draw(zIndex);
             }
             //Debug.Log("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB Increase num "+state + " partNumerator " + this.partNumerator + " numerator " + this.numerator);
 
@@ -1411,7 +1405,10 @@ public class RootElement : WSElement, IWSElement
 
     void ScaleUp()
     {
+       // Debug.Log("currentScaleTween " + currentScaleTween);
         tweenScaleQueue.Clear();
+        if (transform.localScale == Vector3.one)
+            return;
         if (currentScaleTween != 1.0f)
             tweenScaleQueue.Add(1.0f);
     }
@@ -1757,6 +1754,7 @@ public class RootElement : WSElement, IWSElement
                     {
                         elemSet.partNumerator++;
                         elemSet.numerator = elemSet.partNumerator / elemSet.partitions;
+                       
                         return;
                     }
                 }
@@ -2052,14 +2050,16 @@ public class RootElement : WSElement, IWSElement
 
     protected void AttachModifierPartition()
     {
+        if (state == ElementsState.Improper)
+            return;
         if (partitionActive)
         {
             if (null == partMod)
             {
 #if !UNITY_IPHONE && !UNITY_ANDROID
-                partMod = GameObject.Instantiate(partition_root) as GameObject;
-#endif
-#if UNITY_IPHONE || UNITY_ANDROID
+                if(null != partition_root)
+                    partMod = GameObject.Instantiate(partition_root) as GameObject;
+#else
                 partMod = GameObject.Instantiate(partition_root_mobile) as GameObject;
 #endif
                 partMod.transform.SetParent(transform);

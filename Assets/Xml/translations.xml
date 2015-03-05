@@ -11,7 +11,7 @@
 		<hint_create_vertical><![CDATA[Vertical rectangle: click to create]]></hint_create_vertical>
 		<hint_trash><![CDATA[Bin: drag an object here to remove it from workspace]]></hint_trash>
 		<hint_drag_eq><![CDATA[Drag a representation here to compare]]></hint_drag_eq>
-		<hint_onshape><![CDATA[Left click and drag to move, Right click to open tools menu]]></hint_onshape>
+		<hint_onshape><![CDATA[Left click and drag to move, Right click to open menu]]></hint_onshape>
 		<hint_denominator_first><![CDATA[Set the denominator first]]></hint_denominator_first>
 		<hint_denominator><![CDATA[Set the denominator]]></hint_denominator>
 		<hint_numerator><![CDATA[Set the numerator]]></hint_numerator>
@@ -61,17 +61,17 @@
 		<confirm_home><![CDATA[Are you sure you want to leave the workspace?]]></confirm_home>
 		<confirm_logout><![CDATA[Are you sure you want to log out?]]></confirm_logout>
 		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
-		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
-		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
+		<operation_2><![CDATA[Compare]]></operation_2>
+		<operation_3><![CDATA[Add/subtract]]></operation_3>
 		<hint_open_lab><![CDATA[Click to open the laboratory]]></hint_open_lab>
 		<hint_close_lab><![CDATA[Click to close the laboratory]]></hint_close_lab>
 		<hint_highlight><![CDATA[Click to show/hide fraction highlight ]]></hint_highlight>
 		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
 		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
 		<zoom><![CDATA[zoom]]></zoom>
-		<hint_find_parent><![CDATA[Click to find parent fraction]]></hint_find_parent>
+		<hint_find_parent><![CDATA[Click to find original fraction]]></hint_find_parent>
 		<hint_find_equivalence><![CDATA[Click to find an equivalent fraction]]></hint_find_equivalence>
-		<findParent><![CDATA[FIND PARENT]]></findParent>
+		<findParent><![CDATA[HIGHLIGHT ORIGINAL]]></findParent>
 		<findEquivalence><![CDATA[FIND EQUIVALENT]]></findEquivalence>
 	</language>
 	<language id="de" type="latin">
@@ -138,17 +138,17 @@
 		<confirm_home><![CDATA[Are you sure you want to leave the workspace?]]></confirm_home>
 		<confirm_logout><![CDATA[Are you sure you want to log out?]]></confirm_logout>
 		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
-		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
-		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
+		<operation_2><![CDATA[Compare]]></operation_2>
+		<operation_3><![CDATA[Add/subtract]]></operation_3>
 		<hint_open_lab><![CDATA[Click to open the laboratory]]></hint_open_lab>
 		<hint_close_lab><![CDATA[Click to close the laboratory]]></hint_close_lab>
 		<hint_highlight><![CDATA[Click to show/hide fraction highlight]]></hint_highlight>
 		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
 		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
 		<zoom><![CDATA[zoom]]></zoom>
-		<hint_find_parent><![CDATA[Click to find parent fraction]]></hint_find_parent>
+		<hint_find_parent><![CDATA[Click to find original fraction]]></hint_find_parent>
 		<hint_find_equivalence><![CDATA[Click to find an equivalent fraction]]></hint_find_equivalence>
-		<findParent><![CDATA[FIND PARENT]]></findParent>
+		<findParent><![CDATA[HIGHLIGHT ORIGINAL]]></findParent>
 		<findEquivalence><![CDATA[FIND EQUIVALENT]]></findEquivalence>
 	</language>
 	<language id="es" type="latin">
@@ -213,17 +213,17 @@
 		<confirm_home><![CDATA[Are you sure you want to leave the workspace?]]></confirm_home>
 		<confirm_logout><![CDATA[Are you sure you want to log out?]]></confirm_logout>
 		<drag_fraction><![CDATA[DRAG A FRACTION HERE]]></drag_fraction>
-		<operation_2><![CDATA[<size=20>2</size> fractions]]></operation_2>
-		<operation_3><![CDATA[<size=20>3</size> fractions]]></operation_3>
+		<operation_2><![CDATA[Compare]]></operation_2>
+		<operation_3><![CDATA[Add/subtract]]></operation_3>
 		<hint_open_lab><![CDATA[Click to open the laboratory]]></hint_open_lab>
 		<hint_close_lab><![CDATA[Click to close the laboratory]]></hint_close_lab>
 		<hint_highlight><![CDATA[Click to show/hide fraction highlight]]></hint_highlight>
 		<show_highlight><![CDATA[SHOW HIGHLIGHT]]></show_highlight>
 		<hide_highlight><![CDATA[HIDE HIGHLIGHT]]></hide_highlight>
 		<zoom><![CDATA[zoom]]></zoom>
-		<hint_find_parent><![CDATA[Click to find parent fraction]]></hint_find_parent>
+		<hint_find_parent><![CDATA[Click to find original fraction]]></hint_find_parent>
 		<hint_find_equivalence><![CDATA[Click to find an equivalent fraction]]></hint_find_equivalence>
-		<findParent><![CDATA[FIND PARENT]]></findParent>
+		<findParent><![CDATA[HIGHLIGHT ORIGINAL]]></findParent>
 		<findEquivalence><![CDATA[FIND EQUIVALENT]]></findEquivalence>
 	</language>
 </languages>

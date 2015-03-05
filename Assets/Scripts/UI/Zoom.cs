@@ -265,7 +265,7 @@ public class Zoom : MonoBehaviour
             newOrthoSize = maincamera.orthographicSize;
             touchZero = new Touch();
             touchOne = new Touch();
-            Workspace.Instance.RescaleFractionModifier(slider.value / 100);
+           // Workspace.Instance.RescaleFractionModifier(slider.value / 100);
         }
         //CheckBound();
     }

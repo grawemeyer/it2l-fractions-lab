@@ -57,10 +57,13 @@ public class ContextMenuManager : MonoBehaviour {
 
     public void DisableFindParent(bool isFatherTrashed) 
     {
-        if(isFatherTrashed)
+        if (isFatherTrashed)
             findParentBtn.DisableBtn(false);
         else
+        {
             findParentBtn.EnableBtn(false);
+            findParent.color = new Color(0.17f, 0.32f, 0.09f);
+        }
 
     }
 
@@ -73,7 +76,7 @@ public class ContextMenuManager : MonoBehaviour {
         else
         {
             findEquivalenceBtn.EnableBtn(false);
-            findEquivalence.color = new Color(0.17f, 0.32f, 0.09f);
+            findEquivalence.color = new Color(0.172f, 0.322f, 0.092f);
         }
 
     }

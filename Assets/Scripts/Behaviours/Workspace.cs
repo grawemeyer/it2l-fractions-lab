@@ -41,9 +41,17 @@ public class Workspace : MonoBehaviour
     public Color greenResult = new Color(0.3373f, 0.5294f, 0.2392f, 1.0f);
     public Color greyResult = new Color(0.6863f, 0.6588f, 0.5569f, 1.0f);
     public GameObject liquidSource;
+    public Mesh setSourceMoonOut;
+    public Mesh setSourceMoonIn;
+    public Mesh setSourceHeartOut;
+    public Mesh setSourceHeartIn;
+    public Mesh setSourceStarOut;
+    public Mesh setSourceStarIn;
     public GameObject setSourceMoon;
     public GameObject setSourceHeart;
     public GameObject setSourceStar;
+    public Material inMat;
+    public Material outMat;
     public GameObject delimiters;
     public SetElement.Shape lastShape;
     public List<Color> colorList = new List<Color>();
@@ -330,14 +338,20 @@ public class Workspace : MonoBehaviour
 
     GameObject CreateContainer(GameObject f1, GameObject f2)
     {
-        //Debug.Log("CreateContainer " +  f1.GetComponent<RootElement>().shape);
+        Color newColor = Workspace.instance.GetColor();
+        for (int i = 0; i < Workspace.instance.colorList.Count; i++) 
+        {
+            if (newColor != f1.GetComponent<RootElement>().color && newColor != f2.GetComponent<RootElement>().color)
+                break;
+            newColor = Workspace.instance.GetColor();
+        }
+
         Element element = new Element();
         element.position = Vector3.zero;
-        element.color = f1.GetComponent<RootElement>().color; //Workspace.Instance.greenResult;
+        element.color = newColor; //Workspace.Instance.greenResult;
         element.type = f1.GetComponent<RootElement>().type;
         element.state = ElementsState.Fraction; //ElementsState.Result;
         element.partNumerator = 0;
-     //   Debug.Log("f1 partden " + f1.GetComponent<RootElement>().partDenominator + " f2 part den " + f2.GetComponent<RootElement>().partDenominator);
         element.partDenominator = Mathf.Min(f1.GetComponent<RootElement>().partDenominator, f2.GetComponent<RootElement>().partDenominator);
         element.partitions = Mathf.Min(f1.GetComponent<RootElement>().partitions, f2.GetComponent<RootElement>().partitions);
         element.numerator = 0;
@@ -355,9 +369,6 @@ public class Workspace : MonoBehaviour
                 break;
             case (ElementsType.Set):
                 root = CreateSet(element);
-                //root.GetComponent<RootElement>().shape = f1.GetComponent<RootElement>().shape;
-                //root.GetComponent<RootElement>().BroadcastMessage("SetSize", new Vector2(Mathf.Max(f1.GetComponent<RootElement>().width, f2.GetComponent<RootElement>().width), Mathf.Max(f1.GetComponent<RootElement>().height, f2.GetComponent<RootElement>().height)));
-                //root.GetComponent<RootElement>().UpdateGraphics();
                 break;
             case (ElementsType.HeartSet):
                 root = CreateHeartSet(element);
@@ -376,7 +387,7 @@ public class Workspace : MonoBehaviour
                 break;
         }
 
-        root.SendMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
         return root;
     }
 
@@ -429,7 +440,7 @@ public class Workspace : MonoBehaviour
                 root = CreateLiquidMeasures(element);
                 break;
         }
-        root.SendMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
 
         if (f1.GetComponent<RootElement>().parentRef != null)
         {
@@ -467,7 +478,7 @@ public class Workspace : MonoBehaviour
         root.transform.parent = transform;
         root.transform.position = Vector3.zero;
         RootElement rootComp = root.AddComponent<RootElement>();
-        root.SendMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
         root.SendMessage("SetColor", grey);
         root.SendMessage("SetType", f1.GetComponent<RootElement>().type);
         root.SendMessage("SetElementState", ElementsState.Improper);
@@ -869,8 +880,8 @@ public class Workspace : MonoBehaviour
             }
             root.GetComponent<RootElement>().elements.RemoveAll(item => item == null);
            
-            if (root.GetComponent<RootElement>().type == ElementsType.MoonSet || root.GetComponent<RootElement>().type == ElementsType.HeartSet || root.GetComponent<RootElement>().type == ElementsType.StarSet)
-                root.BroadcastMessage("UpdateWidth" , SendMessageOptions.DontRequireReceiver);
+            //if (root.GetComponent<RootElement>().type == ElementsType.MoonSet || root.GetComponent<RootElement>().type == ElementsType.HeartSet || root.GetComponent<RootElement>().type == ElementsType.StarSet)
+               // root.BroadcastMessage("UpdateWidth" , SendMessageOptions.DontRequireReceiver);
            
             RepositioningChildren(root);
         }
@@ -1392,24 +1403,23 @@ public class Workspace : MonoBehaviour
     bool isEquivalent = false;
     void TerminateCurrentAction()
     {
-        //Debug.Log("T prevsize " + prevSize + " prevPs " + prevPos + " prevscale " + preScale );
         Camera.main.orthographicSize = prevSize;
         Camera.main.transform.position = prevPos;
         Camera.main.transform.localScale = preScale;
-
-       // Debug.Log("C size " + Camera.main.orthographicSize + " prevPs " + Camera.main.transform.position + " prevscale " + Camera.main.transform.localScale);
 
         if (null != firstCut && null != secondCut)
         {
             RootElement firstCutRoot = firstCut.GetComponent<RootElement>();
             RootElement secondCutRoot = secondCut.GetComponent<RootElement>();
-            //Debug.Log("state first " + firstCut.GetComponent<RootElement>().state + " second state " + secondCut.GetComponent<RootElement>().state);
+
             if (firstCut.GetComponent<RootElement>().isFatherEquivalent && secondCut.GetComponent<RootElement>().isFatherEquivalent)
                 isEquivalent = true; 
+
             firstCut.SendMessage("MoveToCoord", -1.0f);
             secondCut.SendMessage("MoveToCoord", -1.0f);
 
             StopAllCoroutines();
+
             if (resultObject == null)
             {
                 if(CheckDenominator(firstCutRoot, secondCutRoot))
@@ -1417,6 +1427,19 @@ public class Workspace : MonoBehaviour
                 else
                     resultObject = CreateImproperFractions(firstCut, secondCut);
             }
+            
+            if (null == containerObject)
+            {
+                Color newColor = Workspace.instance.GetColor();
+                for (int i = 0; i < Workspace.instance.colorList.Count; i++)
+                {
+                    if (newColor != firstCutRoot.GetComponent<RootElement>().color && newColor != secondCutRoot.GetComponent<RootElement>().color)
+                        break;
+                    newColor = Workspace.instance.GetColor();
+                }
+                resultObject.GetComponent<RootElement>().color = newColor;
+            }
+
         }
 
         BoxCollider containerBB = resultObject.GetComponent<BoxCollider>();
@@ -1431,12 +1454,13 @@ public class Workspace : MonoBehaviour
         
         if (null != containerObject)
         {
+            resultObject.GetComponent<RootElement>().color = containerObject.GetComponent<RootElement>().color;
             elements.Remove(containerObject);
             Destroy(containerObject);
             containerObject = null;
         }
-
-        if (isEquivalent && resultObject.GetComponent<RootElement>().type != ElementsType.HeartSet && resultObject.GetComponent<RootElement>().type != ElementsType.MoonSet && resultObject.GetComponent<RootElement>().type != ElementsType.StarSet)
+       // Debug.Log("result color " + resultObject.GetComponent<RootElement>().color);
+        if (isEquivalent /*&& resultObject.GetComponent<RootElement>().type != ElementsType.HeartSet && resultObject.GetComponent<RootElement>().type != ElementsType.MoonSet && resultObject.GetComponent<RootElement>().type != ElementsType.StarSet*/)
         {
             GameObject tmp = CreateEquivalence(resultObject);
             tmp.GetComponent<RootElement>().parentEqRef = null;
@@ -1680,7 +1704,7 @@ public class Workspace : MonoBehaviour
             containerObject.transform.position = containerPos;
             yield return new WaitForSeconds(0.2f);
         }
-
+       
         resultObject = containerObject;
         containerObject = null;
         SetFocusOn(resultObject);

@@ -49,8 +49,8 @@ public class ExternalEventsManager : MonoBehaviour
             Application.ExternalCall("ShowMessage", tmp);
         }
 #endif
-        //Debug.LogWarning("******** SendMessageToSupport disabled for testing support *********");
-        return;
+        //Debug.LogWarning("******** SendMessageToSupport disabled for testing *********");
+        //return;
         TDSWrapper.SendMessageToSupport(args);
     }
     #endregion
