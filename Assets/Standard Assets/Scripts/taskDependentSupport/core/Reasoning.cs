@@ -32,12 +32,15 @@ namespace taskDependentSupport.core
 
 	
 		public void processDoneEvent(){
+			Debug.Log ("::: processDoneEvent ::: ");
+			Debug.Log ("::: isTaskCompleted ::: "+studentModel.isTaskCompleted());
 			if (studentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("task1.1setA")){
 					currentFeedback = feedbackData.CE2;
 					setNewFeedback();
 				}
 				else if (taskID.Equals("task2.1")){
+					Debug.Log (":: task 2.1 :: feebdack FE2");
 					currentFeedback = feedbackData.FE2;
 					setNewFeedback();
 				}

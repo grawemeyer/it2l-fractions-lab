@@ -77,6 +77,9 @@ namespace taskDependentSupport.core
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
 			ticks /= 10000000; //Convert windows ticks to seconds
 
+			FeedbackElem currentFeedbackTest = studentModel.getCurrentFeedback();
+			Debug.Log (" :::: feedback ID in feedback ::: "+currentFeedbackTest.getID());
+
 			if (!feedbackMessage.Equals ("")) {
 				if (taskDependentSupport.TDSWrapper.TIS){
 					List<bool> feedbackFollowed = studentModel.getFeedbackFollowed();

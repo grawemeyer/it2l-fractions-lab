@@ -579,7 +579,7 @@ namespace taskDependentSupport.core
 			FE2.setID("FE2");
 			FeedbackMessage MFE2M = new FeedbackMessage ();
 			MFE2M.setDidacticConceptual ("How are all your representations similar, and how are they different?");
-			FE2.setFeedbackMessage (MFE1M);
+			FE2.setFeedbackMessage (MFE2M);
 			FE2.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepFE2 = new Fraction ();
 			nextStepFE2.setSpeech (true);
