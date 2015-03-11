@@ -3,3 +3,4 @@ Library/
 *.sln
 *.userprefs
 *.unity3d
+/bin
