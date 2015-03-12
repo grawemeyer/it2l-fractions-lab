@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.274";
+    public const string VER = "0.276";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -273,6 +273,10 @@ public class InterfaceBehaviour : MonoBehaviour
         indexHighlight = 0;
         actionsPopupBG = GameObject.FindGameObjectWithTag("PopupBG");
         actionsPopupBG.SetActive(false);
+        
+#if UNITY_ANDROID || UNITY_IPHONE
+        zoomController.GetComponent<Zoom>().HideUI();
+#endif
         //if(isStudent)
 
         /*CHEAT*/

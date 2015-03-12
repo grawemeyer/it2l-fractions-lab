@@ -66,6 +66,14 @@ public class Zoom : MonoBehaviour
         interfaceB.localizationUtils.AddTranslationText(percentage, "{zoom}");
     }
 
+    public void HideUI() 
+    {
+        gameObject.GetComponent<Image>().enabled = false;
+        slider.gameObject.SetActive(false);
+        plus.gameObject.SetActive(false);
+        minus.gameObject.SetActive(false);    
+    }
+
     void OnEnable()
     {
         orthoZoomSpeed = (maxCameraSize - minCameraSize) / Screen.height;
@@ -171,7 +179,7 @@ public class Zoom : MonoBehaviour
             return;
         }
 #if UNITY_IPHONE || UNITY_ANDROID
-        if (Input.touchCount == 2 && GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().InputEnabled && Input.GetTouch(0).phase == TouchPhase.Moved && Input.GetTouch(1).phase == TouchPhase.Moved)
+        if (Input.touchCount == 2 && GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().InputEnabled /*&& Input.GetTouch(0).phase == TouchPhase.Moved && Input.GetTouch(1).phase == TouchPhase.Moved*/)
         {
             Workspace.Instance.isPinchActive = true;
             touchZero = Input.touches[0];
