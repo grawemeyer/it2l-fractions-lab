@@ -227,11 +227,14 @@ namespace taskDependentSupport
 
 			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
 			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
-				Debug.Log ("doneButtonPressed");
+				Debug.Log (":::: doneButtonPressed ::::: ");
 				Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
 				reasoning.processEvent();
 				reasoning.processDoneEvent();
+
+				FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
+				Debug.Log (" :::: feedback ID after reasoning ::: "+currentFeedback.getID());
 				
 				Feedback feedback = new Feedback();
 				feedback.setStudentModel(studentModel);

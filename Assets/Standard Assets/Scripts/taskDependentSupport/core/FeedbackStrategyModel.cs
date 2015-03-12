@@ -1,5 +1,11 @@
 
 using System;
+
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+
 namespace taskDependentSupport.core
 {
 
@@ -16,6 +22,8 @@ namespace taskDependentSupport.core
 
 		public static string getFeedbackMessage()
 		{
+			Debug.Log (" :::: feedback ID in strategy model ::: "+currentFeedback.getID()+" pointer::: "+currentFeedbackPointer);
+
 			if (currentFeedbackPointer == 1) {
 				return currentFeedback.getFeedbackMessage ().getSocratic ();
 			}
