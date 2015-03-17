@@ -1139,7 +1139,7 @@ public class Workspace : MonoBehaviour
         UpdateWS();
         root.GetComponent<RootElement>().UpdateGraphics();
         elements.Push(root);
-        ExternalEventsManager.Instance.SendMessageToSupport("EquivalenceGenerated", root.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("EquivalenceGenerated", root.GetComponent<RootElement>().type ,root.name);
         root.BroadcastMessage("SetElementState", ElementsState.Equivalence, SendMessageOptions.DontRequireReceiver);
         root.GetComponent<RootElement>().SendMessage("SetPartitioning", SendMessageOptions.DontRequireReceiver);
         return root;
