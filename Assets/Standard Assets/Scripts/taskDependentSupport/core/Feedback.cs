@@ -80,16 +80,16 @@ namespace taskDependentSupport.core
 			FeedbackElem currentFeedbackTest = studentModel.getCurrentFeedback();
 			Debug.Log (" :::: feedback ID in feedback ::: "+currentFeedbackTest.getID());
 
+			FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
+			String feedbackType = getFeedbackTypeAsString(currentFeedback.getFeedbackType());
+
 			if (!feedbackMessage.Equals ("")) {
 				if (taskDependentSupport.TDSWrapper.TIS){
 					List<bool> feedbackFollowed = studentModel.getFeedbackFollowed();
 					bool followed = feedbackFollowed[feedbackFollowed.Count-1];
 					bool previousViewed = studentModel.getPreviousViewed();
 					int level = studentModel.getCurrentFeedbackLevel();
-					FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
 					List<String> feedback = getFeedbackAsList(currentFeedback);
-					String feedbackType = getFeedbackTypeAsString(currentFeedback.getFeedbackType());
-
 					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedback, feedbackType, level, followed, previousViewed);
 				}
 				else {
@@ -101,9 +101,12 @@ namespace taskDependentSupport.core
 
 					else if (presentationMode.Equals ("low")) {
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
+						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 						sendLowMessage (feedbackMessage);
+
 					} else if (presentationMode.Equals ("high")) {
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
+						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 						Debug.Log ("send HIGH message");
 						sendHighMessage (feedbackMessage);
 					}

@@ -26,7 +26,7 @@ namespace taskDependentSupport.core
 					}
 				}
 			}
-			if (type.Equals ("FractionGenerated")){
+			if (type.Equals ("FractionGenerated") || type.Equals ("EquivalenceGenerated")){
 				Fraction thisFraction = new Fraction();
 				thisFraction.setName(name);
 				thisFraction.setID(id);
