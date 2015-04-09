@@ -56,7 +56,7 @@ public class TaskManager : MonoBehaviour {
     public IEnumerator LoadJson(string _url)
     {
         string url = _url+ "?" + (UnityEngine.Random.Range(1, 100000000)).ToString();
-        Application.ExternalCall("ShowMessage", url);
+        //Application.ExternalCall("ShowMessage", url);
 
         WWW www = new WWW(url);
 

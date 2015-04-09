@@ -117,10 +117,11 @@ public class ExternalEventsManager : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        //embeddingVariables.Add("language", "es");
+        //embeddingVariables.Add("language", "en");
         //embeddingVariables.Add("showStartPage", "false");
-       // embeddingVariables.Add("username", "Pippo01");
+        //embeddingVariables.Add("username", "Pippo01");
         //embeddingVariables.Add("tip", "http://172.19.6.254/italk2learn/tip/Task01.tip");
+        //embeddingVariables.Add("idtask", "task2.4.setA.areaStudent2");
 #endif
     }
 

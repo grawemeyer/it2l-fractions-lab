@@ -287,6 +287,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     IEnumerator Start()
     {
+        Debug.Log("dd " + Debug.isDebugBuild);
         Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
        // Debug.Log("isLogged " + isLogged + " showStartPage " + showStartPage + " istaskdefined " + istaskDefined);
         if (!isLogged)
