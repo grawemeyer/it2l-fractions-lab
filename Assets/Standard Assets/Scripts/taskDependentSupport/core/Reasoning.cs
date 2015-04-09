@@ -898,9 +898,19 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
+
+					Debug.Log (":: numerator: "+numerator);
+					Debug.Log (":: denominator: "+denominator);
+					Debug.Log (":: equivalent: "+equivalent(numerator, denominator, startNumerator, startDenominator));
+					Debug.Log (":: checkCurrentFractionsForEquivalence: "+checkCurrentFractionsForEquivalence(startNumerator, startDenominator));
+					Debug.Log (":: getComparedFractions: "+studentModel.getComparedFractions());
+					Debug.Log (":: getComparedResult: "+studentModel.getComparedResult());
+
 					if ((numerator == 0) && (denominator == 0)) {
 						currentFeedback = feedbackData.S3;
 					}
+
+
 
 					else if (equivalent(numerator, denominator, startNumerator, startDenominator) && 
 					         (studentModel.getCurrentFractions().Count == 1)){
@@ -908,11 +918,11 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.T24E1;
 					}
 
-					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && studentModel.getComparedFractions()){
+					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && studentModel.getComparedResult()){
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T24E1;
 					}
-					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && !studentModel.getComparedFractions()){
+					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && !studentModel.getComparedResult()){
 						currentFeedback = feedbackData.T24M11;
 					}
 					else if ((numerator == startNumerator) && (denominator == startDenominator)) {

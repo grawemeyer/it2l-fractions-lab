@@ -55,7 +55,6 @@ namespace taskDependentSupport.core
 
 			}
 
-
 			if (type.Equals ("OperationResult")){
 				if (name.Equals("Sum")) {
 					Debug.Log (":::::: setAdditionBox ::::::");
@@ -67,9 +66,11 @@ namespace taskDependentSupport.core
 				else {
 					studentModel.setCompared(true);
 					if (id.Equals ("=")){
+						Debug.Log ("set compared result true");
 						studentModel.setComparedResult(true);
 					}
 					else if (id.Equals (">") || id.Equals ("<")){
+						Debug.Log ("set compared fraction true");
 						studentModel.setComparedFractions(true);
 					}
 					else {
