@@ -90,7 +90,7 @@ namespace taskDependentSupport
 			Debug.Log ("setTaskID: "+arg);
 
 			String elem = arg.ToString ();
-				String checkTaskID = elem.Substring(0,7);
+			String checkTaskID = elem.Substring(0,7);
 			if (checkTaskID.Equals ("task1.1")) {
 				taskID = elem.Substring(0,11);
 				studentID = elem.Substring(11);

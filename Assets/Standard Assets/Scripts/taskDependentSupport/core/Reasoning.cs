@@ -357,7 +357,7 @@ namespace taskDependentSupport.core
 				
 				if (firstPartition != 0){
 					firstNumerator = firstNumerator * firstPartition;
-					firstPartition = firstPartition * firstPartition;
+					firstDenominator = firstDenominator * firstPartition;
 				}
 				for (int i = 1; i< studentModel.getCurrentFractions().Count; i++){
 					Fraction currentfraction = studentModel.getCurrentFractions()[i];
@@ -373,6 +373,97 @@ namespace taskDependentSupport.core
 				}
 			}
 			return true;
+		}
+
+		private List<Fraction> getFractionsWithSameValues(int checkNumerator, int checkDenominator){
+			List<Fraction> result = new List<Fraction>();
+			for (int i = 0; i< studentModel.getCurrentFractions().Count; i++) {
+				Fraction currentfraction = studentModel.getCurrentFractions()[i];
+				int numerator = currentfraction.getNumerator();
+				int denominator = currentfraction.getDenominator();
+				int partition = currentfraction.getPartition();
+				
+				if (partition != 0){
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+				}
+
+				if ((checkNumerator == numerator) && (checkDenominator == denominator)){
+					result.Add(currentfraction);
+				}
+			}
+			return result;
+		}
+
+		private List<Fraction> deleteFractionsWithSameValues(int checkNumerator, int checkDenominator){
+			List<Fraction> result = new List<Fraction>();
+			for (int i = 0; i< studentModel.getCurrentFractions().Count; i++) {
+				Fraction currentfraction = studentModel.getCurrentFractions()[i];
+				int numerator = currentfraction.getNumerator();
+				int denominator = currentfraction.getDenominator();
+				int partition = currentfraction.getPartition();
+				
+				if (partition != 0){
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+				}
+				
+				if ((checkNumerator != numerator) || (checkDenominator != denominator)){
+					result.Add(currentfraction);
+				}
+			}
+			return result;
+		}
+
+		private List<Fraction> getFractionsWithDiffRep(String name, List<Fraction> sameValueFractions){
+			List<Fraction> result  = new List<Fraction>();
+			for (int i = 0; i< sameValueFractions.Count; i++) {
+				String currentName = sameValueFractions[i].getName ();
+				if (!currentName.Equals(name)){
+					result.Add (sameValueFractions[i]);
+				}
+			}
+			return result;
+		}
+
+		private bool fourWithDifferentRep(List<Fraction> sameValueFractions){
+			string currentRepresentation = sameValueFractions[0].getName();
+			List<Fraction> diffRep = getFractionsWithDiffRep(currentRepresentation, sameValueFractions);
+			diffRep.Add (sameValueFractions[0]);
+
+			if (diffRep.Count >= 4) {
+				return true;
+			}
+			return false;
+		}
+
+		private bool fourWithDiffRepAndSameValues(){
+			int amountOfReps = createdReps ();
+			if (amountOfReps >= 4) {
+				//get all with the same values
+				List<Fraction> currentFractions = studentModel.getCurrentFractions();
+				while (currentFractions.Count > 0){
+					Fraction firstFraction = currentFractions [0];
+					int firstNumerator = firstFraction.getNumerator();
+					int firstDenominator = firstFraction.getDenominator();
+					int firstPartition = firstFraction.getPartition();
+					
+					if (firstPartition != 0){
+						firstNumerator = firstNumerator * firstPartition;
+						firstDenominator = firstDenominator * firstPartition;
+					}
+
+					List<Fraction> sameValues = getFractionsWithSameValues(firstNumerator, firstDenominator);
+					currentFractions = deleteFractionsWithSameValues(firstNumerator, firstDenominator);
+
+					if (sameValues.Count >= 4){
+						if (fourWithDifferentRep(sameValues)){
+							return true;
+						}
+					}
+				}
+			}
+			return false;
 		}
 
 		private int createdReps(){
@@ -940,6 +1031,7 @@ namespace taskDependentSupport.core
 
 			if (taskID.Equals("task2.1")){
 				checkForFeedbackFollowed();
+				Debug.Log (":::: Hier in Task 2.1 ::: ");
 
 				Fraction currentFraction =studentModel.getCurrentFraction();
 				if (currentFraction != null){
@@ -952,6 +1044,13 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
+					Debug.Log (":::: numerator: "+numerator);
+					Debug.Log (":::: denominator: "+denominator);
+					Debug.Log (":::: sameRepresentations: "+sameRepresentations());
+					Debug.Log (":::: sameValues: "+sameValues());
+					Debug.Log (":::: createdReps: "+createdReps());
+					Debug.Log (":::: fourWithDiffRepAndSameValues: "+fourWithDiffRepAndSameValues());
+
 					if ((numerator ==0) && (denominator ==0)){
 						currentFeedback = feedbackData.S3;
 					}
@@ -962,10 +1061,14 @@ namespace taskDependentSupport.core
 					else if (!sameRepresentations() && sameValues() && (createdReps() < 4)){
 						currentFeedback = feedbackData.FM11;
 					}
-					else if (!sameRepresentations() && sameValues() && (createdReps() == 4)){
+					else if (fourWithDiffRepAndSameValues()){
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.FE1;
 					}
+					//else if (!sameRepresentations() && sameValues() && (createdReps() >= 4)){
+					//	studentModel.setTaskCompleted(true);
+					//	currentFeedback = feedbackData.FE1;
+					//}
 
 					else if ((numerator !=0) || (denominator !=0)) {
 						currentFeedback = feedbackData.FM6;
