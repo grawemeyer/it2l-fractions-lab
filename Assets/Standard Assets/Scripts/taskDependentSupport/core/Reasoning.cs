@@ -956,8 +956,9 @@ namespace taskDependentSupport.core
 					         (numerator == startDenominator)){
 						currentFeedback = feedbackData.T24M5;
 					}
-					else if (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M1.getID ()) ||
-					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M2.getID ())){
+					else if (((denominator == startDenominator) || (multiple(denominator, startDenominator))) &&
+							(studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M1.getID ()) ||
+					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M2.getID ()))){
 						currentFeedback = feedbackData.T24M4;
 					}
 					else if ((denominator != startDenominator) && (!multiple(denominator, startDenominator))){
@@ -969,6 +970,9 @@ namespace taskDependentSupport.core
 					else if (((numerator != startNumerator) || (denominator != startDenominator)) && 
 					         !equivalent(numerator, denominator, startNumerator, startDenominator)){
 						currentFeedback = feedbackData.T24M3;
+					}
+					else if ((denominator == startDenominator) || (multiple(denominator, startDenominator))){
+						currentFeedback = feedbackData.T24M6;
 					}
 
 					else {
