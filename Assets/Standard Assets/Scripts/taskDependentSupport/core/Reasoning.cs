@@ -1027,6 +1027,10 @@ namespace taskDependentSupport.core
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.F2E1;
 					}
+					else if ((partition != 2) && (partition != 3) && (partition != 4) 
+					         && (partition != 5) && (partition != 0)){
+						currentFeedback = feedbackData.F2M11;
+					}
 
 
 					else {
@@ -1223,7 +1227,7 @@ namespace taskDependentSupport.core
 
 				Fraction currentFraction =studentModel.getCurrentFraction();
 
-				Debug.Log ("currentFraction: "+currentFraction);
+				Debug.Log (":::: currentFraction: "+currentFraction);
 
 				if (currentFraction != null){
 						
@@ -1238,7 +1242,10 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
-					Debug.Log ("numerator: "+numerator+" denominator: "+denominator);
+					Debug.Log (":::: numerator: "+numerator+" denominator: "+denominator);
+					Debug.Log (":::: getComparedResult: "+studentModel.getComparedResult());
+					Debug.Log (":::: currentSetIncludesFraction END: "+currentSetIncludesFraction(endNumerator,endDenominator));
+					Debug.Log (":::: currentSetIncludesFraction START: "+currentSetIncludesFraction(startNumerator,startDenominator));
 
 					if (!studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
 						currentFeedback = feedbackData.M11;

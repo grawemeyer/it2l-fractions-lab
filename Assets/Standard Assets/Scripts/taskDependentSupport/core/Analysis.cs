@@ -40,8 +40,10 @@ namespace taskDependentSupport.core
 			if (type.Equals("FractionChange")){
 				if (name.Equals("Numerator")) studentModel.setNumeratorAtFraction(id, fractionsValue);
 				if (name.Equals("Denominator")) studentModel.setDenominatorAtFraction(id, fractionsValue);
-				if (name.Equals("Partitions")) studentModel.setPartitionAtFraction(id, fractionsValue);
-
+				if (name.Equals("Partitions")) {
+					Debug.Log ("::::: partition: "+id+" value: "+fractionsValue);
+					studentModel.setPartitionAtFraction(id, fractionsValue);
+				}
 				studentModel.setComparedResult(false);
 				studentModel.setComparedResult(false);
 				studentModel.setComparedFractions(false);
