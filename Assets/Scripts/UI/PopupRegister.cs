@@ -181,7 +181,7 @@ public class PopupRegister : MonoBehaviour {
             if (passwordOv.gameObject.activeSelf)
                 passwordOv.GetComponentInChildren<Text>().color = InterfaceBehaviour.Orange;
             if (rePasswordOv.gameObject.activeSelf)
-                rePasswordOv.GetComponentInChildren<Text>().color = InterfaceBehaviour.DarkGreen;
+                rePasswordOv.GetComponentInChildren<Text>().color = InterfaceBehaviour.Orange;
         }
     }
 }

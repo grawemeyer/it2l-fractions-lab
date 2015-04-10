@@ -90,7 +90,8 @@ public class PopupTaskDescriptor : MonoBehaviour {
 
     public void Close() 
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        interfaceB.PopPopup();
         interfaceB.taskDescription.GetComponent<UIButton>().EnableBtn(false);
     }
 

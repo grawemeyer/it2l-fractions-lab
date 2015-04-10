@@ -54,7 +54,7 @@ public class LookAtFraction : MonoBehaviour
 
 	}
 
-    void Update()
+  /*  void Update()
     {
         if (zoom && null != fractionOnFocus)
         {
@@ -73,7 +73,7 @@ public class LookAtFraction : MonoBehaviour
                 isFinished = true;
             }
         }
-    }
+    }*/
     #endregion
 
 

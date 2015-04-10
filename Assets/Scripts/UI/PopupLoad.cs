@@ -7,7 +7,7 @@ using fractionslab.utils;
 
 public class PopupLoad : MonoBehaviour {
 
-    public GameObject taskVoice;
+    public GameObject taskElement;
     public GameObject scrollpanel;
     public GameObject scrollbar;
     public GameObject popupTaskDesc;
@@ -47,11 +47,11 @@ public class PopupLoad : MonoBehaviour {
         scrollbar.GetComponent<Scrollbar>().value = 1;
         foreach (Task ts in taskList) 
         {
-            task = GameObject.Instantiate(taskVoice) as GameObject;
-            task.GetComponent<TaskVoice>().Initialize(ts);
+            task = GameObject.Instantiate(taskElement) as GameObject;
+            task.GetComponent<TaskElement>().Initialize(ts);
             task.transform.parent = scrollpanel.transform;
             task.transform.localPosition = new Vector3(-20.0f, yStart - (yOffset * (j++)), task.transform.localPosition.z);
-            task.GetComponent<TaskVoice>().popupDescriptor = popupTaskDesc;
+            task.GetComponent<TaskElement>().popupDescriptor = popupTaskDesc;
         }
 	
 	}

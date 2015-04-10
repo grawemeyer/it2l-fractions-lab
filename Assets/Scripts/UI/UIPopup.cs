@@ -10,7 +10,7 @@ public class UIPopup : MonoBehaviour {
     public bool destroyOnClose;
     public Button okButton;
     public Text text;
-    protected InterfaceBehaviour interfaceB;
+    public InterfaceBehaviour interfaceB;
 
 	void Start () {
         //isHighFeedback = false;

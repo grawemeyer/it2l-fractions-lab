@@ -3,11 +3,32 @@ using System.Collections;
 using System.Text;
 
 public class TestBehaviour : MonoBehaviour {
+    public GameObject prefab;
+    GameObject prova;
+    GameObject prova1;
 
 	void Start ()
     {
-        StartCoroutine(SendData());
+        prova = Instantiate(prefab) as GameObject;
+        prova1 = Instantiate(prova) as GameObject;
+        //prova.renderer.material.color = new Color(0.5f, 0.5f, 0.5f);
+
+        prova1.renderer.materials = prova.renderer.materials;
+
+       // StartCoroutine(SendData());
 	}
+
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            prova.renderer.material.color = Color.red;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            prova1.renderer.material.color = Color.white;
+        }
+    }
 
     IEnumerator SendData()
     {

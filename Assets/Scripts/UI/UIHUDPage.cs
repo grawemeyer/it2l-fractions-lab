@@ -12,11 +12,10 @@ public class UIHUDPage : MonoBehaviour {
     public Button taskDescription;
     public GameObject toolMenu;
     public Text user;
+    public GameObject hint;
     public UnityEngine.Sprite spriteEditUp;
     public UnityEngine.Sprite spriteUp;
-
-
-
+    public GameObject bookmark;
 
 	// Use this for initialization
 	void Start () {
@@ -35,7 +34,7 @@ public class UIHUDPage : MonoBehaviour {
         {
             taskDescription.GetComponent<UIButton>().icons[0].sprite = spriteUp;
             taskDescription.GetComponent<UIButton>().icons[0].gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(0.0f, 0.0f);
-            taskDescription.GetComponent<UIButton>().icons[0].gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2( 35.0f, 45.0f);
+            taskDescription.GetComponent<UIButton>().icons[0].gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(35.0f, 45.0f);
             toolTeacher.SetActive(false);
             user.color = InterfaceBehaviour.ClearGreen;
            
@@ -49,6 +48,13 @@ public class UIHUDPage : MonoBehaviour {
             toolTeacher.SetActive(true);
             user.color = InterfaceBehaviour.Orange;
         }
+
+#if UNITY_ANDROID || UNITY_IPHONE
+        hint.SetActive(false);
+        bookmark.GetComponent<RectTransform>().anchoredPosition = new Vector2(bookmark.GetComponent<RectTransform>().anchoredPosition.x, 45.0f);
+        toolTeacher.GetComponent<RectTransform>().anchoredPosition = new Vector2(toolTeacher.GetComponent<RectTransform>().anchoredPosition.x, -101.0f);
+        taskDescription.GetComponent<RectTransform>().anchoredPosition = new Vector2(taskDescription.GetComponent<RectTransform>().anchoredPosition.x, 46.0f);
+#endif
         
     }
 }

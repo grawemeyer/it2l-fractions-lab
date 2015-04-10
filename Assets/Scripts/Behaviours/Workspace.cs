@@ -41,9 +41,17 @@ public class Workspace : MonoBehaviour
     public Color greenResult = new Color(0.3373f, 0.5294f, 0.2392f, 1.0f);
     public Color greyResult = new Color(0.6863f, 0.6588f, 0.5569f, 1.0f);
     public GameObject liquidSource;
+    public Mesh setSourceMoonOut;
+    public Mesh setSourceMoonIn;
+    public Mesh setSourceHeartOut;
+    public Mesh setSourceHeartIn;
+    public Mesh setSourceStarOut;
+    public Mesh setSourceStarIn;
     public GameObject setSourceMoon;
     public GameObject setSourceHeart;
     public GameObject setSourceStar;
+    public Material inMat;
+    public Material outMat;
     public GameObject delimiters;
     public SetElement.Shape lastShape;
     public List<Color> colorList = new List<Color>();
@@ -202,7 +210,7 @@ public class Workspace : MonoBehaviour
         {
             if (ElementOnFocus.GetComponent<RootElement>().denominator > 0)
             {
-                if (ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.LookAt)
+                //if (ElementOnFocus.GetComponent<RootElement>().state != ElementsState.Equivalence)
                     ElementOnFocus.BroadcastMessage("SetMode", InteractionMode.Moving, SendMessageOptions.DontRequireReceiver);
                 interfaces.SendMessage("ShowSuggestion", "");
                 interfaces.SendMessage("ShowHint", "");
@@ -240,7 +248,9 @@ public class Workspace : MonoBehaviour
             ExternalEventsManager.Instance.SendMessageToSupport("BeginPan", "(" + Camera.main.transform.position.x + ", " + Camera.main.transform.position.y + ")");
             isPan = true;
         }
-      
+
+       // float mouseCursorSpeed = Input.GetAxis("Mouse X") / Time.deltaTime;
+       // Debug.Log("mouse speed " + mouseCursorSpeed);
         newPos = Camera.main.transform.position - offset;
         zoomOutOffset = (outOffset * Camera.main.orthographicSize) / 10.0f;
         //Debug.Log("zoomOutOffset " + zoomOutOffset);
@@ -328,17 +338,25 @@ public class Workspace : MonoBehaviour
 
     GameObject CreateContainer(GameObject f1, GameObject f2)
     {
-        //Debug.Log("CreateContainer " +  f1.GetComponent<RootElement>().shape);
+        Color newColor = Workspace.instance.GetColor();
+        for (int i = 0; i < Workspace.instance.colorList.Count; i++) 
+        {
+            if (newColor != f1.GetComponent<RootElement>().color && newColor != f2.GetComponent<RootElement>().color)
+                break;
+            newColor = Workspace.instance.GetColor();
+        }
+
         Element element = new Element();
         element.position = Vector3.zero;
-        element.color = f1.GetComponent<RootElement>().color; //Workspace.Instance.greenResult;
+        element.color = newColor; //Workspace.Instance.greenResult;
         element.type = f1.GetComponent<RootElement>().type;
         element.state = ElementsState.Fraction; //ElementsState.Result;
         element.partNumerator = 0;
-        element.partDenominator = f1.GetComponent<RootElement>().partDenominator;
-        element.numerator = element.partNumerator / firstCut.GetComponent<RootElement>().partitions;
-        element.denominator = f1.GetComponent<RootElement>().denominator;
-        element.partitions = f1.GetComponent<RootElement>().partitions;
+        element.partDenominator = Mathf.Min(f1.GetComponent<RootElement>().partDenominator, f2.GetComponent<RootElement>().partDenominator);
+        element.partitions = Mathf.Min(f1.GetComponent<RootElement>().partitions, f2.GetComponent<RootElement>().partitions);
+        element.numerator = 0;
+        element.denominator =  element.partDenominator / element.partitions;
+       
         element.shape = (int)f1.GetComponent<RootElement>().shape;
         GameObject root = null;
         switch (element.type)
@@ -351,9 +369,6 @@ public class Workspace : MonoBehaviour
                 break;
             case (ElementsType.Set):
                 root = CreateSet(element);
-                //root.GetComponent<RootElement>().shape = f1.GetComponent<RootElement>().shape;
-                //root.GetComponent<RootElement>().BroadcastMessage("SetSize", new Vector2(Mathf.Max(f1.GetComponent<RootElement>().width, f2.GetComponent<RootElement>().width), Mathf.Max(f1.GetComponent<RootElement>().height, f2.GetComponent<RootElement>().height)));
-                //root.GetComponent<RootElement>().UpdateGraphics();
                 break;
             case (ElementsType.HeartSet):
                 root = CreateHeartSet(element);
@@ -372,7 +387,7 @@ public class Workspace : MonoBehaviour
                 break;
         }
 
-        root.SendMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
         return root;
     }
 
@@ -384,6 +399,7 @@ public class Workspace : MonoBehaviour
         element.type = f1.GetComponent<RootElement>().type;
         element.state = ElementsState.Fraction; //ElementsState.Result;
         element.shape = (int)f1.GetComponent<RootElement>().shape;
+        //Debug.Log("f1 partnun " + f1.GetComponent<RootElement>().partNumerator + " f2 partnumerator " + f2.GetComponent<RootElement>().partNumerator);
         if (currentAction == ActionType.Join)
             element.partNumerator = f1.GetComponent<RootElement>().partNumerator + f2.GetComponent<RootElement>().partNumerator;
         else
@@ -410,7 +426,6 @@ public class Workspace : MonoBehaviour
                 break;
             case (ElementsType.HeartSet):
                 root = CreateHeartSet(element);
-
                 break;
             case (ElementsType.StarSet):
                 root = CreateStarSet(element);
@@ -425,7 +440,7 @@ public class Workspace : MonoBehaviour
                 root = CreateLiquidMeasures(element);
                 break;
         }
-        root.SendMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
 
         if (f1.GetComponent<RootElement>().parentRef != null)
         {
@@ -441,16 +456,19 @@ public class Workspace : MonoBehaviour
             f2.GetComponent<RootElement>().parentRef = null;
         }
 
+       
+
         elements.Remove(f1);
         elements.Remove(f2);
+
 
         Destroy(firstCut);
         Destroy(secondCut);
         firstCut = null;
         secondCut = null;
-
+       
         UpdateWS();
-        return root;
+               return root;
     }
 
     GameObject CreateImproperFractions(GameObject f1, GameObject f2)
@@ -460,8 +478,9 @@ public class Workspace : MonoBehaviour
         root.transform.parent = transform;
         root.transform.position = Vector3.zero;
         RootElement rootComp = root.AddComponent<RootElement>();
-        root.SendMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
+        root.BroadcastMessage("SetMode", InteractionMode.Wait, SendMessageOptions.DontRequireReceiver);
         root.SendMessage("SetColor", grey);
+        root.SendMessage("SetType", f1.GetComponent<RootElement>().type);
         root.SendMessage("SetElementState", ElementsState.Improper);
         root.SendMessage("UpdateGraphics");
         root.SendMessage("DisableInput");
@@ -518,7 +537,7 @@ public class Workspace : MonoBehaviour
                 ExternalEventsManager.Instance.SendMessageToSupport("ImproperGenerated", "HRects", rootComp.name);
                 break;
             case (ElementsType.VRect):
-                ExternalEventsManager.Instance.SendMessageToSupport("ImproperGenerated", "HRects", rootComp.name);
+                ExternalEventsManager.Instance.SendMessageToSupport("ImproperGenerated", "VRects", rootComp.name);
                 break;
             case (ElementsType.Liquid):
                 ExternalEventsManager.Instance.SendMessageToSupport("ImproperGenerated", "LiquidMeasures", rootComp.name);
@@ -598,12 +617,13 @@ public class Workspace : MonoBehaviour
             diff = element.partNumerator;
 
         totalWidth += gap * (wholes - 1);
-
+        //Debug.Log("wholes " + wholes);
         for (int i = 0; i < wholes; i++)
         {
             Element elem = element;
             if (i == wholes - 1)
             {
+                //Debug.Log("diff " + diff);
                 elem.partNumerator = diff;
                 elem.numerator = elem.partNumerator / element.partitions;
             }
@@ -619,6 +639,11 @@ public class Workspace : MonoBehaviour
             {
                 child.SendMessage("SetFractionBaseOffset", i);
                 root.BroadcastMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
+            }
+            if (elem.type == ElementsType.HeartSet || elem.type == ElementsType.MoonSet || elem.type == ElementsType.StarSet)
+            {
+                child.SendMessage("SetFractionBaseOffset", i);
+                root.BroadcastMessage("SetBBExtends", new BBExtend(0.0f, 0.5f, 0.0f, 0.5f));
             }
 
             //work on set
@@ -641,11 +666,11 @@ public class Workspace : MonoBehaviour
            // Debug.Log("MODE " + root.GetComponent<RootElement>().mode);
             child.BroadcastMessage("SetMode", root.GetComponent<RootElement>().mode);
             child.SendMessage("InitializeAs", element.type);
-
             child.SendMessage("SetEnableCollider", false);
-
             child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
+            //Debug.Log("child name " + child.name + " position  " + child.transform.position);
             root.GetComponent<RootElement>().elements.Add(child);
+            //Debug.Log("elements of " + root.name + " " + root.GetComponent<RootElement>().elements.Count);
             root.GetComponent<RootElement>().symbol_root = symbol_root;
             root.GetComponent<RootElement>().symbol_root_mobile = symbol_root_mobile;
             root.GetComponent<RootElement>().partition_root = partition_root;
@@ -660,6 +685,7 @@ public class Workspace : MonoBehaviour
         
         
         root.transform.position += new Vector3(totalWidth * 0.25f, 0.0f, 0.0f);
+        RepositioningChildren(root);
     }
 
     public void AddFractionsChildren(GameObject root)
@@ -706,7 +732,11 @@ public class Workspace : MonoBehaviour
         int i = wholes - 1;
 
         Element elem = element;
-        elem.partNumerator = 1;
+        if(elem.partitions > 1)
+            elem.partNumerator = elem.partitions;
+        else
+            elem.partNumerator = 1;
+
         elem.numerator = elem.partNumerator / element.partitions;
        // Debug.Log("Father " + gameObject.name + " child " + (i + 1) + "numerator " + elem.numerator);
         GameObject child = CreateSingleFraction(label + "_child" + (i + 1), elem, true);
@@ -720,6 +750,11 @@ public class Workspace : MonoBehaviour
         {
             child.SendMessage("SetFractionBaseOffset", i);
             child.SendMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
+        }
+        if (elem.type == ElementsType.HeartSet || elem.type == ElementsType.MoonSet || elem.type == ElementsType.StarSet)
+        {
+            child.SendMessage("SetFractionBaseOffset", i);
+            child.BroadcastMessage("SetBBExtends", new BBExtend(0.0f, 0.5f, 0.0f, 0.5f));
         }
         child.SendMessage("InitializeAs", element.type);
         child.SendMessage("SetEnableCollider", false);
@@ -741,6 +776,91 @@ public class Workspace : MonoBehaviour
         RepositioningChildren(root);
     }
 
+    public void AddResultFractionsChildren(GameObject root)
+    {
+        string label = root.name.Split('_')[0];
+        float totalWidth = 0.0f;
+        float totalHeight = 0.0f;
+
+        RootElement r = root.GetComponent<RootElement>();
+        //Debug.Log("1) root "+ root.name+" height  " + r.height + " width " + r.width);
+        Element element = new Element();
+        element.numerator = r.numerator;
+        element.denominator = r.denominator;
+        element.partNumerator = r.partNumerator;
+        element.partDenominator = r.partDenominator;
+        element.partitions = r.partitions;
+        element.state = r.state;
+        element.type = r.type;
+        element.position = Vector3.zero;
+        element.color = r.color;
+
+        float gap = 0.0f;
+        switch (element.type)
+        {
+            case (ElementsType.HRect):
+            case (ElementsType.VRect):
+            case (ElementsType.Set):
+            case (ElementsType.HeartSet):
+            case (ElementsType.StarSet):
+            case (ElementsType.MoonSet):
+                gap = 0.4f;
+                break;
+            case (ElementsType.Liquid):
+                gap = 0.6f;
+                break;
+        }
+
+        //int diff = element.partNumerator - element.partDenominator;
+
+        int wholes = r.elements.Count + 1; // Mathf.Max(1, Mathf.CeilToInt((float)element.partNumerator / (float)element.partDenominator));
+
+        totalWidth += gap * (wholes - 1);
+
+        int i = wholes - 1;
+
+        Element elem = element;
+        elem.partNumerator = 1;
+        elem.numerator = elem.partNumerator / element.partitions;
+        // Debug.Log("Father " + gameObject.name + " child " + (i + 1) + "numerator " + elem.numerator);
+        GameObject child = CreateSingleFraction(label + "_child" + (i + 1), elem, true);
+        child.transform.parent = root.transform;
+        //work on set
+        /*  if (element.type == ElementsType.Set )
+          {      
+              child.GetComponent<RootElement>().shape = root.GetComponent<RootElement>().shape ;
+          }*/
+        if (elem.type == ElementsType.Line)
+        {
+            child.SendMessage("SetFractionBaseOffset", i);
+            child.SendMessage("SetBBExtends", new BBExtend(0.0f, 1.0f, 0.0f, 1.0f));
+        }
+        if (elem.type == ElementsType.HeartSet || elem.type == ElementsType.MoonSet || elem.type == ElementsType.StarSet)
+        {
+            child.SendMessage("SetFractionBaseOffset", i);
+            child.BroadcastMessage("SetBBExtends", new BBExtend(0.0f, 0.5f, 0.0f, 0.5f));
+        }
+        child.SendMessage("InitializeAs", element.type);
+        child.SendMessage("SetEnableCollider", false);
+        //Debug.Log("1) child height  " + child.GetComponent<RootElement>().height + " width " + child.GetComponent<RootElement>().width);
+
+        child.GetComponent<RootElement>().BroadcastMessage("SetSize", new Vector2(child.GetComponent<RootElement>().width, r.height));
+        totalHeight = child.GetComponent<RootElement>().height;
+        totalWidth += child.GetComponent<RootElement>().width;
+
+        child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
+        //Debug.Log(child.name + " Position1 " + child.transform.position);
+        root.GetComponent<RootElement>().elements.Add(child);
+
+        root.GetComponent<RootElement>().height = totalHeight;
+        root.GetComponent<RootElement>().width = totalWidth;
+
+        //root.transform.position += new Vector3(totalWidth * 0.25f, 0.0f, 0.0f);
+
+        RepositioningChildren(root);
+    }
+
+
     public void RemoveEmptyChildren(GameObject root)
     {
         //Debug.Log("RemoveEmptyChildren");
@@ -759,6 +879,10 @@ public class Workspace : MonoBehaviour
                 }
             }
             root.GetComponent<RootElement>().elements.RemoveAll(item => item == null);
+           
+            //if (root.GetComponent<RootElement>().type == ElementsType.MoonSet || root.GetComponent<RootElement>().type == ElementsType.HeartSet || root.GetComponent<RootElement>().type == ElementsType.StarSet)
+               // root.BroadcastMessage("UpdateWidth" , SendMessageOptions.DontRequireReceiver);
+           
             RepositioningChildren(root);
         }
     }
@@ -788,18 +912,21 @@ public class Workspace : MonoBehaviour
 
         int wholes = element.elements.Count;
 
+       // Debug.Log("whole " + wholes );
         totalWidth += gap * (wholes - 1);
 
         for (int i = 0; i < wholes; i++)
         {
             GameObject child = element.elements[i];
             child.transform.position = root.transform.TransformPoint((wholes - 1 - i) * (new SBSVector3(-(child.GetComponent<RootElement>().width + gap), 0.0f, 0.0f)));
-          //  Debug.Log(child.name + " Position2 " + child.transform.localPosition);
+            //Debug.Log(child.name + " Position2 " + child.transform.position);
             totalHeight = child.GetComponent<RootElement>().height;
             totalWidth += child.GetComponent<RootElement>().width;
         }
 
+       // Debug.Log("totalt width " + totalWidth);
         root.GetComponent<RootElement>().height = totalHeight;
+
         root.GetComponent<RootElement>().width = totalWidth;
 
         root.BroadcastMessage("UpdateArrowsState", SendMessageOptions.DontRequireReceiver);
@@ -841,7 +968,7 @@ public class Workspace : MonoBehaviour
     {
        // Debug.Log("createSet");
         string label = "set";
-        //Debug.Log("CreateSet " + element.shape);
+        Debug.Log("CreateSet " + element.numerator + " " + element.denominator + " " + element.partitions + " " + element.partNumerator + " " + element.partDenominator);
         GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
         CreateFractionsChildren(element, root, 0.4f, label);
         elements.Push(root);
@@ -855,7 +982,6 @@ public class Workspace : MonoBehaviour
     {
        // Debug.Log("createheartset");
         string label = "heartset";
-        //Debug.Log("CreateSet " + element.shape);
         GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
         CreateFractionsChildren(element, root, 0.4f, label);
         elements.Push(root);
@@ -883,6 +1009,8 @@ public class Workspace : MonoBehaviour
         string label = "moonset";
         //Debug.Log("CreateSet " + element.shape);
         GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
+        root.AddComponent<Rigidbody>();
+        root.GetComponent<Rigidbody>().useGravity = false;
         CreateFractionsChildren(element, root, 0.4f, label);
         elements.Push(root);
         UpdateWS();
@@ -977,6 +1105,7 @@ public class Workspace : MonoBehaviour
         root.BroadcastMessage("SetColor", GetColor(), SendMessageOptions.DontRequireReceiver);
         //Debug.Log("after color counter"+ colorCounter);
         root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
+        root.GetComponent<RootElement>().equivalences = null;
         root.GetComponent<RootElement>().UpdateGraphics();  
         elements.Push(root);
         UpdateWS();
@@ -984,9 +1113,42 @@ public class Workspace : MonoBehaviour
         ExternalEventsManager.Instance.SendMessageToSupport("FractionCopy", root.name);
     }
 
+
+    public GameObject CreateEquivalence(GameObject source)
+    {
+        GameObject root = Instantiate(source) as GameObject;
+        string[] splitted = source.name.Split('_');
+        elemCounter++;
+        root.name = source.name + "_eq" + (root.GetComponent<RootElement>().equivalences.Count + 1);
+        root.transform.parent = transform;
+        
+        if (root.GetComponent<RootElement>().isHighlighted)
+        {
+            root.GetComponent<RootElement>().isHighlighted = false;
+            Destroy(root.GetComponent<RootElement>().highlight);
+        }
+
+        float xOffset = 0.0f;
+        float yOffset = (root.transform.position.y > 0.0f) ? (-4.0f + Random.Range(-0.5f, 0.5f)) : (4.0f + Random.Range(-0.5f, 0.5f));
+        root.transform.position += new Vector3(xOffset, yOffset, 0.0f);
+        root.BroadcastMessage("SetType", source.GetComponent<RootElement>().type, SendMessageOptions.DontRequireReceiver);
+        //Debug.Log("before color counter"+ colorCounter);
+        root.BroadcastMessage("SetColor", source.GetComponent<RootElement>().color, SendMessageOptions.DontRequireReceiver);
+        //Debug.Log("after color counter"+ colorCounter);
+        root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
+        UpdateWS();
+        root.GetComponent<RootElement>().UpdateGraphics();
+        elements.Push(root);
+        ExternalEventsManager.Instance.SendMessageToSupport("EquivalenceGenerated", root.GetComponent<RootElement>().type ,root.name);
+        root.BroadcastMessage("SetElementState", ElementsState.Equivalence, SendMessageOptions.DontRequireReceiver);
+        root.GetComponent<RootElement>().SendMessage("SetPartitioning", SendMessageOptions.DontRequireReceiver);
+        return root;
+    }
+
+
     void CutFraction(GameObject source)
     {
-        //Debug.Log("source name " + source.name);
+       // Debug.Log("source name " + source.name);
         if (source.GetComponent<RootElement>().state == ElementsState.Cut)
             return;
         GameObject root = Instantiate(source) as GameObject;
@@ -1005,6 +1167,10 @@ public class Workspace : MonoBehaviour
         root.BroadcastMessage("DetachModifierPartition");
         root.GetComponent<RootElement>().Cut();
         elements.Push(root);
+        if (source.GetComponent<RootElement>().state == ElementsState.Equivalence)
+            root.GetComponent<RootElement>().isFatherEquivalent = true;
+        else
+            root.GetComponent<RootElement>().isFatherEquivalent = false;
 
         source.BroadcastMessage("SetMode", InteractionMode.Freeze);
         UpdateWS();
@@ -1034,6 +1200,17 @@ public class Workspace : MonoBehaviour
     {
         if (null != element.GetComponent<RootElement>().parentRef)
             element.GetComponent<RootElement>().parentRef.BroadcastMessage("SetMode", InteractionMode.Moving);
+
+        if (null != element.GetComponent<RootElement>().parentEqRef && element.GetComponent<RootElement>().state == ElementsState.Equivalence)
+            element.GetComponent<RootElement>().parentEqRef.BroadcastMessage("DeleteEquivalence", element);
+
+        if (element.GetComponent<RootElement>().state != ElementsState.Equivalence && null != element.GetComponent<RootElement>().equivalences && element.GetComponent<RootElement>().equivalences.Count > 0 && element.GetComponent<RootElement>().state != ElementsState.Cut)
+        {
+            foreach (GameObject eq in element.GetComponent<RootElement>().equivalences) 
+            {
+                eq.GetComponent<RootElement>().parentEqRef = null;
+            }
+        }
 
         if (null != element.GetComponent<RootElement>().cutRef)
             element.GetComponent<RootElement>().cutRef.GetComponent<RootElement>().parentRef = null;
@@ -1133,17 +1310,18 @@ public class Workspace : MonoBehaviour
     void StartCurrentAction()
     {
         isAction = true;
-       // Debug.Log("is input " + inputEnabled);
-        //Debug.Log("START CURRENT ACTION");
         prevSize = Camera.main.orthographicSize;
         prevPos = Camera.main.transform.position;
         preScale = Camera.main.transform.localScale;
-       // Debug.Log("S prevsize " + prevSize + " prevPs " + prevPos + " prevscale " + preScale);
+        // Debug.Log("S prevsize " + prevSize + " prevPs " + prevPos + " prevscale " + preScale);
 
         Camera.main.orthographicSize = 10.0f;
         Camera.main.transform.position = new Vector3(0.0f, 0.0f, -10.0f);
         Camera.main.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
 
+       // Debug.Log("is input " + inputEnabled);
+        //Debug.Log("START CURRENT ACTION");
+      
         resultObject = null;
         RootElement firstCutRoot = firstCut.GetComponent<RootElement>();
         RootElement secondCutRoot = secondCut.GetComponent<RootElement>();
@@ -1169,7 +1347,7 @@ public class Workspace : MonoBehaviour
                 {
                     //firstCutRoot.ResetScale();
                     //secondCutRoot.ResetScale();
-
+                   
                     switch (currentAction)
                     {
                         case (ActionType.Join):
@@ -1185,7 +1363,12 @@ public class Workspace : MonoBehaviour
                 }
                 else
                 {
+                    Camera.main.orthographicSize = prevSize;
+                    Camera.main.transform.position = prevPos;
+                    Camera.main.transform.localScale = preScale;
+                    isAction = false;
                     interfaces.SendMessage("ShowFeedbackPopup", "{rep_greater_" + MAXVALUE + "}");
+                    
                     switch (currentAction)
                     {
                         case (ActionType.Join):
@@ -1217,24 +1400,26 @@ public class Workspace : MonoBehaviour
         }
     }
 
+    bool isEquivalent = false;
     void TerminateCurrentAction()
     {
-        //Debug.Log("T prevsize " + prevSize + " prevPs " + prevPos + " prevscale " + preScale );
         Camera.main.orthographicSize = prevSize;
         Camera.main.transform.position = prevPos;
         Camera.main.transform.localScale = preScale;
-
-       // Debug.Log("C size " + Camera.main.orthographicSize + " prevPs " + Camera.main.transform.position + " prevscale " + Camera.main.transform.localScale);
 
         if (null != firstCut && null != secondCut)
         {
             RootElement firstCutRoot = firstCut.GetComponent<RootElement>();
             RootElement secondCutRoot = secondCut.GetComponent<RootElement>();
 
+            if (firstCut.GetComponent<RootElement>().isFatherEquivalent && secondCut.GetComponent<RootElement>().isFatherEquivalent)
+                isEquivalent = true; 
+
             firstCut.SendMessage("MoveToCoord", -1.0f);
             secondCut.SendMessage("MoveToCoord", -1.0f);
 
             StopAllCoroutines();
+
             if (resultObject == null)
             {
                 if(CheckDenominator(firstCutRoot, secondCutRoot))
@@ -1242,6 +1427,19 @@ public class Workspace : MonoBehaviour
                 else
                     resultObject = CreateImproperFractions(firstCut, secondCut);
             }
+            
+            if (null == containerObject)
+            {
+                Color newColor = Workspace.instance.GetColor();
+                for (int i = 0; i < Workspace.instance.colorList.Count; i++)
+                {
+                    if (newColor != firstCutRoot.GetComponent<RootElement>().color && newColor != secondCutRoot.GetComponent<RootElement>().color)
+                        break;
+                    newColor = Workspace.instance.GetColor();
+                }
+                resultObject.GetComponent<RootElement>().color = newColor;
+            }
+
         }
 
         BoxCollider containerBB = resultObject.GetComponent<BoxCollider>();
@@ -1253,13 +1451,22 @@ public class Workspace : MonoBehaviour
             resultObject.SendMessage("AttachSymbol", true);
 
         resultObject.SendMessage("SetMode", InteractionMode.Moving, SendMessageOptions.DontRequireReceiver);
-
+        
         if (null != containerObject)
         {
+            resultObject.GetComponent<RootElement>().color = containerObject.GetComponent<RootElement>().color;
             elements.Remove(containerObject);
             Destroy(containerObject);
             containerObject = null;
         }
+       // Debug.Log("result color " + resultObject.GetComponent<RootElement>().color);
+        if (isEquivalent /*&& resultObject.GetComponent<RootElement>().type != ElementsType.HeartSet && resultObject.GetComponent<RootElement>().type != ElementsType.MoonSet && resultObject.GetComponent<RootElement>().type != ElementsType.StarSet*/)
+        {
+            GameObject tmp = CreateEquivalence(resultObject);
+            tmp.GetComponent<RootElement>().parentEqRef = null;
+            DeleteElement(resultObject);
+        }
+
         UpdateWS();
         isAction = false;
     }
@@ -1332,8 +1539,10 @@ public class Workspace : MonoBehaviour
         BoxCollider containerBB = containerObject.GetComponent<BoxCollider>();
         float offset = -0.50f;
         if (firstCut.GetComponent<RootElement>().type == ElementsType.Set || firstCut.GetComponent<RootElement>().type == ElementsType.HeartSet || firstCut.GetComponent<RootElement>().type == ElementsType.StarSet || firstCut.GetComponent<RootElement>().type == ElementsType.MoonSet)
-            offset = 1.0f/containerBB.size.y;
+            offset = -containerBB.size.y*0.5f;
+
         Vector3 containerPos = Vector3.zero + new Vector3(-containerBB.center.x - 1.2f, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + offset), 0.0f);
+        containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + offset), 0.0f);
         containerObject.transform.position = containerPos;
         containerObject.SendMessage("AttachSymbol", true);
         containerObject.SendMessage("DisableInput");
@@ -1341,23 +1550,30 @@ public class Workspace : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         int numerator = firstCut.GetComponent<RootElement>().partNumerator;
+       // if(firstCut.GetComponent<RootElement>().partitions > 1 && secondCut.GetComponent<RootElement>().partitions > 1)
+          //  numerator = firstCut.GetComponent<RootElement>().numerator;
         for (int i = 0; i < numerator; i++)
         {
             yield return new WaitForSeconds(1.0f);
+
             firstCut.SendMessage("DecreaseCutNumerator");
-            containerObject.GetComponent<RootElement>().IncreaseNumerator();
+            containerObject.GetComponent<RootElement>().IncreaseResultNumerator();
+            //containerObject.GetComponent<RootElement>().IncreaseNumerator();
             containerObject.GetComponent<RootElement>().UpdateGraphics();
             yield return new WaitForEndOfFrame();
             containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + offset), 0.0f);
             containerObject.transform.position = containerPos;
         }
-
+       
         numerator = secondCut.GetComponent<RootElement>().partNumerator;
+      //  if (firstCut.GetComponent<RootElement>().partitions > 1 && secondCut.GetComponent<RootElement>().partitions > 1)
+         //   numerator = secondCut.GetComponent<RootElement>().numerator;
+
         for (int i = 0; i < numerator; i++)
         {
             yield return new WaitForSeconds(1.0f);
             secondCut.SendMessage("DecreaseCutNumerator");
-            containerObject.GetComponent<RootElement>().IncreaseNumerator();
+            containerObject.GetComponent<RootElement>().IncreaseResultNumerator();
             containerObject.GetComponent<RootElement>().UpdateGraphics();
             yield return new WaitForEndOfFrame();
             containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + offset), 0.0f);
@@ -1381,6 +1597,9 @@ public class Workspace : MonoBehaviour
             secondCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
             secondCut.GetComponent<RootElement>().parentRef = null;
         }
+
+        if (firstCut.GetComponent<RootElement>().isFatherEquivalent && secondCut.GetComponent<RootElement>().isFatherEquivalent)
+            isEquivalent = true; 
 
         elements.Remove(firstCut);
         elements.Remove(secondCut);
@@ -1448,6 +1667,8 @@ public class Workspace : MonoBehaviour
         yield return new WaitForSeconds(1.2f);
 
         int numerator = secondCut.GetComponent<RootElement>().partNumerator;
+        //if (secondCut.GetComponent<RootElement>().partitions > 1)
+         //   numerator = secondCut.GetComponent<RootElement>().numerator;
         for (int i = 0; i < numerator; i++)
         {
             yield return new WaitForSeconds(1.0f);
@@ -1462,7 +1683,7 @@ public class Workspace : MonoBehaviour
         BoxCollider containerBB = containerObject.GetComponent<BoxCollider>();
         float offset = -0.50f;
         if (firstCut.GetComponent<RootElement>().type == ElementsType.Set || firstCut.GetComponent<RootElement>().type == ElementsType.HeartSet || firstCut.GetComponent<RootElement>().type == ElementsType.StarSet || firstCut.GetComponent<RootElement>().type == ElementsType.MoonSet)
-            offset = 1.0f / containerBB.size.y;
+            offset = -containerBB.size.y * 0.5f;
         Vector3 containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + offset), 0.0f);
         containerObject.transform.position = containerPos;
         containerObject.SendMessage("AttachSymbol", true);
@@ -1471,18 +1692,19 @@ public class Workspace : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
 
         numerator = firstCut.GetComponent<RootElement>().partNumerator - secondCut.GetComponent<RootElement>().partNumerator;
+
         for (int i = 0; i < numerator; i++)
         {
             yield return new WaitForSeconds(1.0f);
             firstCut.SendMessage("DecreaseCutNumerator");
-            containerObject.GetComponent<RootElement>().IncreaseNumerator();
+            containerObject.GetComponent<RootElement>().IncreaseResultNumerator();
             containerObject.GetComponent<RootElement>().UpdateGraphics();
             yield return new WaitForEndOfFrame();
             containerPos = Vector3.zero + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + offset), 0.0f);
             containerObject.transform.position = containerPos;
             yield return new WaitForSeconds(0.2f);
         }
-
+       
         resultObject = containerObject;
         containerObject = null;
         SetFocusOn(resultObject);
@@ -1500,6 +1722,9 @@ public class Workspace : MonoBehaviour
             secondCut.GetComponent<RootElement>().parentRef.GetComponent<RootElement>().cutRef = null;
             secondCut.GetComponent<RootElement>().parentRef = null;
         }
+
+        if (firstCut.GetComponent<RootElement>().isFatherEquivalent && secondCut.GetComponent<RootElement>().isFatherEquivalent)
+            isEquivalent = true; 
 
         elements.Remove(firstCut);
         elements.Remove(secondCut);
@@ -1734,7 +1959,11 @@ public class Workspace : MonoBehaviour
             {
                 if (elements[i].GetComponent<RootElement>().mode != InteractionMode.Freeze)
                 {
-                    elements[i].SendMessage("SetMode", InteractionMode.Moving, SendMessageOptions.DontRequireReceiver);
+                    if ((null != elements[i].GetComponent<RootElement>().parentEqRef && elements[i].GetComponent<RootElement>().parentEqRef.GetComponent<RootElement>().mode != InteractionMode.Changing) || null == elements[i].GetComponent<RootElement>().parentEqRef)
+                    {
+                            elements[i].SendMessage("SetMode", InteractionMode.Moving, SendMessageOptions.DontRequireReceiver);
+                        //Debug.Log("UpdateWs");
+                    }
                     //elements[i].BroadcastMessage("UpdateWidth");
                 }
 
@@ -1757,6 +1986,7 @@ public class Workspace : MonoBehaviour
     #region Public Methods
     public void Highlight(string name)
     {
+
         interfaces.SendMessage("InterfaceHighlightByName", name);
         foreach (RootElement root in gameObject.GetComponentsInChildren<RootElement>())
             root.InitHighlight(name, false);

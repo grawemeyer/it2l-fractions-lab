@@ -43,7 +43,8 @@ public class TaskManager : MonoBehaviour {
         initialConfiguration.Add("liquids", true);
         initialConfiguration.Add("change_color", true);
         initialConfiguration.Add("copy", true);
-        initialConfiguration.Add("partition", true);
+        initialConfiguration.Add("find_equivalence", true);
+        initialConfiguration.Add("find_parent", true);
         initialConfiguration.Add("highlight", true);
         initialConfiguration.Add("add", true);
         initialConfiguration.Add("subtract", true);
@@ -55,7 +56,7 @@ public class TaskManager : MonoBehaviour {
     public IEnumerator LoadJson(string _url)
     {
         string url = _url+ "?" + (UnityEngine.Random.Range(1, 100000000)).ToString();
-        Application.ExternalCall("ShowMessage", url);
+        //Application.ExternalCall("ShowMessage", url);
 
         WWW www = new WWW(url);
 
@@ -179,6 +180,8 @@ public class TaskManager : MonoBehaviour {
                     int index = (int)Enum.Parse(typeof(configurationName), jsonObj["initial_configuration"][i]["item"].ToString());
                     if(index >= 0  && index < GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().initialConfigurationList.Count)
                         GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().ChangeStateButton(index, initialConfiguration[jsonObj["initial_configuration"][i]["item"].ToString()]);
+                    if(index == 9)
+                        GameObject.FindGameObjectWithTag("Interface").GetComponent<InterfaceBehaviour>().ChangeStateButton(initialConfiguration.Count, initialConfiguration[jsonObj["initial_configuration"][i]["item"].ToString()]);
                 }
             }
             catch (Exception ex){
@@ -241,10 +244,10 @@ public class TaskManager : MonoBehaviour {
             try
             {
                 result = Int32.TryParse(jsonObj["initial_model"][i]["partition"].ToString(), out el.partitions);
-                if (!result)
+                //if (!result)
                     el.partitions = 1;
-                else
-                    el.partitions = Mathf.Max(1, el.partitions);
+               // else
+                  //  el.partitions = Mathf.Max(1, el.partitions);
             }
             catch (Exception ex)
             {

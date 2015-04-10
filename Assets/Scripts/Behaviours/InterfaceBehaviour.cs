@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.242";
+    public const string VER = "0.276";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -85,6 +85,7 @@ public class InterfaceBehaviour : MonoBehaviour
     public GameObject zoomController;
     public GameObject colorMenu;
     public GameObject contextMenu;
+    public GameObject contextMenuEquivalence;
     public GameObject actionMenu;
 
     public List<Button> barTool;
@@ -245,6 +246,10 @@ public class InterfaceBehaviour : MonoBehaviour
         {
             buttonDictionary.Add(bt.name, bt);
         }
+        foreach (Button bt in contextMenuEquivalence.GetComponentsInChildren<Button>())
+        {
+            buttonDictionary.Add(bt.name, bt);
+        }
         foreach (Button bt in actionMenu.GetComponentsInChildren<Button>())
         {
             buttonDictionary.Add(bt.name, bt);
@@ -252,6 +257,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
         //initialConfigurationList = new Dictionary<string, Button>();
         contextMenu.SetActive(false);
+        contextMenuEquivalence.SetActive(false);
         actionMenu.SetActive(false);
         isMenuActive = false;
 
@@ -267,6 +273,10 @@ public class InterfaceBehaviour : MonoBehaviour
         indexHighlight = 0;
         actionsPopupBG = GameObject.FindGameObjectWithTag("PopupBG");
         actionsPopupBG.SetActive(false);
+        
+#if UNITY_ANDROID || UNITY_IPHONE
+        zoomController.GetComponent<Zoom>().HideUI();
+#endif
         //if(isStudent)
 
         /*CHEAT*/
@@ -277,6 +287,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     IEnumerator Start()
     {
+        Debug.Log("dd " + Debug.isDebugBuild);
         Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
        // Debug.Log("isLogged " + isLogged + " showStartPage " + showStartPage + " istaskdefined " + istaskDefined);
         if (!isLogged)
@@ -286,21 +297,27 @@ public class InterfaceBehaviour : MonoBehaviour
         else
         {
             if (showStartPage)
+            {
                 GoToPage("StartPage");
+            }
             else if (istaskDefined)
             {
-               // Debug.Log("file address " + fileAddress);
+                // Debug.Log("file address " + fileAddress);
+                home.SetActive(showStartPage);
+                userLabel.SetActive(showStartPage);
                 yield return StartCoroutine(TaskManager.Instance.LoadJson(fileAddress));
                 if (TaskManager.Instance.isLoad)
                     LoadWorkspace(TaskManager.Instance.task);
                 else
                     NewWorkspace();
             }
-            else if (!istaskDefined)
+            else if (!istaskDefined){
+                home.SetActive(showStartPage);
+                userLabel.SetActive(showStartPage);
                 NewWorkspace();
+            }
 
-            home.SetActive(showStartPage);
-            userLabel.SetActive(showStartPage);
+           
         }
     }
 
@@ -309,7 +326,6 @@ public class InterfaceBehaviour : MonoBehaviour
         highlightUIElement.Add("mcHints", hintText.gameObject.transform.parent.gameObject);
         highlightUIElement.Add("mcTrash", trash);
         highlightUIElement.Add("mcRepresentationBar", sideBar);
-        // highlightUIElement.Add("btSymbol", symbol);
         highlightUIElement.Add("btLines", barTool[0].gameObject);
         highlightUIElement.Add("btRects", barTool[1].gameObject);
         highlightUIElement.Add("btSets", barTool[2].gameObject);
@@ -325,7 +341,6 @@ public class InterfaceBehaviour : MonoBehaviour
             nameHighlight.Add("mcHints");
             nameHighlight.Add("mcTrash");
             nameHighlight.Add("mcRepresentationBar");
-            //  nameHighlight.Add("btSymbol");
             nameHighlight.Add("btLines");
             nameHighlight.Add("btRects");
             nameHighlight.Add("btSets");
@@ -399,7 +414,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         if (null != highlight)
         {
-            highlight.transform.parent = null;
+            highlight.transform.SetParent(null);
             highlight.SetActive(false);
         }
     }
@@ -500,9 +515,13 @@ public class InterfaceBehaviour : MonoBehaviour
         string ver = VER;
 #if UNITY_IPHONE  || UNITY_ANDROID
         ver += " mobile";
+#elif UNITY_WEBGL
+        ver += " webGL preview";
 #endif
         GUI.Label(new Rect(4.0f, /*Screen.height -*/ 2.0f, 100, 20), "Ver " + ver);
+    
     }
+
     #endregion
 
     #region Functionalities
@@ -724,6 +743,7 @@ public class InterfaceBehaviour : MonoBehaviour
     //OK
     void ShowHint(string text)
     {
+        //Debug.Log("ShowHint " + text);
         if (lowFeedbackTxt.Length == 0 && suggestionTxt.Length == 0)
         {
 #if !UNITY_IPHONE && !UNITY_ANDROID
@@ -771,7 +791,7 @@ public class InterfaceBehaviour : MonoBehaviour
         Workspace.Instance.SendMessage("DisableInput");
         GameObject popupFeedback = GameObject.Instantiate(popupmsg) as GameObject;
         popupFeedback.GetComponent<UIPopup>().isHighFeedback = false;
-        popupFeedback.transform.parent = ui.transform;
+        popupFeedback.transform.SetParent(ui.transform);
         PushPopup(popupFeedback);
         localizationUtils.AddTranslationText(popupFeedback.GetComponent<UIPopup>().text, text);
         popupFeedback.GetComponent<UIPopup>().SetColor(Green1);
@@ -910,6 +930,8 @@ public class InterfaceBehaviour : MonoBehaviour
         EnableBarOperations();
         EnableBarTools();
         EnableZoom();
+        if (home.activeSelf)
+            home.GetComponent<UIButton>().EnableBtn(false);
         if (!isStudent)
             EnableBarTeacher();
         taskDescription.gameObject.GetComponent<UIButton>().EnableBtn(false);
@@ -924,6 +946,8 @@ public class InterfaceBehaviour : MonoBehaviour
         DisableBarOperations();
         DisableBarTools();
         DisableZoom();
+        if(home.activeSelf)
+            home.GetComponent<UIButton>().DisableBtn(false);
         if (!isStudent)
             DisableBarTeacher();
         taskDescription.gameObject.GetComponent<UIButton>().DisableBtn(false);
@@ -1017,6 +1041,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
     public void OnTopLeave()
     {
+        Debug.Log("onTopLeave");
         indexFractionArea = -1;
         GameObject elementOnFocus = Workspace.Instance.ElementOnFocus;
         if (elementSelected && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().hasDragged)
@@ -1125,13 +1150,18 @@ public class InterfaceBehaviour : MonoBehaviour
     }
 
     //OK
-    void Partition()
+    void FindEquivalence()
     {
         OnHideContextMenu();
         //contextMenu.SetActive(false);
         //Workspace.Instance.ElementOnFocus.SendMessage("SetMode", InteractionMode.Partitioning);
-        Workspace.Instance.ElementOnFocus.SendMessage("SetPartitioning");
+        Workspace.Instance.ElementOnFocus.SendMessage("CreateEquivalence");
        // Workspace.Instance.SendMessage("EnableInput");
+    }
+
+    void FindParent() 
+    {
+        Workspace.Instance.ElementOnFocus.SendMessage("FindParent");
     }
 
     void Highlight()
@@ -1287,6 +1317,7 @@ public class InterfaceBehaviour : MonoBehaviour
             else
                 st.GetComponent<Selectable>().interactable = true;
         }
+        zoomController.GetComponent<Zoom>().CheckBound();
     }
 
     void DisableZoom()
@@ -1364,9 +1395,9 @@ public class InterfaceBehaviour : MonoBehaviour
     }
 
     //OK
-    void SendDropMessage(GameObject mc, RootElement root)
+    void SendDropMessage(int index, RootElement root)
     {
-        if (mc != null)
+        if (index != -1)
         {
             string str1 = "Sum";
             switch (lastOperation)
@@ -1383,20 +1414,20 @@ public class InterfaceBehaviour : MonoBehaviour
             }
 
             string str2 = "Op1";
-            switch (mc.name)
+            switch (index)
             {
-                case ("FirstArea"):
+                case 0:
                     str2 = "Op1";
                     break;
-                case ("SecondArea"):
+                case 1:
                     str2 = "Op2";
-                    if (lastOperation == FractionsOperations.FIND)
-                        str2 = "Op1";
+                    /*if (lastOperation == FractionsOperations.FIND)
+                        str2 = "Op1";*/
                     break;
-                case ("ResultArea"):
+                case 2:
                     str2 = "Res";
-                    if (lastOperation == FractionsOperations.FIND)
-                        str2 = "Op2";
+                   /* if (lastOperation == FractionsOperations.FIND)
+                        str2 = "Op2";*/
                     break;
             }
             ExternalEventsManager.Instance.SendMessageToSupport("FractionPlaced", str1 + str2, root.name, root.partNumerator + "/" + root.partDenominator);
@@ -1503,9 +1534,10 @@ public class InterfaceBehaviour : MonoBehaviour
             case "SaveAs":
             case "Home":
             case "Highlight":
+            case "HighlightEqui":
                 //Debug.Log("OnBtnsPress btSets");
                 isPressingButton = true;
-                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.LookAt && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
+                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
                     Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Moving;
                 break;
             case "btnPlus":
@@ -1514,7 +1546,7 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btnLab":
                 isPressingButton = true;
                 isPressingOperation = true;
-                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.LookAt && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
+                if (null != Workspace.Instance.ElementOnFocus  && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
                     Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Moving;
                 Workspace.Instance.CheckOverlapActionMenu();
                 break;
@@ -1523,6 +1555,10 @@ public class InterfaceBehaviour : MonoBehaviour
                 isPressingButton = true;
                 break;
             case "LookAt":
+                isPressingButton = true;
+                break;
+            case "FindParent":
+            case "FindEquivalence":
                 isPressingButton = true;
                 break;
         }
@@ -1566,7 +1602,7 @@ public class InterfaceBehaviour : MonoBehaviour
             case "oper3":
                 //Debug.Log("OnBtnsPress btSets");
                 isPressingButton = true;
-                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.LookAt && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
+                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
                     Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Moving;
                 break;
             case "mcFractionAdd":
@@ -1575,7 +1611,7 @@ public class InterfaceBehaviour : MonoBehaviour
             case "btnLab":
                 isPressingButton = true;
                 isPressingOperation = true;
-                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.LookAt && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
+                if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode != InteractionMode.Freeze)
                     Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode = InteractionMode.Moving;
                 Workspace.Instance.CheckOverlapActionMenu();
                 break;
@@ -1704,7 +1740,17 @@ public class InterfaceBehaviour : MonoBehaviour
                 break;
             case "btPartition":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Tool/ShowHidePartition");
-                Partition();
+                FindEquivalence();
+                CheckNotificationWarning();
+                break;
+            case "btFindEquivalence":
+                ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Tool/FindEquivalence");
+                FindEquivalence();
+                CheckNotificationWarning();
+                break;
+            case "btFindParent":
+                ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "Tool/FindParent");
+                FindParent();
                 CheckNotificationWarning();
                 break;
             case "highlight":
@@ -1769,9 +1815,9 @@ public class InterfaceBehaviour : MonoBehaviour
                 Workspace.Instance.SendMessage("EnableInput");
                 EnableHUD();
                 break;
-            case "btLookAt":
-                startLookAt();
-                break;
+            /*case "btLookAt":
+                //startLookAt();
+                break;*/
             case "TaskDescriptor":
                 ExternalEventsManager.Instance.SendMessageToSupport("ClickButton", "OpenTaskDescription");
                 break;
@@ -1793,12 +1839,12 @@ public class InterfaceBehaviour : MonoBehaviour
         isPressingOperation = false;
     }
 
-    void startLookAt()
+ /*   void startLookAt()
     {
         if (!inputEnabled || Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode == InteractionMode.LookAt || Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode == InteractionMode.Initializing || Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode == InteractionMode.Wait || Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode == InteractionMode.Freeze || Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().state == ElementsState.Cut)
             return;
         Camera.main.GetComponent<LookAtFraction>().StartLookAt();
-    }
+    }*/
 
     //OK
     public void OnBtnEnter(string button)
@@ -1834,8 +1880,10 @@ public class InterfaceBehaviour : MonoBehaviour
                 ShowHint("{hint_create_star}");
                 break;
             case "btnLab":
-                if(topBottom.GetComponent<TopBottom>().isClose)
-                    ShowHint("{hint_show_lab}");
+                if (topBottom.GetComponent<TopBottom>().isClose)
+                    ShowHint("{hint_open_lab}");
+                else
+                    ShowHint("{hint_close_lab}");
                 break;
             /*case ("mcFractionSearch"):
                 ShowHint("{hint_find_eq}");
@@ -1860,6 +1908,14 @@ public class InterfaceBehaviour : MonoBehaviour
                 break;
             case "btPartition":
                 ShowHint("{hint_partition}");
+                CheckNotificationWarning();
+                break;
+            case "btFindEquivalence":
+                ShowHint("{hint_find_equivalence}");
+                CheckNotificationWarning();
+                break;
+            case "btFindParent":
+                ShowHint("{hint_find_parent}");
                 CheckNotificationWarning();
                 break;
             case "btCut":
@@ -1896,6 +1952,7 @@ public class InterfaceBehaviour : MonoBehaviour
     public void OnBtnExit()
     {
         Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
+        ShowSuggestion("");
         ShowHint("");
         isPressingButton = false;
     }
@@ -2016,6 +2073,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         // Debug.Log("ON ELEMENT RELEASED  y " + Input.mousePosition.y + " x " + Input.mousePosition.x);
         RootElement selElement = element.GetComponentInChildren<RootElement>();
+        selElement.SendMessage("SetType", element.GetComponent<RootElement>().type);
         if (isOnTrash)
         {
             if (null != Workspace.Instance.ElementOnFocus && Workspace.Instance.ElementOnFocus.GetComponent<RootElement>().mode == InteractionMode.LookAt)
@@ -2039,6 +2097,9 @@ public class InterfaceBehaviour : MonoBehaviour
                         break;
                     case (ElementsState.Improper):
                         eventName = "ImproperTrashed";
+                        break;
+                    case (ElementsState.Equivalence):
+                        eventName = "EquivalenceTrashed";
                         break;
                 }
 
@@ -2079,11 +2140,11 @@ public class InterfaceBehaviour : MonoBehaviour
         elementSelected = false;
         if (indexFractionArea != -1)
         {
-            if (selElement.denominator != 0 && (selElement.mode == InteractionMode.Moving || selElement.mode == InteractionMode.Changing) && (selElement.state == ElementsState.Fraction || selElement.state == ElementsState.Result))
+            if (selElement.denominator != 0 && (selElement.mode == InteractionMode.Moving || selElement.mode == InteractionMode.Changing) && (selElement.state == ElementsState.Fraction || selElement.state == ElementsState.Result || selElement.state == ElementsState.Equivalence))
             {
                 // Debug.Log("elementRelease indexFraciontArea " + indexFractionArea + "numerator" + selElement.partNumerator);
                 SetFractionValue(indexFractionArea, selElement.partNumerator, selElement.partDenominator);
-                SendDropMessage(dropOverMc, selElement);
+                SendDropMessage(indexFractionArea, selElement);
             }
             element.SendMessage("ResetLastPosition");
         }
@@ -2145,52 +2206,71 @@ public class InterfaceBehaviour : MonoBehaviour
     void OnShowContextMenu(GameObject element)
     {
         isMenuActive = true;
+        CloseToolSubmenu();
+        GameObject menu;
+        if (element.GetComponent<RootElement>().state == ElementsState.Equivalence)
+            menu = contextMenuEquivalence; 
+        else
+            menu = contextMenu;
+
+        menu.SetActive(true);
         Vector3 menuPos = Vector3.zero;
         GameObject back = null;
-        for (int i = 0; i < contextMenu.transform.childCount; i++)
+        for (int i = 0; i < menu.transform.childCount; i++)
         {
-            if (contextMenu.transform.GetChild(i).name == "Back")
+            if (menu.transform.GetChild(i).name == "Back")
             {
-                menuPos = contextMenu.transform.GetChild(i).GetComponent<RectTransform>().position;
-                back = contextMenu.transform.GetChild(i).gameObject;
+                menuPos = menu.transform.GetChild(i).GetComponent<RectTransform>().position;
+                back = menu.transform.GetChild(i).gameObject;
             }
         }
 
-        // Debug.Log("onshowcontext");
+         //Debug.Log("onshowcontext");
 
         if (null == back)
             return;
-
-        elementOnFocus = element;
-        CloseToolSubmenu();
+        elementOnFocus = element;     
         float lossy = canvas[0].GetComponent<RectTransform>().lossyScale.x;
+        Vector3 halfScreen = canvas[0].GetComponent<RectTransform>().sizeDelta * 0.5f;
         Vector3 elementPos = RectTransformUtility.WorldToScreenPoint(mainCamera, element.transform.position);
-        Vector3 halfScreen = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0.0f);
+
+        
         elementPos -= halfScreen;   //hack: canvas space has the origin in the middle of the Screen
         elementPos /= lossy;
         elementPos += halfScreen;
-        //Debug.Log("elementPos " + elementPos + "mouse " + Input.mousePosition);
+
         float wGap = back.GetComponent<RectTransform>().sizeDelta.x * 0.5f;
-        //Debug.Log("wGap " + wGap);
-        menuPos.x = elementPos.x;
-        if (elementPos.x > Screen.width * 0.5f)
+
+        if (elementPos.x > halfScreen.x)
             menuPos.x = elementPos.x - wGap; //Input.mousePosition.x - wGap;//menuPos.x = elementPos.x / (Screen.width / 800.0f) - wGap;
         else
             menuPos.x = elementPos.x + wGap; //Input.mousePosition.x + wGap;// menuPos.x = elementPos.x / (Screen.width / 800.0f) + wGap;
+
         float hGap = back.GetComponent<RectTransform>().sizeDelta.y * 0.5f;
-        //Debug.Log("hGap " + hGap);
-        menuPos.y = elementPos.y;
-        if (elementPos.y > Screen.height * 0.5f)
+
+        if (elementPos.y > halfScreen.y)
             menuPos.y = elementPos.y - hGap; // Input.mousePosition.y - hGap;//menuPos.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) - hGap);
         else
             menuPos.y = elementPos.y + hGap; //Input.mousePosition.y + hGap;//menuPos.y = 600.0f - (elementPos.y / (Screen.height / 600.0f) + hGap);
-        back.GetComponent<RectTransform>().position = menuPos;
-        //if (element.GetComponent<RootElement>().isHighlighted)
-        contextMenu.GetComponent<ContextMenuManager>().ChangeTextHighlight(element.GetComponent<RootElement>().isHighlighted);
-        contextMenu.GetComponent<ContextMenuManager>().ChangeTextPartition(element.GetComponent<RootElement>().PartitionActive);
-        contextMenu.SetActive(true);
+
+        back.GetComponent<RectTransform>().anchoredPosition = menuPos;
+
+        menu.GetComponent<ContextMenuManager>().ChangeTextHighlight(element.GetComponent<RootElement>().isHighlighted);
+       /* if (element.GetComponent<RootElement>().type == ElementsType.HeartSet || element.GetComponent<RootElement>().type == ElementsType.StarSet || element.GetComponent<RootElement>().type == ElementsType.MoonSet && element.GetComponent<RootElement>().state != ElementsState.Equivalence)
+            menu.GetComponent<ContextMenuManager>().DisableFindEquivalence(true);
+        else if( element.GetComponent<RootElement>().state != ElementsState.Equivalence)
+            menu.GetComponent<ContextMenuManager>().DisableFindEquivalence(false);*/
+
+            
+        if (element.GetComponent<RootElement>().state == ElementsState.Equivalence)
+            menu.GetComponent<ContextMenuManager>().DisableFindParent(element.GetComponent<RootElement>().parentEqRef == null);
+
+        //menu.GetComponent<ContextMenuManager>().ChangeTextPartition(element.GetComponent<RootElement>().PartitionActive);
+
         CheckNotificationWarning();
         Workspace.Instance.SendMessage("DisableInput");
+
+       
     }
 
     //OK
@@ -2240,7 +2320,13 @@ public class InterfaceBehaviour : MonoBehaviour
             contextMenu.SetActive(false);
             Workspace.Instance.SendMessage("EnableInput");
         }
+        if (contextMenuEquivalence.activeSelf) 
+        {
+            contextMenuEquivalence.SetActive(false);
+            Workspace.Instance.SendMessage("EnableInput");
+        }
         //isMenuActive = false;
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
 
     //OK
@@ -2255,6 +2341,7 @@ public class InterfaceBehaviour : MonoBehaviour
             // }
         }
         //isMenuActive = false;
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
     //OK
     void OnHideSubMenus()
@@ -2266,6 +2353,7 @@ public class InterfaceBehaviour : MonoBehaviour
                 sm.SetActive(false);
             }
         }
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
 
     //TODOUI
@@ -2290,6 +2378,7 @@ public class InterfaceBehaviour : MonoBehaviour
         Workspace.Instance.SendMessage("TerminateCurrentAction");
         Workspace.Instance.SendMessage("EnableInput");
         EnableHUD();
+        Cursor.SetCursor(MouseIconNo, Vector2.zero, CursorMode.Auto);
     }
     #endregion
 
@@ -2533,11 +2622,14 @@ public class InterfaceBehaviour : MonoBehaviour
     bool UserDataControl(string username, string password)
     {
         //CHEAT
+        Debug.Log("is a debug build?" + Debug.isDebugBuild);
+
 #if UNITY_EDITOR
         return true;
 #endif
         if(Debug.isDebugBuild)
             return true;
+
         //chiamata esterna al controllo di username e password
         if (username.ToUpper() == "student01".ToUpper() && password == "12345" && isStudent)
             return true;
@@ -2731,9 +2823,13 @@ public class InterfaceBehaviour : MonoBehaviour
                 PushPopup("TaskDescriptionWindowStudent", true);
                 popup.GetComponent<PopupTaskDescriptor>().initialize(task.title, task.description, isStudent);
                 popup.SetActive(true);
+                inputEnabled = true;
+                Workspace.Instance.inputEnabled = true;
+                Workspace.Instance.SendMessage("EnableInput");
             }
             if (!isStudent && popup.name == "TaskDescriptionWindowTeacher")
             {
+                PushPopup("TaskDescriptionWindowTeacher", true);
                 popup.SetActive(true);
                 if (istaskDefined)
                     popup.GetComponent<PopupTaskDescriptor>().initialize(task.title, task.description, isStudent);
@@ -2743,10 +2839,7 @@ public class InterfaceBehaviour : MonoBehaviour
 
 
             }
-        }
-        inputEnabled = true;
-        Workspace.Instance.inputEnabled = true;
-        Workspace.Instance.SendMessage("EnableInput");
+        }       
         taskDescription.gameObject.SetActive(true);
         taskDescription.GetComponent<UIButton>().DisableBtn(false);
 
@@ -2795,8 +2888,9 @@ public class InterfaceBehaviour : MonoBehaviour
 
     public void ChangeStateButton(int index, bool isActive)
     {
-        //Debug.Log("change state button " + ((configurationName)index).ToString() + " " + isActive);
-        TaskManager.Instance.initialConfiguration[((configurationName)index).ToString()] = isActive;
+        //Debug.Log("change state button " + ((configurationName)index).ToString() + " " + isActive +" index " + index );
+        if(index < initialConfigurationList.Count-1)
+            TaskManager.Instance.initialConfiguration[((configurationName)index).ToString()] = isActive;
         if (!isActive)
         {
             initialConfigurationList[index].GetComponent<UIButton>().DisableBtn(true);
@@ -2835,7 +2929,8 @@ public class InterfaceBehaviour : MonoBehaviour
 
     public void ConfirmOperation(string operation)
     {
-
+        if (Workspace.Instance.isAction)
+            return;
         PushPopup("PopupConfirm");
         foreach (GameObject popup in popups)
         {

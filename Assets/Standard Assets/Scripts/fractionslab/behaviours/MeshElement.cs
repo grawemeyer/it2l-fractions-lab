@@ -85,7 +85,6 @@ namespace fractionslab.behaviours
                         comp.Initialize();
                        // MeshUtils.CreateRectangleStroke(gameObject, strokeDist, strokeWidth, strokeColor, out stroke);
 
-
                     }
 
                     renderer.material.SetColor("_Color", meshColor);

@@ -78,8 +78,8 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
     void OnMouseUp()
     {
-        if (root.GetComponent<RootElement>().hasDragged)
-            root.GetComponent<RootElement>().OnMouseUp();
+       // if (root.GetComponent<RootElement>().hasDragged)
+        root.GetComponent<RootElement>().OnMouseUp();
         root.GetComponent<RootElement>().inputByChild = false;
     }
 
@@ -117,6 +117,7 @@ public class SingleFractionMCElement : WSElement, IWSElement
     #region Protected Methods
     protected void UpdateNumerator()
     {
+        //Debug.Log("UpdateNumerator");
         if (partitions == 1)
         {
             //textnumerator change
@@ -149,8 +150,12 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
         if (!root.GetComponent<RootElement>().inputEnabled)
             return;
+        //Debug.Log("numerator" + numerator + " lastnumerator " + lastNumerator);
+        Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "{hint_numerator}");
+
         if (denominator > 0)
         {
+           
             Workspace.Instance.SendMessage("SetFocusOn", root);
             root.BroadcastMessage("SetMode", InteractionMode.Changing, SendMessageOptions.DontRequireReceiver);
             root.SendMessage("OnSelectFractionPart", FractionPart.Numerator);
@@ -170,6 +175,8 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
         if (!root.GetComponent<RootElement>().inputEnabled)
             return;
+        Workspace.Instance.interfaces.SendMessage("ShowSuggestion", "{hint_denominator}");
+
         root.GetComponent<RootElement>().PlaceButtons(1);
         btnsDenominator.SetActive(true);
         btnsNumerator.SetActive(false);
@@ -180,14 +187,22 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
     public void HideButtons()
     {
+      //  Debug.Log("HIDE BUTTON");
         btnsDenominator.SetActive(false);
         btnsNumerator.SetActive(false);
     }
 
     public void ChangeStateButtons(bool isEnable)
     {
+        bool denActive = btnsDenominator.activeSelf;
+        bool numActive = btnsNumerator.activeSelf;
+        btnsDenominator.SetActive(true);
+        btnsNumerator.SetActive(true);
+        
+       // Debug.Log("ChangeStateButtons");
         foreach (Button bt in btnsDenominator.GetComponentsInChildren<Button>())
         {
+            //Debug.Log("btnsDenominator");
             bt.interactable = isEnable;
             if (null != bt.gameObject.GetComponent<UIButton>())
             {
@@ -200,6 +215,7 @@ public class SingleFractionMCElement : WSElement, IWSElement
         }
         foreach (Button bt in btnsNumerator.GetComponentsInChildren<Button>())
         {
+           // Debug.Log("btnsNumerator");
             bt.interactable = isEnable;
             if (null != bt.gameObject.GetComponent<UIButton>())
             {
@@ -210,6 +226,8 @@ public class SingleFractionMCElement : WSElement, IWSElement
 
             }
         }
+            btnsDenominator.SetActive(denActive);
+            btnsNumerator.SetActive(numActive);
     }
     #endregion
 
@@ -258,7 +276,7 @@ public class SingleFractionMCElement : WSElement, IWSElement
         partDenominator = value;
     }
 
-    public void CheckMultiRaycastCollision()
+   /* public void CheckMultiRaycastCollision()
     {
         PointerEventData pe = new PointerEventData(EventSystem.current);
         pe.position = Input.mousePosition;
@@ -272,6 +290,6 @@ public class SingleFractionMCElement : WSElement, IWSElement
             gos += g + "  ";
         }
         // Debug.Log("hit : " + hits.Count + " " + gos);
-    }
+    }*/
     #endregion
 }
