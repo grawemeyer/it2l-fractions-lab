@@ -335,10 +335,10 @@ public class Workspace : MonoBehaviour
         }
         elements.Clear();
     }
-
+    Color newColor;
     GameObject CreateContainer(GameObject f1, GameObject f2)
     {
-        Color newColor = Workspace.instance.GetColor();
+        newColor = Workspace.instance.GetColor();
         for (int i = 0; i < Workspace.instance.colorList.Count; i++) 
         {
             if (newColor != f1.GetComponent<RootElement>().color && newColor != f2.GetComponent<RootElement>().color)
@@ -349,6 +349,7 @@ public class Workspace : MonoBehaviour
         Element element = new Element();
         element.position = Vector3.zero;
         element.color = newColor; //Workspace.Instance.greenResult;
+        Debug.Log("1 newcolor " + newColor);
         element.type = f1.GetComponent<RootElement>().type;
         element.state = ElementsState.Fraction; //ElementsState.Result;
         element.partNumerator = 0;
@@ -473,7 +474,7 @@ public class Workspace : MonoBehaviour
 
     GameObject CreateImproperFractions(GameObject f1, GameObject f2)
     {
-        //Debug.Log("CreateImproperFractions");
+       // Debug.Log("CreateImproperFractions");
         GameObject root = new GameObject("result_" + (++elemCounter));
         root.transform.parent = transform;
         root.transform.position = Vector3.zero;
@@ -516,7 +517,8 @@ public class Workspace : MonoBehaviour
 
         f1.transform.parent = root.transform;
         f2.transform.parent = root.transform;
-
+       // Debug.Log("f1 " + f1.transform.position);
+       // Debug.Log("f2 " + f2.transform.position);
         Vector3 f1Pos = new Vector3(f1.transform.position.x, f1.transform.position.y, -0.2f);
         Vector3 f2Pos = new Vector3(f2.transform.position.x, f2.transform.position.y, -0.2f);
         f1.transform.position = f1Pos;
@@ -1045,7 +1047,7 @@ public class Workspace : MonoBehaviour
 
     GameObject CreateNumberedLine(Element element)
     {
-        Debug.Log("CreateNumberedLine");
+       // Debug.Log("CreateNumberedLine");
         string label = "line";
         GameObject root = CreateSingleFraction(label + "_" + (++elemCounter), element, false);
         CreateFractionsChildren(element, root, 0.0f, label);
@@ -1109,8 +1111,7 @@ public class Workspace : MonoBehaviour
         root.GetComponent<RootElement>().UpdateGraphics();  
         elements.Push(root);
         UpdateWS();
-
-        ExternalEventsManager.Instance.SendMessageToSupport("FractionCopy", root.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", source.GetComponent<RootElement>().type, root.name);
     }
 
 
@@ -1136,9 +1137,9 @@ public class Workspace : MonoBehaviour
         root.BroadcastMessage("SetColor", source.GetComponent<RootElement>().color, SendMessageOptions.DontRequireReceiver);
         //Debug.Log("after color counter"+ colorCounter);
         root.BroadcastMessage("SetBBExtends", source.GetComponent<RootElement>().bbExtends);
-        UpdateWS();
-        root.GetComponent<RootElement>().UpdateGraphics();
         elements.Push(root);
+        root.GetComponent<RootElement>().UpdateGraphics();
+        UpdateWS();
         ExternalEventsManager.Instance.SendMessageToSupport("EquivalenceGenerated", root.GetComponent<RootElement>().type ,root.name);
         root.BroadcastMessage("SetElementState", ElementsState.Equivalence, SendMessageOptions.DontRequireReceiver);
         root.GetComponent<RootElement>().SendMessage("SetPartitioning", SendMessageOptions.DontRequireReceiver);
@@ -1409,6 +1410,18 @@ public class Workspace : MonoBehaviour
 
         if (null != firstCut && null != secondCut)
         {
+
+            if (newColor == new Color())
+            {
+                newColor = Workspace.instance.GetColor();
+                for (int i = 0; i < Workspace.instance.colorList.Count; i++)
+                {
+                    if (newColor != firstCut.GetComponent<RootElement>().color && newColor != secondCut.GetComponent<RootElement>().color)
+                        break;
+                    newColor = Workspace.instance.GetColor();
+                }
+            }
+
             RootElement firstCutRoot = firstCut.GetComponent<RootElement>();
             RootElement secondCutRoot = secondCut.GetComponent<RootElement>();
 
@@ -1428,25 +1441,29 @@ public class Workspace : MonoBehaviour
                     resultObject = CreateImproperFractions(firstCut, secondCut);
             }
             
-            if (null == containerObject)
+            if (null == containerObject && resultObject.GetComponent<RootElement>().state != ElementsState.Improper)
             {
-                Color newColor = Workspace.instance.GetColor();
-                for (int i = 0; i < Workspace.instance.colorList.Count; i++)
+                if (resultObject.GetComponent<RootElement>().type == ElementsType.Liquid)
                 {
-                    if (newColor != firstCutRoot.GetComponent<RootElement>().color && newColor != secondCutRoot.GetComponent<RootElement>().color)
-                        break;
-                    newColor = Workspace.instance.GetColor();
+                    resultObject.GetComponent<RootElement>().SendMessage("SetColor", newColor);
+                    resultObject.GetComponent<RootElement>().BroadcastMessage("SetContentColor", newColor, SendMessageOptions.DontRequireReceiver);
                 }
-                resultObject.GetComponent<RootElement>().color = newColor;
+                else
+                    resultObject.GetComponent<RootElement>().BroadcastMessage("SetColor", newColor);
+               
             }
+        }
 
+        if (null == new Color())
+        {
+            newColor = Workspace.instance.GetColor();
         }
 
         BoxCollider containerBB = resultObject.GetComponent<BoxCollider>();
         Vector3 containerPos = Camera.main.transform.position + new Vector3(-containerBB.center.x, 0.0f, 0.0f) + new Vector3(0.0f, -(containerBB.size.y + 0.1f), 0.0f);
         containerPos.z = 0.0f;
         resultObject.transform.position = containerPos;
-       // resultObject.transform.position = Camera.main.ScreenToWorldPoint(Camera.main.transform.position);
+
         if (resultObject.GetComponent<RootElement>().state != ElementsState.Improper)
             resultObject.SendMessage("AttachSymbol", true);
 
@@ -1454,13 +1471,18 @@ public class Workspace : MonoBehaviour
         
         if (null != containerObject)
         {
-            resultObject.GetComponent<RootElement>().color = containerObject.GetComponent<RootElement>().color;
+            if (resultObject.GetComponent<RootElement>().type == ElementsType.Liquid)
+            {
+                resultObject.GetComponent<RootElement>().SendMessage("SetColor", newColor);
+                resultObject.GetComponent<RootElement>().BroadcastMessage("SetContentColor", newColor, SendMessageOptions.DontRequireReceiver);
+            }
+            else
+                resultObject.GetComponent<RootElement>().BroadcastMessage("SetColor", newColor);
             elements.Remove(containerObject);
             Destroy(containerObject);
             containerObject = null;
         }
-       // Debug.Log("result color " + resultObject.GetComponent<RootElement>().color);
-        if (isEquivalent /*&& resultObject.GetComponent<RootElement>().type != ElementsType.HeartSet && resultObject.GetComponent<RootElement>().type != ElementsType.MoonSet && resultObject.GetComponent<RootElement>().type != ElementsType.StarSet*/)
+        if (isEquivalent && resultObject.GetComponent<RootElement>().state != ElementsState.Improper)
         {
             GameObject tmp = CreateEquivalence(resultObject);
             tmp.GetComponent<RootElement>().parentEqRef = null;
@@ -1858,6 +1880,7 @@ public class Workspace : MonoBehaviour
 
     IEnumerator MakeImproprer()
     {
+        Debug.Log("MakeImproprer");
         switch (currentAction)
         {
             case (ActionType.Join):

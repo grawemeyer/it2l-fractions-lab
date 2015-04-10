@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.276";
+    public const string VER = "0.286";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -419,6 +419,17 @@ public class InterfaceBehaviour : MonoBehaviour
         }
     }
 
+    IEnumerator highFeedbackTest() 
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            string message = "prova";
+            var json = "{\"method\": \"HighFeedback\", \"parameters\": {\"message\": \"" + message + "\"}}";
+            taskDependentSupport.TDSWrapper.eventManager.SendMessage("SendEvent", json);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
 
     void Update()
     {
@@ -426,7 +437,10 @@ public class InterfaceBehaviour : MonoBehaviour
         //Debug.Log("inputEnabled " + inputEnabled);
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.Z))
-            ShowHighFeedback("PROVA");
+        {
+            StartCoroutine("highFeedbackTest");  
+        }
+           // ShowHighFeedback("PROVA");
 #endif
         if (Input.GetKeyDown(KeyCode.G) && Debug.isDebugBuild)
         {
