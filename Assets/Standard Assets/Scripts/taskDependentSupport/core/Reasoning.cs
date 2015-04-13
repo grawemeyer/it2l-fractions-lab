@@ -466,6 +466,13 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
+		private bool onlyOneFraction(){
+			if (studentModel.getCurrentFractions ().Count == 1) {
+				return true;
+			}
+			return false;
+		}
+
 		private int createdReps(){
 			return studentModel.getCurrentFractions ().Count;
 		}
@@ -898,9 +905,19 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
+
+					Debug.Log (":: numerator: "+numerator);
+					Debug.Log (":: denominator: "+denominator);
+					Debug.Log (":: equivalent: "+equivalent(numerator, denominator, startNumerator, startDenominator));
+					Debug.Log (":: checkCurrentFractionsForEquivalence: "+checkCurrentFractionsForEquivalence(startNumerator, startDenominator));
+					Debug.Log (":: getComparedFractions: "+studentModel.getComparedFractions());
+					Debug.Log (":: getComparedResult: "+studentModel.getComparedResult());
+
 					if ((numerator == 0) && (denominator == 0)) {
 						currentFeedback = feedbackData.S3;
 					}
+
+
 
 					else if (equivalent(numerator, denominator, startNumerator, startDenominator) && 
 					         (studentModel.getCurrentFractions().Count == 1)){
@@ -908,11 +925,11 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.T24E1;
 					}
 
-					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && studentModel.getComparedFractions()){
+					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && studentModel.getComparedResult()){
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T24E1;
 					}
-					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && !studentModel.getComparedFractions()){
+					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && !studentModel.getComparedResult()){
 						currentFeedback = feedbackData.T24M11;
 					}
 					else if ((numerator == startNumerator) && (denominator == startDenominator)) {
@@ -946,8 +963,9 @@ namespace taskDependentSupport.core
 					         (numerator == startDenominator)){
 						currentFeedback = feedbackData.T24M5;
 					}
-					else if (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M1.getID ()) ||
-					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M2.getID ())){
+					else if (((denominator == startDenominator) || (multiple(denominator, startDenominator))) &&
+							(studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M1.getID ()) ||
+					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M2.getID ()))){
 						currentFeedback = feedbackData.T24M4;
 					}
 					else if ((denominator != startDenominator) && (!multiple(denominator, startDenominator))){
@@ -959,6 +977,9 @@ namespace taskDependentSupport.core
 					else if (((numerator != startNumerator) || (denominator != startDenominator)) && 
 					         !equivalent(numerator, denominator, startNumerator, startDenominator)){
 						currentFeedback = feedbackData.T24M3;
+					}
+					else if ((denominator == startDenominator) || (multiple(denominator, startDenominator))){
+						currentFeedback = feedbackData.T24M6;
 					}
 
 					else {
@@ -1016,6 +1037,10 @@ namespace taskDependentSupport.core
 					else if ((partition == 5)  && (denominator != 0) && (numerator != 0)){
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.F2E1;
+					}
+					else if ((partition != 2) && (partition != 3) && (partition != 4) 
+					         && (partition != 5) && (partition != 0)){
+						currentFeedback = feedbackData.F2M11;
 					}
 
 
@@ -1116,7 +1141,7 @@ namespace taskDependentSupport.core
 					}
 					else if (!studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
 								&& currentSetIncludesFraction(secondNumerator, secondDenominator)){
-						//currentFeedback = feedbackData.M11;
+						//currentFeedback = feedbackData.M13;
 						currentFeedback = feedbackData.CM8;
 					}
 					else if ((numerator ==0) && (denominator ==0)){
@@ -1213,7 +1238,7 @@ namespace taskDependentSupport.core
 
 				Fraction currentFraction =studentModel.getCurrentFraction();
 
-				Debug.Log ("currentFraction: "+currentFraction);
+				Debug.Log (":::: currentFraction: "+currentFraction);
 
 				if (currentFraction != null){
 						
@@ -1228,10 +1253,13 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
-					Debug.Log ("numerator: "+numerator+" denominator: "+denominator);
+					Debug.Log (":::: numerator: "+numerator+" denominator: "+denominator);
+					Debug.Log (":::: getComparedResult: "+studentModel.getComparedResult());
+					Debug.Log (":::: currentSetIncludesFraction END: "+currentSetIncludesFraction(endNumerator,endDenominator));
+					Debug.Log (":::: currentSetIncludesFraction START: "+currentSetIncludesFraction(startNumerator,startDenominator));
 
 					if (!studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
-						currentFeedback = feedbackData.M11;
+						currentFeedback = feedbackData.M13;
 					}
 
 					else if (studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
@@ -1239,11 +1267,21 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.E1;
 					}
 
-					else if ((numerator == endNumerator) && (denominator == endDenominator)) {
-						Debug.Log ("solution found ");
-						studentModel.setTaskCompleted(true);
-						currentFeedback = feedbackData.E1;
+					//else if ((numerator == endNumerator) && (denominator == endDenominator)) {
+					//	Debug.Log ("solution found ");
+					//	studentModel.setTaskCompleted(true);
+					//	currentFeedback = feedbackData.E1;
+					//}
+
+					else if (currentSetIncludesFraction(endNumerator,endDenominator) && 
+					         (onlyOneFraction() || (!currentSetIncludesFraction(startNumerator,startDenominator)))){
+						currentFeedback = feedbackData.M8;
 					}
+					else if (currentSetIncludesFraction(startNumerator,startDenominator) && 
+					         ((!onlyOneFraction()) || (!currentSetIncludesFraction(endNumerator,endDenominator)))){
+						currentFeedback = feedbackData.M9;
+					}
+
 					else if ((denominator == 0) && (numerator == 0)){
 						currentFeedback = feedbackData.S3;
 					}
@@ -1263,18 +1301,18 @@ namespace taskDependentSupport.core
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
-				         studentModel.getPreviousFeedback().getID().Equals(feedbackData.M8.getID ())){
-						currentFeedback = feedbackData.M9;
+				         studentModel.getPreviousFeedback().getID().Equals(feedbackData.M10.getID ())){
+						currentFeedback = feedbackData.M11;
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
 				         (!studentModel.getReflectionForDenominatorShown())){
-						currentFeedback = feedbackData.M10;
+						currentFeedback = feedbackData.M12;
 						studentModel.setReflectionForDenominatorShown(true);
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && studentModel.getReflectionForDenominatorShown()){
-						currentFeedback = feedbackData.M8;
+						currentFeedback = feedbackData.M10;
 					}
 
 					else if ((numerator != endNumerator) && 

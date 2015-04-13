@@ -40,8 +40,10 @@ namespace taskDependentSupport.core
 			if (type.Equals("FractionChange")){
 				if (name.Equals("Numerator")) studentModel.setNumeratorAtFraction(id, fractionsValue);
 				if (name.Equals("Denominator")) studentModel.setDenominatorAtFraction(id, fractionsValue);
-				if (name.Equals("Partitions")) studentModel.setPartitionAtFraction(id, fractionsValue);
-
+				if (name.Equals("Partitions")) {
+					Debug.Log ("::::: partition: "+id+" value: "+fractionsValue);
+					studentModel.setPartitionAtFraction(id, fractionsValue);
+				}
 				studentModel.setComparedResult(false);
 				studentModel.setComparedResult(false);
 				studentModel.setComparedFractions(false);
@@ -55,7 +57,6 @@ namespace taskDependentSupport.core
 
 			}
 
-
 			if (type.Equals ("OperationResult")){
 				if (name.Equals("Sum")) {
 					Debug.Log (":::::: setAdditionBox ::::::");
@@ -67,9 +68,11 @@ namespace taskDependentSupport.core
 				else {
 					studentModel.setCompared(true);
 					if (id.Equals ("=")){
+						Debug.Log ("set compared result true");
 						studentModel.setComparedResult(true);
 					}
 					else if (id.Equals (">") || id.Equals ("<")){
+						Debug.Log ("set compared fraction true");
 						studentModel.setComparedFractions(true);
 					}
 					else {

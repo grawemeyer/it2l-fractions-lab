@@ -8,7 +8,7 @@ namespace taskDependentSupport.core
 	public class FeedbackData
 	{
 				
-		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, E1, E2, R1, R2, O1, O2;
+		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12, M13, E1, E2, R1, R2, O1, O2;
 		public FeedbackElem CM2, CM5, CM6, CM6Second, CM7, CM8, CM11, CM12, CE2;
 		public FeedbackElem FM6, FM10, FM11, FE1, FE2;
 		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
@@ -360,10 +360,10 @@ namespace taskDependentSupport.core
 			M7 = new FeedbackElem ();
 			M7.setID ("M7");
 			FeedbackMessage M7M = new FeedbackMessage ();
-			M7M.setSocratic ("Excellent. How about copying this and using the partition tool to make the equivalent fraction?");
-			M7M.setGuidance ("You could now copy the fraction and use the partition tool to make an equivalent fraction. To open the partition tool, right click the fraction.");
-			M7M.setDidacticConceptual ("Excellent. Now copy this fraction and use the partition tool to change it.");
-			M7M.setDidacticProcedural ("Excellent. Now copy the fraction use the partition tool to change it to a fraction with a denominator of "+endDenominator+".");
+			M7M.setSocratic ("Excellent. How are you going to make the equivalent fraction?");
+			M7M.setGuidance ("You could now copy the fraction and use `find equivalent' to make an equivalent fraction. Right-click the fraction.");
+			M7M.setDidacticConceptual ("Excellent. Now copy this fraction, right click the copy, and select `find equivalent'.");
+			M7M.setDidacticProcedural ("Excellent. Now copy this fraction, right click the copy, and select `find equivalent' to make a fraction with a denominator of "+endDenominator+".");
 			M7.setFeedbackMessage (M7M);
 			M7.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM7 = new Fraction ();
@@ -382,18 +382,49 @@ namespace taskDependentSupport.core
 			nextStepCM7.sameRepresentation (true);
 			CM7.setNextStep (nextStepCM7);
 
+
 			M8 = new FeedbackElem ();
 			M8.setID ("M8");
 			FeedbackMessage M8M = new FeedbackMessage ();
-			M8M.setSocratic ("How could you compare your fraction with "+startNumerator+"/"+startDenominator+"?");
-			M8M.setGuidance ("Think about the denominators in the two fractions. What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?");
-			M8M.setDidacticConceptual ("Compare your fraction with "+startNumerator+"/"+startDenominator+" by using the compairson box.");
-			M8M.setHighlighting (Highlighting.ComparisonBox);
+			M8M.setSocratic ("Now that you have made "+endNumerator+"/"+endDenominator+" how are you going to compare it with "+startNumerator+"/"+startDenominator+"?");
+			M8M.setGuidance ("Look at the task and think about what other fraction you need to make to compare it with "+endNumerator+"/"+endDenominator+".");
+			M8M.setDidacticConceptual ("You need one of your fractions to be "+startNumerator+"/"+startDenominator+", to compare it with "+endNumerator+"/"+endDenominator+".");
+			M8M.setDidacticProcedural ("Keep the fraction "+endNumerator+"/"+endDenominator+". Now change the other fraction to "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.");
 			M8.setFeedbackMessage (M8M);
-			M8.setFeedbackType (FeedbackType.problemSolving);
+			M8.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepM8 = new Fraction ();
-			nextStepM8.setComparison (true);
+			nextStepM8.setNumerator (startNumerator);
+			nextStepM8.setDenominator (startDenominator);
 			M8.setNextStep (nextStepM8);
+
+			M9 = new FeedbackElem ();
+			M9.setID ("M9");
+			FeedbackMessage M9M = new FeedbackMessage ();
+			M9M.setSocratic ("How are you going to make a fraction with the denominator "+endDenominator+", that is equivalent to "+startNumerator+"/"+startDenominator+".");
+			M9M.setGuidance ("Look at the task and think about what other fraction you need to make to compare it with "+startNumerator+"/"+startDenominator+".");
+			M9M.setDidacticConceptual ("As well as "+startNumerator+"/"+startDenominator+", you need a second fraction that is equivalent to "+startNumerator+"/"+startDenominator+" and that has "+endDenominator+" as its denominator.");
+			M9M.setDidacticProcedural ("Keep the fraction "+startNumerator+"/"+startDenominator+". Now change the other fraction to "+endNumerator+"/"+endDenominator+". Then compare the two fractions using the comparison box.");
+			M9.setFeedbackMessage (M9M);
+			M9.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepM9 = new Fraction ();
+			nextStepM9.setNumerator (endNumerator);
+			nextStepM9.setDenominator (endDenominator);
+			M9.setNextStep (nextStepM9);
+
+
+
+			M10 = new FeedbackElem ();
+			M10.setID ("M10");
+			FeedbackMessage M10M = new FeedbackMessage ();
+			M10M.setSocratic ("How could you compare your fraction with "+startNumerator+"/"+startDenominator+"?");
+			M10M.setGuidance ("Think about the denominators in the two fractions. What is the relationship between them?");
+			M10M.setDidacticConceptual ("Compare your fraction with "+startNumerator+"/"+startDenominator+"  by creating another fraction, this time "+startNumerator+"/"+startDenominator+", and using the comparison box.");
+			M10M.setHighlighting (Highlighting.ComparisonBox);
+			M10.setFeedbackMessage (M10M);
+			M10.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepM10 = new Fraction ();
+			nextStepM10.setComparison (true);
+			M10.setNextStep (nextStepM10);
 
 			CM8 = new FeedbackElem ();
 			CM8.setID ("CM8");
@@ -409,43 +440,43 @@ namespace taskDependentSupport.core
 			nextStepCM8.setComparison (true);
 			CM8.setNextStep (nextStepCM8);
 
-			M9 = new FeedbackElem ();
-			M9.setID ("M9");
-			FeedbackMessage M9M = new FeedbackMessage ();
-			M9M.setSocratic ("What are you going to compare your fraction with?");
-			M9M.setGuidance ("In equivalent fractions, the two numerators must be the same multiple of each other as the two denominators.");
-			M9M.setDidacticConceptual ("First create another fraction, this time "+startNumerator+"/"+startDenominator+". Then compare your two fractions.");
-			M9M.setHighlighting (Highlighting.RepresentationToolBox);
-			M9.setFeedbackMessage (M9M);
-			M9.setFeedbackType (FeedbackType.nextStep);
-			Fraction nextStepM9 = new Fraction ();
-			nextStepM9.setNumerator (startNumerator);
-			nextStepM9.setDenominator (startDenominator);
-			nextStepM9.setComparison (true);
-			M9.setNextStep (nextStepM9);
-
-			M10 = new FeedbackElem ();
-			M10.setID ("M10");
-			FeedbackMessage M10M = new FeedbackMessage ();
-			M10M.setDidacticConceptual ("Excellent. Please explain why you made the denominator "+endDenominator+".");
-			M10.setFeedbackMessage (M10M);
-			M10.setFeedbackType (FeedbackType.reflection);
-			Fraction nextStepM10 = new Fraction ();
-			nextStepM10.setSpeech (true);
-			M10.setNextStep (nextStepM10);
-
 			M11 = new FeedbackElem ();
 			M11.setID ("M11");
 			FeedbackMessage M11M = new FeedbackMessage ();
-			M11M.setSocratic ("How can you check, using a Fractions Lab tool, that your solution is correct?");
-			M11M.setGuidance ("You could use the comparison box to compare your fractions.");
-			M11M.setDidacticConceptual ("Compare the two fractions using the comparison box.");
-			M11M.setHighlighting (Highlighting.ComparisonBox);
+			M11M.setSocratic ("What are you going to compare your fraction with?");
+			M11M.setGuidance ("In equivalent fractions, the two numerators must be the same multiple of each other as the two denominators.");
+			M11M.setDidacticConceptual ("First create another fraction, this time "+startNumerator+"/"+startDenominator+". Then compare your two fractions.");
+			M11M.setHighlighting (Highlighting.RepresentationToolBox);
 			M11.setFeedbackMessage (M11M);
 			M11.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepM11 = new Fraction ();
+			nextStepM11.setNumerator (startNumerator);
+			nextStepM11.setDenominator (startDenominator);
 			nextStepM11.setComparison (true);
 			M11.setNextStep (nextStepM11);
+
+			M12 = new FeedbackElem ();
+			M12.setID ("M12");
+			FeedbackMessage M12M = new FeedbackMessage ();
+			M12M.setDidacticConceptual ("Excellent. Please explain why you made the denominator "+endDenominator+".");
+			M12.setFeedbackMessage (M12M);
+			M12.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepM12 = new Fraction ();
+			nextStepM12.setSpeech (true);
+			M12.setNextStep (nextStepM12);
+
+			M13 = new FeedbackElem ();
+			M13.setID ("M13");
+			FeedbackMessage M13M = new FeedbackMessage ();
+			M13M.setSocratic ("How can you check, using a Fractions Lab tool, that your solution is correct?");
+			M13M.setGuidance ("You could use the comparison box to compare your fractions.");
+			M13M.setDidacticConceptual ("Compare the two fractions using the comparison box.");
+			M13M.setHighlighting (Highlighting.ComparisonBox);
+			M13.setFeedbackMessage (M13M);
+			M13.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepM13 = new Fraction ();
+			nextStepM13.setComparison (true);
+			M13.setNextStep (nextStepM13);
 
 			CM11 = new FeedbackElem ();
 			CM11.setID ("CM11");
@@ -612,9 +643,9 @@ namespace taskDependentSupport.core
 			F2M6.setID ("F2M6");
 			FeedbackMessage F2M6M = new FeedbackMessage ();
 			F2M6M.setSocratic ("Excellent. Now, how are you going to partition the fraction?");
-			F2M6M.setGuidance ("Right click the fraction and partition the fraction into two.");
-			F2M6M.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into two.");
-			F2M6M.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into two.");
+			F2M6M.setGuidance ("Right click the fraction, select `find equivalent', and partition the fraction into two.");
+			F2M6M.setDidacticConceptual ("Click the fraction with the right-hand mouse button, then select `find equivalent' and partition the fraction into two.");
+			F2M6M.setDidacticProcedural ("Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into two.");
 			F2M6.setFeedbackMessage (F2M6M);
 			F2M6.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M6 = new Fraction ();
@@ -625,9 +656,9 @@ namespace taskDependentSupport.core
 			F2M7.setID ("F2M7");
 			FeedbackMessage F2M7M = new FeedbackMessage ();
 			F2M7M.setSocratic ("Excellent. Now, how are you going to partition the fraction into 3?");
-			F2M7M.setGuidance ("Right click the fraction and partition the fraction into 3.");
-			F2M7M.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into 3.");
-			F2M7M.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into 3.");
+			F2M7M.setGuidance ("Right click the fraction, select `find equivalent', and partition the fraction into 3.");
+			F2M7M.setDidacticConceptual ("Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 3.");
+			F2M7M.setDidacticProcedural ("Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 3.");
 			F2M7.setFeedbackMessage (F2M7M);
 			F2M7.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M7 = new Fraction ();
@@ -638,9 +669,9 @@ namespace taskDependentSupport.core
 			F2M7b.setID ("F2M7b");
 			FeedbackMessage F2M7bM = new FeedbackMessage ();
 			F2M7bM.setSocratic ("Excellent. Now, how are you going to partition the fraction into 4?");
-			F2M7bM.setGuidance ("Right click the fraction and partition the fraction into 4.");
-			F2M7bM.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into 4.");
-			F2M7bM.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into 4.");
+			F2M7bM.setGuidance ("Right click the fraction, select `find equivalent', and partition the fraction into 4.");
+			F2M7bM.setDidacticConceptual ("Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 4.");
+			F2M7bM.setDidacticProcedural ("Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 4.");
 			F2M7b.setFeedbackMessage (F2M7bM);
 			F2M7b.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M7b = new Fraction ();
@@ -651,9 +682,9 @@ namespace taskDependentSupport.core
 			F2M7c.setID ("F2M7c");
 			FeedbackMessage F2M7cM = new FeedbackMessage ();
 			F2M7cM.setSocratic ("Excellent. Now, how are you going to partition the fraction into 5?");
-			F2M7cM.setGuidance ("Right click the fraction and partition the fraction into 5.");
-			F2M7cM.setDidacticConceptual ("Click the fraction with the right-hand mouse button and partition the fraction into 5.");
-			F2M7cM.setDidacticProcedural ("Click the fraction with the right-hand mouse button and click the new arrow to partition the fraction into 5.");
+			F2M7cM.setGuidance ("Right click the fraction, select `find equivalent', and partition the fraction into 5.");
+			F2M7cM.setDidacticConceptual ("Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 5.");
+			F2M7cM.setDidacticProcedural ("Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 5.");
 			F2M7c.setFeedbackMessage (F2M7cM);
 			F2M7c.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M7c = new Fraction ();
@@ -691,7 +722,7 @@ namespace taskDependentSupport.core
 			F2E2 = new FeedbackElem ();
 			F2E2.setID("F2E2");
 			FeedbackMessage MF2E2M = new FeedbackMessage ();
-			MF2E2M.setDidacticConceptual ("Were all your fractions equivalent? When you used the partition tool, what happened to the denominators and numerators?");
+			MF2E2M.setDidacticConceptual ("When you used find equivalent, what happened to the denominators and numerators?");
 			F2E2.setFeedbackMessage (MF2E2M);
 			F2E2.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepF2E2 = new Fraction ();
@@ -781,10 +812,10 @@ namespace taskDependentSupport.core
 			T24M7 = new FeedbackElem ();
 			T24M7.setID ("T24M7");
 			FeedbackMessage T24M7M = new FeedbackMessage ();
-			T24M7M.setSocratic ("Excellent. How about copying this and using the partition tool to make the equivalent fraction?");
-			T24M7M.setGuidance ("You could now copy the fraction and use the partition tool to make an equivalent fraction. To open the partition tool, right-click the fraction.");
-			T24M7M.setDidacticConceptual ("Excellent. Now copy this fraction and use the partition tool to change it.");
-			T24M7M.setDidacticProcedural ("Excellent. Now copy the fraction use the partition tool to change it to an equivalent fraction.");
+			T24M7M.setSocratic ("Excellent. How are you going to make an equivalent fraction?");
+			T24M7M.setGuidance ("You could now copy the fraction and use `find equivalent' to make an equivalent fraction.");
+			T24M7M.setDidacticConceptual ("Excellent. Now copy this fraction and use `find equivalent' to change it.");
+			T24M7M.setDidacticProcedural ("Excellent. Now right click the fraction and copy it. Then right click the copy and select `find equivalent' to make an equivalent fraction.");
 			T24M7.setFeedbackMessage (T24M7M);
 			T24M7.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepT24M7 = new Fraction ();
