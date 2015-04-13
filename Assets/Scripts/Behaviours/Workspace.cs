@@ -1112,6 +1112,8 @@ public class Workspace : MonoBehaviour
         elements.Push(root);
         UpdateWS();
         ExternalEventsManager.Instance.SendMessageToSupport("FractionGenerated", source.GetComponent<RootElement>().type, root.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, root.GetComponent<RootElement>().partNumerator);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Denominator", root.name, root.GetComponent<RootElement>().partDenominator);
     }
 
 
@@ -1141,6 +1143,8 @@ public class Workspace : MonoBehaviour
         root.GetComponent<RootElement>().UpdateGraphics();
         UpdateWS();
         ExternalEventsManager.Instance.SendMessageToSupport("EquivalenceGenerated", root.GetComponent<RootElement>().type ,root.name);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Numerator", root.name, root.GetComponent<RootElement>().partNumerator);
+        ExternalEventsManager.Instance.SendMessageToSupport("FractionChange", "Denominator", root.name, root.GetComponent<RootElement>().partDenominator);
         root.BroadcastMessage("SetElementState", ElementsState.Equivalence, SendMessageOptions.DontRequireReceiver);
         root.GetComponent<RootElement>().SendMessage("SetPartitioning", SendMessageOptions.DontRequireReceiver);
         return root;
