@@ -50,6 +50,9 @@ public class ExternalEventsManager : MonoBehaviour
         }
 #endif
         //Debug.LogWarning("******** SendMessageToSupport disabled for testing support *********");
+#if UNITY_EDITOR
+        return;
+#endif
         TDSWrapper.SendMessageToSupport(args);
     }
     #endregion

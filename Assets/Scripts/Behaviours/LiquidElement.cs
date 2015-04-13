@@ -83,6 +83,11 @@ public class LiquidElement : WSElement, IWSElement
     public override void Draw(int zIndex)
     {
         base.Draw(zIndex);
+        if (null != label0 )
+        {
+            Color meshColor = Workspace.Instance.green;
+            label0.SendMessage("SetColor", meshColor, SendMessageOptions.DontRequireReceiver);
+        }
 
         Vector3 pos = transform.position;
         pos.z = zIndex;

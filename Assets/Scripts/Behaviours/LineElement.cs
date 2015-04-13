@@ -77,7 +77,12 @@ public class LineElement : WSElement, IWSElement
     public override void Draw(int zIndex)
     {
         base.Draw(zIndex);
-
+        if (null != label0 && null != label1)
+        {
+            Color meshColor = Workspace.Instance.black;
+            label0.SendMessage("SetColor", meshColor, SendMessageOptions.DontRequireReceiver);
+            label1.SendMessage("SetColor", meshColor, SendMessageOptions.DontRequireReceiver);
+        }
         if (!Workspace.Instance.OperationPending)
             UpdateArrowsState();
 
