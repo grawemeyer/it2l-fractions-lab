@@ -64,6 +64,11 @@ namespace taskDependentSupport
 			Application.ExternalCall("sendFeedbackTypeToSNA", feedbackType);
 		}
 
+		public static void sendRepresentationTypeToSNA(String representation){
+			Debug.Log ("sendRepresentationTypeToSNA:: "+representation);
+			Application.ExternalCall("sendRepresentationTypeToSNA", representation);
+		}
+
 		public static void sendMessageToTIS(List<String> feedback, String currentFeedbackType, int level, bool followed, bool viewed){
 			String feedbackString = feedback [0];
 			Debug.Log ("TDSWRAPPER: sendMessageToTIS:"+ feedbackString+" currentFeedbackType: "+currentFeedbackType+" level: "+level+" followed: "+followed+" viewed: "+viewed);
