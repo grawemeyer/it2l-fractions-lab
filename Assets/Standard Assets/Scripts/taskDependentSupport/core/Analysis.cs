@@ -35,6 +35,8 @@ namespace taskDependentSupport.core
 				studentModel.setComparedResult(false);
 				studentModel.setComparedFractions(false);
 				studentModel.setCurrentFraction(id);
+				taskDependentSupport.TDSWrapper.sendRepresentationTypeToSNA(name);
+				Debug.Log ("!!!!! generated name: "+name+" id: "+id);
 
 			}
 			if (type.Equals("FractionChange")){

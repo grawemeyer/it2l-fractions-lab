@@ -94,6 +94,7 @@ namespace taskDependentSupport.core
 				}
 				else {
 					calculatePresentationOfFeedback (studentModel.getlastDisplayedMessageType());
+					taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 					if (presentationMode.Equals ("lightBulb")){
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
 						taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
@@ -101,12 +102,10 @@ namespace taskDependentSupport.core
 
 					else if (presentationMode.Equals ("low")) {
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
-						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 						sendLowMessage (feedbackMessage);
 
 					} else if (presentationMode.Equals ("high")) {
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
-						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 						Debug.Log ("send HIGH message");
 						sendHighMessage (feedbackMessage);
 					}
