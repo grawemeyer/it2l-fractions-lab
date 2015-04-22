@@ -11,7 +11,10 @@ namespace taskDependentSupport.core
 		public void analyseEvent(StudentModel studentModel, string type, string name, string id, string value, int fractionsValue, string position, long time)
 		{
 			studentModel.setEventTime(time);
-			studentModel.setCurrentFraction(id);
+			if (!id.Equals ("")) {
+				studentModel.setCurrentFraction(id);
+			}
+
 
 			Debug.Log ("::: ANAYLSE: "+type+" name: "+name+" id: "+id+" value: "+value+" fractionsValue: "+fractionsValue);
 

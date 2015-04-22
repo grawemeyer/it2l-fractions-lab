@@ -33,6 +33,7 @@ namespace taskDependentSupport.core
 	
 		public void processDoneEvent(){
 			Debug.Log ("::: processDoneEvent ::: ");
+			processEvent ();
 			Debug.Log ("::: isTaskCompleted ::: "+studentModel.isTaskCompleted());
 			if (studentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("task1.1setA")){
@@ -507,6 +508,47 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
+		private bool currentSetContainsFraction(int checkNumerator, int checkDenominator){
+			if (studentModel.getCurrentFractions ().Count > 0) {
+				for (int i = 0; i< studentModel.getCurrentFractions().Count; i++){
+					Fraction currentfraction = studentModel.getCurrentFractions()[i];
+					int numerator = currentfraction.getNumerator();
+					int denominator = currentfraction.getDenominator();
+					int partition = currentfraction.getPartition();
+					
+					if (partition != 0){
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+					if ((numerator == checkNumerator) && (denominator == checkDenominator)){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		private bool currentSetContainsEqivalentFraction(int checkNumerator, int checkDenominator){
+			if (studentModel.getCurrentFractions ().Count > 0) {
+				for (int i = 0; i< studentModel.getCurrentFractions().Count; i++){
+				Fraction multiplCurrentfraction = studentModel.getCurrentFractions()[i];
+					int multipleNumerator = multiplCurrentfraction.getNumerator();
+					int multipleDenominator = multiplCurrentfraction.getDenominator();
+					int multiplePartition = multiplCurrentfraction.getPartition();
+				
+					if (multiplePartition != 0){
+						multipleNumerator = multipleNumerator * multiplePartition;
+						multipleDenominator = multipleDenominator * multiplePartition;
+					}
+		
+					if (equivalent(multipleNumerator, multipleDenominator, checkNumerator, checkDenominator)){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
 		private bool checkCurrentFractionsForEquivalence(int equivalentNumerator, int equivalentDenominator){
 			if (studentModel.getCurrentFractions ().Count > 0) {
 				bool containsMainFraction = false;
@@ -576,6 +618,8 @@ namespace taskDependentSupport.core
 		{
 			Debug.Log ("processEvent");
 			Debug.Log ("taskID: "+taskID);
+			Fraction testCurrentFraction = studentModel.getCurrentFraction ();
+			Debug.Log ("testCurrentFraction: "+testCurrentFraction);
 
 			if (taskID.Equals("task3aPlus.1.setA.area") || taskID.Equals("task3aPlus.1.setB.area") || taskID.Equals("task3aPlus.1.setC.area") ||
 			    taskID.Equals("task3aPlus.1.setA.numb") || taskID.Equals("task3aPlus.1.setB.numb") || taskID.Equals("task3aPlus.1.setC.numb") ||
@@ -921,8 +965,8 @@ namespace taskDependentSupport.core
 
 					else if (equivalent(numerator, denominator, startNumerator, startDenominator) && 
 					         (studentModel.getCurrentFractions().Count == 1)){
-						studentModel.setTaskCompleted(true);
-						currentFeedback = feedbackData.T24E1;
+						//studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.T24M12;
 					}
 
 					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && studentModel.getComparedResult()){
@@ -931,6 +975,10 @@ namespace taskDependentSupport.core
 					}
 					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && !studentModel.getComparedResult()){
 						currentFeedback = feedbackData.T24M11;
+					}
+					else if (currentSetContainsEqivalentFraction(startNumerator, startDenominator) && 
+					         (!currentSetContainsFraction(startNumerator, startDenominator))){
+						currentFeedback = feedbackData.T24M13;
 					}
 					else if ((numerator == startNumerator) && (denominator == startDenominator)) {
 						currentFeedback = feedbackData.T24M7;

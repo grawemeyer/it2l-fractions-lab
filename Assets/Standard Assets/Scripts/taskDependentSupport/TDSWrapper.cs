@@ -241,7 +241,7 @@ namespace taskDependentSupport
 				Debug.Log (":::: doneButtonPressed ::::: ");
 				Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
-				reasoning.processEvent();
+				//reasoning.processEvent();		
 				reasoning.processDoneEvent();
 
 				FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
@@ -260,7 +260,7 @@ namespace taskDependentSupport
 			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedOFF*")){
 				Debug.Log (":::: Light bulb pressed OFF::::");
 
-				Reasoning reasoning = new Reasoning(taskID);
+				/*Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
 				reasoning.processEvent();
 				
@@ -270,7 +270,7 @@ namespace taskDependentSupport
 				feedback.generateFeedbackMessage();
 
 				needsNewThread = true;
-				responseThread = null;
+				responseThread = null;*/
 			}
 			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISOFF*")){
 				switchTISoff();
