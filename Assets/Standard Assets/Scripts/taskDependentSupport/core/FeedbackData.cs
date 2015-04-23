@@ -875,9 +875,9 @@ namespace taskDependentSupport.core
 			T24M12.setID ("T24M12");
 			FeedbackMessage T24M12M = new FeedbackMessage ();
 			T24M12M.setSocratic ("Now that you have made a fraction that is equivalent to "+startNumerator+"/"+startDenominator+", how are you going to compare it with "+startNumerator+"/"+startDenominator+"?");
-			T24M12M.setGuidance ("Look at the task and think about what other fraction you need to make to compare it with?");
-			T24M12M.setDidacticConceptual ("You need one of your fractions to be "+startNumerator+"/"+startDenominator+", to compare it with the fraction that is equivalent to "+startNumerator+"/"+startDenominator+".");
-			T24M12M.setDidacticProcedural ("Keep the fraction that is equivalent to "+startNumerator+"/"+startDenominator+". Now create another fraction that is "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.");
+			T24M12M.setGuidance ("Look at the task and think about what other fraction you need to make, to compare with your fraction.");
+			T24M12M.setDidacticConceptual ("To compare your fraction to "+startNumerator+"/"+startDenominator+", you will need to make a second fraction, this time "+startNumerator+"/"+startDenominator+".");
+			T24M12M.setDidacticProcedural ("Keep the fraction that you have made. Now create a second fraction. This time "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.");
 			T24M12.setFeedbackMessage (T24M12M);
 			T24M12.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepT24M12 = new Fraction ();
@@ -889,8 +889,8 @@ namespace taskDependentSupport.core
 			T24M13.setID ("T24M13");
 			FeedbackMessage T24M13M = new FeedbackMessage ();
 			T24M13M.setSocratic ("Now that you have made a fraction that is equivalent to "+startNumerator+"/"+startDenominator+", how are you going to compare it with "+startNumerator+"/"+startDenominator+"?");
-			T24M13M.setGuidance ("Look at the task and think about what other fraction you need to make to compare it with?");
-			T24M13M.setDidacticConceptual ("You need one of your fractions to be "+startNumerator+"/"+startDenominator+", to compare it with the fraction that is equivalent to "+startNumerator+"/"+startDenominator+".");
+			T24M13M.setGuidance ("Look at the task and think about what other fraction you need to make, to compare with your fraction.");
+			T24M13M.setDidacticConceptual ("To compare your fraction to "+startNumerator+"/"+startDenominator+", you will need to make a second fraction, this time "+startNumerator+"/"+startDenominator+".");
 			T24M13M.setDidacticProcedural ("Keep the fraction that is equivalent to "+startNumerator+"/"+startDenominator+". Now change the other fraction to "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.");
 			T24M13.setFeedbackMessage (T24M13M);
 			T24M13.setFeedbackType (FeedbackType.nextStep);
