@@ -10,7 +10,7 @@ namespace taskDependentSupport.core
 				
 		public FeedbackElem S1, S2, S3, M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12, M13, E1, E2, R1, R2, O1, O2;
 		public FeedbackElem CM2, CM5, CM6, CM6Second, CM7, CM8, CM11, CM12, CE2;
-		public FeedbackElem FM6, FM10, FM11, FE1, FE2;
+		public FeedbackElem FM6, FM10, FM11, FM12, FE1, FE2;
 		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24M12, T24M13, T24E1, T24E2;
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M8, T26M10, T26M11, T26E1, T26E2;
@@ -598,6 +598,17 @@ namespace taskDependentSupport.core
 			nextStepFM11.differntRepresentation (true);
 			nextStepFM11.allSameValue(true);
 			FM11.setNextStep (nextStepFM11);
+
+			FM12 = new FeedbackElem ();
+			FM12.setID ("FM12");
+			FeedbackMessage MF12M = new FeedbackMessage ();
+			MF12M.setSocratic ("Excellent! Do your fractions have the same values?");
+			MF12M.setGuidance ("Excellent! Now change your fractions to the same values.");
+			FM12.setFeedbackMessage (MF12M);
+			FM12.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepFM12 = new Fraction ();
+			nextStepFM12.allSameValue(true);
+			FM12.setNextStep (nextStepFM12);
 
 			FE1 = new FeedbackElem ();
 			FE1.setID("FE1");

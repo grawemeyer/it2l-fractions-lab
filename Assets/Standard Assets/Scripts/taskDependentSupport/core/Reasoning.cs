@@ -1134,6 +1134,9 @@ namespace taskDependentSupport.core
 					else if (!sameRepresentations() && sameValues() && (createdReps() < 4)){
 						currentFeedback = feedbackData.FM11;
 					}
+					else if (!sameRepresentations() && (!sameValues() && (createdReps() > 1))){
+						currentFeedback = feedbackData.FM12;
+					}
 					else if (fourWithDiffRepAndSameValues()){
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.FE1;
