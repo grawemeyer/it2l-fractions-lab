@@ -95,7 +95,8 @@ namespace taskDependentSupport.core
 					bool previousViewed = studentModel.getPreviousViewed();
 					int level = studentModel.getCurrentFeedbackLevel();
 					List<String> feedback = getFeedbackAsList(currentFeedback);
-					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedback, feedbackType, level, followed, previousViewed);
+					String feedbackID = currentFeedback.getID();
+					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedback, feedbackType, feedbackID, level, followed, previousViewed);
 				}
 				else {
 					calculatePresentationOfFeedback (studentModel.getlastDisplayedMessageType());
