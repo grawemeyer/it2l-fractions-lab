@@ -23,8 +23,13 @@ namespace taskDependentSupport.core
 
 		public void calculatePresentationOfFeedback(int feedbackType){
 			presentationMode = "lightBulb";
+			FeedbackElem feedback = studentModel.getCurrentFeedback ();
+			String feedbackID = feedback.getID ();
+			String lastReflectiveIdentifier = "E";
+			Boolean lastReflectivePrompt = feedbackID.Contains (lastReflectiveIdentifier);
+			Debug.Log ("feedbackType: "+feedbackType+" feedbackID: "+feedbackID+ " lastReflectivePrompt: "+lastReflectivePrompt);
 
-			if ((feedbackType == FeedbackType.affirmation) || (feedbackType == FeedbackType.taskNotFinished)) {
+			if (lastReflectivePrompt || (feedbackType == FeedbackType.affirmation) || (feedbackType == FeedbackType.taskNotFinished)) {
 				presentationMode = "high";
 			}
 		}
