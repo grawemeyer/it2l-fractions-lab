@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.300";
+    public const string VER = "0.302";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -94,6 +94,7 @@ public class InterfaceBehaviour : MonoBehaviour
     public List<Button> barTeacher;
 
     public GameObject popupmsg;
+    public GameObject popupHighMsg;
     public GameObject symbolPrefab;
     public GameObject partitionPrefab;
     public GameObject overlayablePage;
@@ -791,7 +792,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
         Workspace.Instance.SendMessage("DisableInput");
         ShowLowFeedback("");
-        GameObject popupFeedback = GameObject.Instantiate(popupmsg) as GameObject;
+        GameObject popupFeedback = GameObject.Instantiate(popupHighMsg) as GameObject;
         popupFeedback.transform.parent = ui.transform;
         PushPopup(popupFeedback);
         popupFeedback.GetComponent<UIPopup>().setText(text);
