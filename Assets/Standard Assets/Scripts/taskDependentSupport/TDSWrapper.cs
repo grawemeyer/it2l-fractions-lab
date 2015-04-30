@@ -75,6 +75,11 @@ namespace taskDependentSupport
 			Application.ExternalCall("sendMessageToTIS", feedback, currentFeedbackType, feedbackID, level, followed, viewed);
 		}
 
+		public static void sendDoneButtonPressedToTIS(bool value){
+			Debug.Log ("sendDoneButtonPressedToTIS:: "+value);
+			Application.ExternalCall("sendDoneButtonPressedToTIS", value);
+		}
+
 		public static void SendMessageToLightBulb(String feedbacktext){
 			Debug.Log ("TDSWRAPPER: sendMessageToLightBulb: "+feedbacktext);
 			Application.ExternalCall("sendMessageToLightBulb", feedbacktext);
@@ -223,44 +228,41 @@ namespace taskDependentSupport
 			}*/
 
 			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange") 
-			    || eventType.Equals ("OperationResult") || (eventType.Equals ("EquivalenceGenerated"))) {
-				Debug.Log ("FractionGenerated ||  FractionChange");
-				Debug.Log ("needsNewThread "+needsNewThread);
-				Debug.Log ("responseThread "+responseThread);
-				Debug.Log ("counter "+counter);
-				Debug.Log ("counter "+counter.getValue());
-				if (needsNewThread || (responseThread == null)){
-					responseThread = new Thread (new ThreadStart (handleEvent));
-					responseThread.Start (); 
-					needsNewThread = false;
-				}
-			}
+						|| eventType.Equals ("OperationResult") || (eventType.Equals ("EquivalenceGenerated"))) {
+						Debug.Log ("FractionGenerated ||  FractionChange");
+						Debug.Log ("needsNewThread " + needsNewThread);
+						Debug.Log ("responseThread " + responseThread);
+						Debug.Log ("counter " + counter);
+						Debug.Log ("counter " + counter.getValue ());
+						if (needsNewThread || (responseThread == null)) {
+								responseThread = new Thread (new ThreadStart (handleEvent));
+								responseThread.Start (); 
+								needsNewThread = false;
+						}
+				} else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
+						(eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))) {
+						Debug.Log (":::: doneButtonPressed ::::: ");
+						Reasoning reasoning = new Reasoning (taskID);
+						reasoning.setStudentModel (studentModel);
+						//reasoning.processEvent();		
+						reasoning.processDoneEvent ();
 
-			else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
-			         (eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))){
-				Debug.Log (":::: doneButtonPressed ::::: ");
-				Reasoning reasoning = new Reasoning(taskID);
-				reasoning.setStudentModel(studentModel);
-				//reasoning.processEvent();		
-				reasoning.processDoneEvent();
-
-				FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
-				Debug.Log (" :::: feedback ID after reasoning ::: "+currentFeedback.getID());
+						FeedbackElem currentFeedback = studentModel.getCurrentFeedback ();
+						Debug.Log (" :::: feedback ID after reasoning ::: " + currentFeedback.getID ());
 				
-				Feedback feedback = new Feedback();
-				feedback.setStudentModel(studentModel);
-				feedback.setStudentID(studentID);
-				feedback.generateFeedbackMessage();
-			}
-			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedON*")){
-				Debug.Log (":::: Light bulb pressed ON::::");
-				studentModel.setPreviousViewed(true);
+						Feedback feedback = new Feedback ();
+						feedback.setStudentModel (studentModel);
+						feedback.setStudentID (studentID);
+						feedback.generateFeedbackMessage ();
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedON*")) {
+						Debug.Log (":::: Light bulb pressed ON::::");
+						studentModel.setPreviousViewed (true);
+						sendDoneButtonPressedToTIS (false);
 			
-			}
-			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedOFF*")){
-				Debug.Log (":::: Light bulb pressed OFF::::");
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedOFF*")) {
+						Debug.Log (":::: Light bulb pressed OFF::::");
 
-				/*Reasoning reasoning = new Reasoning(taskID);
+						/*Reasoning reasoning = new Reasoning(taskID);
 				reasoning.setStudentModel(studentModel);
 				reasoning.processEvent();
 				
@@ -271,13 +273,13 @@ namespace taskDependentSupport
 
 				needsNewThread = true;
 				responseThread = null;*/
-			}
-			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISOFF*")){
-				switchTISoff();
-			}
-			else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISON*")){
-				switchTISon();
-			}
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISOFF*")) {
+						switchTISoff ();
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchTISON*")) {
+						switchTISon ();
+				} else if (eventType.Equals ("ClickButton") && eventName.Equals ("CloseFeedbackPopup")) {
+						sendDoneButtonPressedToTIS (true);
+				}
 		}
 
 		private static void handleEvent()
