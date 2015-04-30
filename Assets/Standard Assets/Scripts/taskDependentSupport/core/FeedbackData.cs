@@ -26,7 +26,7 @@ namespace taskDependentSupport.core
 			String representation = "area";
 
 			if (taskID.Equals ("task1.1setA")) {
-				endDenominator = 3;
+				endDenominator = 5;
 			}
 			
 			if (taskID.Equals("task2.7.setA")){
@@ -183,11 +183,19 @@ namespace taskDependentSupport.core
 				representation = "liquid measures";
 			}
 
+			FeedbackMessageString.startNumerator = startNumerator;
+			FeedbackMessageString.startDenominator = startDenominator;
+			FeedbackMessageString.endNumerator = endNumerator;
+			FeedbackMessageString.endDenominator = endDenominator;
+			FeedbackMessageString.representation = representation;
+
+
+
 			S1 = new FeedbackElem ();
 			S1.setID("S1");
 			FeedbackMessage S1M = new FeedbackMessage ();
-			S1M.setSocratic ("How are you going to tackle this task?");
-			S1M.setDidacticConceptual ("Read the task again, and explain how you are going to tackle it.");
+			S1M.setSocratic (FeedbackMessageString.S1M_socratic);
+			S1M.setDidacticConceptual (FeedbackMessageString.S1M_didacticConceptual);
 			S1.setFeedbackMessage (S1M);
 			S1.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepS1 = new Fraction ();
@@ -197,9 +205,9 @@ namespace taskDependentSupport.core
 			S2 = new FeedbackElem ();
 			S2.setID ("S2");
 			FeedbackMessage S2M = new FeedbackMessage ();
-			S2M.setSocratic ("What do you need to do in this task?");
-			S2M.setGuidance ("You can click one of the buttons on the representations toolbox to create a fraction.");
-			S2M.setDidacticConceptual ("Read the task again, and explain how you are going to tackle it.");
+			S2M.setSocratic (FeedbackMessageString.S2M_socratic);
+			S2M.setGuidance (FeedbackMessageString.S2M_guidance);
+			S2M.setDidacticConceptual (FeedbackMessageString.S2M_didacticConceptual);
 			S2M.setHighlighting(Highlighting.RepresentationToolBox);
 			S2.setFeedbackMessage (S2M);
 			S2.setFeedbackType (FeedbackType.nextStep);
@@ -210,10 +218,10 @@ namespace taskDependentSupport.core
 			S3 = new FeedbackElem ();
 			S3.setID ("S3");
 			FeedbackMessage S3M = new FeedbackMessage ();
-			S3M.setSocratic ("Good. What do you need to do now, to change the fraction?");
-			S3M.setGuidance ("You can use the arrow buttons to change the fraction.");
-			S3M.setDidacticConceptual ("Now click the up arrow next to the empty fraction, to make the denominator.");
-			S3M.setDidacticProcedural ("Click the up arrow next to the empty fraction, to make the denominator (the bottom part of the fraction) "+endDenominator+".");
+			S3M.setSocratic (FeedbackMessageString.S3M_socratic);
+			S3M.setGuidance (FeedbackMessageString.S3M_guidance);
+			S3M.setDidacticConceptual (FeedbackMessageString.S3M_didacticConceptual);
+			S3M.setDidacticProcedural (FeedbackMessageString.S3M_didacticProcedural);
 			S3M.setHighlighting(Highlighting.ArrowButtons);
 			S3.setFeedbackMessage (S3M);
 			S3.setFeedbackType (FeedbackType.nextStep);
@@ -224,10 +232,10 @@ namespace taskDependentSupport.core
 			M1 = new FeedbackElem ();
 			M1.setID ("M1");
 			FeedbackMessage M1M = new FeedbackMessage ();
-			M1M.setSocratic ("Is the denominator in your fraction correct?");
-			M1M.setGuidance ("You can click the up arrow next to your fraction to change the denominator.");
-			M1M.setDidacticConceptual ("Check that the denominator in your fraction is correct.");
-			M1M.setDidacticProcedural ("Check that the denominator (the bottom part of your fraction) is "+endDenominator+".");
+			M1M.setSocratic (FeedbackMessageString.M1M_socratic);
+			M1M.setGuidance (FeedbackMessageString.M1M_guidance);
+			M1M.setDidacticConceptual (FeedbackMessageString.M1M_didacticConceptual);
+			M1M.setDidacticProcedural (FeedbackMessageString.M1M_didacticProcedural);
 			M1M.setHighlighting(Highlighting.ArrowButtons);
 			M1.setFeedbackMessage (M1M);
 			M1.setFeedbackType (FeedbackType.problemSolving);
@@ -238,10 +246,10 @@ namespace taskDependentSupport.core
 			M2 = new FeedbackElem ();
 			M2.setID ("M2");
 			FeedbackMessage M2M = new FeedbackMessage ();
-			M2M.setSocratic ("Have you changed the numerator or the denominator?");
-			M2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
-			M2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
-			M2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+endDenominator+".");
+			M2M.setSocratic (FeedbackMessageString.M2M_socratic);
+			M2M.setGuidance (FeedbackMessageString.M2M_guidance);
+			M2M.setDidacticConceptual (FeedbackMessageString.M2M_didacticConceptual);
+			M2M.setDidacticProcedural (FeedbackMessageString.M2M_didacticProcedural);
 			M2.setFeedbackMessage (M2M);
 			M2.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM2 = new Fraction ();
@@ -251,14 +259,14 @@ namespace taskDependentSupport.core
 			CM2 = new FeedbackElem ();
 			CM2.setID ("CM2");
 			FeedbackMessage CM2M = new FeedbackMessage ();
-			CM2M.setSocratic ("Have you changed the numerator or the denominator?");
-			CM2M.setGuidance ("Remember that the denominator is the bottom part of the fraction.");
-			CM2M.setDidacticConceptual ("Check that you have changed the denominator, not the numerator.");
-			CM2M.setDidacticProcedural ("Check that the denominator in your fraction, not the numerator, is "+5+".");
+			CM2M.setSocratic (FeedbackMessageString.CM2M_socratic);
+			CM2M.setGuidance (FeedbackMessageString.CM2M_guidance);
+			CM2M.setDidacticConceptual (FeedbackMessageString.CM2M_didacticConceptual);
+			CM2M.setDidacticProcedural (FeedbackMessageString.CM2M_didacticProcedural);
 			CM2.setFeedbackMessage (CM2M);
 			CM2.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepCM2 = new Fraction ();
-			nextStepCM2.setDenominator(5);
+			nextStepCM2.setDenominator(endDenominator);
 			CM2.setNextStep (nextStepCM2);
 
 			M3 = new FeedbackElem ();
@@ -303,7 +311,7 @@ namespace taskDependentSupport.core
 			CM5M.setSocratic ("Have you changed the denominator or the numerator?");
 			CM5M.setGuidance ("The denominator is the bottom part of the fraction.");
 			CM5M.setDidacticConceptual ("You changed the numerator. You need to change the denominator.");
-			CM5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+5+".");
+			CM5M.setDidacticProcedural ("You changed the numerator. You need to change the denominator to "+endDenominator+".");
 			CM5.setFeedbackMessage (M5M);
 			CM5.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepCM5 = new Fraction ();
@@ -643,7 +651,7 @@ namespace taskDependentSupport.core
 			F2M4 = new FeedbackElem ();
 			F2M4.setID ("F2M4");
 			FeedbackMessage F2M4M = new FeedbackMessage ();
-			F2M4M.setSocratic ("“Excellent. What fraction have you made?");
+			F2M4M.setSocratic ("Excellent. What fraction have you made?");
 			F2M4.setFeedbackMessage (F2M4M);
 			F2M4.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepF2M4 = new Fraction ();
