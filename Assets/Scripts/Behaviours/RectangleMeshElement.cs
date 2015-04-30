@@ -147,10 +147,10 @@ namespace fractionslab.behaviours
 
     void Start() 
     {
-      /*  if (Application.platform == RuntimePlatform.OSXWebPlayer)
+        if (Application.platform == RuntimePlatform.OSXWebPlayer)
             wBorderLine = 0.035f;
         else
-            wBorderLine = 0.02f;*/
+            wBorderLine = 0.02f;
 
         Draw();
 
