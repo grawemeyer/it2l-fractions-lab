@@ -36827,7 +36827,8 @@ MonoBehaviour:
   - {fileID: 216202213}
   barTeacher:
   - {fileID: 1241856057}
-  popupmsg: {fileID: 100004, guid: 74170a159c5d4ab4d8e4ae7a3ac5ac81, type: 2}
+  popupmsg: {fileID: 162704, guid: 2a4e8b782a2e25446aea0f72ac10f1bc, type: 2}
+  popupHighMsg: {fileID: 163696, guid: 7054603be1247f348918eff76852bba6, type: 2}
   symbolPrefab: {fileID: 100020, guid: 567187ee0c7f25743ba1a0bbb33b4a60, type: 2}
   partitionPrefab: {fileID: 100000, guid: 3137a4d7874509e45a1e84b0ac37010c, type: 2}
   overlayablePage: {fileID: 691948500}
