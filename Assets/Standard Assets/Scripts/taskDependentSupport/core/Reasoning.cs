@@ -18,18 +18,13 @@ namespace taskDependentSupport.core
 		private FeedbackData feedbackData;
 		private FeedbackElem currentFeedback;
 
-		public Reasoning(string taskIDvalue){
+		public Reasoning(string taskIDvalue, StudentModel student){
 			Debug.Log ("hier in REASONING and generate new feedbackdata!!!");
 			taskID = taskIDvalue;
-			feedbackData = new FeedbackData (taskID);
+			studentModel = student;
+			feedbackData = new FeedbackData (taskID, student);
 			taskID = taskIDvalue;
 		}
-
-		public void setStudentModel(StudentModel elem){
-			studentModel = elem;
-			//studentModel.setFeedbackData (new FeedbackData ());
-		}
-
 	
 		public void processDoneEvent(){
 			Debug.Log ("::: processDoneEvent ::: ");

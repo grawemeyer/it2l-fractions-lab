@@ -32,9 +32,36 @@ namespace taskDependentSupport.core
 		private FeedbackElem currentFeedback = new FeedbackElem ();
 		private int currentFeedbackLevel = 0;
 		private bool previousViewed = false;
+		private bool languageEnglish = true;
+		private bool languageGerman = false;
+		private bool languageSpanish = false;
+
+		public void setLanguageEnglish(bool value){
+			languageEnglish = value;
+		}
+
+		public bool getLanguageEnglish(){
+			return languageEnglish;
+		}
+
+		public void setLanguageGerman(bool value){
+			languageGerman = value;
+		}
+		
+		public bool getLanguageGerman(){
+			return languageGerman;
+		}
+
+		public void setLanguageSpanish(bool value){
+			languageSpanish = value;
+		}
+		
+		public bool getLanguageSpanish(){
+			return languageSpanish;
+		}
 
 		public StudentModel(String taskID){
-			feedbackData = new FeedbackData (taskID); 
+			feedbackData = new FeedbackData (taskID, this); 
 		}
 
 		public void setPreviousViewed(bool value){

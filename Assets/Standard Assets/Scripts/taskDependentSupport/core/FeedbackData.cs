@@ -16,7 +16,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M8, T26M10, T26M11, T26E1, T26E2;
 		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
 
-		public FeedbackData (String taskID){
+		public FeedbackData (String taskID, StudentModel student){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
 
 			int startNumerator = 0;
@@ -185,7 +185,7 @@ namespace taskDependentSupport.core
 
 			Debug.Log (" startNumerator: "+startNumerator+" startDenominator: "+startDenominator+" endNumerator: "+endNumerator+" endDenominator:"+endDenominator);
 
-			FeedbackMessageString feedbackMessageString = new FeedbackMessageString (true, false, false);
+			FeedbackMessageString feedbackMessageString = new FeedbackMessageString (student.getLanguageEnglish(), student.getLanguageGerman(), student.getLanguageSpanish());
 			feedbackMessageString.setStartNumerator(startNumerator);
 			feedbackMessageString.setStartDenominator(startDenominator);
 			feedbackMessageString.setEndNumerator(endNumerator);

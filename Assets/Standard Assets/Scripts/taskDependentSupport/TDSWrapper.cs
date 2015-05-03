@@ -167,6 +167,24 @@ namespace taskDependentSupport
 			TIS = false;
 		}
 
+		private static void switchEnghlishOn(StudentModel student){
+			student.setLanguageEnglish (true);
+			student.setLanguageGerman (false);
+			student.setLanguageSpanish (false);
+		}
+
+		private static void switchGermanOn(StudentModel student){
+			student.setLanguageEnglish (false);
+			student.setLanguageGerman (true);
+			student.setLanguageSpanish (false);
+		}
+
+		private static void switchSpanishOn(StudentModel student){
+			student.setLanguageEnglish (false);
+			student.setLanguageGerman (false);
+			student.setLanguageSpanish (true);
+		}
+
 		public static void SendMessageToSupport(params object[] args)
 		{
 			if (intelligentSupportOff) return;
@@ -242,9 +260,7 @@ namespace taskDependentSupport
 				} else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
 						(eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))) {
 						Debug.Log (":::: doneButtonPressed ::::: ");
-						Reasoning reasoning = new Reasoning (taskID);
-						reasoning.setStudentModel (studentModel);
-						//reasoning.processEvent();		
+						Reasoning reasoning = new Reasoning (taskID, studentModel);
 						reasoning.processDoneEvent ();
 
 						FeedbackElem currentFeedback = studentModel.getCurrentFeedback ();
@@ -279,6 +295,12 @@ namespace taskDependentSupport
 						switchTISon ();
 				} else if (eventType.Equals ("ClickButton") && eventName.Equals ("CloseFeedbackPopup")) {
 						sendDoneButtonPressedToTIS (true);
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchEnglishON*")) {
+						switchEnghlishOn(studentModel);	
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchGermanON*")) {
+						switchGermanOn(studentModel);	
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchSpanishON*")) {
+						switchSpanishOn(studentModel);	
 				}
 		}
 
@@ -288,8 +310,7 @@ namespace taskDependentSupport
 				while (counter.getValue ()< 400) {}
 				if (counter.getValue () >= 400) {
 					Debug.Log("counter > 400");
-					Reasoning reasoning = new Reasoning(taskID);
-					reasoning.setStudentModel(studentModel);
+					Reasoning reasoning = new Reasoning(taskID, studentModel);
 					reasoning.processEvent();
 
 					Feedback feedback = new Feedback();
