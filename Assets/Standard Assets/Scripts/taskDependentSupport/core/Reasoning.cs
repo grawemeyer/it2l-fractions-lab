@@ -1128,7 +1128,6 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.FM11;
 					}
 					else if (!sameRepresentations() && !sameValues() && (createdReps() > 1)){
-						Debug.Log (":::: hier in feedbackData.FM12");
 						currentFeedback = feedbackData.FM12;
 					}
 					else if (fourWithDiffRepAndSameValues()){
