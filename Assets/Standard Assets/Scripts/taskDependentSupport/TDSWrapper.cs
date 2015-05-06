@@ -34,6 +34,7 @@ namespace taskDependentSupport
 		public static bool doneButtonEnabled = true;
 		public static bool arrowButtonEnabled = false;
 		public static bool needsNewThread = true;
+		public static String languageString = "";
 
 		private static StudentModel studentModel;
 
@@ -133,6 +134,7 @@ namespace taskDependentSupport
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
 			studentModel = new StudentModel (taskID);
+			setLanguageInStudentModel(studentModel);
 			studentModel.resetDoneButtonPressed();
 		
 			if (checkTaskID.Equals ("task2.7")) {
@@ -165,6 +167,22 @@ namespace taskDependentSupport
 
 		private static void switchTISoff(){
 			TIS = false;
+		}
+
+		public static void setLanguage(String value){
+			languageString = value;
+		}
+
+		private static void setLanguageInStudentModel(StudentModel student){
+			if (languageString.Equals ("de")) {
+				switchGermanOn(student);
+			}
+			else if (languageString.Equals ("es")){
+				switchSpanishOn(student);
+			}
+			else {
+				switchEnghlishOn(student);
+			}
 		}
 
 		private static void switchEnghlishOn(StudentModel student){
@@ -219,6 +237,7 @@ namespace taskDependentSupport
 
 			if (studentModel == null) {
 				studentModel = new StudentModel (taskID);
+				setLanguageInStudentModel(studentModel);
 			}
 
 			Analysis analyse = new Analysis ();
