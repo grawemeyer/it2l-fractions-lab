@@ -438,20 +438,18 @@ namespace taskDependentSupport.core
 			if (amountOfReps >= 4) {
 				//get all with the same values
 				List<Fraction> currentFractions = studentModel.getCurrentFractions();
-				while (currentFractions.Count > 0){
-					Fraction firstFraction = currentFractions [0];
-					int firstNumerator = firstFraction.getNumerator();
-					int firstDenominator = firstFraction.getDenominator();
-					int firstPartition = firstFraction.getPartition();
+
+				for (int i = 0; i< currentFractions.Count; i++){
+					Fraction currentFraction = currentFractions [i];
+					int firstNumerator = currentFraction.getNumerator();
+					int firstDenominator = currentFraction.getDenominator();
+					int firstPartition = currentFraction.getPartition();
 					
 					if (firstPartition != 0){
 						firstNumerator = firstNumerator * firstPartition;
 						firstDenominator = firstDenominator * firstPartition;
 					}
-
 					List<Fraction> sameValues = getFractionsWithSameValues(firstNumerator, firstDenominator);
-					currentFractions = deleteFractionsWithSameValues(firstNumerator, firstDenominator);
-
 					if (sameValues.Count >= 4){
 						if (fourWithDifferentRep(sameValues)){
 							return true;
@@ -1129,7 +1127,8 @@ namespace taskDependentSupport.core
 					else if (!sameRepresentations() && sameValues() && (createdReps() < 4)){
 						currentFeedback = feedbackData.FM11;
 					}
-					else if (!sameRepresentations() && (!sameValues() && (createdReps() > 1))){
+					else if (!sameRepresentations() && !sameValues() && (createdReps() > 1)){
+						Debug.Log (":::: hier in feedbackData.FM12");
 						currentFeedback = feedbackData.FM12;
 					}
 					else if (fourWithDiffRepAndSameValues()){
