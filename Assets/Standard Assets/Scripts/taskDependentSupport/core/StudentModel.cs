@@ -35,6 +35,15 @@ namespace taskDependentSupport.core
 		private bool languageEnglish = true;
 		private bool languageGerman = false;
 		private bool languageSpanish = false;
+		private bool popUpClosed = true;
+
+		public void setPopUpClosed(bool value){
+			popUpClosed = value;
+		}
+
+		public bool getPopUpClosed(){
+			return popUpClosed;
+		}
 
 		public void setLanguageEnglish(bool value){
 			languageEnglish = value;

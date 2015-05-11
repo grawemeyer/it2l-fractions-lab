@@ -79,6 +79,10 @@ namespace taskDependentSupport
 		public static void sendDoneButtonPressedToTIS(bool value){
 			Debug.Log ("sendDoneButtonPressedToTIS:: "+value);
 			Application.ExternalCall("sendDoneButtonPressedToTIS", value);
+			if (studentModel == null) {
+				studentModel = new StudentModel (taskID);
+			}
+			studentModel.setPopUpClosed (value);
 		}
 
 		public static void SendMessageToLightBulb(String feedbacktext){

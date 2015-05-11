@@ -100,22 +100,28 @@ namespace taskDependentSupport.core
 				}
 				else {
 					calculatePresentationOfFeedback (studentModel.getlastDisplayedMessageType());
-					taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
+
 					if (presentationMode.Equals ("lightBulb")){
+						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
 						taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
 					}
 
-					else if (presentationMode.Equals ("low")) {
-						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
-						sendLowMessage (feedbackMessage);
+					else if (studentModel.getPopUpClosed()){
+						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
+						if (presentationMode.Equals ("low")) {
+							taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
+							sendLowMessage (feedbackMessage);
 
-					} else if (presentationMode.Equals ("high")) {
-						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
-						Debug.Log ("send HIGH message");
-						sendHighMessage (feedbackMessage);
+						} else if (presentationMode.Equals ("high")) {
+							taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
+							Debug.Log ("send HIGH message");
+							sendHighMessage (feedbackMessage);
+							studentModel.setPopUpClosed(false);
+						}
 					}
 				}
+				//check when this should be called
 				studentModel.setPreviousViewed (false);
 			}
 		}
