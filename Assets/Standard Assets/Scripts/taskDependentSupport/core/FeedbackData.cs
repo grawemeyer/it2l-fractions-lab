@@ -13,7 +13,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem FM6, FM10, FM11, FM12, FE1, FE2;
 		public FeedbackElem F2M1, F2M4, F2M6, F2M7, F2M7b, F2M7c,F2M10, F2M11, F2E1, F2E2;
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24M12, T24M13, T24E1, T24E2;
-		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M8, T26M10, T26M11, T26E1, T26E2;
+		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M7start, T26M7end, T26M8, T26M10, T26M11, T26E1, T26E2;
 		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
 
 		public FeedbackData (String taskID, StudentModel student){
@@ -1040,6 +1040,37 @@ namespace taskDependentSupport.core
 			nextStepT26M7.setDenominators (valuesM6den);
 			T26M7.setNextStep (nextStepT26M7);
 
+			T26M7start = new FeedbackElem ();
+			T26M7start.setID ("T26M7start");
+			FeedbackMessage T26M7startM = new FeedbackMessage ();
+			T26M7startM.setGuidance (feedbackMessageString.T26M7Mstart_guidance());
+			T26M7startM.setSocratic (feedbackMessageString.T26M7Mstart_socratic());
+			T26M7startM.setDidacticConceptual (feedbackMessageString.T26M7Mstart_didacticConceptual());
+			T26M7startM.setDidacticProcedural (feedbackMessageString.T26M7Mstart_didacticProcedural());
+			T26M7startM.setHighlighting (Highlighting.ArrowButtons);
+			T26M7start.setFeedbackMessage (T26M7startM);
+			T26M7start.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT26M7start = new Fraction ();
+			nextStepT26M7start.setNumerator (endNumerator);
+			nextStepT26M7start.setDenominator (endDenominator);
+			T26M7start.setNextStep (nextStepT26M7start);
+
+			T26M7end = new FeedbackElem ();
+			T26M7end.setID ("T26M7end");
+			FeedbackMessage T26M7endM = new FeedbackMessage ();
+			T26M7endM.setGuidance (feedbackMessageString.T26M7Mend_guidance());
+			T26M7endM.setSocratic (feedbackMessageString.T26M7Mend_socratic());
+			T26M7endM.setDidacticConceptual (feedbackMessageString.T26M7Mend_didacticConceptual());
+			T26M7endM.setDidacticProcedural (feedbackMessageString.T26M7Mend_didacticProcedural());
+			T26M7endM.setHighlighting (Highlighting.ArrowButtons);
+			T26M7end.setFeedbackMessage (T26M7endM);
+			T26M7end.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT26M7end = new Fraction ();
+			nextStepT26M7end.setNumerator (startNumerator);
+			nextStepT26M7end.setDenominator (startDenominator);
+			T26M7end.setNextStep (nextStepT26M7end);
+
+
 			T26M8 = new FeedbackElem ();
 			T26M8.setID ("T26M8");
 			FeedbackMessage T26M8M = new FeedbackMessage ();
@@ -1310,6 +1341,8 @@ namespace taskDependentSupport.core
 			else if (T26M5.getID ().Equals (id)) return T26M5;
 			else if (T26M6.getID ().Equals (id)) return T26M6;
 			else if (T26M7.getID ().Equals (id)) return T26M7;
+			else if (T26M7start.getID().Equals (id)) return T26M7start;
+			else if (T26M7end.getID().Equals (id)) return T26M7end;
 			else if (T26M8.getID ().Equals (id)) return T26M8;
 			else if (T26M10.getID ().Equals (id)) return T26M10;
 			else if (T26M11.getID ().Equals (id)) return T26M11;

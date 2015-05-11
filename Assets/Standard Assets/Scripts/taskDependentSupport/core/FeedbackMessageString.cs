@@ -270,6 +270,16 @@ namespace taskDependentSupport.core
 		 String fT26M7M_didacticConceptual = "Please make the other fraction.";
 		 String fT26M7M_didacticProcedural = "You have made "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".";
 
+		String fT26M7Mstart_guidance = "There are two fractions in this task.  You can make another fraction by using the representation tool.";
+		String fT26M7Mstart_socratic = "Excellent. How are you going to make the second fraction?";
+		String fT26M7Mstart_didacticConceptual = "Please make the other fraction.";
+		String fT26M7Mstart_didacticProcedural = "You have made "+startNumerator+"/"+startDenominator+".  Please make "+endNumerator+"/"+endDenominator+".";
+
+		String fT26M7Mend_guidance = "There are two fractions in this task.  You can make another fraction by using the representation tool.";
+		String fT26M7Mend_socratic = "Excellent. How are you going to make the second fraction?";
+		String fT26M7Mend_didacticConceptual = "Please make the other fraction.";
+		String fT26M7Mend_didacticProcedural = "You have made "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+".";
+
 		 String fT26M8M_guidance = "It is easier to compare fractions when they are represented the same way.";
 		 String fT26M8M_socratic = "Can you think of a clearer way to represent the fractions?";
 		 String fT26M8M_didacticConceptual = "Please change one of your fractions so they use the same representation.";
@@ -586,6 +596,18 @@ namespace taskDependentSupport.core
 		String gfT26M7M_didacticConceptual = "GERMAN Please make the other fraction.";
 		String gfT26M7M_didacticProcedural = "GERMAN You have made "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".";
 		
+		String gfT26M7Mstart_guidance = "GERMAN There are two fractions in this task.  You can make another fraction by using the representation tool.";
+		String gfT26M7Mstart_socratic = "GERMAN Excellent. How are you going to make the second fraction?";
+		String gfT26M7Mstart_didacticConceptual = "GERMAN Please make the other fraction.";
+		String gfT26M7Mstart_didacticProcedural = "GERMAN You have made "+startNumerator+"/"+startDenominator+".  Please make "+endNumerator+"/"+endDenominator+".";
+		
+		String gfT26M7Mend_guidance = "GERMAN There are two fractions in this task.  You can make another fraction by using the representation tool.";
+		String gfT26M7Mend_socratic = "GERMAN Excellent. How are you going to make the second fraction?";
+		String gfT26M7Mend_didacticConceptual = "GERMAN Please make the other fraction.";
+		String gfT26M7Mend_didacticProcedural = "GERMAN You have made "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+".";
+
+
+
 		String gfT26M8M_guidance = "GERMAN It is easier to compare fractions when they are represented the same way.";
 		String gfT26M8M_socratic = "GERMAN Can you think of a clearer way to represent the fractions?";
 		String gfT26M8M_didacticConceptual = "GERMAN Please change one of your fractions so they use the same representation.";
@@ -901,7 +923,17 @@ namespace taskDependentSupport.core
 		String sfT26M7M_socratic = "SPANISH Excellent. How are you going to make the second fraction?";
 		String sfT26M7M_didacticConceptual = "SPANISH Please make the other fraction.";
 		String sfT26M7M_didacticProcedural = "SPANISH You have made "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".";
+
+		String sfT26M7Mstart_guidance = "SPANISH There are two fractions in this task.  You can make another fraction by using the representation tool.";
+		String sfT26M7Mstart_socratic = "SPANISH Excellent. How are you going to make the second fraction?";
+		String sfT26M7Mstart_didacticConceptual = "SPANISH Please make the other fraction.";
+		String sfT26M7Mstart_didacticProcedural = "SPANISH You have made "+startNumerator+"/"+startDenominator+".  Please make "+endNumerator+"/"+endDenominator+".";
 		
+		String sfT26M7Mend_guidance = "SPANISH There are two fractions in this task.  You can make another fraction by using the representation tool.";
+		String sfT26M7Mend_socratic = "SPANISH Excellent. How are you going to make the second fraction?";
+		String sfT26M7Mend_didacticConceptual = "SPANISH Please make the other fraction.";
+		String sfT26M7Mend_didacticProcedural = "SPANISH You have made "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+".";
+
 		String sfT26M8M_guidance = "SPANISH It is easier to compare fractions when they are represented the same way.";
 		String sfT26M8M_socratic = "SPANISH Can you think of a clearer way to represent the fractions?";
 		String sfT26M8M_didacticConceptual = "SPANISH Please change one of your fractions so they use the same representation.";
@@ -3106,6 +3138,96 @@ namespace taskDependentSupport.core
 			}
 			else {
 				return fT26M7M_didacticProcedural;
+			}
+		}
+
+		public String T26M7Mstart_guidance (){
+			if (spanish) {
+				return sfT26M7Mstart_guidance;
+			} 
+			else if (german){
+				return gfT26M7Mstart_guidance;
+			}
+			else {
+				return fT26M7Mstart_guidance;
+			}
+		}
+		public String T26M7Mstart_socratic(){
+			if (spanish) {
+				return sfT26M7Mstart_socratic;
+			} 
+			else if (german) {
+				return gfT26M7Mstart_socratic;
+			}
+			else {
+				return fT26M7Mstart_socratic;
+			}
+		}
+		public String T26M7Mstart_didacticConceptual(){
+			if (spanish) {
+				return sfT26M7Mstart_didacticConceptual;
+			} 
+			else if (german){
+				return gfT26M7Mstart_didacticConceptual;
+			}
+			else {
+				return fT26M7Mstart_didacticConceptual;
+			}
+		}
+		public String T26M7Mstart_didacticProcedural(){
+			if (spanish) {
+				return sfT26M7Mstart_didacticProcedural;
+			} 
+			else if (german){
+				return gfT26M7Mstart_didacticProcedural;
+			}
+			else {
+				return fT26M7Mstart_didacticProcedural;
+			}
+		}
+
+		public String T26M7Mend_guidance (){
+			if (spanish) {
+				return sfT26M7Mend_guidance;
+			} 
+			else if (german){
+				return gfT26M7Mend_guidance;
+			}
+			else {
+				return fT26M7Mend_guidance;
+			}
+		}
+		public String T26M7Mend_socratic(){
+			if (spanish) {
+				return sfT26M7Mend_socratic;
+			} 
+			else if (german) {
+				return gfT26M7Mend_socratic;
+			}
+			else {
+				return fT26M7Mend_socratic;
+			}
+		}
+		public String T26M7Mend_didacticConceptual(){
+			if (spanish) {
+				return sfT26M7Mend_didacticConceptual;
+			} 
+			else if (german){
+				return gfT26M7Mend_didacticConceptual;
+			}
+			else {
+				return fT26M7Mend_didacticConceptual;
+			}
+		}
+		public String T26M7Mend_didacticProcedural(){
+			if (spanish) {
+				return sfT26M7Mend_didacticProcedural;
+			} 
+			else if (german){
+				return gfT26M7Mend_didacticProcedural;
+			}
+			else {
+				return fT26M7Mend_didacticProcedural;
 			}
 		}
 

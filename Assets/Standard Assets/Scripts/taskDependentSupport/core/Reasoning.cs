@@ -820,10 +820,13 @@ namespace taskDependentSupport.core
 					         currentSetIncludesFraction(endNumerator, endDenominator) && (studentModel.getComparedFractions() == false)){
 						currentFeedback = feedbackData.T26M11;
 					}
-					else if (currentSetIncludesFraction(startNumerator, startDenominator) || 
-					         currentSetIncludesFraction(endNumerator, endDenominator)){
-						currentFeedback = feedbackData.T26M7;
+					else if (currentSetIncludesFraction(startNumerator, startDenominator)){
+						currentFeedback = feedbackData.T26M7start;
 					}
+					else if (currentSetIncludesFraction(endNumerator, endDenominator)){
+						currentFeedback = feedbackData.T26M7end;
+					}
+
 
 					else if (((denominator == startDenominator) || (denominator == endDenominator)) && 
 					         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T26M1.getID ()) ||
