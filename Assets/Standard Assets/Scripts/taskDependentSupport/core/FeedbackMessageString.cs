@@ -71,9 +71,9 @@ namespace taskDependentSupport.core
 		 String fCM6MSecond_didacticProcedural = "Now, create a second fraction using the same representation.";
 
 		 String fM7M_socratic = "Excellent. How are you going to make the equivalent fraction?";
-		 String fM7M_guidance = "You could now copy the fraction and use `find equivalent' to make an equivalent fraction. Right-click the fraction.";
-		 String fM7M_didacticConceptual = "Excellent. Now copy this fraction, right click the copy, and select `find equivalent'.";
-		 String fM7M_didacticProcedural = "Excellent. Now copy this fraction, right click the copy, and select `find equivalent' to make a fraction with a denominator of "+endDenominator+".";
+		 String fM7M_guidance = "You could now copy the fraction and use 'find equivalent' to make an equivalent fraction. Right-click the fraction.";
+		 String fM7M_didacticConceptual = "Excellent. Now copy this fraction, right click the copy, and select 'find equivalent'.";
+		 String fM7M_didacticProcedural = "Excellent. Now copy this fraction, right click the copy, and select 'find equivalent' to make a fraction with a denominator of "+endDenominator+".";
 
 		 String fCM7M_socratic = "Why have you decided to use a different representation? What does the task ask you to do?";
 		 String fCM7M_guidance = "Please use the same representation for the second fraction.";
@@ -149,24 +149,24 @@ namespace taskDependentSupport.core
 		 String fF2M4M_socratic = "Excellent. What fraction have you made?";
 
 		 String fF2M6M_socratic = "Excellent. Now, how are you going to partition the fraction?";
-		 String fF2M6M_guidance = "Right click the fraction, select `find equivalent', and partition the fraction into two.";
-		 String fF2M6M_didacticConceptual = "Click the fraction with the right-hand mouse button, then select `find equivalent' and partition the fraction into two.";
-		 String fF2M6M_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into two.";
+		 String fF2M6M_guidance = "Right click the fraction, select 'find equivalent', and partition the fraction into two.";
+		 String fF2M6M_didacticConceptual = "Click the fraction with the right-hand mouse button, then select 'find equivalent' and partition the fraction into two.";
+		 String fF2M6M_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into two.";
 
 		 String fF2M7M_socratic = "Excellent. Now, how are you going to partition the fraction into 3?";
-		 String fF2M7M_guidance = "Right click the fraction, select `find equivalent', and partition the fraction into 3.";
-		 String fF2M7M_didacticConceptual = "Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 3.";
-		 String fF2M7M_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 3.";
+		 String fF2M7M_guidance = "Right click the fraction, select 'find equivalent', and partition the fraction into 3.";
+		 String fF2M7M_didacticConceptual = "Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 3.";
+		 String fF2M7M_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 3.";
 
 		 String fF2M7bM_socratic = "Excellent. Now, how are you going to partition the fraction into 4?";
-		 String fF2M7bM_guidance = "Right click the fraction, select `find equivalent', and partition the fraction into 4.";
-		 String fF2M7bM_didacticConceptual = "Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 4.";
-		 String fF2M7bM_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 4.";
+		 String fF2M7bM_guidance = "Right click the fraction, select 'find equivalent', and partition the fraction into 4.";
+		 String fF2M7bM_didacticConceptual = "Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 4.";
+		 String fF2M7bM_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 4.";
 
 		 String fF2M7cM_socratic = "Excellent. Now, how are you going to partition the fraction into 5?";
-		 String fF2M7cM_guidance = "Right click the fraction, select `find equivalent', and partition the fraction into 5.";
-		 String fF2M7cM_didacticConceptual = "Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 5.";
-		 String fF2M7cM_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 5.";
+		 String fF2M7cM_guidance = "Right click the fraction, select 'find equivalent', and partition the fraction into 5.";
+		 String fF2M7cM_didacticConceptual = "Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 5.";
+		 String fF2M7cM_didacticProcedural = "Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 5.";
 
 		 String fF2M10M_socratic = "Excellent. Is your new fraction equivalent to your original fraction? What has happened to the denominator and what has happened to the numerator?";
 
@@ -192,7 +192,7 @@ namespace taskDependentSupport.core
 		 String fT24M3M_guidance = "Please read the task again carefully.";
 		 String fT24M3M_didacticConceptual = "Re-read the task then check your fraction.";
 
-		 String fT24M4M_didacticConceptual = "Excellent. Please explain what the 'numerator' and `denominator' are";
+		 String fT24M4M_didacticConceptual = "Excellent. Please explain what the 'numerator' and 'denominator' are";
 
 		 String fT24M5M_socratic = "Have you changed the denominator or the numerator?";
 		 String fT24M5M_guidance = "The denominator is the bottom part of the fraction.";
@@ -205,9 +205,9 @@ namespace taskDependentSupport.core
 		 String fT24M6M_didacticProcedural = "Now, change the numerator. Remember, you need to make a fraction equivalent to "+startNumerator+"/"+startDenominator+".";
 
 		 String fT24M7M_socratic = "Excellent. How are you going to make an equivalent fraction?";
-		 String fT24M7M_guidance = "You could now copy the fraction and use `find equivalent' to make an equivalent fraction.";
-		 String fT24M7M_didacticConceptual = "Excellent. Now copy this fraction and use `find equivalent' to change it.";
-		 String fT24M7M_didacticProcedural = "Excellent. Now right click the fraction and copy it. Then right click the copy and select `find equivalent' to make an equivalent fraction.";
+		 String fT24M7M_guidance = "You could now copy the fraction and use 'find equivalent' to make an equivalent fraction.";
+		 String fT24M7M_didacticConceptual = "Excellent. Now copy this fraction and use 'find equivalent' to change it.";
+		 String fT24M7M_didacticProcedural = "Excellent. Now right click the fraction and copy it. Then right click the copy and select 'find equivalent' to make an equivalent fraction.";
 
 		 String fT24M8M_socratic = "How could you compare your fraction with "+startNumerator+"/"+startDenominator+".";
 		 String fT24M8M_guidance = "Think about the denominators in your fraction and in "+startNumerator+"/"+startDenominator+". What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?";
@@ -253,7 +253,7 @@ namespace taskDependentSupport.core
 		 String fT26M3M_socratic = "Is this the fraction you were planning to make?";
 		 String fT26M3M_didacticConceptual = "Re-read the task then check your fraction.";
 
-		 String fT26M4M_didacticConceptual = "Excellent. Please explain what the 'numerator' and `denominator' are.";
+		 String fT26M4M_didacticConceptual = "Excellent. Please explain what the 'numerator' and 'denominator' are.";
 
 		 String fT26M5M_guidance = "The denominator is the bottom part of the fraction.";
 		 String fT26M5M_socratic = "Have you changed the denominator or the numerator?";
@@ -310,7 +310,7 @@ namespace taskDependentSupport.core
 		 String fT3aP1M3M_guidance = "Please read the task again carefully.";
 		 String fT3aP1M3M_didacticConceptual = "Re-read the task then check your fraction.";
 
-		 String fT3aP1M4M_didacticConceptual = "Excellent. Please explain what the 'numerator' and `denominator' are.";
+		 String fT3aP1M4M_didacticConceptual = "Excellent. Please explain what the 'numerator' and 'denominator' are.";
 
 		 String fT3aP1M5M_socratic = "Have you changed the denominator or the numerator?";
 		 String fT3aP1M5M_guidance = "The denominator is the bottom part of the fraction.";
@@ -397,9 +397,9 @@ namespace taskDependentSupport.core
 		String gfCM6MSecond_didacticProcedural = "GERMAN Now, create a second fraction using the same representation.";
 		
 		String gfM7M_socratic = "GERMAN Excellent. How are you going to make the equivalent fraction?";
-		String gfM7M_guidance = "GERMAN You could now copy the fraction and use `find equivalent' to make an equivalent fraction. Right-click the fraction.";
-		String gfM7M_didacticConceptual = "GERMAN Excellent. Now copy this fraction, right click the copy, and select `find equivalent'.";
-		String gfM7M_didacticProcedural = "GERMAN Excellent. Now copy this fraction, right click the copy, and select `find equivalent' to make a fraction with a denominator of "+endDenominator+".";
+		String gfM7M_guidance = "GERMAN You could now copy the fraction and use 'find equivalent' to make an equivalent fraction. Right-click the fraction.";
+		String gfM7M_didacticConceptual = "GERMAN Excellent. Now copy this fraction, right click the copy, and select 'find equivalent'.";
+		String gfM7M_didacticProcedural = "GERMAN Excellent. Now copy this fraction, right click the copy, and select 'find equivalent' to make a fraction with a denominator of "+endDenominator+".";
 		
 		String gfCM7M_socratic = "GERMAN Why have you decided to use a different representation? What does the task ask you to do?";
 		String gfCM7M_guidance = "GERMAN Please use the same representation for the second fraction.";
@@ -475,24 +475,24 @@ namespace taskDependentSupport.core
 		String gfF2M4M_socratic = "GERMAN Excellent. What fraction have you made?";
 		
 		String gfF2M6M_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction?";
-		String gfF2M6M_guidance = "GERMAN Right click the fraction, select `find equivalent', and partition the fraction into two.";
-		String gfF2M6M_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select `find equivalent' and partition the fraction into two.";
-		String gfF2M6M_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into two.";
+		String gfF2M6M_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into two.";
+		String gfF2M6M_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent' and partition the fraction into two.";
+		String gfF2M6M_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into two.";
 		
 		String gfF2M7M_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction into 3?";
-		String gfF2M7M_guidance = "GERMAN Right click the fraction, select `find equivalent', and partition the fraction into 3.";
-		String gfF2M7M_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 3.";
-		String gfF2M7M_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 3.";
+		String gfF2M7M_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into 3.";
+		String gfF2M7M_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 3.";
+		String gfF2M7M_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 3.";
 		
 		String gfF2M7bM_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction into 4?";
-		String gfF2M7bM_guidance = "GERMAN Right click the fraction, select `find equivalent', and partition the fraction into 4.";
-		String gfF2M7bM_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 4.";
-		String gfF2M7bM_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 4.";
+		String gfF2M7bM_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into 4.";
+		String gfF2M7bM_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 4.";
+		String gfF2M7bM_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 4.";
 		
 		String gfF2M7cM_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction into 5?";
-		String gfF2M7cM_guidance = "GERMAN Right click the fraction, select `find equivalent', and partition the fraction into 5.";
-		String gfF2M7cM_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 5.";
-		String gfF2M7cM_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 5.";
+		String gfF2M7cM_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into 5.";
+		String gfF2M7cM_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 5.";
+		String gfF2M7cM_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 5.";
 		
 		String gfF2M10M_socratic = "GERMAN Excellent. Is your new fraction equivalent to your original fraction? What has happened to the denominator and what has happened to the numerator?";
 		
@@ -518,7 +518,7 @@ namespace taskDependentSupport.core
 		String gfT24M3M_guidance = "GERMAN Please read the task again carefully.";
 		String gfT24M3M_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
 		
-		String gfT24M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and `denominator' are";
+		String gfT24M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and 'denominator' are";
 		
 		String gfT24M5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
 		String gfT24M5M_guidance = "TGERMAN he denominator is the bottom part of the fraction.";
@@ -531,9 +531,9 @@ namespace taskDependentSupport.core
 		String gfT24M6M_didacticProcedural = "GERMAN Now, change the numerator. Remember, you need to make a fraction equivalent to "+startNumerator+"/"+startDenominator+".";
 		
 		String gfT24M7M_socratic = "GERMAN Excellent. How are you going to make an equivalent fraction?";
-		String gfT24M7M_guidance = "GERMAN You could now copy the fraction and use `find equivalent' to make an equivalent fraction.";
-		String gfT24M7M_didacticConceptual = "GERMAN Excellent. Now copy this fraction and use `find equivalent' to change it.";
-		String gfT24M7M_didacticProcedural = "GERMAN Excellent. Now right click the fraction and copy it. Then right click the copy and select `find equivalent' to make an equivalent fraction.";
+		String gfT24M7M_guidance = "GERMAN You could now copy the fraction and use 'find equivalent' to make an equivalent fraction.";
+		String gfT24M7M_didacticConceptual = "GERMAN Excellent. Now copy this fraction and use 'find equivalent' to change it.";
+		String gfT24M7M_didacticProcedural = "GERMAN Excellent. Now right click the fraction and copy it. Then right click the copy and select 'find equivalent' to make an equivalent fraction.";
 		
 		String gfT24M8M_socratic = "GERMAN ow could you compare your fraction with "+startNumerator+"/"+startDenominator+".";
 		String gfT24M8M_guidance = "GERMAN Think about the denominators in your fraction and in "+startNumerator+"/"+startDenominator+". What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?";
@@ -579,7 +579,7 @@ namespace taskDependentSupport.core
 		String gfT26M3M_socratic = "GERMAN Is this the fraction you were planning to make?";
 		String gfT26M3M_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
 		
-		String gfT26M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and `denominator' are.";
+		String gfT26M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and 'denominator' are.";
 		
 		String gfT26M5M_guidance = "GERMAN The denominator is the bottom part of the fraction.";
 		String gfT26M5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
@@ -638,7 +638,7 @@ namespace taskDependentSupport.core
 		String gfT3aP1M3M_guidance = "GERMAN Please read the task again carefully.";
 		String gfT3aP1M3M_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
 		
-		String gfT3aP1M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and `denominator' are.";
+		String gfT3aP1M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and 'denominator' are.";
 		
 		String gfT3aP1M5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
 		String gfT3aP1M5M_guidance = "GERMAN The denominator is the bottom part of the fraction.";
@@ -725,9 +725,9 @@ namespace taskDependentSupport.core
 		String sfCM6MSecond_didacticProcedural = "SPANISH Now, create a second fraction using the same representation.";
 		
 		String sfM7M_socratic = "SPANISH Excellent. How are you going to make the equivalent fraction?";
-		String sfM7M_guidance = "SPANISH You could now copy the fraction and use `find equivalent' to make an equivalent fraction. Right-click the fraction.";
-		String sfM7M_didacticConceptual = "SPANISH Excellent. Now copy this fraction, right click the copy, and select `find equivalent'.";
-		String sfM7M_didacticProcedural = "SPANISH Excellent. Now copy this fraction, right click the copy, and select `find equivalent' to make a fraction with a denominator of "+endDenominator+".";
+		String sfM7M_guidance = "SPANISH You could now copy the fraction and use 'find equivalent' to make an equivalent fraction. Right-click the fraction.";
+		String sfM7M_didacticConceptual = "SPANISH Excellent. Now copy this fraction, right click the copy, and select 'find equivalent'.";
+		String sfM7M_didacticProcedural = "SPANISH Excellent. Now copy this fraction, right click the copy, and select 'find equivalent' to make a fraction with a denominator of "+endDenominator+".";
 		
 		String sfCM7M_socratic = "SPANISH Why have you decided to use a different representation? What does the task ask you to do?";
 		String sfCM7M_guidance = "SPANISH Please use the same representation for the second fraction.";
@@ -803,24 +803,24 @@ namespace taskDependentSupport.core
 		String sfF2M4M_socratic = "SPANISH Excellent. What fraction have you made?";
 		
 		String sfF2M6M_socratic = "SPANISH Excellent. Now, how are you going to partition the fraction?";
-		String sfF2M6M_guidance = "SPANISH Right click the fraction, select `find equivalent', and partition the fraction into two.";
-		String sfF2M6M_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select `find equivalent' and partition the fraction into two.";
-		String sfF2M6M_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into two.";
+		String sfF2M6M_guidance = "SPANISH Right click the fraction, select 'find equivalent', and partition the fraction into two.";
+		String sfF2M6M_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select 'find equivalent' and partition the fraction into two.";
+		String sfF2M6M_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into two.";
 		
 		String sfF2M7M_socratic = "SPANISH Excellent. Now, how are you going to partition the fraction into 3?";
-		String sfF2M7M_guidance = "SPANISH Right click the fraction, select `find equivalent', and partition the fraction into 3.";
-		String sfF2M7M_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 3.";
-		String sfF2M7M_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 3.";
+		String sfF2M7M_guidance = "SPANISH Right click the fraction, select 'find equivalent', and partition the fraction into 3.";
+		String sfF2M7M_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 3.";
+		String sfF2M7M_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 3.";
 		
 		String sfF2M7bM_socratic = "SPANISH Excellent. Now, how are you going to partition the fraction into 4?";
-		String sfF2M7bM_guidance = "SPANISH Right click the fraction, select `find equivalent', and partition the fraction into 4.";
-		String sfF2M7bM_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 4.";
-		String sfF2M7bM_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 4.";
+		String sfF2M7bM_guidance = "SPANISH Right click the fraction, select 'find equivalent', and partition the fraction into 4.";
+		String sfF2M7bM_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 4.";
+		String sfF2M7bM_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 4.";
 		
 		String sfF2M7cM_socratic = "SPANISH Excellent. Now, how are you going to partition the fraction into 5?";
-		String sfF2M7cM_guidance = "SPANISH Right click the fraction, select `find equivalent', and partition the fraction into 5.";
-		String sfF2M7cM_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select `find equivalent', and partition the fraction into 5.";
-		String sfF2M7cM_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click `find equivalent'. Then click to partition the fraction into 5.";
+		String sfF2M7cM_guidance = "SPANISH Right click the fraction, select 'find equivalent', and partition the fraction into 5.";
+		String sfF2M7cM_didacticConceptual = "SPANISH Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 5.";
+		String sfF2M7cM_didacticProcedural = "SPANISH Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 5.";
 		
 		String sfF2M10M_socratic = "SPANISH Excellent. Is your new fraction equivalent to your original fraction? What has happened to the denominator and what has happened to the numerator?";
 		
@@ -846,7 +846,7 @@ namespace taskDependentSupport.core
 		String sfT24M3M_guidance = "SPANISH Please read the task again carefully.";
 		String sfT24M3M_didacticConceptual = "SPANISH Re-read the task then check your fraction.";
 		
-		String sfT24M4M_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and `denominator' are";
+		String sfT24M4M_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and 'denominator' are";
 		
 		String sfT24M5M_socratic = "SPANISH Have you changed the denominator or the numerator?";
 		String sfT24M5M_guidance = "SPANISH The denominator is the bottom part of the fraction.";
@@ -859,9 +859,9 @@ namespace taskDependentSupport.core
 		String sfT24M6M_didacticProcedural = "SPANISH Now, change the numerator. Remember, you need to make a fraction equivalent to "+startNumerator+"/"+startDenominator+".";
 		
 		String sfT24M7M_socratic = "SPANISH Excellent. How are you going to make an equivalent fraction?";
-		String sfT24M7M_guidance = "SPANISH You could now copy the fraction and use `find equivalent' to make an equivalent fraction.";
-		String sfT24M7M_didacticConceptual = "SPANISH Excellent. Now copy this fraction and use `find equivalent' to change it.";
-		String sfT24M7M_didacticProcedural = "SPANISH Excellent. Now right click the fraction and copy it. Then right click the copy and select `find equivalent' to make an equivalent fraction.";
+		String sfT24M7M_guidance = "SPANISH You could now copy the fraction and use 'find equivalent' to make an equivalent fraction.";
+		String sfT24M7M_didacticConceptual = "SPANISH Excellent. Now copy this fraction and use 'find equivalent' to change it.";
+		String sfT24M7M_didacticProcedural = "SPANISH Excellent. Now right click the fraction and copy it. Then right click the copy and select 'find equivalent' to make an equivalent fraction.";
 		
 		String sfT24M8M_socratic = "SPANISH How could you compare your fraction with "+startNumerator+"/"+startDenominator+".";
 		String sfT24M8M_guidance = "SPANISH Think about the denominators in your fraction and in "+startNumerator+"/"+startDenominator+". What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?";
@@ -907,7 +907,7 @@ namespace taskDependentSupport.core
 		String sfT26M3M_socratic = "SPANISH Is this the fraction you were planning to make?";
 		String sfT26M3M_didacticConceptual = "SPANISH Re-read the task then check your fraction.";
 		
-		String sfT26M4M_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and `denominator' are.";
+		String sfT26M4M_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and 'denominator' are.";
 		
 		String sfT26M5M_guidance = "SPANISH The denominator is the bottom part of the fraction.";
 		String sfT26M5M_socratic = "SPANISH Have you changed the denominator or the numerator?";
@@ -964,7 +964,7 @@ namespace taskDependentSupport.core
 		String sfT3aP1M3M_guidance = "SPANISH Please read the task again carefully.";
 		String sfT3aP1M3M_didacticConceptual = "SPANISH Re-read the task then check your fraction.";
 		
-		String sfT3aP1M4M_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and `denominator' are.";
+		String sfT3aP1M4M_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and 'denominator' are.";
 		
 		String sfT3aP1M5M_socratic = "SPANISH Have you changed the denominator or the numerator?";
 		String sfT3aP1M5M_guidance = "SPANISH The denominator is the bottom part of the fraction.";
