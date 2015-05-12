@@ -26,9 +26,18 @@ namespace taskDependentSupport.core
 			private int numeratorAddEnd = 0;
 			private int denominatorAddEnd = 0;
 			private bool additionBox = false;
-
+			private int[] partitionValues;
+			
 			public Fraction ()
 			{
+			}
+
+			public void setPartitionValues(int[] values){
+				partitionValues = values;
+			}
+
+			public int[] getPartitionValues(){
+			return partitionValues;
 			}
 
 			public void setAdditionBox(bool value){

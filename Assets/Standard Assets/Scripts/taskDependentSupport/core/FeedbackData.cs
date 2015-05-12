@@ -200,7 +200,7 @@ namespace taskDependentSupport.core
 			S1.setFeedbackMessage (S1M);
 			S1.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepS1 = new Fraction ();
-			nextStepS1.setAnyValue (true);
+			nextStepS1.setSpeech (true);
 			S1.setNextStep (nextStepS1);
 
 			S2 = new FeedbackElem ();
@@ -279,8 +279,10 @@ namespace taskDependentSupport.core
 			M3.setFeedbackMessage (M3M);
 			M3.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepM3 = new Fraction ();
-			nextStepM3.setNumerator(endNumerator);
-			nextStepM3.setDenominator(endDenominator);
+			int[] valuesM3num = new int[2] {startNumerator, endNumerator};
+			int[] valuesM3denom = new int[2] {startDenominator, endDenominator};
+			nextStepM3.setNumerators(valuesM3num);
+			nextStepM3.setDenominators(valuesM3denom);
 			M3.setNextStep (nextStepM2);
 
 			M4 = new FeedbackElem ();
@@ -316,7 +318,7 @@ namespace taskDependentSupport.core
 			CM5.setFeedbackMessage (M5M);
 			CM5.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepCM5 = new Fraction ();
-			nextStepCM5.setDenominator(5);
+			nextStepCM5.setDenominator(endDenominator);
 			CM5.setNextStep (nextStepCM2);
 
 			M6 = new FeedbackElem ();
@@ -669,7 +671,8 @@ namespace taskDependentSupport.core
 			F2M6.setFeedbackMessage (F2M6M);
 			F2M6.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M6 = new Fraction ();
-			nextStepF2M6.setPartition(2);
+			int[] partitionValuesM6 = new int[4] {2,3,4,5};
+			nextStepF2M6.setPartitionValues(partitionValuesM6);
 			F2M6.setNextStep (nextStepF2M6);
 
 			F2M7 = new FeedbackElem ();
@@ -682,7 +685,8 @@ namespace taskDependentSupport.core
 			F2M7.setFeedbackMessage (F2M7M);
 			F2M7.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M7 = new Fraction ();
-			nextStepF2M7.setPartition(3);
+			int[] partitionValuesM7 = new int[4] {2,3,4,5};
+			nextStepF2M7.setPartitionValues(partitionValuesM7);
 			F2M7.setNextStep (nextStepF2M7);
 
 			F2M7b = new FeedbackElem ();
@@ -695,7 +699,8 @@ namespace taskDependentSupport.core
 			F2M7b.setFeedbackMessage (F2M7bM);
 			F2M7b.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M7b = new Fraction ();
-			nextStepF2M7b.setPartition(4);
+			int[] partitionValuesM7b = new int[4] {2,3,4,5};
+			nextStepF2M7b.setPartitionValues(partitionValuesM7b);
 			F2M7b.setNextStep (nextStepF2M7b);
 
 			F2M7c = new FeedbackElem ();
@@ -708,7 +713,8 @@ namespace taskDependentSupport.core
 			F2M7c.setFeedbackMessage (F2M7cM);
 			F2M7c.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M7c = new Fraction ();
-			nextStepF2M7c.setPartition(5);
+			int[] partitionValuesM7c = new int[4] {2,3,4,5};
+			nextStepF2M7c.setPartitionValues(partitionValuesM7c);
 			F2M7c.setNextStep (nextStepF2M7c);
 
 			F2M10 = new FeedbackElem ();
@@ -729,7 +735,8 @@ namespace taskDependentSupport.core
 			F2M11.setFeedbackMessage (F2M11M);
 			F2M11.setFeedbackType (FeedbackType.nextStep);
 			Fraction nextStepF2M11 = new Fraction ();
-			nextStepF2M11.setPartition(5);
+			int[] partitionValuesM11 = new int[4] {2,3,4,5};
+			nextStepF2M11.setPartitionValues(partitionValuesM11);
 			F2M11.setNextStep (nextStepF2M11);
 
 			F2E1 = new FeedbackElem ();
@@ -976,10 +983,10 @@ namespace taskDependentSupport.core
 			T26M3.setFeedbackMessage (T26M3M);
 			T26M3.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepT26M3 = new Fraction ();
-			int[] values3 = new int[2] {startDenominator, endDenominator};
-			int[] values4 = new int[2] {startNumerator, endNumerator};
-			nextStepT26M3.setNumerators (values4);
-			nextStepT26M3.setDenominators (values3);
+			int[] values3 = new int[2] {startNumerator, endNumerator};
+			int[] values4 = new int[2] {startDenominator, endDenominator};
+			nextStepT26M3.setNumerators (values3);
+			nextStepT26M3.setDenominators (values4);
 			T26M3.setNextStep (nextStepT26M3);
 
 			T26M4 = new FeedbackElem ();

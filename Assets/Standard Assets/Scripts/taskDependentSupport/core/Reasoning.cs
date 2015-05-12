@@ -143,6 +143,7 @@ namespace taskDependentSupport.core
 		private void checkForFeedbackFollowed(){
 			bool wasFeedbackFollowed = feedbackFollowed ();
 			studentModel.addFeedbackFollowed (wasFeedbackFollowed);
+			Debug.Log ("<<<<< feedback followed >>>>> "+wasFeedbackFollowed);
 		}
 
 		private bool feedbackFollowed(){
@@ -151,6 +152,7 @@ namespace taskDependentSupport.core
 			int feedbackNumerator = feedbackNextSteps.getNumerator();
 			int feedbackDenominator = feedbackNextSteps.getDenominator ();
 			int feedbackPartitionValue = feedbackNextSteps.getPartition();
+			int[] feedbackPartitionValues = feedbackNextSteps.getPartitionValues ();
 			bool feedbackAnyValue = feedbackNextSteps.getAnyValye();
 			bool feedbackSpeech = feedbackNextSteps.getSpeech();
 			bool feedbackComparison = feedbackNextSteps.getComparison();
@@ -169,79 +171,78 @@ namespace taskDependentSupport.core
 
 			bool result = false;
 
-			for (int i = 0; i < studentModel.getCurrentFractions().Count; i++) {
-				Fraction thisFraction = studentModel.getCurrentFractions()[i];
-				int numerator = thisFraction.getNumerator();
-				int denominator = thisFraction.getDenominator();
-				int partition = thisFraction.getPartition();
+			Fraction thisFraction = studentModel.getCurrentFraction ();
+
+			int numerator = thisFraction.getNumerator();
+			int denominator = thisFraction.getDenominator();
+			int partition = thisFraction.getPartition();
 				
-				if (partition != 0){
-					numerator = numerator * partition;
-					denominator = denominator * partition;
-					studentModel.setPartitionUsed(true);
-				}
+			if (partition != 0){
+				numerator = numerator * partition;
+				denominator = denominator * partition;
+				studentModel.setPartitionUsed(true);
+			}
 
 
-
-				if (feedbackAnyValue){
-					if ((numerator != 0) || (denominator != 0)) result =true;
-				}
-
-				else if (numeratorAnyValue){
-					if (numerator != 0) result = true;
-				}
-				else if (feedbackPartitionValue != 0){
-					if (feedbackPartitionValue == partition) result=true;
-				}
-				else if (partitionBool){
-					if (partition != 0) result= true;
-				}
-
-				else if (numeratorAdd != 0){
-					if ((denominator == denominatorAdd) && (numerator < numeratorAdd)) result = true;
-				}
-
-				else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
-					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()) result= true;
-				}
-
-				else if (equivalentFraction){
-					result= equivalent(numerator, denominator, feedbackNumerator, feedbackDenominator);
-				}
-
-				else if (feedbackNumerator != 0){
-					if (feedbackDenominator !=0){
-						if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)) result= true;
-					}
-					if (feedbackNumerator == numerator) result= true;
-				}
-
-				else if (feedbackDenominator !=0){
-					if (feedbackDenominator == denominator) result= true;
-				}
-
-				else if (feedbackSpeech){
-					//need task-independent support for this
-					return true;
-				}
-				else if (feedbackComparison) {
-					result= studentModel.getCompared();
-				}
-
-				else if ((numerators != null) && (denominators != null)){
-					for (int j = 0; j < denominators.Length; j++){
-						int valueNum = numerators[j];
-						int valueDen = denominators[j];
-						if ((numerator == valueNum) && (denominator == valueDen)) result = true;
+			if (feedbackAnyValue){
+				if ((numerator != 0) || (denominator != 0)) result =true;
+			}
+			else if (numeratorAnyValue){
+				if (numerator != 0) result = true;
+			}
+			else if (feedbackPartitionValues != null){
+				for (int k = 0; k < feedbackPartitionValues.Length; k++){
+					int currentPartitionValue = feedbackPartitionValues[k];
+					if (currentPartitionValue == partition){
+						result = true;
 					}
 				}
-
-				else if (denominators != null){
-					for (int j = 0; j < denominators.Length; j++){
-						int value = denominators[j];
-						if (denominator == value) result = true;
-					}
+			}
+			else if (feedbackPartitionValue != 0){
+				if (feedbackPartitionValue == partition) result=true;
+			}
+			else if (partitionBool){
+				if (partition != 0) result= true;
+			}
+			else if (numeratorAdd != 0){
+				if ((denominator == denominatorAdd) && (numerator < numeratorAdd)) result = true;
+			}
+			else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
+				if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()) result= true;
+			}
+			else if (equivalentFraction){
+				result= equivalent(numerator, denominator, feedbackNumerator, feedbackDenominator);
+			}
+			else if (feedbackNumerator != 0){
+				if (feedbackDenominator !=0){
+					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)) result= true;
 				}
+				if (feedbackNumerator == numerator) result= true;
+			}
+			else if (feedbackDenominator !=0){
+				if (feedbackDenominator == denominator) result= true;
+			}
+			else if ((numerators != null) && (denominators != null)){
+				for (int j = 0; j < denominators.Length; j++){
+					int valueNum = numerators[j];
+					int valueDen = denominators[j];
+					if ((numerator == valueNum) && (denominator == valueDen)) result = true;
+				}
+			}
+			else if (denominators != null){
+				for (int j = 0; j < denominators.Length; j++){
+					int value = denominators[j];
+					if (denominator == value) result = true;
+				}
+			}
+
+			if (feedbackSpeech){
+				//need task-independent support for this
+				return false;
+			}
+
+			if (feedbackComparison) {
+				result= studentModel.getCompared();
 			}
 
 			if (additionBox) {
@@ -258,6 +259,11 @@ namespace taskDependentSupport.core
 			if (allSameValue){
 				result = sameValues();
 			}
+
+			if (differntRepresentation && allSameValue){
+				result = ((!sameRepresentations()) && sameValues());
+			}
+
 			return result;
 		}
 

@@ -72,6 +72,7 @@ namespace taskDependentSupport.core
 				}
 				else {
 					studentModel.setCompared(true);
+					Debug.Log ("::: student model set compared true");
 					if (id.Equals ("=")){
 						Debug.Log ("set compared result true");
 						studentModel.setComparedResult(true);

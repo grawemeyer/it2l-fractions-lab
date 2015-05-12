@@ -41,7 +41,7 @@ namespace taskDependentSupport.core
 
 		 String fM3M_socratic = "Is this the fraction you were planning to make?";
 		 String fM3M_guidance = "Please read the task again carefully.";
-		 String fM3M_didacticConceptual = "Re-read the task then echeck your fraction.";
+		 String fM3M_didacticConceptual = "Re-read the task then check your fraction.";
 
 		 String fM4M_didacticConceptual = "Excellent. Please explain what the numerator and denominator are.";
 
