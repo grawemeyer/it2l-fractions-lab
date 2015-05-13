@@ -27,7 +27,7 @@ namespace taskDependentSupport.core
 		 String fM1M_socratic = "Is the denominator in your fraction correct?";
 		 String fM1M_guidance = "You can click the up arrow next to your fraction to change the denominator.";
 		 String fM1M_didacticConceptual = "Check that the denominator in your fraction is correct.";
-		 private String fM1M_didacticProcedural = "Check that the denominator (the bottom part of your fraction) is "+endDenominator+".";
+		 String fM1M_didacticProcedural = "Check that the denominator (the bottom part of your fraction) is "+endDenominator+".";
 
 		 String fM2M_socratic = "Have you changed the numerator or the denominator?";
 		 String fM2M_guidance = "Remember that the denominator is the bottom part of the fraction.";
@@ -338,333 +338,335 @@ namespace taskDependentSupport.core
 
 		 String fT3aP1E2M_didacticConceptual = "Please explain how you answered the task. Why did you make the fractions that you made?.";
 
-		String gfS1M_socratic = "GERMAN How are you going to tackle this task?";
-		String gfS1M_didacticConceptual = "GERMAN Read the task again, and explain how you are going to tackle it.";
-		
-		String gfS2M_socratic = "GERMAN What do you need to do in this task?";
-		String gfS2M_guidance = "GERMAN You can click one of the buttons on the representations toolbox to create a fraction.";
-		String gfS2M_didacticConceptual ="GERMAN Read the task again, and explain how you are going to tackle it.";
+
+		String gfS1M_socratic = "Wie willst du diese Aufgabe bearbeiten?";
+		String gfS1M_didacticConceptual = "Lies die Aufgabe erneut und erkläre, wie du vorgehst, um die Aufgabe zu lösen.";
+		
+		String gfS2M_socratic = "Was musst du in dieser Aufgabe machen?";
+		String gfS2M_guidance = "Du kannst  auf die Symbolleiste für Bilddiagramme (am Rand rechts) klicken, um einen Bruch zu erstellen.";
+		String gfS2M_didacticConceptual ="Lies die Aufgabe erneut und erkläre, wie du vorgehst, um die Aufgabe zu lösen.";
+		
+		String gfS3M_socratic = "Gut gemacht. Was musst du jetzt tun, um den Bruch zu erstellen?";
+		String gfS3M_guidance = " Du kannst die Pfeile benutzen, um den Bruch zu verändern";
+		String gfS3M_didacticConceptual = "Klicke jetzt auf den 'nach oben' Pfeil neben dem Bruch, um den Nenner zu bestimmen.";
+		String gfS3M_didacticProcedural = "Klicke auf den 'nach oben' Pfeil neben dem Bruch, um den Nenner (das was unten im Bruch steht) zu erstellen "+ endDenominator+" einzustellen.";
+		
+		String gfM1M_socratic = "Ist der Nenner in deinem Bruch richtig?";
+		String gfM1M_guidance ="Klicke jetzt auf den 'nach oben' Pfeil neben dem  Bruch, um den Nenner zu verändern.";
+		String gfM1M_didacticConceptual = "Prüfe, ob der Nenner in deinem Bruch richtig ist.";
+		String gfM1M_didacticProcedural = "Bitte prüfe, ob der Nenner (das was unten im Bruch steht) "+endDenominator+" ist.";
+
+		String gfM2M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfM2M_guidance = "Erinnere dich: Der Nenner steht unten im Bruch.";
+		String gfM2M_didacticConceptual = "Prüfe, ob du den Nenner und nicht den Zähler verändert hast.";
+		String gfM2M_didacticProcedural = "Bitte prüfe, ob der Nenner und nicht der Zähler deines Bruches " +endDenominator+" ist.";
+		
+		String gfCM2M_socratic  = "Hast du den Zähler oder den Nenner verändert?";
+		String gfCM2M_guidance = "Erinnere dich: Der Nenner steht unten im Bruch.";
+		String gfCM2M_didacticConceptual = "Überprüfe, ob du den Nenner, und nicht den Zähler verändert hast.";
+		String gfCM2M_didacticProcedural = "Prüfe, dass der Nenner deines Bruches "+endDenominator+" ist, und nicht der Zähler.";
+
+		String gfM3M_socratic = "Ist das der Bruch, den du machen wolltest?";
+		String gfM3M_guidance = "Bitte lies die Aufgabe noch einmal gründlich durch.";
+		String gfM3M_didacticConceptual = "Lies die Aufgabe erneut und prüfe deinen Bruch.";
+
+		String gfM4M_didacticConceptual = "Sehr gut! Bitte erkläre was Zähler und Nenner sind.";
+		
+		String gfM5M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfM5M_guidance = "Der Nenner ist der untere Teil des Bruchs.";
+		String gfM5M_didacticConceptual = "Du hast den Zähler verändert. Du musst jedoch den Nenner verändern.";
+		String gfM5M_didacticProcedural = "Du hast den Zähler verändert. Du musst den Nenner auf "+endDenominator+" einstellen.";
+		
+		String gfCM5M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfCM5M_guidance = "Der Nenner ist der untere Teil des Bruchs.";
+		String gfCM5M_didacticConceptual = "Du hast den Zähler verändert. Du musst jedoch den Nenner verändern.";
+		String gfCM5M_didacticProcedural = "Du hast den Zähler verändert. Du musst den Nenner auf "+endDenominator+" einstellen.";
+
+		String gfM6M_socratic = "Sehr gut! Wie veränderst du den Zähler?";
+		String gfM6M_guidance = "Wenn du neben den oberen Teil des Bruchs klickst, und dann den 'nach oben' Pfeil benutzt, kannst du den Zähler des Bruchs (das was oben steht) verändern.";
+		String gfM6M_didacticConceptual = "Du hast den Nenner verändert. Jetzt musst du den Zähler verändern.";
+		String gfM6M_didacticProcedural = "Verändere jetzt den Zähler. Denke daran: Du sollst einen Bruch erstellen, der wertgleich zu dem Bruch "+startNumerator+"/"+startDenominator+" ist.";
+		
+		String gfCM6M_socratic = "Sehr gut! Wie willst du diesen Bruch jetzt vergleichen?";
+		String gfCM6M_guidance = "Jetzt hast du den ersten Bruch erstellt, vergleiche deinen ersten Bruch jetzt mit dem zweiten Bruch.";
+		String gfCM6M_didacticConceptual = "Du musst diesen Bruch nun mit einem zweiten Bruch vergleichen.";
+		String gfCM6M_didacticProcedural = "Erstelle nun einen zweiten Bruch und stelle ihn mit dem gleichen Bilddiagramm dar.";
+
+		String gfCM6MSecond_socratic = "Sehr gut! Wie wirst du den Bruch nun vergleichen? ";
+		String gfCM6MSecond_guidance = "Jetzt hast du den ersten Bruch erstellt, vergleiche diesen jetzt mit dem zweiten Bruch.";
+		String gfCM6MSecond_didacticConceptual = "Du musst diesen Bruch nun mit einem zweiten Bruch vergleichen.";
+		String gfCM6MSecond_didacticProcedural = "Erstelle nun einen zweiten Bruch und stelle ihn mit dem gleichen Bilddiagramm dar.";
+
+		String gfM7M_socratic = "Sehr gut! Wie wirst du einen wertgleichen Bruch erstellen?";
+		String gfM7M_guidance = "Du könntest den Bruch kopieren und im Menü die Funktion 'Finde einen wertgleichen Bruch' benutzen, um einen wertgleichen Bruch zu finden. Klicke dazu mit der rechten Maustaste auf deinen Bruch.";
+		String gfM7M_didacticConceptual = "Sehr gut! Kopiere jetzt diesen Bruch und benutze im Menü die Funktion 'Finde einen wertgleichen Bruch', um deinen Bruch zu verändern. Klicke dazu mit der rechten Maustaste auf deinen Bruch.";
+		String gfM7M_didacticProcedural = "Sehr gut! Klicke jetzt mit der rechten Maustaste auf den Bruch und kopiere ihn. Klicke danach mit der rechten Maustaste auf den kopierten Bruch und wähle im Menü die Funktion 'Finde einen wertgleichen Bruch', um einen wertgleichen Bruch mit "+endDenominator+" im Nenner zu erstellen.";
+
+		String gfCM7M_socratic = "Warum hast du dich entschieden, eine anderes Bilddiagramm zu benutzen? Was sollst du in dieser Aufgabe machen?";
+		String gfCM7M_guidance = "Bitte benutze das gleiche Bilddiagramm für den zweiten Bruch.";
+		String gfCM7M_didacticProcedural = "Bitte erstelle einen zweiten Bruch und benutze dafür das gleiche Bilddiagramm wie beim ersten Bruch.";
+		
+		String gfM8M_socratic = "Jetzt, da du den Bruch "+endNumerator+"/"+endDenominator+" erstellt hast, wie willst du ihn mit "+startNumerator+"/"+startDenominator+" vergleichen?";
+		String gfM8M_guidance = "Sieh dir die Aufgabe an und überlege, welchen anderen Bruch du erstellen musst, um ihn mit "+endNumerator+"/"+endDenominator+" zu vergleichen.";
+		String gfM8M_didacticConceptual = "Einer deiner Brüche muss "+startNumerator+"/"+startDenominator+" sein, damit du ihn mit "+endNumerator+"/"+endDenominator+" vergleichen kannst.";
+		String gfM8M_didacticProcedural = "Behalten den Bruch "+endNumerator+"/"+endDenominator+". Verändere nun den anderen Bruch in "+startNumerator+"/"+startDenominator+". Vergleiche die Brüche mithilfe der Vergleichsfunktion (am Rand oben).";
+
+		String gfM9M_socratic = "Wie kannst du einen Bruch erstellen, der "+endDenominator+" im Nenner hat und wertgleich zu "+startNumerator+"/"+startDenominator+" ist.";
+		String gfM9M_guidance = "Sieh dir die Aufgabe an und überlege, welchen anderen Bruch du erstellen musst, um ihn mit "+startNumerator+"/"+startDenominator+" zu vergleichen.";
+		String gfM9M_didacticConceptual = "Du brauchst zwei Brüche, um die Aufgabe zu bearbeiten: Zum einen brauchst du den Bruch "+startNumerator+"/"+startDenominator+" und zum anderen einen Bruch, der wertgleich zu "+startNumerator+"/"+startDenominator+" ist und "+endDenominator+" im Nenner stehen hat.";
+		String gfM9M_didacticProcedural = "Behalte den Bruch "+startNumerator+"/"+startDenominator+". Wandle jetzt den anderen Bruch in "+endNumerator+"/"+endDenominator+" um. Vergleiche die Brüche mithilfe der Vergleichsfunktion (am Rand oben).";
+
+		String gfM10M_socratic = "Wie könntest du deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen?";
+		String gfM10M_guidance = "Schaue dir die Nenner der beiden Brüche genau an. In welchem Verhältnis steht der Nenner des einen Bruchs zu dem Nenner des anderen Bruchs?";
+		String gfM10M_didacticConceptual = "Um deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen zu können, musst du zusätzlich zu deinem Bruch den Bruch "+startNumerator+"/"+startDenominator+" erstellen, und die Vergleichsfunktion (am Rand oben) benutzen.";
+
+		String gfCM8M_socratic = "Sehr gut! Wie willst du die Brüche mithilfe der Vergleichsfunktion (am Rand oben) vergleichen?";
+		String gfCM8M_guidance = "Du kannst die Brüche jetzt vergleichen. Öffne dazu die Vergleichsfunktion (am Rand oben).";
+		String gfCM8M_didacticConceptual = "Sehr gut! Benutze jetzt die Vergleichsfunktion.";
+		String gfCM8M_didacticProcedural = "Sehr gut! Öffne nun die Vergleichsfunktion (am Rand oben) und ziehe die beiden Brüche in den Kasten.";
+
+		String gfM11M_socratic = "Womit wirst du deinen Bruch vergleichen?";
+		String gfM11M_guidance = "Bei wertgleichen Brüchen sind die Zähler und Nenner des einen Bruches das gleiche Vielfache des anderen Bruches.";
+		String gfM11M_didacticConceptual = "Erstelle zuerst einen weiteren Bruch und zwar "+startNumerator+"/"+startDenominator+". Vergleiche dann die beiden Brüche.";
+
+		String gfM12M_didacticConceptual = "Sehr gut! Erkläre nun, warum du im Nenner "+endDenominator+" stehen hast.";
+
+		String gfM13M_socratic = "Wie kannst du in Fractions Lab prüfen, ob deine Lösung richtig ist?";
+		String gfM13M_guidance = "Du könntest die Vergleichsfunktion benutzen, um deine Brüche zu vergleichen.";
+		String gfM13M_didacticConceptual = "Vergleiche die Brüche mithilfe der Vergleichsfunktion.";
+
+		String gfCM11M_didacticConceptual = "Sehr gut! Erkläre nun, warum du im Nenner 3 stehen hast.";
+
+		String gfCM12M_socratic = "Sehr gut! Was wirst du als nächstes tun?";
+
+		String gfE1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+
+		String gfE2M_didacticConceptual = "Bitte erkläre, was du mit dem Zähler und dem Nenner des Bruchs "+startNumerator+"/"+startDenominator+" gemacht hast, um einen wertgleichen Bruch mit "+endDenominator+" im Nenner zu erstellen.";
+
+		String gfCE2M_didacticConceptual = "Was konntest du beobachten als du 1/3 und 1/5 verglichen hast. Erkläre bitte!";
+
+		String gfR1M_didacticConceptual = "Was ist mit Zähler und Nenner passiert? Ist mit beiden das gleiche passiert, oder etwas unterschiedliches?";
+
+		String gfR2M_didacticConceptual = "Warum hast du den Bruch "+endNumerator+"/"+endDenominator+" erstellt? Was hast du mit dem Zähler und dem Nenner von "+startNumerator+"/"+startDenominator+" gemacht?";
+
+		String gfO1M_didacticConceptual = "Es sieht nicht so aus, als hättest du die Aufgabe bereits beendet.";
+
+		String gfO2M_didacticConceptual = "Wenn du mehr Hilfe benötigst, um die Aufgabe zu bearbeiten, dann frage deinen Lehrer.";
+
+		String gfMF6M_socratic = "Sehr gut! Wie stellt man Brüche mit einem anderen Bilddiagramm dar?";
+		String gfMF6M_guidance = "Sehr gut! Klicke nun auf die Schaltfläche für die Bilddiagramme und erstelle genau denselben Bruch mit einem anderen Bilddiagramm.";
+
+		String gfMF10M_socratic = "Sehr gut! Auf welche Weise sind die Bilddiagramme ähnlich und wo unterscheiden sie sich?";
+
+		String gfMF11M_socratic = " Sehr gut! Bist du mit der Aufgabe fertig?";
+		String gfMF11M_guidance = "Sehr gut! Weiter so. Erstelle nun deinen Bruch mit einem anderen Bilddiagramm dar.";
+
+		String gfMF12M_socratic = "Sehr gut! Haben deine Brüche den gleichen Wert?";
+		String gfMF12M_guidance = "Sehr gut! Verändere deine Brüche so, dass sie den gleichen Wert haben.";
+
+		String gfMFE1M_didacticConceptual = "Sehr gut, du hast deinen Bruch mit allen Bilddiagrammen dargestellt. Gut gemacht.";
+
+		String gfMFE2M_didacticConceptual = "Sehr gut! Auf welche Weise sind die Bilddiagramme ähnlich und wo unterscheiden sie sich?"; 
+
+		String gfF2M1M_socratic = "Gut gemacht. Was musst du jetzt in einem letzten Schritt tun, um den Bruch  zu erstellen?";
+		String gfF2M1M_guidance = "Du kannst die Pfeile oben am Bruch benutzen, um den Bruch fertigzustellen.";
+		String gfF2M1M_didacticConceptual = "Klicke jetzt auf den 'nach oben' Pfeil im oberen Teil des Bruches, um den Zähler zu bestimmen.";
+		String gfF2M1M_didacticProcedural = "Klicke jetzt auf den 'nach oben' Pfeil im oberen Teil des Bruches, um den Zähler zu bestimmen (das was oben im Bruch steht).";
+
+		String gfF2M4M_socratic = "Sehr gut! Welchen Bruch hast du erstellt?";
+
+		String gfF2M6M_socratic = "Sehr gut! Wie wirst du den Bruch zerteilen?";
+		String gfF2M6M_guidance = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Zerteile den Bruch in zwei Teile.";
+		String gfF2M6M_didacticConceptual = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Teile den Bruch in zwei Teile.";
+		String gfF2M6M_didacticProcedural = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Klicke, um den Bruch in zwei Teile zu teilen.";
+		
+		String gfF2M7M_socratic = "Sehr gut! Wie wirst du den Bruch in 3 Teile teilen?";
+		String gfF2M7M_guidance = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruc'. Zerteile den Bruch in 3 Teile.";
+		String gfF2M7M_didacticConceptual = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Zerteile den Bruch in 3 Teile.";
+		String gfF2M7M_didacticProcedural = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Klicke, um den Bruch in 3 Teile zu zerteilen.";
+		
+		String gfF2M7bM_socratic = "Sehr gut! Wie wirst du den Bruch in 4 Teile zerteilen?";
+		String gfF2M7bM_guidance = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Zerteile den Bruch in 4 Teile.";
+		String gfF2M7bM_didacticConceptual = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Zerteile den Bruch in 4 Teile.";
+		String gfF2M7bM_didacticProcedural = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Klicke, um den Bruch in 4 Teile zu zerteilen.";
+		
+		String gfF2M7cM_socratic = "Sehr gut! Wie wirst du den Bruch in 5 Teile zerteilen?";
+		String gfF2M7cM_guidance = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Zerteile den Bruch in 5 Teile.";
+		String gfF2M7cM_didacticConceptual = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Zerteile den Bruch in 5 Teile.";
+		String gfF2M7cM_didacticProcedural = "Klicke mit der rechten Maustaste auf den Bruch und wähle im Menü 'Finde einen wertgleichen Bruch'. Klicke, um den Bruch in 5 Teile zu zerteilen.";
+		
+		String gfF2M10M_socratic = "Sehr gut! Ist dein neuer Bruch nun wertgleich mit dem ursprünglichen Bruch? Was ist mit dem Nenner geschehen, und was ist mit dem Zähler geschehen?";
+		
+		String gfF2M11M_socratic = "Sehr gut! Bist du mit der Aufgabe fertig?";
+		String gfF2M11M_guidance = "Weiter so! Jetzt zerteile den Bruch noch weiter.";
+		
+		String gfMF2E1M_didacticConceptual = "Sehr gut! Du hast den Bruch 2, 3, 4, und 5 Mal geteilt. Toll gemacht!";
+		
+		String gfMF2E2M_didacticConceptual = "Was ist mit Zähler und Nenner passiert, als du im Menü die Funktion 'Finde einen wertgleichen Bruch' benutzt hast?";
+		
+		
+		String gfT24M1M_socratic = "Ist der Nenner deines Bruches richtig?";
+		String gfT24M1M_guidance = "Du kannst auf den Pfeil neben deinem Bruch klicken, um ihn zu verändern.";
+		String gfT24M1M_didacticConceptual = "Prüfe ob der Nenner deines Bruchs richtig ist.";
+		String gfT24M1M_didacticProcedural = "Prüfe, dass der Nenner deines Bruches "+startDenominator+" ist.";
+		
+		String gfT24M2M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfT24M2M_guidance = "Denk daran: Der Nenner ist der untere Teil des Bruchs.";
+		String gfT24M2M_didacticConceptual = "Überprüfe, ob du den Nenner, und nicht den Zähler verändert hast.";
+		String gfT24M2M_didacticProcedural = "Prüfe, dass der Nenner deines Bruches  "+startDenominator+" ist, und nicht der Zähler.";
+		
+		String gfT24M3M_socratic = "Ist das der Bruch, den du machen wolltest?";
+		String gfT24M3M_guidance = "Bitte lies die Aufgabe noch einmal gründlich durch.";
+		String gfT24M3M_didacticConceptual = "Lies die Aufgabe erneut und prüfe dann deinen Bruch.";
+		
+		String gfT24M4M_didacticConceptual = "Sehr gut! Bitte erkläre was 'Zähler' und 'Nenner' sind.";
+		
+		String gfT24M5M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfT24M5M_guidance = "Der Nenner ist der untere Teil des Bruchs.";
+		String gfT24M5M_didacticConceptual = "Du hast den Zähler verändert. Du musst jedoch den Nenner verändern.";
+		String gfT24M5M_didacticProcedural = "Du hast den Zähler verändert. Du musst den Nenner auf "+startDenominator+" einstellen.";
+		
+		String gfT24M6M_socratic = "Sehr gut! Wie wirst du den Zähler verändern?";
+		String gfT24M6M_guidance = "Wenn du neben den oberen Teil des Bruchs klickst, und dann den 'nach oben' Pfeil benutzt, kannst du den Zähler des Bruchs (das was oben steht) verändern.";
+		String gfT24M6M_didacticConceptual = "Du hast den Zähler verändert. Du musst jedoch den Nenner verändern.";
+		String gfT24M6M_didacticProcedural = "Verändere jetzt den Zähler. Denke daran: Du sollst einen wertgleichen Bruch zum Bruch "+startNumerator+"/"+startDenominator+" erstellen.";
+		
+		String gfT24M7M_socratic = "Sehr gut! Wie wirst du einen wertgleichen Bruch erstellen?";
+		String gfT24M7M_guidance = "Du könntest du den Bruch kopieren und im Menü auf 'Finde einen wertgleichen Bruch' auswählen, um einen wertgleichen Bruch zu finden.";
+		String gfT24M7M_didacticConceptual = "Sehr gut! Kopiere jetzt diesen Bruch und benutze im Menü 'Finde einen wertgleichen Bruch', um deinen Bruch zu verändern.";
+		String gfT24M7M_didacticProcedural = "Sehr gut! Klicke jetzt mit der rechten Maustaste auf den Bruch und kopiere ihn. Klicke danach mit der rechten Maustaste auf den kopierten Bruch und wähle im Menü 'Finde einen wertgleichen Bruch', um einen wertgleichen Bruch zu erstellen.";
+			
+		String gfT24M8M_socratic = "Wie könntest du deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen?";
+		String gfT24M8M_guidance = "Achte auf den Nenner deines Bruchs und auf den Nenner des Bruchs "+startNumerator+"/"+startDenominator+". Welchen Zusammenhang kannst du zwischen den Brüchen erkennen? Was musst du mit "+startNumerator+" tun, um den richtigen Zähler für deinen Bruch zu finden?";
+		String gfT24M8M_didacticConceptual = "Vergleiche deinen Bruch mit "+startNumerator+"/"+startDenominator+", indem du die Vergleichsfunktion (am Rand oben) benutzt.";
+
+		String gfT24M9M_socratic = "Mit welchem anderen Bruch willst du deinen Bruch vergleichen?";
+		String gfT24M9M_guidance = "Bei wertgleichen Brüchen sind die Zähler und Nenner des einen Bruches das (gleiche) Vielfache des anderen Bruches.";
+		String gfT24M9M_didacticConceptual = "Erstelle zuerst einen weiteren Bruch, dieses Mal "+startNumerator+"/"+startDenominator+". Vergleiche dann deine beiden Brüche.";
+
+		String gfT24M10M_didacticConceptual = "Sehr gut! Bitte erkläre, warum du den Nenner "+startDenominator+" oder ein Vielfaches von "+startDenominator+" gewählt hast.";
+
+		String gfT24M11M_socratic = "Wie kannst du in Fractions Lab prüfen, ob deine Lösung richtig ist?";
+		String gfT24M11M_guidance = "Du könntest die Vergleichsfunktion (am Rand oben) benutzen, um deine Brüche zu vergleichen.";
+		String gfT24M11M_didacticConceptual = "Vergleiche die beiden Brüche, indem du die Vergleichsfunktion (am Rand oben) benutzt.";
+
+		String gfT24M12M_socratic = "Jetzt, da du einen wertgleichen Bruch zu "+startNumerator+"/"+startDenominator+" erstellt hast, wie willst du ihn mit "+startNumerator+"/"+startDenominator+" vergleichen?";
+		String gfT24M12M_guidance = "Sieh dir die Aufgabe an und überlege, welchen anderen Bruch du erstellen musst, um ihn mit deinem Bruch zu vergleichen.";
+		String gfT24M12M_didacticConceptual = "Um deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen zu können, musst du einen zweiten Bruch erstellen. Nimm dieses Mal "+startNumerator+"/"+startDenominator+".";
+		String gfT24M12M_didacticProcedural = "Behalte den Bruch, den du erstellt hast. Erstelle einen zweiten Bruch. Nimm dieses Mal "+startNumerator+"/"+startDenominator+". Dann vergleich die Brüche mithilfe der Vergleichsfunktion";
+
+		String gfT24M13M_socratic = "Jetzt, da du den Bruch "+endNumerator+"/"+endDenominator+" erstellt hast, wie willst du ihn mit "+startNumerator+"/"+startDenominator+" vergleichen?";
+		String gfT24M13M_guidance = "Sieh dir die Aufgabe an und überlege dir, welchen weiteren Bruch du brauchst, um ihn mit deinem Bruch zu vergleichen.";
+		String gfT24M13M_didacticConceptual = "Um deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen zu können, musst du einen zweiten Bruch erstellen. Nimm dieses Mal "+startNumerator+"/"+startDenominator+".";
+		String gfT24M13M_didacticProcedural = "Behalten den Bruch, der wertgleich zu "+startNumerator+"/"+startDenominator+" ist. Wandle  nun den anderen Bruch in "+startNumerator+"/"+startDenominator+" um. Vergleiche die beiden Brüche dann mithilfe der Vergleichsfunktion.";
+		
+		String gfT24E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		
+		String gfT24E2M_didacticConceptual = "Bitte erkläre, was du mit dem Zähler und dem Nenner von "+startNumerator+"/"+startDenominator+" des Bruchs gemacht hast, um einen wertgleichen Bruch zu erstellen.";
+		
+		
+		
+		String gfT26M1M_guidance = "Du kannst auf den Pfeil neben deinem Bruch klicken, um ihn zu verändern.";
+		String gfT26M1M_socratic = "Ist der Nenner in deinem Bruch richtig?";
+		String gfT26M1M_didacticConceptual = "Prüfe, ob der Nenner in deinem Bruch richtig ist.";
+		String gfT26M1M_didacticProcedural = "Bitte prüfe, ob der Nenner (das was unten im Bruch steht) "+startDenominator+" oder "+endDenominator+" ist.";
+
+		String gfT26M2M_guidance = "Denk daran: Der Nenner steht unten im Bruch.";
+		String gfT26M2M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfT26M2M_didacticConceptual = "Überprüfe, ob du den Nenner, und nicht den Zähler verändert hast.";
+		String gfT26M2M_didacticProcedural = "Prüfe, dass der Nenner deines Bruches "+startDenominator+" or "+endDenominator+" ist, und nicht der Zähler.";
+
+		String gfT26M3M_guidance = "Bitte lies die Aufgabe noch einmal gründlich durch.";
+		String gfT26M3M_socratic = "Ist das wirklich der Bruch, den du machen wolltest?";
+		String gfT26M3M_didacticConceptual = "Lies die Aufgabe erneut und prüfe deinen Bruch.";
+
+		String gfT26M4M_didacticConceptual = "Sehr gut! Bitte erkläre was 'Zähler' und 'Nenner' sind.";
+
+		String gfT26M5M_guidance = "Der Nenner ist der untere Teil des Bruchs.";
+		String gfT26M5M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfT26M5M_didacticConceptual = "Du hast den Zähler verändert. Du musst jedoch den Nenner verändern.";
+		String gfT26M5M_didacticProcedural = "Du hast den Zähler verändert. Du musst den Nenner in "+startDenominator+" oder "+endDenominator+" ändern.";
+
+		String gfT26M6M_guidance = "Wenn du neben den oberen Teil des Bruchs klickst, und dann den 'nach oben' Pfeil benutzt, kannst du den Zähler des Bruchs (das was oben steht) verändern.";
+		String gfT26M6M_socratic = "Sehr gut! Wie wirst du den Zähler verändern?";
+		String gfT26M6M_didacticConceptual = "Du hast den Nenner verändert. Jetzt musst du den Zähler verändern.";
+		String gfT26M6M_didacticProcedural = "Verändere jetzt den Zähler. Denke daran: Du sollst den Bruch "+startNumerator+"/"+startDenominator+" oder "+endNumerator+"/"+endDenominator+" erstellen.";
+
+		String gfT26M7M_guidance = "In dieser Aufgabe gibt es zwei Brüche. Du kannst einen weiteren Bruch mithilfe der Symbolleiste für Bilddiagramme (rechts) erstellen.";
+		String gfT26M7M_socratic = "Sehr gut! Wie erstellst du deinen zweiten Bruch?";
+		String gfT26M7M_didacticConceptual = "Bitte erstelle noch einen weiteren Bruch.";
+		String gfT26M7M_didacticProcedural = "Du hast "+startNumerator+"/"+startDenominator+" oder "+endNumerator+"/"+endDenominator+" erstellt. Bitte erstelle "+startNumerator+"/"+startDenominator+" oder "+endNumerator+"/"+endDenominator+".";
+		
+		String gfT26M7Mstart_guidance = "In dieser Aufgabe gibt es zwei Brüche. Du kannst einen weiteren Bruch mithilfe der Symbolleiste für Bilddiagramme (rechts) erstellen.";
+		String gfT26M7Mstart_socratic = "Sehr gut! Wie erstellst du deinen zweiten Bruch?";
+		String gfT26M7Mstart_didacticConceptual = "Bitte erstelle noch einen weiteren Bruch.";
+		String gfT26M7Mstart_didacticProcedural = "Du hast "+startNumerator+"/"+startDenominator+" erstellt. Bitte erstelle "+endNumerator+"/"+endDenominator+".";
+		
+		String gfT26M7Mend_guidance = "In dieser Aufgabe gibt es zwei Brüche. Du kannst einen weiteren Bruch mithilfe der Symbolleiste für Bilddiagramme (rechts) erstellen.";
+		String gfT26M7Mend_socratic = "Sehr gut! Wie erstellst du deinen zweiten Bruch?";
+		String gfT26M7Mend_didacticConceptual = "Bitte erstelle noch einen weiteren Bruch.";
+		String gfT26M7Mend_didacticProcedural = "Du hast "+endNumerator+"/"+endDenominator+" erstellt. Bitte erstelle "+startNumerator+"/"+startDenominator+".";
 		
-		String gfS3M_socratic = "GERMAN Good. What do you need to do now, to change the fraction?";
-		String gfS3M_guidance = "GERMAN You can use the arrow buttons to change the fraction.";
-		String gfS3M_didacticConceptual = "GERMAN Now click the up arrow next to the empty fraction, to make the denominator.";
-		String gfS3M_didacticProcedural = "GERMAN Click the up arrow next to the empty fraction, to make the denominator (the bottom part of the fraction) "+endDenominator+".";
-		
-		String gfM1M_socratic = "GERMAN Is the denominator in your fraction correct?";
-		String gfM1M_guidance = "GERMAN You can click the up arrow next to your fraction to change the denominator.";
-		String gfM1M_didacticConceptual = "GERMAN Check that the denominator in your fraction is correct.";
-		String gfM1M_didacticProcedural = "GERMAN Check that the denominator (the bottom part of your fraction) is "+endDenominator+".";
-		
-		String gfM2M_socratic = "GERMAN Have you changed the numerator or the denominator?";
-		String gfM2M_guidance = "GERMAN Remember that the denominator is the bottom part of the fraction.";
-		String gfM2M_didacticConceptual = "GERMAN Check that you have changed the denominator, not the numerator.";
-		String gfM2M_didacticProcedural = "GERMAN Check that the denominator in your fraction, not the numerator, is "+endDenominator+".";
-		
-		String gfCM2M_socratic  = "GERMAN Have you changed the numerator or the denominator?";
-		String gfCM2M_guidance = "GERMAN Remember that the denominator is the bottom part of the fraction.";
-		String gfCM2M_didacticConceptual = "GERMAN Check that you have changed the denominator, not the numerator.";
-		String gfCM2M_didacticProcedural = "GERMAN Check that the denominator in your fraction, not the numerator, is "+endDenominator+".";
-		
-		String gfM3M_socratic = "GERMAN Is this the fraction you were planning to make?";
-		String gfM3M_guidance = "GERMAN Please read the task again carefully.";
-		String gfM3M_didacticConceptual = "GERMAN Re-read the task then echeck your fraction.";
-		
-		String gfM4M_didacticConceptual = "GERMAN Excellent. Please explain what the numerator and denominator are.";
-		
-		String gfM5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
-		String gfM5M_guidance = "GERMAN The denominator is the bottom part of the fraction.";
-		String gfM5M_didacticConceptual = "GERMAN You changed the numerator. You need to change the denominator.";
-		String gfM5M_didacticProcedural = "GERMAN You changed the numerator. You need to change the denominator to "+endDenominator+".";
-		
-		String gfCM5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
-		String gfCM5M_guidance = "GERMAN The denominator is the bottom part of the fraction.";
-		String gfCM5M_didacticConceptual = "GERMAN You changed the numerator. You need to change the denominator.";
-		String gfCM5M_didacticProcedural = "GERMAN You changed the numerator. You need to change the denominator to "+endDenominator+".";
-		
-		String gfM6M_socratic = "GERMAN Excellent. Now, how are you going to change the numerator?";
-		String gfM6M_guidance = "GERMAN If you click near the top of your fraction, and click the arrow, you can change the numerator (the top part of the fraction).";
-		String gfM6M_didacticConceptual = "GERMAN You changed the denominator. Now, change the numerator.";
-		String gfM6M_didacticProcedural = "GERMAN Now, change the numerator. Remember, you need to make the fraction equivalent to "+startNumerator+"/"+startDenominator+".";
-		
-		String gfCM6M_socratic = "GERMAN Excellent. Now, how are you going to compare the fraction?";
-		String gfCM6M_guidance = "GERMAN Now that you have made the first fraction, you need to compare it with the second fraction.";
-		String gfCM6M_didacticConceptual = "GERMAN You now need to compare the fraction with a second fraction.";
-		String gfCM6M_didacticProcedural = "GERMAN Now, create a second fraction using the same representation.";
-		
-		String gfCM6MSecond_socratic = "GERMAN Excellent. Now, how are you going to compare the fraction?";
-		String gfCM6MSecond_guidance = "GERMAN Now that you have made the first fraction, you need to compare it with the second fraction.";
-		String gfCM6MSecond_didacticConceptual = "GERMAN You now need to compare the fraction with a second fraction.";
-		String gfCM6MSecond_didacticProcedural = "GERMAN Now, create a second fraction using the same representation.";
-		
-		String gfM7M_socratic = "GERMAN Excellent. How are you going to make the equivalent fraction?";
-		String gfM7M_guidance = "GERMAN You could now copy the fraction and use 'find equivalent' to make an equivalent fraction. Right-click the fraction.";
-		String gfM7M_didacticConceptual = "GERMAN Excellent. Now copy this fraction, right click the copy, and select 'find equivalent'.";
-		String gfM7M_didacticProcedural = "GERMAN Excellent. Now copy this fraction, right click the copy, and select 'find equivalent' to make a fraction with a denominator of "+endDenominator+".";
-		
-		String gfCM7M_socratic = "GERMAN Why have you decided to use a different representation? What does the task ask you to do?";
-		String gfCM7M_guidance = "GERMAN Please use the same representation for the second fraction.";
-		String gfCM7M_didacticProcedural = "GERMAN Please create the second fraction using the same representation that you used for the first fraction.";
-		
-		String gfM8M_socratic = "GERMAN Now that you have made "+endNumerator+"/"+endDenominator+" how are you going to compare it with "+startNumerator+"/"+startDenominator+"?";
-		String gfM8M_guidance = "GERMAN Look at the task and think about what other fraction you need to make to compare it with "+endNumerator+"/"+endDenominator+".";
-		String gfM8M_didacticConceptual = "GERMAN You need one of your fractions to be "+startNumerator+"/"+startDenominator+", to compare it with "+endNumerator+"/"+endDenominator+".";
-		String gfM8M_didacticProcedural = "GERMAN Keep the fraction "+endNumerator+"/"+endDenominator+". Now change the other fraction to "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.";
-		
-		String gfM9M_socratic = "GERMAN How are you going to make a fraction with the denominator "+endDenominator+", that is equivalent to "+startNumerator+"/"+startDenominator+".";
-		String gfM9M_guidance = "GERMAN Look at the task and think about what other fraction you need to make to compare it with "+startNumerator+"/"+startDenominator+".";
-		String gfM9M_didacticConceptual = "GERMAN As well as "+startNumerator+"/"+startDenominator+", you need a second fraction that is equivalent to "+startNumerator+"/"+startDenominator+" and that has "+endDenominator+" as its denominator.";
-		String gfM9M_didacticProcedural = "GERMAN Keep the fraction "+startNumerator+"/"+startDenominator+". Now change the other fraction to "+endNumerator+"/"+endDenominator+". Then compare the two fractions using the comparison box.";
-		
-		String gfM10M_socratic = "GERMAN How could you compare your fraction with "+startNumerator+"/"+startDenominator+"?";
-		String gfM10M_guidance = "GERMAN Think about the denominators in the two fractions. What is the relationship between them?";
-		String gfM10M_didacticConceptual = "GERMAN Compare your fraction with "+startNumerator+"/"+startDenominator+"  by creating another fraction, this time "+startNumerator+"/"+startDenominator+", and using the comparison box.";
-		
-		String gfCM8M_socratic = "GERMAN Excellent. How using the comparison tool to compare the two fractions?";
-		String gfCM8M_guidance = "GERMAN You could now compare the fractions. Open the comparison tool at the top of the screen.";
-		String gfCM8M_didacticConceptual = "GERMAN Excellent. Now use the comparison tool.";
-		String gfCM8M_didacticProcedural = "GERMAN Excellent. Not open the comparison tool, at the top of the screen, and drag in the two fractions.";
-		
-		String gfM11M_socratic = "GERMAN What are you going to compare your fraction with?";
-		String gfM11M_guidance = "GERMAN In equivalent fractions, the two numerators must be the same multiple of each other as the two denominators.";
-		String gfM11M_didacticConceptual = "GERMAN First create another fraction, this time "+startNumerator+"/"+startDenominator+". Then compare your two fractions.";
-		
-		String gfM12M_didacticConceptual = "GERMAN Excellent. Please explain why you made the denominator "+endDenominator+".";
-		
-		String gfM13M_socratic = "GERMAN How can you check, using a Fractions Lab tool, that your solution is correct?";
-		String gfM13M_guidance = "GERMAN You could use the comparison box to compare your fractions.";
-		String gfM13M_didacticConceptual = "GERMAN Compare the two fractions using the comparison box.";
-		
-		String gfCM11M_didacticConceptual = "GERMAN Excellent. Please explain why you made the denominator 3.";
-		
-		String gfCM12M_socratic = "GERMAN Excellent, what are you going to do now?";
-		
-		String gfE1M_didacticConceptual = "GERMAN The way that you worked that out was excellent. Well done.";
-		
-		String gfE2M_didacticConceptual = "GERMAN Please explain what you did to the numerator and the denominator of "+startNumerator+"/"+startDenominator+" to make an equivalent fraction with "+endDenominator+" as the denominator.";
-		
-		String gfCE2M_didacticConceptual = "GERMAN Please explain what you found by comparing 1/3 and 1/5.";
-		
-		String gfR1M_didacticConceptual = "GERMAN What has happened to the numerator and denominator? Have they been affected the same or differently?";
-		
-		String gfR2M_didacticConceptual = "GERMAN Why did you make the fraction "+endNumerator+"/"+endDenominator+"? What did you do to the numerator and denominator of "+startNumerator+"/"+startDenominator+"?";
-		
-		String gfO1M_didacticConceptual = "GERMAN You don't appear to have completed the task.";
-		
-		String gfO2M_didacticConceptual = "GERMAN If you need more help to finish the task, you could ask your teacher.";
-		
-		String gfMF6M_socratic = "GERMAN Excellent. Now, how are you going to use a different representation?";
-		String gfMF6M_guidance = "GERMAN Excellent, Now, click the representation toolbar and create another representation of exactly the same fraction.";
-		
-		String gfMF10M_socratic = "GERMAN Excellent. How are your representations similar, and how are they different?";
-		
-		String gfMF11M_socratic = "GERMAN Excellent! Have you completed the task?";
-		String gfMF11M_guidance = "GERMAN Excellent! Keep going. Now make your fraction using a different representation.";
-		
-		String gfMF12M_socratic = "GERMAN Excellent! Do your fractions have the same values?";
-		String gfMF12M_guidance = "GERMAN Excellent! Now change your fractions to the same values.";
-		
-		String gfMFE1M_didacticConceptual = "GERMAN Excellent, you have made your fraction using all the representations. Well done.";
-		
-		String gfMFE2M_didacticConceptual ="GERMAN How are all your representations similar, and how are they different?";
-		
-		String gfF2M1M_socratic = "GERMAN Good. What do you need to do now, to complete the fraction?";
-		String gfF2M1M_guidance = "GERMAN You can use the arrow buttons at the top of the fraction to complete your fraction.";
-		String gfF2M1M_didacticConceptual = "GERMAN Now click the up arrow next to the top of the fraction, to make the numerator.";
-		String gfF2M1M_didacticProcedural = "GERMAN Click the up arrow next to the top of the fraction, to make the numerator (the top part of the fraction).";
-		
-		String gfF2M4M_socratic = "GERMAN Excellent. What fraction have you made?";
-		
-		String gfF2M6M_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction?";
-		String gfF2M6M_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into two.";
-		String gfF2M6M_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent' and partition the fraction into two.";
-		String gfF2M6M_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into two.";
-		
-		String gfF2M7M_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction into 3?";
-		String gfF2M7M_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into 3.";
-		String gfF2M7M_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 3.";
-		String gfF2M7M_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 3.";
-		
-		String gfF2M7bM_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction into 4?";
-		String gfF2M7bM_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into 4.";
-		String gfF2M7bM_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 4.";
-		String gfF2M7bM_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 4.";
-		
-		String gfF2M7cM_socratic = "GERMAN Excellent. Now, how are you going to partition the fraction into 5?";
-		String gfF2M7cM_guidance = "GERMAN Right click the fraction, select 'find equivalent', and partition the fraction into 5.";
-		String gfF2M7cM_didacticConceptual = "GERMAN Click the fraction with the right-hand mouse button, then select 'find equivalent', and partition the fraction into 5.";
-		String gfF2M7cM_didacticProcedural = "GERMAN Click the fraction with the right-hand mouse button. Then click 'find equivalent'. Then click to partition the fraction into 5.";
-		
-		String gfF2M10M_socratic = "GERMAN Excellent. Is your new fraction equivalent to your original fraction? What has happened to the denominator and what has happened to the numerator?";
-		
-		String gfF2M11M_socratic = "GERMAN Excellent! Have you completed the task?";
-		String gfF2M11M_guidance = "GERMAN Keep going. Now partition your fraction further.";
-		
-		String gfMF2E1M_didacticConceptual = "GERMAN Excellent, you have partitioned your fraction 2, 3, 4 and 5 times. Well done.";
-		
-		String gfMF2E2M_didacticConceptual = "GERMAN When you used find equivalent, what happened to the denominators and numerators?";
-		
-		
-		String gfT24M1M_socratic = "GERMAN Is the denominator in your fraction correct?";
-		String gfT24M1M_guidance = "GERMAN You can click the up arrow next to your fraction to change it.";
-		String gfT24M1M_didacticConceptual = "GERMAN Check that the denominator in your fraction is correct.";
-		String gfT24M1M_didacticProcedural = "GERMAN Check that the denominator (the bottom part of your fraction) is "+startDenominator+".";
-		
-		String gfT24M2M_socratic = "GERMAN Have you changed the numerator or denominator?";
-		String gfT24M2M_guidance = "GERMAN Remember that the denominator is the bottom part of the fraction.";
-		String gfT24M2M_didacticConceptual = "GERMAN Check that you have changed the denominator, not the numerator.";
-		String gfT24M2M_didacticProcedural = "GERMAN Check that the denominator in your fraction, not the numerator, is "+startDenominator+".";
-		
-		String gfT24M3M_socratic = "GERMAN Is this the fraction you were planning to make?";
-		String gfT24M3M_guidance = "GERMAN Please read the task again carefully.";
-		String gfT24M3M_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
-		
-		String gfT24M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and 'denominator' are";
-		
-		String gfT24M5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
-		String gfT24M5M_guidance = "TGERMAN he denominator is the bottom part of the fraction.";
-		String gfT24M5M_didacticConceptual = "GERMAN You changed the numerator. You need to change the denominator.";
-		String gfT24M5M_didacticProcedural = "GERMAN You changed the numerator. You need to change the denominator to "+startDenominator+".";
-		
-		String gfT24M6M_socratic = "GERMAN Excellent. Now, how are you going to change the numerator?";
-		String gfT24M6M_guidance = "GERMAN If you click near the top of your fraction, and click the up arrow, you can change the numerator (the top part of the fraction).";
-		String gfT24M6M_didacticConceptual = "GERMAN You changed the denominator. Now, change the numerator.";
-		String gfT24M6M_didacticProcedural = "GERMAN Now, change the numerator. Remember, you need to make a fraction equivalent to "+startNumerator+"/"+startDenominator+".";
-		
-		String gfT24M7M_socratic = "GERMAN Excellent. How are you going to make an equivalent fraction?";
-		String gfT24M7M_guidance = "GERMAN You could now copy the fraction and use 'find equivalent' to make an equivalent fraction.";
-		String gfT24M7M_didacticConceptual = "GERMAN Excellent. Now copy this fraction and use 'find equivalent' to change it.";
-		String gfT24M7M_didacticProcedural = "GERMAN Excellent. Now right click the fraction and copy it. Then right click the copy and select 'find equivalent' to make an equivalent fraction.";
-		
-		String gfT24M8M_socratic = "GERMAN ow could you compare your fraction with "+startNumerator+"/"+startDenominator+".";
-		String gfT24M8M_guidance = "GERMAN Think about the denominators in your fraction and in "+startNumerator+"/"+startDenominator+". What is the relationship between them? What do you need to do to "+startNumerator+" to work out the correct numerator for your fraction?";
-		String gfT24M8M_didacticConceptual = "Compare your fraction with "+startNumerator+"/"+startDenominator+" by using the comparison box.";
-		
-		String gfT24M9M_socratic = "GERMAN What are you going to compare your fraction with?";
-		String gfT24M9M_guidance = "GERMAN In equivalent fractions, the two numerators must be the same multiple of each other as the two denominators.";
-		String gfT24M9M_didacticConceptual = "GERMAN First create another fraction, this time "+startNumerator+"/"+startDenominator+". Then compare your two fractions.";
-		
-		String gfT24M10M_didacticConceptual = "GERMAN Excellent. Please explain why you made the denominator "+startDenominator+" or a multiple of "+startDenominator+".";
-		
-		String gfT24M11M_socratic = "GERMAN How can you check, using a Fractions Lab tool,  that your solution is correct?";
-		String gfT24M11M_guidance = "GERMAN You could use the comparison box to compare your fractions.";
-		String gfT24M11M_didacticConceptual = "GERMAN Compare the two fractions using the comparison box.";
-		
-		String gfT24M12M_socratic = "GERMAN Now that you have made a fraction that is equivalent to "+startNumerator+"/"+startDenominator+", how are you going to compare it with "+startNumerator+"/"+startDenominator+"?";
-		String gfT24M12M_guidance = "GERMAN Look at the task and think about what other fraction you need to make, to compare with your fraction.";
-		String gfT24M12M_didacticConceptual = "GERMAN To compare your fraction to "+startNumerator+"/"+startDenominator+", you will need to make a second fraction, this time "+startNumerator+"/"+startDenominator+".";
-		String gfT24M12M_didacticProcedural = "GERMAN Keep the fraction that you have made. Now create a second fraction. This time "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.";
-		
-		String gfT24M13M_socratic = "GERMAN Now that you have made a fraction that is equivalent to "+startNumerator+"/"+startDenominator+", how are you going to compare it with "+startNumerator+"/"+startDenominator+"?";
-		String gfT24M13M_guidance = "GERMAN Look at the task and think about what other fraction you need to make, to compare with your fraction.";
-		String gfT24M13M_didacticConceptual = "GERMAN To compare your fraction to "+startNumerator+"/"+startDenominator+", you will need to make a second fraction, this time "+startNumerator+"/"+startDenominator+".";
-		String gfT24M13M_didacticProcedural = "GERMAN Keep the fraction that is equivalent to "+startNumerator+"/"+startDenominator+". Now change the other fraction to "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.";
-		
-		String gfT24E1M_didacticConceptual = "GERMAN The way that you worked that out was excellent. Well done.";
-		
-		String gfT24E2M_didacticConceptual = "GERMAN Please explain what you did to the numerator and denominator of "+startNumerator+"/"+startDenominator+" to make an equivalent fraction.";
-		
-		
-		
-		String gfT26M1M_guidance = "GERMAN You can click the up arrow next to your fraction to change it.";
-		String gfT26M1M_socratic = "GERMAN Is the denominator in your fraction correct?";
-		String gfT26M1M_didacticConceptual = "GERMAN Check that the denominator in your fraction is correct.";
-		String gfT26M1M_didacticProcedural = "GERMAN Check that the denominator (the bottom part of your fraction) is "+startDenominator+" or "+endDenominator+".";
-		
-		String gfT26M2M_guidance = "GERMAN Remember that the denominator is the bottom part of the fraction.";
-		String gfT26M2M_socratic = "GERMAN Have you changed the numerator or denominator?";
-		String gfT26M2M_didacticConceptual = "GERMAN Check that you have changed the denominator, not the numerator.";
-		String gfT26M2M_didacticProcedural = "GERMAN Check that the denominator in your fraction, not the numerator, is "+startDenominator+" or "+endDenominator+".";
-		
-		String gfT26M3M_guidance = "GERMAN Please read the task again carefully.";
-		String gfT26M3M_socratic = "GERMAN Is this the fraction you were planning to make?";
-		String gfT26M3M_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
-		
-		String gfT26M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and 'denominator' are.";
-		
-		String gfT26M5M_guidance = "GERMAN The denominator is the bottom part of the fraction.";
-		String gfT26M5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
-		String gfT26M5M_didacticConceptual = "GERMAN You changed the numerator. You need to change the denominator.";
-		String gfT26M5M_didacticProcedural = "GERMAN You changed the numerator. You need to change the denominator to "+startDenominator+" or "+endDenominator+".";
-		
-		String gfT26M6M_guidance = "GERMAN If you click near the top of your fraction, and click the up arrow, you can change the numerator (the top part of the fraction).";
-		String gfT26M6M_socratic = "GERMAN Excellent. Now, how are you going to change the numerator?";
-		String gfT26M6M_didacticConceptual = "GERMAN You changed the denominator.  Now, change the numerator.";
-		String gfT26M6M_didacticProcedural = "GERMAN Now, change the numerator. Remember, you need to make the fraction "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".";
-		
-		String gfT26M7M_guidance = "GERMAN There are two fractions in this task.  You can make another fraction by using the representation tool.";
-		String gfT26M7M_socratic = "GERMAN Excellent. How are you going to make the second fraction?";
-		String gfT26M7M_didacticConceptual = "GERMAN Please make the other fraction.";
-		String gfT26M7M_didacticProcedural = "GERMAN You have made "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+" or "+endNumerator+"/"+endDenominator+".";
-		
-		String gfT26M7Mstart_guidance = "GERMAN There are two fractions in this task.  You can make another fraction by using the representation tool.";
-		String gfT26M7Mstart_socratic = "GERMAN Excellent. How are you going to make the second fraction?";
-		String gfT26M7Mstart_didacticConceptual = "GERMAN Please make the other fraction.";
-		String gfT26M7Mstart_didacticProcedural = "GERMAN You have made "+startNumerator+"/"+startDenominator+".  Please make "+endNumerator+"/"+endDenominator+".";
-		
-		String gfT26M7Mend_guidance = "GERMAN There are two fractions in this task.  You can make another fraction by using the representation tool.";
-		String gfT26M7Mend_socratic = "GERMAN Excellent. How are you going to make the second fraction?";
-		String gfT26M7Mend_didacticConceptual = "GERMAN Please make the other fraction.";
-		String gfT26M7Mend_didacticProcedural = "GERMAN You have made "+endNumerator+"/"+endDenominator+".  Please make "+startNumerator+"/"+startDenominator+".";
 
 
+		String gfT26M8M_guidance = "Es ist einfacher zwei Brüche zu vergleichen, wenn du für beide dasselbe Bilddiagramm ausgewählt hast.";
+		String gfT26M8M_socratic = "Fällt dir eine bessere Möglichkeit ein, die Brüche darzustellen?";
+		String gfT26M8M_didacticConceptual = "Bitte gebrauche für beide Brüche dasselbe Bilddiagramm (z.B. beides Mal ein Rechteck benutzen).";
+		
+		String gfT26M10M_didacticConceptual = "Großartig! Bitte erkläre, warum du ausgerechnet diese Brüche erstellt hast.";
+		
+		String gfT26M11M_guidance = "Du könntest die Vergleichsfunktion (am Rand oben) benutzen, um deine Brüche zu vergleichen.";
+		String gfT26M11M_socratic = "Wie kannst du in Fractions Lab prüfen, ob deine Lösung richtig ist?";
+		String gfT26M11M_didacticConceptual = "Vergleiche die Brüche mithilfe der Vergleichsfunktion (am Rand oben).";
+		
+		String gfT26E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		
+		String gfT26E2M_didacticConceptual = "Bitte erkläre, warum du zustimmst, oder warum nicht.";
+		
+		
+		
+		String gfT3aP1M1M_socratic = "Ist der Nenner deines Bruches richtig?";
+		String gfT3aP1M1M_guidance = "Du kannst auf den Pfeil neben deinem Bruch klicken, um ihn zu verändern.";
+		String gfT3aP1M1M_didacticConceptual = "Prüfe ob der Nenner deines Bruchs richtig ist.";
+		String gfT3aP1M1M_didacticProcedural = "Bitte prüfe, ob der Nenner (das was unten im Bruch steht) "+startDenominator+" ist.";
+		
+		String gfT3aP1M2M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfT3aP1M2M_guidance = "Erinnere dich: Der Nenner steht unten im Bruch.";
+		String gfT3aP1M2M_didacticConceptual = "Prüfe, ob du den Nenner und nicht den Zähler verändert hast.";
+		String gfT3aP1M2M_didacticProcedural = " Bitte prüfe, ob der Nenner deines Bruches "+startDenominator+" ist und nicht der Zähler deines Bruches.";
+		
+		String gfT3aP1M3M_socratic = "Ist das wirklich der Bruch, den du machen wolltest?";
+		String gfT3aP1M3M_guidance = "Bitte lies die Aufgabe noch einmal gründlich durch.";
+		String gfT3aP1M3M_didacticConceptual = "Lies die Aufgabe erneut und prüfe deinen Bruch.";
+		
+		String gfT3aP1M4M_didacticConceptual = "Sehr gut! Bitte erkläre was 'Zähler' und 'Nenner' sind.";
+		
+		String gfT3aP1M5M_socratic = "Hast du den Zähler oder den Nenner verändert?";
+		String gfT3aP1M5M_guidance = "Der Nenner ist der untere Teil des Bruchs.";
+		String gfT3aP1M5M_didacticConceptual = "Du hast den Zähler verändert. Du musst jedoch den Nenner verändern.";
+		String gfT3aP1M5M_didacticProcedural = "Du hast den Zähler verändert. Du musst den Nenner auf "+startDenominator+" einstellen.";
+		
+		String gfT3aP1M6M_socratic = "Sehr gut! Wie wirst du den Zähler verändern?";
+		String gfT3aP1M6M_guidance = "Wenn du neben den oberen Teil des Bruchs klickst, und dann den 'nach oben' Pfeil benutzt, kannst du den Zähler des Bruchs (das was oben steht) verändern.";
+		String gfT3aP1M6M_didacticConceptual = "Prüfe, ob du den Nenner und nicht den Zähler verändert hast.";
+		String gfT3aP1M6M_didacticProcedural = "Verändere jetzt den Zähler. Denke daran, dass du zwei Brüche erstellen musst, die addiert "+startNumerator+"/"+startDenominator+" ergeben.";
+		
+		String gfT3aP1M7M_socratic = "Sehr gut! Du hast einen Bruch erstellt. Was musst du nun tun, um die Aufgabe fertigzustellen?";
+		String gfT3aP1M7M_guidance = "Du musst nun einen zweiten Bruch erstellen, der addiert mit deinem ersten Bruch so viel ergibt, wie der Bruch im Aufgabentext.";
+		
+		String gfT3aP1M8M_socratic = "Überlege dir, wie Brüche addiert werden. Was muss gleich sein, und was wird addiert?";
+		String gfT3aP1M8M_guidance = "Um zwei Brüche  zu addieren, müssen die Nenner gleich sein. Dann addierst du die Zähler.";
+		
+		String gfT3aP1M10M_didacticConceptual = "Sehr gut! Erkläre nun, warum du im Nenner "+startDenominator+"stehen hast.";
+		
+		String gfT3aP1M11M_socratic = "Wie kannst du in Fractions Lab prüfen, ob deine Lösung richtig ist?";
+		String gfT3aP1M11M_guidance = "Du kannst deine Brüche addieren, indem du die Additionsbox benutzt.";
+		String gfT3aP1M11M_didacticConceptual = "Addiere deine Brüche mithilfe der Additionsbox.";
+		
+		String gfT3aP1E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		
+		String gfT3aP1E2M_didacticConceptual = "Bitte erkläre, wie du die Aufgabe beantwortet hast. Warum hast du diese Brüche erstellt?";
 
-		String gfT26M8M_guidance = "GERMAN It is easier to compare fractions when they are represented the same way.";
-		String gfT26M8M_socratic = "GERMAN Can you think of a clearer way to represent the fractions?";
-		String gfT26M8M_didacticConceptual = "GERMAN Please change one of your fractions so they use the same representation.";
-		
-		String gfT26M10M_didacticConceptual = "GERMAN Great. Please explain why you made these fractions.";
-		
-		String gfT26M11M_guidance = "GERMAN You could use the comparison box to compare your fractions.";
-		String gfT26M11M_socratic = "GERMAN How can you check, using a Fractions Lab tool,  that your solution is correct?";
-		String gfT26M11M_didacticConceptual = "GERMAN Compare the two fractions using the comparison box.";
-		
-		String gfT26E1M_didacticConceptual = "GERMAN The way that you worked that out was excellent. Well done.";
-		
-		String gfT26E2M_didacticConceptual = "GERMAN Please explain why you agree or disagree.";
-		
-		
-		
-		String gfT3aP1M1M_socratic = "GERMAN Is the denominator in your fraction correct?";
-		String gfT3aP1M1M_guidance = "GERMAN You can click the up arrow next to your fraction to change it.";
-		String gfT3aP1M1M_didacticConceptual = "GERMAN Check that the denominator in your fraction is correct.";
-		String gfT3aP1M1M_didacticProcedural = "GERMAN Check that the denominator (the bottom part of your fraction) is "+startDenominator+".";
-		
-		String gfT3aP1M2M_socratic = "GERMAN Have you changed the numerator or denominator?";
-		String gfT3aP1M2M_guidance = "GERMAN Remember that the denominator is the bottom part of the fraction.";
-		String gfT3aP1M2M_didacticConceptual = "GERMAN Check that you have changed the denominator, not the numerator.";
-		String gfT3aP1M2M_didacticProcedural = "GERMAN Check that the denominator in your fraction, not the numerator, is "+startDenominator+".";
-		
-		String gfT3aP1M3M_socratic = "GERMAN Is this the fraction you were planning to make?";
-		String gfT3aP1M3M_guidance = "GERMAN Please read the task again carefully.";
-		String gfT3aP1M3M_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
-		
-		String gfT3aP1M4M_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and 'denominator' are.";
-		
-		String gfT3aP1M5M_socratic = "GERMAN Have you changed the denominator or the numerator?";
-		String gfT3aP1M5M_guidance = "GERMAN The denominator is the bottom part of the fraction.";
-		String gfT3aP1M5M_didacticConceptual = "GERMAN You changed the numerator. You need to change the denominator.";
-		String gfT3aP1M5M_didacticProcedural = "GERMAN You changed the numerator. You need to change the denominator to "+startDenominator+".";
-		
-		String gfT3aP1M6M_socratic = "GERMAN Excellent. Now, how are you going to change the numerator?";
-		String gfT3aP1M6M_guidance = "GERMAN If you click near the top of your fraction, and click the up arrow, you can change the numerator (the top part of the fraction).";
-		String gfT3aP1M6M_didacticConceptual = "GERMAN You changed the denominator.  Now, change the numerator.";
-		String gfT3aP1M6M_didacticProcedural = "GERMAN Now, change the numerator. Remember, you need to make two fractions that can be added together to make "+startNumerator+"/"+startDenominator+".";
-		
-		String gfT3aP1M7M_socratic = "GERMAN Excellent. You've made one fraction. What do you need to do now, to complete the task?";
-		String gfT3aP1M7M_guidance = "GERMAN You now need to make a second fraction that, when added together with your first fraction, makes the fraction shown in the task.";
-		
-		String gfT3aP1M8M_socratic = "GERMAN Think about how you add two fractions together. What needs to be the same, and what do you need to add together?";
-		String gfT3aP1M8M_guidance = "GERMAN To add two fractions together, the denominators need to be the same. Then you add together the numerators.";
-		
-		String gfT3aP1M10M_didacticConceptual = "GERMAN Excellent. Please explain why you made the denominator "+startDenominator+".";
-		
-		String gfT3aP1M11M_socratic = "GERMAN How can you check, using a Fractions Lab tool,  that your solution is correct?";
-		String gfT3aP1M11M_guidance = "GERMAN You could use the addition box to add your fractions.";
-		String gfT3aP1M11M_didacticConceptual = "GERMAN Add your two fractions using the addition box.";
-		
-		String gfT3aP1E1M_didacticConceptual = "GERMAN The way that you worked that out was excellent. Well done.";
-		
-		String gfT3aP1E2M_didacticConceptual = "GERMAN Please explain how you answered the task. Why did you make the fractions that you made?.";
 
 		String sfS1M_socratic = "SPANISH How are you going to tackle this task?";
 		String sfS1M_didacticConceptual = "SPANISH Read the task again, and explain how you are going to tackle it.";
