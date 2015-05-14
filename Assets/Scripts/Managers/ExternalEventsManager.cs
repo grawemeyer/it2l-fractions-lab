@@ -128,6 +128,8 @@ public class ExternalEventsManager : MonoBehaviour
         interfaces = GameObject.FindGameObjectWithTag("Interface");
         workspace = GameObject.FindGameObjectWithTag("Workspace");
         TDSWrapper.eventManager = gameObject;
+        if (embeddingVariables.ContainsKey("language"))
+            TDSWrapper.setLanguage(embeddingVariables["language"].ToString());
         if (embeddingVariables.ContainsKey("idtask"))
             TDSWrapper.setTaskID(embeddingVariables["idtask"]);
     }
