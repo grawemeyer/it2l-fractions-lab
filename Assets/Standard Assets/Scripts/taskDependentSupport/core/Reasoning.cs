@@ -103,7 +103,12 @@ namespace taskDependentSupport.core
 
 			Debug.Log ("setNewFeedback: "+currentFeedbackID);
 
-			FeedbackElem studentFeedbackElem = feedbackData.getFeedbackElem (currentFeedbackID);
+			FeedbackData thisFeedbackData = studentModel.getFeedbackData ();
+			if (thisFeedbackData == null) {
+				thisFeedbackData = feedbackData;
+			}
+
+			FeedbackElem studentFeedbackElem = thisFeedbackData.getFeedbackElem (currentFeedbackID);
 			Debug.Log ("studentFeedbackElem: "+studentFeedbackElem.getID());
 			int studentCounter = studentFeedbackElem.getCounter();
 			currentCounter = studentCounter;
