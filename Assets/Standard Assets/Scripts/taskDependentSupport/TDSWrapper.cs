@@ -210,57 +210,63 @@ namespace taskDependentSupport
 
 		public static void SendMessageToSupport(params object[] args)
 		{
-			if (intelligentSupportOff) return;
+				if (intelligentSupportOff)
+						return;
 
-			string eventType = "";
-			string eventName = "";
-			string objectID = "";
-			string objectValue = "";
-			string objectPosition = "";
-			int objectValueInt = 0;
+				string eventType = "";
+				string eventName = "";
+				string objectID = "";
+				string objectValue = "";
+				string objectPosition = "";
+				int objectValueInt = 0;
 
-			if (args.Length>0) eventType = args [0].ToString ();
-			if (args.Length>1) eventName = args [1].ToString ();
-			if (args.Length>2) objectID = args [2].ToString ();
+				if (args.Length > 0)
+						eventType = args [0].ToString ();
+				if (args.Length > 1)
+						eventName = args [1].ToString ();
+				if (args.Length > 2)
+						objectID = args [2].ToString ();
 
-			if (args.Length > 3){
-				objectValue = args [3].ToString ();
-				try {
-					objectValueInt = System.Convert.ToInt32(objectValue);	
-				} catch (Exception ex) {
+				if (args.Length > 3) {
+						objectValue = args [3].ToString ();
+						try {
+								objectValueInt = System.Convert.ToInt32 (objectValue);	
+						} catch (Exception ex) {
 						
-				};
-			}
-			if (args.Length>4) objectPosition = args [4].ToString ();
+						}
+						;
+				}
+				if (args.Length > 4)
+						objectPosition = args [4].ToString ();
 
-			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
-			ticks /= 10000000; //Convert windows ticks to seconds
+				long ticks = DateTime.UtcNow.Ticks - DateTime.Parse ("01/01/1970 00:00:00").Ticks;
+				ticks /= 10000000; //Convert windows ticks to seconds
 
-			SaveEvent (ticks+";eventType:"+eventType+";eventName:"+eventName+";objectID:"+objectID+";objectValue:"+objectValue+";objectValueInt:"+objectValueInt+";objectPosition:"+objectPosition+";");
+				SaveEvent (ticks + ";eventType:" + eventType + ";eventName:" + eventName + ";objectID:" + objectID + ";objectValue:" + objectValue + ";objectValueInt:" + objectValueInt + ";objectPosition:" + objectPosition + ";");
 
-			Debug.Log ("taskID: "+taskID);
+				Debug.Log ("taskID: " + taskID);
 
-			if (studentModel == null) {
-				studentModel = new StudentModel (taskID);
-				setLanguageInStudentModel(studentModel);
-			}
+				if (studentModel == null) {
+						studentModel = new StudentModel (taskID);
+						setLanguageInStudentModel (studentModel);
+				}
 
-			Analysis analyse = new Analysis ();
-			analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
+				Analysis analyse = new Analysis ();
+				analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
 
-			Debug.Log ("eventType: "+eventType+" eventName:"+eventName);
+				Debug.Log ("eventType: " + eventType + " eventName:" + eventName);
 
-			if (counter == null) {
-				Debug.Log ("counter == null");
-				counter = new Counter ();
-				Thread counterThread = new Thread (new ThreadStart (counter.increaseCounter));
-				counterThread.Start ();
-			}
+				if (counter == null) {
+						Debug.Log ("counter == null");
+						counter = new Counter ();
+						Thread counterThread = new Thread (new ThreadStart (counter.increaseCounter));
+						counterThread.Start ();
+				}
 
-			counter.resetCounter ();
+				counter.resetCounter ();
 
-			//for testing
-			/*if (taskID.Equals("EQUIValence1")){
+				//for testing
+				/*if (taskID.Equals("EQUIValence1")){
 				if (testCounter == null) {
 					Debug.Log ("testCounter == null");
 					testCounter = new Counter ();
@@ -269,7 +275,7 @@ namespace taskDependentSupport
 				}
 			}*/
 
-			if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange") 
+				if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange") 
 						|| eventType.Equals ("OperationResult") || (eventType.Equals ("EquivalenceGenerated"))) {
 						Debug.Log ("FractionGenerated ||  FractionChange");
 						Debug.Log ("needsNewThread " + needsNewThread);
@@ -320,12 +326,16 @@ namespace taskDependentSupport
 				} else if (eventType.Equals ("ClickButton") && eventName.Equals ("CloseFeedbackPopup")) {
 						sendDoneButtonPressedToTIS (true);
 				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchEnglishON*")) {
-						switchEnghlishOn(studentModel);	
+						switchEnghlishOn (studentModel);	
 				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchGermanON*")) {
-						switchGermanOn(studentModel);	
+						switchGermanOn (studentModel);	
 				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*switchSpanishON*")) {
-						switchSpanishOn(studentModel);	
+						switchSpanishOn (studentModel);	
+				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*closeFeedbackPopup*")) {
+						sendDoneButtonPressedToTIS (true);
 				}
+		
+
 		}
 
 		private static void handleEvent()
