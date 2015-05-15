@@ -174,6 +174,7 @@ namespace taskDependentSupport
 		}
 
 		public static void setLanguage(String value){
+			Debug.Log ("::::: setLanguage:::: "+value);
 			languageString = value;
 		}
 

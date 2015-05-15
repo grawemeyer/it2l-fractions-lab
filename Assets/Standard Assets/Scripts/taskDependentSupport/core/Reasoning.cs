@@ -22,8 +22,8 @@ namespace taskDependentSupport.core
 			Debug.Log ("hier in REASONING and generate new feedbackdata!!!");
 			taskID = taskIDvalue;
 			studentModel = student;
-			feedbackData = new FeedbackData (taskID, student);
 			taskID = taskIDvalue;
+			feedbackData = new FeedbackData (taskIDvalue, student);
 		}
 	
 		public void processDoneEvent(){
@@ -103,7 +103,7 @@ namespace taskDependentSupport.core
 
 			Debug.Log ("setNewFeedback: "+currentFeedbackID);
 
-			FeedbackElem studentFeedbackElem = studentModel.getFeedbackData ().getFeedbackElem (currentFeedbackID);
+			FeedbackElem studentFeedbackElem = feedbackData.getFeedbackElem (currentFeedbackID);
 			Debug.Log ("studentFeedbackElem: "+studentFeedbackElem.getID());
 			int studentCounter = studentFeedbackElem.getCounter();
 			currentCounter = studentCounter;
