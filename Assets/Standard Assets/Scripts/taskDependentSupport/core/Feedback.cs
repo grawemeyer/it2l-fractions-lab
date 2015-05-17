@@ -76,7 +76,9 @@ namespace taskDependentSupport.core
 
 		public void generateFeedbackMessage(){
 			Debug.Log ("generateFeedbackMessage");
-			string feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
+			String feedbackMessage = FeedbackStrategyModel.getFeedbackMessage();
+
+
 			Debug.Log ("feedbackMessage: "+feedbackMessage);
 
 			long ticks = DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks;
@@ -88,14 +90,29 @@ namespace taskDependentSupport.core
 			FeedbackElem currentFeedback = studentModel.getCurrentFeedback();
 			String feedbackType = getFeedbackTypeAsString(currentFeedback.getFeedbackType());
 
+
 			if (!feedbackMessage.Equals ("")) {
+				int level = studentModel.getCurrentFeedbackLevel();
+				String feedbackID = currentFeedback.getID();
+				String feedbackMessgageRule = studentModel.getMessageRule ();
+				String feedbackFollowedRule = studentModel.getFeedbackFollowedRule ();
+				String feedbackCounterRule = studentModel.getFeedbackCounterRule ();
+
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.feedbackMessageRule", feedbackMessgageRule);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.feedbackFollowedRule", feedbackFollowedRule);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.feedbackCounterRule", feedbackCounterRule);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.message", feedbackMessage);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.messageID", feedbackID);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.messageType", feedbackType);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.level", level.ToString());
 				if (taskDependentSupport.TDSWrapper.TIS){
 					List<bool> feedbackFollowed = studentModel.getFeedbackFollowed();
 					bool followed = feedbackFollowed[feedbackFollowed.Count-1];
 					bool previousViewed = studentModel.getPreviousViewed();
-					int level = studentModel.getCurrentFeedbackLevel();
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.followed", followed.ToString ());
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.previousViewed", previousViewed.ToString ());
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.MessageSend","true");
 					List<String> feedback = getFeedbackAsList(currentFeedback);
-					String feedbackID = currentFeedback.getID();
 					taskDependentSupport.TDSWrapper.sendMessageToTIS(feedback, feedbackType, feedbackID, level, followed, previousViewed);
 				}
 				else {
@@ -103,22 +120,29 @@ namespace taskDependentSupport.core
 
 					if (presentationMode.Equals ("lightBulb")){
 						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
-						taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lightBulbMessage:" + feedbackMessage + ";");
+						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.presentation","lightBulbMessage");
+						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.MessageSend","true");
 						taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
 					}
 
 					else if (studentModel.getPopUpClosed()){
 						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
 						if (presentationMode.Equals ("low")) {
-							taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";lowMessage:" + feedbackMessage + ";");
+							taskDependentSupport.TDSWrapper.SaveEvent ("TDS.presentation","low");
+							taskDependentSupport.TDSWrapper.SaveEvent ("TDS.MessageSend","true");
 							sendLowMessage (feedbackMessage);
 
 						} else if (presentationMode.Equals ("high")) {
-							taskDependentSupport.TDSWrapper.SaveEvent (ticks + ";highMessage:" + feedbackMessage + ";");
+							taskDependentSupport.TDSWrapper.SaveEvent ("TDS.presentation","popUp");
+							taskDependentSupport.TDSWrapper.SaveEvent ("TDS.MessageSend","true");
 							Debug.Log ("send HIGH message");
 							sendHighMessage (feedbackMessage);
 							studentModel.setPopUpClosed(false);
 						}
+					}
+					else if (!studentModel.getPopUpClosed()){
+						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.NOTsend","popUpIsNotClosed");
+					
 					}
 				}
 				//check when this should be called

@@ -61,11 +61,13 @@ namespace taskDependentSupport
 		}
 
 		public static void sendFeedbackTypeToSNA(String feedbackType){
+			SaveEvent ("TDS.sendFeedbackTypeToSNA", feedbackType);
 			Debug.Log ("sendFeedbackTypeToSNA:: "+feedbackType);
 			Application.ExternalCall("sendFeedbackTypeToSNA", feedbackType);
 		}
 
 		public static void sendRepresentationTypeToSNA(String representation){
+			SaveEvent ("TDS.sendRepresentationTypeToSNA", representation);
 			Debug.Log ("sendRepresentationTypeToSNA:: "+representation);
 			Application.ExternalCall("sendRepresentationTypeToSNA", representation);
 		}
@@ -77,6 +79,7 @@ namespace taskDependentSupport
 		}
 
 		public static void sendDoneButtonPressedToTIS(bool value){
+			SaveEvent ("TDS.sendDoneButtonPressedToTIS", value.ToString());
 			Debug.Log ("sendDoneButtonPressedToTIS:: "+value);
 			Application.ExternalCall("sendDoneButtonPressedToTIS", value);
 			if (studentModel == null) {
@@ -92,12 +95,14 @@ namespace taskDependentSupport
 
 		public static void PlaySound(String message){
 			Debug.Log ("playSound: "+message);
+			SaveEvent ("TDS.PlaySound", message);
 			Application.ExternalCall("playSound", message);
 		}
 
-		public static void SaveEvent(String message){
-			Debug.Log ("saveEvent: "+message);
-			Application.ExternalCall("saveEvent", message);
+		public static void SaveEvent(String id, String message){
+			String result = id+":"+message;
+			Debug.Log ("saveEvent: "+result);
+			Application.ExternalCall("saveEvent", result);
 		}
 
 		public static void setTaskID(object arg){
@@ -154,6 +159,7 @@ namespace taskDependentSupport
 		}
 		
 		public static void DoneButtonEnable(bool value){
+			SaveEvent ("TDS.DoneButtonEnable", value.ToString ());
 			Debug.Log ("TDSWRAPPER: DoneButtonEnable: "+value);
 			Application.ExternalCall("doneButtonEnable", value.ToString ());
 			doneButtonEnabled = value;
@@ -161,15 +167,18 @@ namespace taskDependentSupport
 
 		public static void ArrowButtonEnable(bool value){
 			Debug.Log ("TDSWRAPPER: ArrowButtonEnable: "+value);
+			SaveEvent ("TDS.ArrowButtonEnable", value.ToString ());
 			Application.ExternalCall("arrowButtonEnable", value.ToString ());
 			arrowButtonEnabled = value;
 		}
 
 		private static void switchTISon(){
+			SaveEvent ("TDS.TIS", "true");
 			TIS = true;
 		}
 
 		private static void switchTISoff(){
+			SaveEvent ("TDS.TIS", "false");
 			TIS = false;
 		}
 
@@ -239,10 +248,13 @@ namespace taskDependentSupport
 				if (args.Length > 4)
 						objectPosition = args [4].ToString ();
 
-				long ticks = DateTime.UtcNow.Ticks - DateTime.Parse ("01/01/1970 00:00:00").Ticks;
-				ticks /= 10000000; //Convert windows ticks to seconds
-
-				SaveEvent (ticks + ";eventType:" + eventType + ";eventName:" + eventName + ";objectID:" + objectID + ";objectValue:" + objectValue + ";objectValueInt:" + objectValueInt + ";objectPosition:" + objectPosition + ";");
+				SaveEvent ("TDS.eventType", eventType);
+				SaveEvent ("TDS.eventName", eventName);
+				SaveEvent ("TDS.objectID", objectID);
+				SaveEvent ("TDS.objectValue", objectValue);
+				SaveEvent ("TDS.objectValueInt", objectValueInt.ToString());
+				SaveEvent ("TDS.objectPosition", objectPosition);
+				
 
 				Debug.Log ("taskID: " + taskID);
 
@@ -252,7 +264,7 @@ namespace taskDependentSupport
 				}
 
 				Analysis analyse = new Analysis ();
-				analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition, ticks);
+				analyse.analyseEvent (studentModel, eventType, eventName, objectID, objectValue, objectValueInt, objectPosition);
 
 				Debug.Log ("eventType: " + eventType + " eventName:" + eventName);
 

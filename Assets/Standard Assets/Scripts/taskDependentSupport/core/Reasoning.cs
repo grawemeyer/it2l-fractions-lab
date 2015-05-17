@@ -32,15 +32,18 @@ namespace taskDependentSupport.core
 			Debug.Log ("::: isTaskCompleted ::: "+studentModel.isTaskCompleted());
 			if (studentModel.isTaskCompleted ()) {
 				if (taskID.Equals ("task1.1setA")){
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task1.1");
 					currentFeedback = feedbackData.CE2;
 					setNewFeedback();
 				}
 				else if (taskID.Equals("task2.1")){
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task2.1");
 					Debug.Log (":: task 2.1 :: feebdack FE2");
 					currentFeedback = feedbackData.FE2;
 					setNewFeedback();
 				}
 				else if (taskID.Equals ("task2.2")) {
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task2.2");
 					currentFeedback = feedbackData.F2E2;
 					setNewFeedback();
 				}
@@ -48,19 +51,23 @@ namespace taskDependentSupport.core
 				         taskID.Equals("task2.4.setA.numb") || taskID.Equals("task2.4.setB.numb") || taskID.Equals("task2.4.setC.numb") ||
 				         taskID.Equals("task2.4.setA.sets") || taskID.Equals("task2.4.setB.sets") || taskID.Equals("task2.4.setC.sets") ||
 				         taskID.Equals("task2.4.setA.liqu") || taskID.Equals("task2.4.setB.liqu") || taskID.Equals("task2.4.setC.liqu")){
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task2.4");
 					currentFeedback = feedbackData.T24E2;
 					setNewFeedback();
 				}
 				else if (taskID.Equals("task2.6.setA") || taskID.Equals("task2.6.setB") || taskID.Equals("task2.6.setC")){
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task2.6");
 					currentFeedback = feedbackData.T26E2;
 					setNewFeedback();
 				}
 				else if (taskID.Equals("task2.7.setA") ||taskID.Equals("task2.7.setB") || taskID.Equals("task2.7.setC")) {
 					if (studentModel.getParticitionUsed()){
+						studentModel.setMessageRule("processDoneEvent-taskCompleted-partitionUsed-task2.7");
 						Debug.Log (" currentFeedback = feedbackData.R1");
 						currentFeedback = feedbackData.R1;
 					}
 					else {
+						studentModel.setMessageRule("processDoneEvent-taskCompleted-partitionNotUsed-task2.7");
 						Debug.Log (" currentFeedback = feedbackData.R1");
 						currentFeedback = feedbackData.R2;
 					}
@@ -70,6 +77,7 @@ namespace taskDependentSupport.core
 				         taskID.Equals("task3aPlus.1.setA.numb") || taskID.Equals("task3aPlus.1.setB.numb") || taskID.Equals("task3aPlus.1.setC.numb") ||
 				         taskID.Equals("task3aPlus.1.setA.sets") || taskID.Equals("task3aPlus.1.setB.sets") || taskID.Equals("task3aPlus.1.setC.sets") ||
 				         taskID.Equals("task3aPlus.1.setA.liqu") || taskID.Equals("task3aPlus.1.setB.liqu") || taskID.Equals("task3aPlus.1.setC.liqu") ){
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task3");
 					currentFeedback = feedbackData.T3aP1E2;
 					setNewFeedback();
 				}
@@ -77,9 +85,11 @@ namespace taskDependentSupport.core
 			} 
 			else {
 				if (studentModel.firstDoneButtonPressed()){
+					studentModel.setMessageRule("processDoneEvent-taskNotCompleted-first");
 					currentFeedback = feedbackData.O1;
 				}
 				else {
+					studentModel.setMessageRule("processDoneEvent-taskNotCompleted-second");
 					currentFeedback = feedbackData.O2;
 					TDSWrapper.ArrowButtonEnable (true);
 				}
@@ -116,24 +126,29 @@ namespace taskDependentSupport.core
 			Debug.Log ("studentCounter: "+studentCounter);
 
 			if (studentCounter == 0) {
+				studentModel.setFeedbackCounterRule("feedbackCounter-studentCounter-0");
 				if (socratic.Length>0) currentCounter = 1;
 				else if (guidance.Length>0) currentCounter =2;
 				else if (didacticConceptual.Length>0) currentCounter=3;
 				else if (didacticProcedural.Length>0) currentCounter = 4;
 			}
 			else if (studentCounter == 1){
+				studentModel.setFeedbackCounterRule("feedbackCounter-studentCounter-1");
 				if (guidance.Length>0) currentCounter =2;
 				else if (didacticConceptual.Length>0) currentCounter=3;
 				else if (didacticProcedural.Length>0) currentCounter = 4;
 			}
 			else if (studentCounter == 2){
+				studentModel.setFeedbackCounterRule("feedbackCounter-studentCounter-2");
 				if (didacticConceptual.Length>0) currentCounter=3;
 				else if (didacticProcedural.Length>0) currentCounter = 4;
 			}
 			else if (studentCounter == 3){
+				studentModel.setFeedbackCounterRule("feedbackCounter-studentCounter-3");
 				if (didacticProcedural.Length>0) currentCounter = 4;
 			}
 			else if (studentCounter ==4){
+				studentModel.setFeedbackCounterRule("feedbackCounter-studentCounter-4");
 				currentCounter = 1;
 			}
 
@@ -190,12 +205,19 @@ namespace taskDependentSupport.core
 
 
 			if (feedbackAnyValue){
-				if ((numerator != 0) || (denominator != 0)) result =true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackAnyValue");
+				if ((numerator != 0) || (denominator != 0)){
+					result =true;
+				}
 			}
 			else if (numeratorAnyValue){
-				if (numerator != 0) result = true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-NumAnyValue");
+				if (numerator != 0){
+					result = true;
+				}
 			}
 			else if (feedbackPartitionValues != null){
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackPartitionValues");
 				for (int k = 0; k < feedbackPartitionValues.Length; k++){
 					int currentPartitionValue = feedbackPartitionValues[k];
 					if (currentPartitionValue == partition){
@@ -204,68 +226,103 @@ namespace taskDependentSupport.core
 				}
 			}
 			else if (feedbackPartitionValue != 0){
-				if (feedbackPartitionValue == partition) result=true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackPartitionValue");
+				if (feedbackPartitionValue == partition){
+					result=true;
+				}
 			}
 			else if (partitionBool){
-				if (partition != 0) result= true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-partitionBool");
+				if (partition != 0){
+					result= true;
+				}
 			}
 			else if (numeratorAdd != 0){
-				if ((denominator == denominatorAdd) && (numerator < numeratorAdd)) result = true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-numeratorAdd");
+				if ((denominator == denominatorAdd) && (numerator < numeratorAdd)){
+					result = true;
+				}
 			}
 			else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
-				if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()) result= true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num-Den-Comp");
+				if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()){
+					result= true;
+				}
 			}
 			else if (equivalentFraction){
 				result= equivalent(numerator, denominator, feedbackNumerator, feedbackDenominator);
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-equivalentFraction");
 			}
 			else if (feedbackNumerator != 0){
 				if (feedbackDenominator !=0){
-					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)) result= true;
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num-Den");
+					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)){
+						result= true;
+					}
 				}
-				if (feedbackNumerator == numerator) result= true;
+				if (feedbackNumerator == numerator){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num");
+					result= true;
+				}
 			}
 			else if (feedbackDenominator !=0){
-				if (feedbackDenominator == denominator) result= true;
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Den");
+				if (feedbackDenominator == denominator){
+					result= true;
+				}
 			}
 			else if ((numerators != null) && (denominators != null)){
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-set-Num-Den");
 				for (int j = 0; j < denominators.Length; j++){
 					int valueNum = numerators[j];
 					int valueDen = denominators[j];
-					if ((numerator == valueNum) && (denominator == valueDen)) result = true;
+					if ((numerator == valueNum) && (denominator == valueDen)){
+						result = true;
+					}
 				}
 			}
 			else if (denominators != null){
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-set-Den");
 				for (int j = 0; j < denominators.Length; j++){
 					int value = denominators[j];
-					if (denominator == value) result = true;
+					if (denominator == value){
+						result = true;
+					}
 				}
 			}
 
 			if (feedbackSpeech){
 				//need task-independent support for this
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-speech");
 				return false;
 			}
 
 			if (feedbackComparison) {
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-compared");
 				result= studentModel.getCompared();
 			}
 
 			if (additionBox) {
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-compared");
 				result = studentModel.getAdditionBox();
 			}
 
 			if (numeratorAddEnd != 0) {
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-numeratorAddEnd");
 				result = checkForAddedFraction(numeratorAddEnd, denominatorAddEnd);
 			}
 
 			if (differntRepresentation) {
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-differntRepresentation");
 				result = !sameRepresentations();
 			}
 			if (allSameValue){
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-allSameValue");
 				result = sameValues();
 			}
 
 			if (differntRepresentation && allSameValue){
+				studentModel.setFeedbackFollowedRule("feedbackFollowed-differntRepresentation-allSameValue");
 				result = ((!sameRepresentations()) && sameValues());
 			}
 
@@ -711,64 +768,78 @@ namespace taskDependentSupport.core
 					}
 
 					if ((numerator == 0) && (denominator == 0)) {
+						studentModel.setMessageRule("processEvent-task3-checkFor-Num-Den-Not-0");
 						currentFeedback = feedbackData.S3;
 					}
 
 					//needs to be removed when new rules that include a third fraction of the solution fraction has been added
 					else if (checkForAddedFraction(startNumerator, startDenominator)){
+						studentModel.setMessageRule("processEvent-task3-checkForAddedFraction-Num-Den");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T3aP1E1;
 					}
 
 					else if (checkForAddedFraction(startNumerator, startDenominator) && studentModel.getAdditionBox()){
+						studentModel.setMessageRule("processEvent-task3-checkForAddedFraction-Num-Den-AddBox");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T3aP1E1;
 					}
 					else if (checkForAddedFraction(startNumerator, startDenominator) && (!studentModel.getAdditionBox())){
+						studentModel.setMessageRule("processEvent-task3-checkForAddedFraction-Num-Den-Not-AddBox");
 						currentFeedback = feedbackData.T3aP1M11;
 					}
 
 					else if ((numerator == startDenominator) &&
 					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3aP1M1.getID ())){
+						studentModel.setMessageRule("processEvent-task3-Den-PreviousFeedback-T3aP1M1");
 						currentFeedback = feedbackData.T3aP1M5;
 					}
 
 					else if ((denominator == startDenominator) &&
 					         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3aP1M1.getID ()) ||
 					 studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3aP1M2.getID ()))){
+						studentModel.setMessageRule("processEvent-task3-Den-PreviousFeedback-T3aP1M1-or-T3aP1M2");
 						currentFeedback = feedbackData.T3aP1M4;
 					}
 
 					else if ((numerator == 0) && (denominator == startDenominator)){
+						studentModel.setMessageRule("processEvent-task3-Num-startDen");
 						currentFeedback = feedbackData.T3aP1M6;
 					}
 
 					else if (onlyOneFractionCreatedForAddition(startNumerator, startDenominator)){
+						studentModel.setMessageRule("processEvent-task3-onlyOneFractionCreatedForAddition");
 						currentFeedback = feedbackData.T3aP1M7;
 					}
 
 					//(numerator >= startNumerato) needs to get changed (>) for new rules that include a third fraction of the solution fraction
 					else if ((denominator == startDenominator) && (numerator >= startNumerator)){
+						studentModel.setMessageRule("processEvent-task3-startDen-greater-startNum");
 						currentFeedback = feedbackData.T3aP1M8;
 					}
 					//(numerator >= startNumerato) needs to get changed (>) for new rules that include a third fraction of the solution fraction
 					else if ((denominator != startDenominator) && (numerator >= startNumerator)){
+						studentModel.setMessageRule("processEvent-task3-Not-startDen-greater-startNum");
 						currentFeedback = feedbackData.T3aP1M3;
 					}
 
 					else if (numerator == startDenominator){
+						studentModel.setMessageRule("processEvent-task3-startDenom");
 						currentFeedback = feedbackData.T3aP1M2;
 					}
 
 					else if (denominator != startDenominator){
+						studentModel.setMessageRule("processEvent-task3-Not-startDenom");
 						currentFeedback = feedbackData.T3aP1M1;
 					}
 
 					else {
+						studentModel.setMessageRule("processEvent-task3-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task3-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 				setNewFeedback();
@@ -816,59 +887,73 @@ namespace taskDependentSupport.core
 					}
 
 					if (sameRepresentations() == false){
+						studentModel.setMessageRule("processEvent-task2.6-Not-sameRepresentations");
 						currentFeedback = feedbackData.T26M8;
 					}
 
 					else if ((numerator == 0) && (denominator == 0)) {
+						studentModel.setMessageRule("processEvent-task2.6-Num-Den-Not-0");
 						currentFeedback = feedbackData.S3;
 					}
 					else if (currentSetIncludesFraction(startNumerator, startDenominator) && 
 					         currentSetIncludesFraction(endNumerator, endDenominator) && studentModel.getComparedFractions()){
+						studentModel.setMessageRule("processEvent-task2.6-task-completed");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T26E1;
 					}
 					else if (currentSetIncludesFraction(startNumerator, startDenominator) && 
 					         currentSetIncludesFraction(endNumerator, endDenominator) && (studentModel.getComparedFractions() == false)){
+						studentModel.setMessageRule("processEvent-task2.6-correctResult-But-Not-compared");
 						currentFeedback = feedbackData.T26M11;
 					}
 					else if (currentSetIncludesFraction(startNumerator, startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.6-currentSetIncludesFraction-start-Num-Den");
 						currentFeedback = feedbackData.T26M7start;
 					}
 					else if (currentSetIncludesFraction(endNumerator, endDenominator)){
+						studentModel.setMessageRule("processEvent-task2.6-currentSetIncludesFraction-end-Num-Den");
 						currentFeedback = feedbackData.T26M7end;
 					}
 
 
 					else if (((denominator == startDenominator) || (denominator == endDenominator)) && 
 					         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T26M1.getID ()) ||
-					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T26M1.getID ()))){
+					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T26M2.getID ()))){
+						studentModel.setMessageRule("processEvent-task2.6-startDen-endDen-previousFeedack-T26M1-T26M2");
 						currentFeedback = feedbackData.T26M4;
 					}
 					else if (((numerator == startDenominator) || (numerator == endDenominator)) &&
 					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T26M1.getID ())){
+						studentModel.setMessageRule("processEvent-task2.6-startDen-endDen-previousFeedack-T26M1");
 						currentFeedback = feedbackData.T26M5;
 					}
 					else if ((denominator == startDenominator) || (denominator == endDenominator)){
+						studentModel.setMessageRule("processEvent-task2.6-startDen-or-endDen");
 						currentFeedback = feedbackData.T26M6;
 					}
 
 					else if ((numerator == 0) && ((denominator != startDenominator) || (denominator != endDenominator))){
+						studentModel.setMessageRule("processEvent-task2.6-Num-Not-0-Den-else");
 						currentFeedback = feedbackData.T26M1;
 					}
 					else if ((numerator == startDenominator) || (numerator == endDenominator)){
+						studentModel.setMessageRule("processEvent-task2.6-startDen-or-endDem");
 						currentFeedback = feedbackData.T26M2;
 					}
 					else if ((numerator != 0) && 
 					         (((numerator!=startNumerator) && (denominator!=startDenominator)) ||
 					 ((numerator!=endNumerator) && (denominator!=endDenominator)))){
+						studentModel.setMessageRule("processEvent-task2.6-Not-startNum-or-endNum-startDen-or-endDem");
 						currentFeedback = feedbackData.T26M3;
 					}
 
 					else {
+						studentModel.setMessageRule("processEvent-task2.6-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task2.6-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 				setNewFeedback();
@@ -965,6 +1050,7 @@ namespace taskDependentSupport.core
 					Debug.Log (":: getComparedResult: "+studentModel.getComparedResult());
 
 					if ((numerator == 0) && (denominator == 0)) {
+						studentModel.setMessageRule("processEvent-task2.4-Den-Num-0");
 						currentFeedback = feedbackData.S3;
 					}
 
@@ -972,76 +1058,94 @@ namespace taskDependentSupport.core
 
 					else if (equivalent(numerator, denominator, startNumerator, startDenominator) && 
 					         (studentModel.getCurrentFractions().Count == 1)){
+						studentModel.setMessageRule("processEvent-task2.4-completed-Not-compared");
 						//studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T24M12;
 					}
 
 					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && studentModel.getComparedResult()){
+						studentModel.setMessageRule("processEvent-task2.4-task-completed");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T24E1;
 					}
 					else if (checkCurrentFractionsForEquivalence(startNumerator, startDenominator) && !studentModel.getComparedResult()){
+						studentModel.setMessageRule("processEvent-task2.4-checkCurrentFractionsForEquivalence-not-compared");
 						currentFeedback = feedbackData.T24M11;
 					}
 					else if (currentSetContainsEqivalentFraction(startNumerator, startDenominator) && 
 					         (!currentSetContainsFraction(startNumerator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-currentSetContainsEqivalentFraction-not-currentSetContainsFraction");
 						currentFeedback = feedbackData.T24M13;
 					}
 					else if ((numerator == startNumerator) && (denominator == startDenominator)) {
+						studentModel.setMessageRule("processEvent-task2.4-startNum-endDenom");
 						currentFeedback = feedbackData.T24M7;
 					}
 					else if ((numerator == 0) && ((denominator == startDenominator) || multiple(denominator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-startDen-multiple");
 						currentFeedback = feedbackData.T24M6;
 					}
 
 					else if (!equivalent(numerator, denominator, startNumerator, startDenominator) &&
 					         ((numerator != 0) && (!multiple(numerator, startNumerator))) && 
 					         ((denominator == startDenominator) || multiple(denominator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-startDen-not-multipleNum");
 						currentFeedback = feedbackData.T24M9;
 					} 
 					else if (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M8.getID ())){
+						studentModel.setMessageRule("processEvent-task2.4-previousFeedback-T24M8");
 						currentFeedback = feedbackData.T24M5;
 					}
 					else if (!equivalent(numerator, denominator, startNumerator, startDenominator) &&
 					         ((numerator != 0) && (multiple(numerator, startNumerator))) && 
 					         ((denominator == startDenominator) || multiple(denominator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-not-Equivalent-01");
 						currentFeedback = feedbackData.T24M8;
 					} 
 
 					else if (!equivalent(numerator, denominator, startNumerator, startDenominator) &&
 					         (numerator == 0)  && 
 					         ((denominator == startDenominator) || multiple(denominator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-not-Equivalent-02");
 						currentFeedback = feedbackData.T24M10;
 					} 
 
 					else if (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M1.getID ()) &&
 					         (numerator == startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.4-previousFeedback-T24M1");
 						currentFeedback = feedbackData.T24M5;
 					}
 					else if (((denominator == startDenominator) || (multiple(denominator, startDenominator))) &&
 							(studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M1.getID ()) ||
 					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T24M2.getID ()))){
+						studentModel.setMessageRule("processEvent-task2.4-previousFeedback-T24M1-or-T24M2");
 						currentFeedback = feedbackData.T24M4;
 					}
 					else if ((denominator != startDenominator) && (!multiple(denominator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-Not-startDen-not-multiple");
 						currentFeedback = feedbackData.T24M1;
 					}
 					else if (numerator == startDenominator){
+						studentModel.setMessageRule("processEvent-task2.4-startDenom");
 						currentFeedback = feedbackData.T24M2;
 					}
 					else if (((numerator != startNumerator) || (denominator != startDenominator)) && 
 					         !equivalent(numerator, denominator, startNumerator, startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.4-not-equivalent-all");
 						currentFeedback = feedbackData.T24M3;
 					}
 					else if ((denominator == startDenominator) || (multiple(denominator, startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.4-startDen-multipleDen");
 						currentFeedback = feedbackData.T24M6;
 					}
 
 					else {
+						studentModel.setMessageRule("processEvent-task2.4-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task2.4-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 				setNewFeedback();
@@ -1065,45 +1169,56 @@ namespace taskDependentSupport.core
 					}
 					
 					if ((numerator == 0) && (denominator == 0)) {
+						studentModel.setMessageRule("processEvent-task2.2-Num-Dem-0");
 						currentFeedback = feedbackData.S3;
 					}
 					else if ((denominator != 0) && (numerator == 0)){
+						studentModel.setMessageRule("processEvent-task2.2-Num-Dem-not-0");
 						currentFeedback = feedbackData.F2M1;
 					}
 					else if ((partition == 0)  && (denominator != 0) && (numerator != 0) && 
 					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.F2M1.getID ())){
+						studentModel.setMessageRule("processEvent-task2.2-previousFeedback-F2M1");
 						currentFeedback = feedbackData.F2M4;
 					}
 					else if ((partition == 0)  && (denominator != 0) && (numerator != 0)){
+						studentModel.setMessageRule("processEvent-task2.2-partition-0");
 						currentFeedback = feedbackData.F2M6;
 					}
 					else if ((partition == 2)  && (denominator != 0) && (numerator != 0)){
+						studentModel.setMessageRule("processEvent-task2.2-partition-2");
 						currentFeedback = feedbackData.F2M7;
 					}
 
 					else if ((partition == 3)  && (denominator != 0) && (numerator != 0)){
+						studentModel.setMessageRule("processEvent-task2.2-partition-3");
 						currentFeedback = feedbackData.F2M7b;
 					}
 
 					else if ((partition == 4)  && (denominator != 0) && (numerator != 0)){
+						studentModel.setMessageRule("processEvent-task2.2-partition-4");
 						currentFeedback = feedbackData.F2M7c;
 					}
 
 					else if ((partition == 5)  && (denominator != 0) && (numerator != 0)){
+						studentModel.setMessageRule("processEvent-task2.2-partition-5");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.F2E1;
 					}
 					else if ((partition != 2) && (partition != 3) && (partition != 4) 
 					         && (partition != 5) && (partition != 0)){
+						studentModel.setMessageRule("processEvent-task2.2-partition-wrongValue");
 						currentFeedback = feedbackData.F2M11;
 					}
 
 
 					else {
+						studentModel.setMessageRule("processEvent-task2.2-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task2.2-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 				setNewFeedback();
@@ -1132,6 +1247,7 @@ namespace taskDependentSupport.core
 					Debug.Log (":::: fourWithDiffRepAndSameValues: "+fourWithDiffRepAndSameValues());
 
 					if ((numerator ==0) && (denominator ==0)){
+						studentModel.setMessageRule("processEvent-task2.1-Num-Den-0");
 						currentFeedback = feedbackData.S3;
 					}
 					//else if (!sameRepresentations() && sameValues() && (createdReps() == 2)){
@@ -1139,12 +1255,15 @@ namespace taskDependentSupport.core
 					//}
 
 					else if (!sameRepresentations() && sameValues() && (createdReps() < 4)){
+						studentModel.setMessageRule("processEvent-task2.1-not-sameRep-sameValues-reps-less-4");
 						currentFeedback = feedbackData.FM11;
 					}
 					else if (!sameRepresentations() && !sameValues() && (createdReps() > 1)){
+						studentModel.setMessageRule("processEvent-task2.1-not-sameRep-not-sameValues-reps-greater-1");
 						currentFeedback = feedbackData.FM12;
 					}
 					else if (fourWithDiffRepAndSameValues()){
+						studentModel.setMessageRule("processEvent-task2.1-fourWithDiffRepAndSameValues");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.FE1;
 					}
@@ -1154,13 +1273,16 @@ namespace taskDependentSupport.core
 					//}
 
 					else if ((numerator !=0) || (denominator !=0)) {
+						studentModel.setMessageRule("processEvent-task2.1-Num-Den-not-0");
 						currentFeedback = feedbackData.FM6;
 					}
 					else {
+						studentModel.setMessageRule("processEvent-task2.1-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task2.1-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 				setNewFeedback();
@@ -1189,73 +1311,91 @@ namespace taskDependentSupport.core
 					}
 
 					if (!sameRepresentations()){
+						studentModel.setMessageRule("processEvent-task1-not-sameRepresentations");
 						currentFeedback = feedbackData.CM7;
 					}
 
 					else if (studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
 					         && currentSetIncludesFraction(secondNumerator, secondDenominator)){
+						studentModel.setMessageRule("processEvent-task1-task-completed");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.E1;
 					}
 					else if (!studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
 								&& currentSetIncludesFraction(secondNumerator, secondDenominator)){
+						studentModel.setMessageRule("processEvent-task1-task-completed-not-compared");
 						//currentFeedback = feedbackData.M13;
 						currentFeedback = feedbackData.CM8;
 					}
 					else if ((numerator ==0) && (denominator ==0)){
+						studentModel.setMessageRule("processEvent-task1-Num-Den-0");
 						currentFeedback = feedbackData.S3;
 					}
 					else if ((denominator != firstDenominator) && (denominator != secondDenominator) 
 					         && (numerator == 0)){
+						studentModel.setMessageRule("processEvent-task1-Num-0");
 						currentFeedback = feedbackData.M1;
 					}
 					else if ((denominator != firstDenominator) && (denominator != secondDenominator)
 					         && (numerator != firstNumerator) && (numerator != secondNumerator)){
+						studentModel.setMessageRule("processEvent-task1-Num-Den-wrongValues");
 						currentFeedback = feedbackData.M3;
 					}
 					else if (numerator == firstDenominator){
+						studentModel.setMessageRule("processEvent-task1-Num-firstDen");
 						currentFeedback = feedbackData.M2;
 					}
 					else if (numerator == secondDenominator){
+						studentModel.setMessageRule("processEvent-task1-Num-SecondDen");
 						currentFeedback = feedbackData.CM2;
 					}
 					else if ((denominator == firstDenominator)
 					         && (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())
 					    || studentModel.getPreviousFeedback().getID().Equals(feedbackData.M2.getID ()))){
+						studentModel.setMessageRule("processEvent-task1-previousFeedback-M1-or-M2");
 						currentFeedback = feedbackData.M4;	
 					}
 					else if ((denominator == secondDenominator)
 					         && (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())
 					    || studentModel.getPreviousFeedback().getID().Equals(feedbackData.CM2.getID ()))){
+						studentModel.setMessageRule("processEvent-task1-previousFeedback-M1-or-CM2");
 						currentFeedback = feedbackData.M4;	
 					}
 					else if ((numerator == firstDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())){
+						studentModel.setMessageRule("processEvent-task1-firstDen-previousFeedback-M1");
 						currentFeedback = feedbackData.M5;	
 					}
 					else if ((numerator == secondDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID ())){
+						studentModel.setMessageRule("processEvent-task1-SecondDen-previousFeedback-M1");
 						currentFeedback = feedbackData.CM5;	
 					}
 					else if ((numerator==firstNumerator) && (denominator == firstDenominator) 
 					        && !currentSetIncludesFraction(secondNumerator, secondDenominator)){
+						studentModel.setMessageRule("processEvent-task1-firstDen-Not-currentSetIncludesFraction");
 						currentFeedback = feedbackData.CM6Second;	
 					}
 					else if ((numerator==secondNumerator) && (denominator == secondDenominator) 
 					         && !currentSetIncludesFraction(firstNumerator, firstDenominator)){
+						studentModel.setMessageRule("processEvent-task1-secondDen-Not-currentSetIncludesFraction");
 						currentFeedback = feedbackData.CM6;	
 					}
 					else if (denominator==secondDenominator 
 					         && currentSetIncludesFraction(firstNumerator, firstDenominator)){
+						studentModel.setMessageRule("processEvent-task1-secondDen-currentSetIncludesFraction");
 						currentFeedback = feedbackData.CM12;	
 					}
 					else if (denominator==firstDenominator){
+						studentModel.setMessageRule("processEvent-task1-firstDen");
 						currentFeedback = feedbackData.CM11;	
 					}
 
 					else {
+						studentModel.setMessageRule("processEvent-task1-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task1-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 				setNewFeedback();
@@ -1317,10 +1457,12 @@ namespace taskDependentSupport.core
 					Debug.Log (":::: currentSetIncludesFraction START: "+currentSetIncludesFraction(startNumerator,startDenominator));
 
 					if (!studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.7-completed-Not-compared");
 						currentFeedback = feedbackData.M13;
 					}
 
 					else if (studentModel.getComparedResult() && currentSetIncludesFraction(endNumerator,endDenominator) && currentSetIncludesFraction(startNumerator,startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.7-completed");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.E1;
 					}
@@ -1333,68 +1475,83 @@ namespace taskDependentSupport.core
 
 					else if (currentSetIncludesFraction(endNumerator,endDenominator) && 
 					         (onlyOneFraction() || (!currentSetIncludesFraction(startNumerator,startDenominator)))){
+						studentModel.setMessageRule("processEvent-task2.7-currentSetIncludesFraction-onlyOneFraction");
 						currentFeedback = feedbackData.M8;
 					}
 					else if (currentSetIncludesFraction(startNumerator,startDenominator) && 
 					         ((!onlyOneFraction()) || (!currentSetIncludesFraction(endNumerator,endDenominator)))){
+						studentModel.setMessageRule("processEvent-task2.7-currentSetIncludesFraction-Not-onlyOneFraction");
 						currentFeedback = feedbackData.M9;
 					}
 
 					else if ((denominator == 0) && (numerator == 0)){
+						studentModel.setMessageRule("processEvent-task2.7-Num-Den-0");
 						currentFeedback = feedbackData.S3;
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
 				         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID()) || 
 						 studentModel.getPreviousFeedback().getID().Equals(feedbackData.M2.getID ()))){
+						studentModel.setMessageRule("processEvent-task2.7-previousFeedback-M1-or-M2");
 						currentFeedback = feedbackData.M4;
 					}
 						
 					else if ((numerator != endNumerator) && (numerator == endDenominator) && studentModel.getPreviousFeedback().getID().Equals(feedbackData.M1.getID())){
+						studentModel.setMessageRule("processEvent-task2.7-previousFeedback-M1");
 						currentFeedback = feedbackData.M5;
 					}
 
 					else if ((numerator == startNumerator) && (denominator == startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.7-startNum-startDen");
 						currentFeedback = feedbackData.M7;
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
 				         studentModel.getPreviousFeedback().getID().Equals(feedbackData.M10.getID ())){
+						studentModel.setMessageRule("processEvent-task2.7-previousFeedback-M11");
 						currentFeedback = feedbackData.M11;
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && 
 				         (!studentModel.getReflectionForDenominatorShown())){
+						studentModel.setMessageRule("processEvent-task2.7-not-getReflectionForDenominatorShown");
 						currentFeedback = feedbackData.M12;
 						studentModel.setReflectionForDenominatorShown(true);
 					}
 
 					else if ((numerator != endNumerator) && (denominator == endDenominator) && studentModel.getReflectionForDenominatorShown()){
+						studentModel.setMessageRule("processEvent-task2.7-getReflectionForDenominatorShown");
 						currentFeedback = feedbackData.M10;
 					}
 
 					else if ((numerator != endNumerator) && 
 					        ((denominator == endDenominator) || (denominator == startDenominator))){
+						studentModel.setMessageRule("processEvent-task2.7-Num-wrongValue");
 						currentFeedback = feedbackData.M6;
 					}
 
 					else if ((denominator != endDenominator) && (denominator != startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.7-Den-wrongValue");
 						currentFeedback = feedbackData.M1;
 					}
 
 					else if ((numerator == endDenominator) || (numerator == startDenominator)){
+						studentModel.setMessageRule("processEvent-task2.7-endDen-startDen");
 						currentFeedback = feedbackData.M2;
 					}
 
 					else if (((numerator != startNumerator) || (denominator != startDenominator)) && ((numerator != endNumerator) || (denominator != endDenominator))){
+						studentModel.setMessageRule("processEvent-task2.7-Num-Den-wrongValues");
 						currentFeedback = feedbackData.M3;
 					}
 					
 					else {
+						studentModel.setMessageRule("processEvent-task2.7-Default-01");
 						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {
+					studentModel.setMessageRule("processEvent-task2.7-Default-02");
 					currentFeedback = new FeedbackElem();
 				}
 

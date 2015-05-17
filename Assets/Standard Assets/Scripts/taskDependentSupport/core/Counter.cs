@@ -46,7 +46,7 @@ namespace taskDependentSupport.core
 					while (true) {
 						Thread.Sleep (1000);
 						//TDSWrapper.PlaySound("testing");
-						TDSWrapper.SaveEvent("testing 2");
+						TDSWrapper.SaveEvent("TDS.test","testing 2");
 					}
 				}
 			

@@ -13,7 +13,6 @@ namespace taskDependentSupport.core
 		private bool compared = false;
 		private bool comparedResult = false;
 		private bool comparedFractions = false;
-		private long time = 0;
 		private int lastDisplayedMessageID = 0;
 		private int lastDisplayedMessageType = 0; 
 		private int misconception = 0;
@@ -36,6 +35,33 @@ namespace taskDependentSupport.core
 		private bool languageGerman = false;
 		private bool languageSpanish = false;
 		private bool popUpClosed = true;
+		private String messageRule = "";
+		private String followedRule = "";
+		private String feedbackCounterRule = "";
+
+		public void setFeedbackCounterRule(String value){
+			feedbackCounterRule = value;
+		}
+		
+		public String getFeedbackCounterRule(){
+			return feedbackCounterRule;
+		}
+
+		public void setFeedbackFollowedRule(String rule){
+			followedRule = rule;
+		}
+		
+		public String getFeedbackFollowedRule(){
+			return followedRule;
+		}
+
+		public void setMessageRule(String rule){
+			messageRule = rule;
+		}
+
+		public String getMessageRule(){
+			return messageRule;
+		}
 
 		public void setPopUpClosed(bool value){
 			popUpClosed = value;
@@ -242,16 +268,6 @@ namespace taskDependentSupport.core
 		public int getlastDisplayedMessageID()
 		{
 			return lastDisplayedMessageID;
-		}
-
-		public void setEventTime(long value)
-		{
-			time = value;
-		}
-
-		public long getEventTime()
-		{
-			return time;
 		}
 
 		public int getEquivalenceOpen()

@@ -8,9 +8,8 @@ namespace taskDependentSupport.core
 
 
 
-		public void analyseEvent(StudentModel studentModel, string type, string name, string id, string value, int fractionsValue, string position, long time)
+		public void analyseEvent(StudentModel studentModel, string type, string name, string id, string value, int fractionsValue, string position)
 		{
-			studentModel.setEventTime(time);
 			if (!id.Equals ("")) {
 				studentModel.setCurrentFraction(id);
 			}
