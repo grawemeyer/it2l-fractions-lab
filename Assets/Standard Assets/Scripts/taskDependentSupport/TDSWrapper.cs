@@ -376,14 +376,16 @@ namespace taskDependentSupport
 
 
 		public static void messageViewed(){
-			FeedbackElem viewedMessageElem = studentModel.getFeedbackElemViewed ();
-			String feedbackID = viewedMessageElem.getID ();
-			int type = viewedMessageElem.getFeedbackType ();
-			String feedbackType = getFeedbackTypeAsString(type);
-			String message = studentModel.getViewedMessage ();
-			SaveEvent ("TDS.wiewedMessage.id", feedbackID);
-			SaveEvent ("TDS.wiewedMessage.type", feedbackType);
-			SaveEvent ("TDS.wiewedMessage.message", message);
+			if (!TIS) {
+				FeedbackElem viewedMessageElem = studentModel.getFeedbackElemViewed ();
+				String feedbackID = viewedMessageElem.getID ();
+				int type = viewedMessageElem.getFeedbackType ();
+				String feedbackType = getFeedbackTypeAsString (type);
+				String message = studentModel.getViewedMessage ();
+				SaveEvent ("TDS.wiewedMessage.id", feedbackID);
+				SaveEvent ("TDS.wiewedMessage.type", feedbackType);
+				SaveEvent ("TDS.wiewedMessage.message", message);
+			}
 		}
 
 		private static void handleEvent()
