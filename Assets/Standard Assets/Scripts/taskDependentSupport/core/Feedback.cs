@@ -123,10 +123,15 @@ namespace taskDependentSupport.core
 						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.presentation","lightBulbMessage");
 						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.MessageSend","true");
 						taskDependentSupport.TDSWrapper.SendMessageToLightBulb(feedbackMessage);
+						studentModel.setFeedbackElemViewed(currentFeedback);
+						studentModel.setViewedMessage(feedbackMessage);
 					}
 
 					else if (studentModel.getPopUpClosed()){
 						taskDependentSupport.TDSWrapper.sendFeedbackTypeToSNA(feedbackType);
+						studentModel.setFeedbackElemViewed(currentFeedback);
+						studentModel.setViewedMessage(feedbackMessage);
+						taskDependentSupport.TDSWrapper.messageViewed();
 						if (presentationMode.Equals ("low")) {
 							taskDependentSupport.TDSWrapper.SaveEvent ("TDS.presentation","low");
 							taskDependentSupport.TDSWrapper.SaveEvent ("TDS.MessageSend","true");

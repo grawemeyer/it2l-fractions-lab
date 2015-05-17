@@ -38,6 +38,24 @@ namespace taskDependentSupport.core
 		private String messageRule = "";
 		private String followedRule = "";
 		private String feedbackCounterRule = "";
+		private FeedbackElem viewedFeedback = new FeedbackElem ();
+		private String viewedMessage = "";
+
+		public void setViewedMessage (String value){
+			viewedMessage = value;
+		}
+
+		public String getViewedMessage(){
+			return viewedMessage;
+		}
+
+		public void setFeedbackElemViewed(FeedbackElem current){
+			viewedFeedback = current;
+		}
+
+		public FeedbackElem getFeedbackElemViewed (){
+			return viewedFeedback;
+		}
 
 		public void setFeedbackCounterRule(String value){
 			feedbackCounterRule = value;

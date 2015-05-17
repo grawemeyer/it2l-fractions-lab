@@ -314,6 +314,7 @@ namespace taskDependentSupport
 						feedback.generateFeedbackMessage ();
 				} else if (eventType.Equals ("PlatformEvent") && eventName.Equals ("*lightBulbPressedON*")) {
 						Debug.Log (":::: Light bulb pressed ON::::");
+						messageViewed();
 						studentModel.setPreviousViewed (true);
 						sendDoneButtonPressedToTIS (false);
 			
@@ -348,6 +349,41 @@ namespace taskDependentSupport
 				}
 		
 
+		}
+
+		private static String getFeedbackTypeAsString(int feedbackType){
+			String feedbackTypeString = "";
+			if (feedbackType == FeedbackType.problemSolving) {
+				feedbackTypeString = FeedbackType.problemSolvingString;
+			}
+			else if (feedbackType == FeedbackType.nextStep) {
+				feedbackTypeString = FeedbackType.nextStepString;
+			}
+			else if (feedbackType == FeedbackType.affirmation) {
+				feedbackTypeString = FeedbackType.affirmationString;
+			}
+			else if (feedbackType == FeedbackType.reflection) {
+				feedbackTypeString = FeedbackType.reflectionString;
+			}
+			else if (feedbackType == FeedbackType.other) {
+				feedbackTypeString = FeedbackType.otherString;
+			}
+			else if (feedbackType == FeedbackType.taskNotFinished) {
+				feedbackTypeString = FeedbackType.taskNotFinishedString;
+			}
+			return feedbackTypeString;
+		}
+
+
+		public static void messageViewed(){
+			FeedbackElem viewedMessageElem = studentModel.getFeedbackElemViewed ();
+			String feedbackID = viewedMessageElem.getID ();
+			int type = viewedMessageElem.getFeedbackType ();
+			String feedbackType = getFeedbackTypeAsString(type);
+			String message = studentModel.getViewedMessage ();
+			SaveEvent ("TDS.wiewedMessage.id", feedbackID);
+			SaveEvent ("TDS.wiewedMessage.type", feedbackType);
+			SaveEvent ("TDS.wiewedMessage.message", message);
 		}
 
 		private static void handleEvent()
