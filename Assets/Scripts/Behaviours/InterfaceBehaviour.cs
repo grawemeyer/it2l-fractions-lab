@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.302";
+    public const string VER = "0.304";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -2749,7 +2749,7 @@ public class InterfaceBehaviour : MonoBehaviour
     {
        // Debug.Log("ChooseTask");
         //cheat!!!!
-        yield return StartCoroutine(TaskManager.Instance.LoadJson("http://172.19.6.254/italk2learn/tip/Task01.tip"));
+        yield return StartCoroutine(TaskManager.Instance.LoadJson("http://172.19.6.254/italk2learn/tip/TaskNoButton.tip"));
        // Debug.Log("ChooseTask after");
 
         if (TaskManager.Instance.isLoad)
