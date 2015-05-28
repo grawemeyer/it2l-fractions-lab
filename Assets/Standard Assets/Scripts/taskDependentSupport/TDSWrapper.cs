@@ -140,6 +140,8 @@ namespace taskDependentSupport
 				studentID = elem.Substring(22);
 			}
 			//task3aPlus.1.setA.area
+			SaveEvent ("TDS.taskID", taskID);
+			SaveEvent ("TDS.studentID", studentID);
 			Debug.Log ("taskID: "+taskID);
 			Debug.Log ("studentID: "+studentID);
 			studentModel = new StudentModel (taskID);
