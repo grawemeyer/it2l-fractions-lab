@@ -15,6 +15,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24M12, T24M13, T24E1, T24E2;
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M7start, T26M7end, T26M8, T26M10, T26M11, T26E1, T26E2;
 		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
+		public FeedbackElem tooManyReps;
 
 		public FeedbackData (String taskID, StudentModel student){
 			Debug.Log (":::: FeedbackData taskID: "+taskID);
@@ -191,6 +192,16 @@ namespace taskDependentSupport.core
 			feedbackMessageString.setEndNumerator(endNumerator);
 			feedbackMessageString.setEndDenominator(endDenominator);
 			//feedbackMessageString.setRepresentation(representation);
+
+			tooManyReps = new FeedbackElem ();
+			tooManyReps.setID("TMR");
+			FeedbackMessage tooManyRepsM = new FeedbackMessage ();
+			tooManyRepsM.setDidacticConceptual (feedbackMessageString.allTooManyReps_guidance());
+			tooManyReps.setFeedbackMessage (tooManyRepsM);
+			tooManyReps.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextSteptooManyRepsM = new Fraction ();
+			nextSteptooManyRepsM.setRepsOnScreenBelow (7);
+			tooManyReps.setNextStep (nextSteptooManyRepsM);
 
 			S1 = new FeedbackElem ();
 			S1.setID("S1");
@@ -1296,6 +1307,7 @@ namespace taskDependentSupport.core
 			else if (R2.getID ().Equals (id)) return R2;
 			else if (O1.getID ().Equals (id)) return O1;
 			else if (O2.getID ().Equals (id)) return O2;
+			else if (tooManyReps.getID ().Equals (id)) return tooManyReps;
 
 			else if (CM2.getID ().Equals (id)) return CM2;
 			else if (CM5.getID ().Equals (id)) return CM5;

@@ -260,9 +260,25 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
-		public void setCurrentFraction(String id){
-			currentFraction = getFraction (id);
+		private bool fractionIncludedInSet(String id){
+			for (int i = 0; i < currentFractions.Count; i++) 
+			{
+				Fraction current = currentFractions[i];
+				if (current.getID() == id) 
+				{
+					return true;
+				}
+			}
+			return false;
 		}
+
+		public void setCurrentFraction(String id){
+			if (fractionIncludedInSet (id)) {
+				currentFraction = getFraction (id);
+			}
+		}
+
+
 
 		public Fraction getCurrentFraction(){
 			return currentFraction;
@@ -311,6 +327,7 @@ namespace taskDependentSupport.core
 
 		public void removeFraction(String id)
 		{
+			Debug.Log ("<< remove >> id: "+id);
 			for (int i = 0; i < currentFractions.Count; i++) 
 			{
 				Fraction current = currentFractions[i];
@@ -320,6 +337,16 @@ namespace taskDependentSupport.core
 					i = currentFractions.Count;
 				}
 			}
+			int newCount = currentFractions.Count;
+			Debug.Log (" << newCount >> "+newCount);
+			if (newCount > 0) {
+				currentFraction = currentFractions [newCount - 1];
+				Debug.Log ("<< currentFraction >> id: "+currentFraction.getID ());
+			} 
+			else {
+				currentFraction = null;
+			}
+
 		}
 
 		public void setNumeratorAtFraction(String id, int value)

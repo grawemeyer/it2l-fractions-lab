@@ -27,11 +27,20 @@ namespace taskDependentSupport.core
 			private int denominatorAddEnd = 0;
 			private bool additionBox = false;
 			private int[] partitionValues;
+			private int repsOnScreen = 0;
 			
 			public Fraction ()
 			{
 			}
 
+			public void setRepsOnScreenBelow(int value){
+				repsOnScreen = value;
+			}
+
+			public int getRepsOnScreenBelow(){
+				return repsOnScreen;
+			}
+			
 			public void setPartitionValues(int[] values){
 				partitionValues = values;
 			}

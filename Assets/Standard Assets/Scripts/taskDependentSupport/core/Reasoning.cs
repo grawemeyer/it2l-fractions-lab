@@ -102,9 +102,16 @@ namespace taskDependentSupport.core
 
 
 		private void setNewFeedback(){
+
+			String feedbackID = currentFeedback.getID();;
+			if (feedbackID.Equals ("")) {
+				currentFeedback = feedbackData.S2;
+			}
+
 			studentModel.setCurrentFeedback (currentFeedback);
-			int currentCounter = 0;
 			string currentFeedbackID = currentFeedback.getID();
+			int currentCounter = 0;
+
 			string guidance = currentFeedback.getFeedbackMessage ().getGuidance ();
 			string socratic = currentFeedback.getFeedbackMessage ().getSocratic ();
 			string didacticConceptual = currentFeedback.getFeedbackMessage ().getDidacticConceptual ();
@@ -188,145 +195,161 @@ namespace taskDependentSupport.core
 			int numeratorAddEnd = feedbackNextSteps.getNumeratorForAdditionTaskEnd ();
 			int denominatorAddEnd = feedbackNextSteps.getDenominatorForAdditionTaskEnd ();
 			bool additionBox = feedbackNextSteps.getAdditionBox ();
+			int getRepsOnScreenBelow = feedbackNextSteps.getRepsOnScreenBelow ();
 
 			bool result = false;
 
 			Fraction thisFraction = studentModel.getCurrentFraction ();
 
-			int numerator = thisFraction.getNumerator();
-			int denominator = thisFraction.getDenominator();
-			int partition = thisFraction.getPartition();
+			if (thisFraction != null){
+
+				int numerator = thisFraction.getNumerator();
+				int denominator = thisFraction.getDenominator();
+				int partition = thisFraction.getPartition();
 				
-			if (partition != 0){
-				numerator = numerator * partition;
-				denominator = denominator * partition;
-				studentModel.setPartitionUsed(true);
-			}
+				if (partition != 0){
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+					studentModel.setPartitionUsed(true);
+				}
 
 
-			if (feedbackAnyValue){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackAnyValue");
-				if ((numerator != 0) || (denominator != 0)){
-					result =true;
+				if (feedbackAnyValue){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackAnyValue");
+					if ((numerator != 0) || (denominator != 0)){
+						result =true;
+					}
 				}
-			}
-			else if (numeratorAnyValue){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-NumAnyValue");
-				if (numerator != 0){
-					result = true;
-				}
-			}
-			else if (feedbackPartitionValues != null){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackPartitionValues");
-				for (int k = 0; k < feedbackPartitionValues.Length; k++){
-					int currentPartitionValue = feedbackPartitionValues[k];
-					if (currentPartitionValue == partition){
+				else if (numeratorAnyValue){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-NumAnyValue");
+					if (numerator != 0){
 						result = true;
 					}
 				}
-			}
-			else if (feedbackPartitionValue != 0){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackPartitionValue");
-				if (feedbackPartitionValue == partition){
-					result=true;
+				else if (feedbackPartitionValues != null){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackPartitionValues");
+					for (int k = 0; k < feedbackPartitionValues.Length; k++){
+						int currentPartitionValue = feedbackPartitionValues[k];
+						if (currentPartitionValue == partition){
+							result = true;
+						}
+					}
 				}
-			}
-			else if (partitionBool){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-partitionBool");
-				if (partition != 0){
-					result= true;
+				else if (feedbackPartitionValue != 0){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-feedbackPartitionValue");
+					if (feedbackPartitionValue == partition){
+						result=true;
+					}
 				}
-			}
-			else if (numeratorAdd != 0){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-numeratorAdd");
-				if ((denominator == denominatorAdd) && (numerator < numeratorAdd)){
-					result = true;
-				}
-			}
-			else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num-Den-Comp");
-				if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()){
-					result= true;
-				}
-			}
-			else if (equivalentFraction){
-				result= equivalent(numerator, denominator, feedbackNumerator, feedbackDenominator);
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-equivalentFraction");
-			}
-			else if (feedbackNumerator != 0){
-				if (feedbackDenominator !=0){
-					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num-Den");
-					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)){
+				else if (partitionBool){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-partitionBool");
+					if (partition != 0){
 						result= true;
 					}
 				}
-				if (feedbackNumerator == numerator){
-					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num");
-					result= true;
-				}
-			}
-			else if (feedbackDenominator !=0){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Den");
-				if (feedbackDenominator == denominator){
-					result= true;
-				}
-			}
-			else if ((numerators != null) && (denominators != null)){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-set-Num-Den");
-				for (int j = 0; j < denominators.Length; j++){
-					int valueNum = numerators[j];
-					int valueDen = denominators[j];
-					if ((numerator == valueNum) && (denominator == valueDen)){
+				else if (numeratorAdd != 0){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-numeratorAdd");
+					if ((denominator == denominatorAdd) && (numerator < numeratorAdd)){
 						result = true;
 					}
 				}
-			}
-			else if (denominators != null){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-set-Den");
-				for (int j = 0; j < denominators.Length; j++){
-					int value = denominators[j];
-					if (denominator == value){
-						result = true;
+				else if ((feedbackNumerator != 0) && (feedbackDenominator !=0) && feedbackComparison){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num-Den-Comp");
+					if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator) && studentModel.getCompared()){
+						result= true;
 					}
 				}
+				else if (equivalentFraction){
+					result= equivalent(numerator, denominator, feedbackNumerator, feedbackDenominator);
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-equivalentFraction");
+				}
+				else if (feedbackNumerator != 0){
+					if (feedbackDenominator !=0){
+						studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num-Den");
+						if ((feedbackNumerator == numerator) && (feedbackDenominator == denominator)){
+							result= true;
+						}
+					}
+					if (feedbackNumerator == numerator){
+						studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Num");
+						result= true;
+					}
+				}
+				else if (feedbackDenominator !=0){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-Den");
+					if (feedbackDenominator == denominator){
+						result= true;
+					}
+				}
+				else if ((numerators != null) && (denominators != null)){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-set-Num-Den");
+					for (int j = 0; j < denominators.Length; j++){
+						int valueNum = numerators[j];
+						int valueDen = denominators[j];
+						if ((numerator == valueNum) && (denominator == valueDen)){
+							result = true;
+						}
+					}
+				}
+				else if (denominators != null){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-checkFor-set-Den");
+					for (int j = 0; j < denominators.Length; j++){
+						int value = denominators[j];
+						if (denominator == value){
+							result = true;
+						}
+					}
+				}
+				if (feedbackComparison) {
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-compared");
+					result= studentModel.getCompared();
+				}
+				
+				if (additionBox) {
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-compared");
+					result = studentModel.getAdditionBox();
+				}
+				
+				if (numeratorAddEnd != 0) {
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-numeratorAddEnd");
+					result = checkForAddedFraction(numeratorAddEnd, denominatorAddEnd);
+				}
+				
+				if (differntRepresentation) {
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-differntRepresentation");
+					result = !sameRepresentations();
+				}
+				if (allSameValue){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-allSameValue");
+					result = sameValues();
+				}
+				
+				if (differntRepresentation && allSameValue){
+					studentModel.setFeedbackFollowedRule("feedbackFollowed-differntRepresentation-allSameValue");
+					result = ((!sameRepresentations()) && sameValues());
+				}
 			}
-
 			if (feedbackSpeech){
 				//need task-independent support for this
 				studentModel.setFeedbackFollowedRule("feedbackFollowed-speech");
 				return false;
 			}
 
-			if (feedbackComparison) {
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-compared");
-				result= studentModel.getCompared();
-			}
 
-			if (additionBox) {
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-compared");
-				result = studentModel.getAdditionBox();
-			}
-
-			if (numeratorAddEnd != 0) {
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-numeratorAddEnd");
-				result = checkForAddedFraction(numeratorAddEnd, denominatorAddEnd);
-			}
-
-			if (differntRepresentation) {
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-differntRepresentation");
-				result = !sameRepresentations();
-			}
-			if (allSameValue){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-allSameValue");
-				result = sameValues();
-			}
-
-			if (differntRepresentation && allSameValue){
-				studentModel.setFeedbackFollowedRule("feedbackFollowed-differntRepresentation-allSameValue");
-				result = ((!sameRepresentations()) && sameValues());
+			if (getRepsOnScreenBelow > 0) {
+				result = belowAmountOfReps(getRepsOnScreenBelow);
 			}
 
 			return result;
+		}
+
+		private Boolean belowAmountOfReps(int value){
+			int fractionsOnScreen = studentModel.getCurrentFractions ().Count;
+
+			if (fractionsOnScreen < value) {
+				return true;
+			}
+			return false;
 		}
 
 		private List<int> getNumeratorsWithCorrectDenominator(int finalNumerator, int finalDenominator){
@@ -682,6 +705,8 @@ namespace taskDependentSupport.core
 			Fraction testCurrentFraction = studentModel.getCurrentFraction ();
 			Debug.Log ("testCurrentFraction: "+testCurrentFraction);
 
+
+
 			if (taskID.Equals("task3aPlus.1.setA.area") || taskID.Equals("task3aPlus.1.setB.area") || taskID.Equals("task3aPlus.1.setC.area") ||
 			    taskID.Equals("task3aPlus.1.setA.numb") || taskID.Equals("task3aPlus.1.setB.numb") || taskID.Equals("task3aPlus.1.setC.numb") ||
 			    taskID.Equals("task3aPlus.1.setA.sets") || taskID.Equals("task3aPlus.1.setB.sets") || taskID.Equals("task3aPlus.1.setC.sets") ||
@@ -783,6 +808,10 @@ namespace taskDependentSupport.core
 						studentModel.setMessageRule("processEvent-task3-checkForAddedFraction-Num-Den-AddBox");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T3aP1E1;
+					}
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
 					}
 					else if (checkForAddedFraction(startNumerator, startDenominator) && (!studentModel.getAdditionBox())){
 						studentModel.setMessageRule("processEvent-task3-checkForAddedFraction-Num-Den-Not-AddBox");
@@ -886,20 +915,19 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
-					if (sameRepresentations() == false){
-						studentModel.setMessageRule("processEvent-task2.6-Not-sameRepresentations");
-						currentFeedback = feedbackData.T26M8;
-					}
-
-					else if ((numerator == 0) && (denominator == 0)) {
-						studentModel.setMessageRule("processEvent-task2.6-Num-Den-Not-0");
-						currentFeedback = feedbackData.S3;
-					}
-					else if (currentSetIncludesFraction(startNumerator, startDenominator) && 
-					         currentSetIncludesFraction(endNumerator, endDenominator) && studentModel.getComparedFractions()){
+					if (currentSetIncludesFraction(startNumerator, startDenominator) && 
+					    currentSetIncludesFraction(endNumerator, endDenominator) && studentModel.getComparedFractions()){
 						studentModel.setMessageRule("processEvent-task2.6-task-completed");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.T26E1;
+					}
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
+					}
+					else if ((numerator == 0) && (denominator == 0)) {
+						studentModel.setMessageRule("processEvent-task2.6-Num-Den-Not-0");
+						currentFeedback = feedbackData.S3;
 					}
 					else if (currentSetIncludesFraction(startNumerator, startDenominator) && 
 					         currentSetIncludesFraction(endNumerator, endDenominator) && (studentModel.getComparedFractions() == false)){
@@ -931,7 +959,10 @@ namespace taskDependentSupport.core
 						studentModel.setMessageRule("processEvent-task2.6-startDen-or-endDen");
 						currentFeedback = feedbackData.T26M6;
 					}
-
+					else if (sameRepresentations() == false){
+						studentModel.setMessageRule("processEvent-task2.6-Not-sameRepresentations");
+						currentFeedback = feedbackData.T26M8;
+					}
 					else if ((numerator == 0) && ((denominator != startDenominator) || (denominator != endDenominator))){
 						studentModel.setMessageRule("processEvent-task2.6-Num-Not-0-Den-else");
 						currentFeedback = feedbackData.T26M1;
@@ -1072,6 +1103,10 @@ namespace taskDependentSupport.core
 						studentModel.setMessageRule("processEvent-task2.4-checkCurrentFractionsForEquivalence-not-compared");
 						currentFeedback = feedbackData.T24M11;
 					}
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
+					}
 					else if (currentSetContainsEqivalentFraction(startNumerator, startDenominator) && 
 					         (!currentSetContainsFraction(startNumerator, startDenominator))){
 						studentModel.setMessageRule("processEvent-task2.4-currentSetContainsEqivalentFraction-not-currentSetContainsFraction");
@@ -1176,6 +1211,10 @@ namespace taskDependentSupport.core
 						studentModel.setMessageRule("processEvent-task2.2-Num-Dem-not-0");
 						currentFeedback = feedbackData.F2M1;
 					}
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
+					}
 					else if ((partition == 0)  && (denominator != 0) && (numerator != 0) && 
 					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.F2M1.getID ())){
 						studentModel.setMessageRule("processEvent-task2.2-previousFeedback-F2M1");
@@ -1200,18 +1239,16 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.F2M7c;
 					}
 
-					else if ((partition == 5)  && (denominator != 0) && (numerator != 0)){
+					else if ((partition >= 5)  && (denominator != 0) && (numerator != 0)){
 						studentModel.setMessageRule("processEvent-task2.2-partition-5");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.F2E1;
 					}
 					else if ((partition != 2) && (partition != 3) && (partition != 4) 
-					         && (partition != 5) && (partition != 0)){
+					         && (partition < 5) && (partition != 0)){
 						studentModel.setMessageRule("processEvent-task2.2-partition-wrongValue");
 						currentFeedback = feedbackData.F2M11;
 					}
-
-
 					else {
 						studentModel.setMessageRule("processEvent-task2.2-Default-01");
 						currentFeedback = new FeedbackElem();
@@ -1253,6 +1290,10 @@ namespace taskDependentSupport.core
 					//else if (!sameRepresentations() && sameValues() && (createdReps() == 2)){
 					//	currentFeedback = feedbackData.FM10;
 					//}
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
+					}
 
 					else if (!sameRepresentations() && sameValues() && (createdReps() < 4)){
 						studentModel.setMessageRule("processEvent-task2.1-not-sameRep-sameValues-reps-less-4");
@@ -1310,16 +1351,15 @@ namespace taskDependentSupport.core
 						denominator = denominator * partition;
 					}
 
-					if (!sameRepresentations()){
-						studentModel.setMessageRule("processEvent-task1-not-sameRepresentations");
-						currentFeedback = feedbackData.CM7;
-					}
-
-					else if (studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
+					if (studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
 					         && currentSetIncludesFraction(secondNumerator, secondDenominator)){
 						studentModel.setMessageRule("processEvent-task1-task-completed");
 						studentModel.setTaskCompleted(true);
 						currentFeedback = feedbackData.E1;
+					}
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
 					}
 					else if (!studentModel.getComparedFractions() && currentSetIncludesFraction(firstNumerator, firstDenominator)
 								&& currentSetIncludesFraction(secondNumerator, secondDenominator)){
@@ -1467,6 +1507,10 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.E1;
 					}
 
+					else if (!belowAmountOfReps(7)){
+						studentModel.setMessageRule("processEvent-tooManyReps");
+						currentFeedback = feedbackData.tooManyReps;
+					}
 					//else if ((numerator == endNumerator) && (denominator == endDenominator)) {
 					//	Debug.Log ("solution found ");
 					//	studentModel.setTaskCompleted(true);

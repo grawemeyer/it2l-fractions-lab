@@ -54,7 +54,9 @@ namespace taskDependentSupport.core
 			}
 
 			if (type.Equals ("FractionTrashed")){
+				Debug.Log (" <<<< FractionTrashed >>>> id"+id);
 				studentModel.removeFraction(id);
+				Debug.Log (" <<<< after removed fraction >>>> id"+id);
 				studentModel.setCompared(false);
 				studentModel.setComparedResult(false);
 				studentModel.setComparedFractions(false);
