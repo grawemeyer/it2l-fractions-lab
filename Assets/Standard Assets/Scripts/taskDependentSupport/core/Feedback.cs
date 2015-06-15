@@ -26,7 +26,7 @@ namespace taskDependentSupport.core
 			FeedbackElem feedback = studentModel.getCurrentFeedback ();
 			String feedbackID = feedback.getID ();
 			String lastReflectiveIdentifier = "E";
-			Boolean lastReflectivePrompt = feedbackID.Contains (lastReflectiveIdentifier);
+			bool lastReflectivePrompt = feedbackID.Contains (lastReflectiveIdentifier);
 			Debug.Log ("feedbackType: "+feedbackType+" feedbackID: "+feedbackID+ " lastReflectivePrompt: "+lastReflectivePrompt);
 
 			if (lastReflectivePrompt || (feedbackType == FeedbackType.affirmation) || (feedbackType == FeedbackType.taskNotFinished)) {
