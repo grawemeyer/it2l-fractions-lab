@@ -13,7 +13,7 @@ namespace taskDependentSupport.core
 		private bool spanish = false;
 
 		String fallTooManyReps_guidance = "You might find it easier if you tidy the workspace (by deleting some of the representations).";
-		String gallTooManyReps_guidance = "GERMAN You might find it easier if you tidy the workspace (by deleting some of the representations).";
+		String gallTooManyReps_guidance = "Vielleicht ist es einfacher, wenn du deinen Arbeitsbereich etwas aufräumst, indem du einige der Bilddiagramme löschst.";
 		String sallTooManyReps_guidance = "SPANISH You might find it easier if you tidy the workspace (by deleting some of the representations).";
 
 		 String fS1M_socratic = "How are you going to tackle this task?";
@@ -443,7 +443,7 @@ namespace taskDependentSupport.core
 
 		String gfCM12M_socratic = "Sehr gut! Was wirst du als nächstes tun?";
 
-		String gfE1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfE1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 
 		String gfE2M_didacticConceptual = "Bitte erkläre, was du mit dem Zähler und dem Nenner des Bruchs "+startNumerator+"/"+startDenominator+" gemacht hast, um einen wertgleichen Bruch mit "+endDenominator+" im Nenner zu erstellen.";
 
@@ -468,7 +468,7 @@ namespace taskDependentSupport.core
 		String gfMF12M_socratic = "Sehr gut! Haben deine Brüche den gleichen Wert?";
 		String gfMF12M_guidance = "Sehr gut! Verändere deine Brüche so, dass sie den gleichen Wert haben.";
 
-		String gfMFE1M_didacticConceptual = "Sehr gut, du hast deinen Bruch mit allen Bilddiagrammen dargestellt. Gut gemacht.";
+		String gfMFE1M_didacticConceptual = "Sehr gut, du hast deinen Bruch mit allen Bilddiagrammen dargestellt. Bitte gehe jetzt zur nächsten Aufgabe.";
 
 		String gfMFE2M_didacticConceptual = "Sehr gut! Auf welche Weise sind die Bilddiagramme ähnlich und wo unterscheiden sie sich?"; 
 
@@ -504,7 +504,7 @@ namespace taskDependentSupport.core
 		String gfF2M11M_socratic = "Sehr gut! Bist du mit der Aufgabe fertig?";
 		String gfF2M11M_guidance = "Weiter so! Jetzt zerteile den Bruch noch weiter.";
 		
-		String gfMF2E1M_didacticConceptual = "Sehr gut! Du hast den Bruch 2, 3, 4, und 5 Mal geteilt. Toll gemacht!";
+		String gfMF2E1M_didacticConceptual = "Sehr gut! Du hast den Bruch 2, 3, 4, und 5 Mal geteilt. Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfMF2E2M_didacticConceptual = "Was ist mit Zähler und Nenner passiert, als du im Menü die Funktion 'Finde einen wertgleichen Bruch' benutzt hast?";
 		
@@ -564,7 +564,7 @@ namespace taskDependentSupport.core
 		String gfT24M13M_didacticConceptual = "Um deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen zu können, musst du einen zweiten Bruch erstellen. Nimm dieses Mal "+startNumerator+"/"+startDenominator+".";
 		String gfT24M13M_didacticProcedural = "Behalten den Bruch, der wertgleich zu "+startNumerator+"/"+startDenominator+" ist. Wandle  nun den anderen Bruch in "+startNumerator+"/"+startDenominator+" um. Vergleiche die beiden Brüche dann mithilfe der Vergleichsfunktion.";
 		
-		String gfT24E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfT24E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfT24E2M_didacticConceptual = "Bitte erkläre, was du mit dem Zähler und dem Nenner von "+startNumerator+"/"+startDenominator+" des Bruchs gemacht hast, um einen wertgleichen Bruch zu erstellen.";
 		
@@ -623,7 +623,7 @@ namespace taskDependentSupport.core
 		String gfT26M11M_socratic = "Wie kannst du in Fractions Lab prüfen, ob deine Lösung richtig ist?";
 		String gfT26M11M_didacticConceptual = "Vergleiche die Brüche mithilfe der Vergleichsfunktion (am Rand oben).";
 		
-		String gfT26E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfT26E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfT26E2M_didacticConceptual = "Bitte erkläre, warum du zustimmst, oder warum nicht.";
 		
@@ -667,7 +667,7 @@ namespace taskDependentSupport.core
 		String gfT3aP1M11M_guidance = "Du kannst deine Brüche addieren, indem du die Additionsbox benutzt.";
 		String gfT3aP1M11M_didacticConceptual = "Addiere deine Brüche mithilfe der Additionsbox.";
 		
-		String gfT3aP1E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfT3aP1E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfT3aP1E2M_didacticConceptual = "Bitte erkläre, wie du die Aufgabe beantwortet hast. Warum hast du diese Brüche erstellt?";
 
