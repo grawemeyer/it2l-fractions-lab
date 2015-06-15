@@ -82,6 +82,14 @@ namespace taskDependentSupport
 			SaveEvent ("TDS.sendDoneButtonPressedToTIS", value.ToString());
 			Debug.Log ("sendDoneButtonPressedToTIS:: "+value);
 			Application.ExternalCall("sendDoneButtonPressedToTIS", value);
+
+			if (value) {
+				Application.ExternalCall ("notifyWindowClose", "");
+			} 
+			else {
+				Application.ExternalCall ("notifyWindowOpen", "");		
+			}
+
 			if (studentModel == null) {
 				studentModel = new StudentModel (taskID);
 			}
