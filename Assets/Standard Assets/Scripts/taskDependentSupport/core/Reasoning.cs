@@ -414,10 +414,19 @@ namespace taskDependentSupport.core
 			}
 		}
 
-		private bool currentSetIncludesFraction(int numerator, int denominator){
+		private bool currentSetIncludesFraction(int testNumerator, int testDenominator){
 			for (int i = 0; i< studentModel.getCurrentFractions().Count; i++){
 				Fraction current = studentModel.getCurrentFractions()[i];
-				if ((current.getNumerator() == numerator) && (current.getDenominator() == denominator)){
+				int numerator = current.getNumerator ();
+				int denominator = current.getDenominator ();
+				int partition = current.getPartition ();
+				
+				if (partition != 0) {
+					numerator = numerator * partition;
+					denominator = denominator * partition;
+				}
+		
+				if ((testNumerator == numerator) && (testDenominator == denominator)){
 					return true;
 				}
 			}
