@@ -55,6 +55,11 @@ namespace taskDependentSupport
 			Application.ExternalCall("newEvent", args);
 		}
 
+		public static void sendFLstarted(){
+			Debug.Log ("<<<<<< sendFLstarted >>>>>>");
+			Application.ExternalCall("Flstarted", "");
+		}
+
 		public static void SendHighMessage(String feedbacktext, String currentFeedbackType, String previousFeedbackType, bool followed){
 			Debug.Log ("SendHighMessage: SendHighMessage: "+feedbacktext);
 			Application.ExternalCall("SendHighMessage", feedbacktext);
@@ -116,6 +121,7 @@ namespace taskDependentSupport
 		public static void setTaskID(object arg){
 			Debug.Log ("!!!!!!!!!!! setTaskID: "+arg);
 			Debug.Log ("setTaskID: "+arg);
+			sendFLstarted ();
 
 			String elem = arg.ToString ();
 			String checkTaskID = elem.Substring(0,7);
@@ -161,6 +167,7 @@ namespace taskDependentSupport
 				DoneButtonEnable(true);
 				ArrowButtonEnable(false);
 			}
+
 		}
 
 		public static void SetTaskInformationPackage(String _tip) 
