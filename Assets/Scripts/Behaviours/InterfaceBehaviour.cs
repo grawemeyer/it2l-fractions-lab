@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.306";
+    public const string VER = "0.308";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
