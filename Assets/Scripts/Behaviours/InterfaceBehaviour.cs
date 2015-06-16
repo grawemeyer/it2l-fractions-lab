@@ -10,7 +10,7 @@ using System;
 
 public class InterfaceBehaviour : MonoBehaviour
 {
-    public const string VER = "0.308";
+    public const string VER = "0.310";
     public float min_orthographicsize = 10.0f;
 
     #region Protected Fields
@@ -158,6 +158,7 @@ public class InterfaceBehaviour : MonoBehaviour
     #region Unity Callbacks
     void Awake()
     {
+        colorMenu.SetActive(false);
         indexFractionArea = -1;
         bookmark = GameObject.FindGameObjectWithTag("Bookmark");
         bookmark.SetActive(false);
