@@ -82,6 +82,14 @@ namespace taskDependentSupport
 			SaveEvent ("TDS.sendDoneButtonPressedToTIS", value.ToString());
 			Debug.Log ("sendDoneButtonPressedToTIS:: "+value);
 			Application.ExternalCall("sendDoneButtonPressedToTIS", value);
+
+			if (value) {
+				Application.ExternalCall ("notifyWindowClose", "");
+			} 
+			else {
+				Application.ExternalCall ("notifyWindowOpen", "");		
+			}
+
 			if (studentModel == null) {
 				studentModel = new StudentModel (taskID);
 			}
@@ -270,6 +278,7 @@ namespace taskDependentSupport
 
 				Debug.Log ("eventType: " + eventType + " eventName:" + eventName);
 
+
 				if (counter == null) {
 						Debug.Log ("counter == null");
 						counter = new Counter ();
@@ -290,17 +299,22 @@ namespace taskDependentSupport
 			}*/
 
 				if (eventType.Equals ("FractionGenerated") || eventType.Equals ("FractionChange") 
-						|| eventType.Equals ("OperationResult") || (eventType.Equals ("EquivalenceGenerated"))) {
+						|| eventType.Equals ("OperationResult") || (eventType.Equals ("EquivalenceGenerated"))
+			    		|| (eventType.Equals ("ClickButton") && !eventName.Equals ("CloseFeedbackPopup"))
+			    		|| eventType.Equals ("FractionTrashed")) {
 						Debug.Log ("FractionGenerated ||  FractionChange");
 						Debug.Log ("needsNewThread " + needsNewThread);
 						Debug.Log ("responseThread " + responseThread);
 						Debug.Log ("counter " + counter);
 						Debug.Log ("counter " + counter.getValue ());
-						if (needsNewThread || (responseThread == null)) {
-								responseThread = new Thread (new ThreadStart (handleEvent));
-								responseThread.Start (); 
-								needsNewThread = false;
-						}
+						
+					if (needsNewThread || (responseThread == null)) {
+						responseThread = new Thread (new ThreadStart (handleEvent));
+						responseThread.Start (); 
+						needsNewThread = false;
+					}
+					
+
 				} else if (doneButtonEnabled && eventType.Equals ("PlatformEvent") && 
 						(eventName.Equals ("doneButtonPressed") || eventName.Equals ("*doneButtonPressed*"))) {
 						Debug.Log (":::: doneButtonPressed ::::: ");

@@ -12,6 +12,10 @@ namespace taskDependentSupport.core
 		private bool german  =false;
 		private bool spanish = false;
 
+		String fallTooManyReps_guidance = "You might find it easier if you tidy the workspace (by deleting some of the representations).";
+		String gallTooManyReps_guidance = "Vielleicht ist es einfacher, wenn du deinen Arbeitsbereich etwas aufräumst, indem du einige der Bilddiagramme löschst.";
+		String sallTooManyReps_guidance = "SPANISH You might find it easier if you tidy the workspace (by deleting some of the representations).";
+
 		 String fS1M_socratic = "How are you going to tackle this task?";
 		 String fS1M_didacticConceptual = "Read the task again, and explain how you are going to tackle it.";
 
@@ -112,7 +116,7 @@ namespace taskDependentSupport.core
 
 		 String fCM12M_socratic = "Excellent, what are you going to do now?";
 
-		 String fE1M_didacticConceptual = "The way that you worked that out was excellent. Well done.";
+		String fE1M_didacticConceptual = "The way that you worked that out was excellent. Now go to the next task.";
 
 		 String fE2M_didacticConceptual = "Please explain what you did to the numerator and the denominator of "+startNumerator+"/"+startDenominator+" to make an equivalent fraction with "+endDenominator+" as the denominator.";
 
@@ -122,7 +126,7 @@ namespace taskDependentSupport.core
 
 		 String fR2M_didacticConceptual = "Why did you make the fraction "+endNumerator+"/"+endDenominator+"? What did you do to the numerator and denominator of "+startNumerator+"/"+startDenominator+"?";
 
-		 String fO1M_didacticConceptual = "You don't appear to have completed the task.";
+		String fO1M_didacticConceptual = "Are you sure that you have answered the task fully? Please read the task again.";
 
 		 String fO2M_didacticConceptual = "If you need more help to finish the task, you could ask your teacher.";
 
@@ -137,7 +141,7 @@ namespace taskDependentSupport.core
 		 String fMF12M_socratic = "Excellent! Do your fractions have the same values?";
 		 String fMF12M_guidance = "Excellent! Now change your fractions to the same values.";
 
-		 String fMFE1M_didacticConceptual = "Excellent, you have made your fraction using all the representations. Well done.";
+		String fMFE1M_didacticConceptual = "Excellent, you have made your fraction using all the representations. Now go to the next task.";
 
 		 String fMFE2M_didacticConceptual ="How are all your representations similar, and how are they different?";
 
@@ -173,7 +177,7 @@ namespace taskDependentSupport.core
 		 String fF2M11M_socratic = "Excellent! Have you completed the task?";
 		 String fF2M11M_guidance = "Keep going. Now partition your fraction further.";
 
-		 String fMF2E1M_didacticConceptual = "Excellent, you have partitioned your fraction 2, 3, 4 and 5 times. Well done.";
+		 String fMF2E1M_didacticConceptual = "Excellent, you have partitioned your fraction 2, 3, 4 and 5 times. Now go to the next task.";
 
 		 String fMF2E2M_didacticConceptual = "When you used find equivalent, what happened to the denominators and numerators?";
 
@@ -233,7 +237,7 @@ namespace taskDependentSupport.core
 		 String fT24M13M_didacticConceptual = "To compare your fraction to "+startNumerator+"/"+startDenominator+", you will need to make a second fraction, this time "+startNumerator+"/"+startDenominator+".";
 		 String fT24M13M_didacticProcedural = "Keep the fraction that is equivalent to "+startNumerator+"/"+startDenominator+". Now change the other fraction to "+startNumerator+"/"+startDenominator+". Then compare the two fractions using the comparison box.";
 
-		 String fT24E1M_didacticConceptual = "The way that you worked that out was excellent. Well done.";
+		String fT24E1M_didacticConceptual = "The way that you worked that out was excellent. Now go to the next task.";
 
 		 String fT24E2M_didacticConceptual = "Please explain what you did to the numerator and denominator of "+startNumerator+"/"+startDenominator+" to make an equivalent fraction.";
 
@@ -290,7 +294,7 @@ namespace taskDependentSupport.core
 		 String fT26M11M_socratic = "How can you check, using a Fractions Lab tool,  that your solution is correct?";
 		 String fT26M11M_didacticConceptual = "Compare the two fractions using the comparison box.";
 
-		 String fT26E1M_didacticConceptual = "The way that you worked that out was excellent. Well done.";
+		String fT26E1M_didacticConceptual = "The way that you worked that out was excellent. Now go to the next task.";
 
 		 String fT26E2M_didacticConceptual = "Please explain why you agree or disagree.";
 
@@ -334,7 +338,7 @@ namespace taskDependentSupport.core
 		 String fT3aP1M11M_guidance = "You could use the addition box to add your fractions.";
 		 String fT3aP1M11M_didacticConceptual = "Add your two fractions using the addition box.";
 	
-		 String fT3aP1E1M_didacticConceptual = "The way that you worked that out was excellent. Well done.";
+		String fT3aP1E1M_didacticConceptual = "The way that you worked that out was excellent. Now go to the next task.";
 
 		 String fT3aP1E2M_didacticConceptual = "Please explain how you answered the task. Why did you make the fractions that you made?.";
 
@@ -439,7 +443,7 @@ namespace taskDependentSupport.core
 
 		String gfCM12M_socratic = "Sehr gut! Was wirst du als nächstes tun?";
 
-		String gfE1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfE1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 
 		String gfE2M_didacticConceptual = "Bitte erkläre, was du mit dem Zähler und dem Nenner des Bruchs "+startNumerator+"/"+startDenominator+" gemacht hast, um einen wertgleichen Bruch mit "+endDenominator+" im Nenner zu erstellen.";
 
@@ -464,7 +468,7 @@ namespace taskDependentSupport.core
 		String gfMF12M_socratic = "Sehr gut! Haben deine Brüche den gleichen Wert?";
 		String gfMF12M_guidance = "Sehr gut! Verändere deine Brüche so, dass sie den gleichen Wert haben.";
 
-		String gfMFE1M_didacticConceptual = "Sehr gut, du hast deinen Bruch mit allen Bilddiagrammen dargestellt. Gut gemacht.";
+		String gfMFE1M_didacticConceptual = "Sehr gut, du hast deinen Bruch mit allen Bilddiagrammen dargestellt. Bitte gehe jetzt zur nächsten Aufgabe.";
 
 		String gfMFE2M_didacticConceptual = "Sehr gut! Auf welche Weise sind die Bilddiagramme ähnlich und wo unterscheiden sie sich?"; 
 
@@ -500,7 +504,7 @@ namespace taskDependentSupport.core
 		String gfF2M11M_socratic = "Sehr gut! Bist du mit der Aufgabe fertig?";
 		String gfF2M11M_guidance = "Weiter so! Jetzt zerteile den Bruch noch weiter.";
 		
-		String gfMF2E1M_didacticConceptual = "Sehr gut! Du hast den Bruch 2, 3, 4, und 5 Mal geteilt. Toll gemacht!";
+		String gfMF2E1M_didacticConceptual = "Sehr gut! Du hast den Bruch 2, 3, 4, und 5 Mal geteilt. Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfMF2E2M_didacticConceptual = "Was ist mit Zähler und Nenner passiert, als du im Menü die Funktion 'Finde einen wertgleichen Bruch' benutzt hast?";
 		
@@ -560,7 +564,7 @@ namespace taskDependentSupport.core
 		String gfT24M13M_didacticConceptual = "Um deinen Bruch mit "+startNumerator+"/"+startDenominator+" vergleichen zu können, musst du einen zweiten Bruch erstellen. Nimm dieses Mal "+startNumerator+"/"+startDenominator+".";
 		String gfT24M13M_didacticProcedural = "Behalten den Bruch, der wertgleich zu "+startNumerator+"/"+startDenominator+" ist. Wandle  nun den anderen Bruch in "+startNumerator+"/"+startDenominator+" um. Vergleiche die beiden Brüche dann mithilfe der Vergleichsfunktion.";
 		
-		String gfT24E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfT24E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfT24E2M_didacticConceptual = "Bitte erkläre, was du mit dem Zähler und dem Nenner von "+startNumerator+"/"+startDenominator+" des Bruchs gemacht hast, um einen wertgleichen Bruch zu erstellen.";
 		
@@ -619,7 +623,7 @@ namespace taskDependentSupport.core
 		String gfT26M11M_socratic = "Wie kannst du in Fractions Lab prüfen, ob deine Lösung richtig ist?";
 		String gfT26M11M_didacticConceptual = "Vergleiche die Brüche mithilfe der Vergleichsfunktion (am Rand oben).";
 		
-		String gfT26E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfT26E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfT26E2M_didacticConceptual = "Bitte erkläre, warum du zustimmst, oder warum nicht.";
 		
@@ -663,7 +667,7 @@ namespace taskDependentSupport.core
 		String gfT3aP1M11M_guidance = "Du kannst deine Brüche addieren, indem du die Additionsbox benutzt.";
 		String gfT3aP1M11M_didacticConceptual = "Addiere deine Brüche mithilfe der Additionsbox.";
 		
-		String gfT3aP1E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Toll gemacht!";
+		String gfT3aP1E1M_didacticConceptual = "Das hast du dir gut erarbeitet! Bitte gehe jetzt zur nächsten Aufgabe.";
 		
 		String gfT3aP1E2M_didacticConceptual = "Bitte erkläre, wie du die Aufgabe beantwortet hast. Warum hast du diese Brüche erstellt?";
 
@@ -1019,6 +1023,16 @@ namespace taskDependentSupport.core
 			endDenominator = value;
 		}
 
+
+		public String allTooManyReps_guidance(){
+			if (spanish) {
+				return sallTooManyReps_guidance;
+			} else if (german) {
+				return gallTooManyReps_guidance;
+			} else {
+				return fallTooManyReps_guidance;		
+			}
+		}
 
 		public String S1M_socratic(){
 			if (spanish) {

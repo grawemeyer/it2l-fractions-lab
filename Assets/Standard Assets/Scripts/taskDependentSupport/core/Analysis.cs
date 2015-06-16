@@ -28,6 +28,7 @@ namespace taskDependentSupport.core
 					}
 				}
 			}
+
 			if (type.Equals ("FractionGenerated") || type.Equals ("EquivalenceGenerated")){
 				Fraction thisFraction = new Fraction();
 				thisFraction.setName(name);
@@ -38,15 +39,24 @@ namespace taskDependentSupport.core
 				studentModel.setComparedFractions(false);
 				studentModel.setCurrentFraction(id);
 				taskDependentSupport.TDSWrapper.sendRepresentationTypeToSNA(name);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionGenerated", id);
 				Debug.Log ("!!!!! generated name: "+name+" id: "+id);
 
 			}
 			if (type.Equals("FractionChange")){
-				if (name.Equals("Numerator")) studentModel.setNumeratorAtFraction(id, fractionsValue);
-				if (name.Equals("Denominator")) studentModel.setDenominatorAtFraction(id, fractionsValue);
+				if (name.Equals("Numerator")){
+					studentModel.setNumeratorAtFraction(id, fractionsValue);
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionChanged", id+" numerator "+fractionsValue);
+				}
+				if (name.Equals("Denominator")){
+					studentModel.setDenominatorAtFraction(id, fractionsValue);
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionChanged", id+" denominator "+fractionsValue);
+				}
+
 				if (name.Equals("Partitions")) {
 					Debug.Log ("::::: partition: "+id+" value: "+fractionsValue);
 					studentModel.setPartitionAtFraction(id, fractionsValue);
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionChanged", id+" partition "+fractionsValue);
 				}
 				studentModel.setComparedResult(false);
 				studentModel.setComparedResult(false);
@@ -54,7 +64,10 @@ namespace taskDependentSupport.core
 			}
 
 			if (type.Equals ("FractionTrashed")){
+				Debug.Log (" <<<< FractionTrashed >>>> id"+id);
 				studentModel.removeFraction(id);
+				Debug.Log (" <<<< after removed fraction >>>> id"+id);
+				taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionTrashed", id);
 				studentModel.setCompared(false);
 				studentModel.setComparedResult(false);
 				studentModel.setComparedFractions(false);
@@ -65,19 +78,24 @@ namespace taskDependentSupport.core
 				if (name.Equals("Sum")) {
 					Debug.Log (":::::: setAdditionBox ::::::");
 					studentModel.setAdditionBox(true);
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.additionOperationBox", "open");
 				}
 				else if (name.Equals("Substraction")){
 					studentModel.setSubstractionBox(true);
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.substractionOperationBox", "open");
 				}
 				else {
 					studentModel.setCompared(true);
 					Debug.Log ("::: student model set compared true");
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.compareOperationBox", "open");
 					if (id.Equals ("=")){
 						Debug.Log ("set compared result true");
+						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.compareOperationResult", "=");
 						studentModel.setComparedResult(true);
 					}
 					else if (id.Equals (">") || id.Equals ("<")){
 						Debug.Log ("set compared fraction true");
+						taskDependentSupport.TDSWrapper.SaveEvent ("TDS.compareOperationResult", "> or <");
 						studentModel.setComparedFractions(true);
 					}
 					else {
@@ -87,6 +105,16 @@ namespace taskDependentSupport.core
 				}
 			}
 
+			if (type.Equals ("ReleaseFraction")){
+				Fraction current = studentModel.getCurrentFraction ();
+				if (current != null){
+					string fractionId = current.getID();
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionInUse", fractionId);
+				}
+				else {
+					taskDependentSupport.TDSWrapper.SaveEvent ("TDS.fractionInUse", "null");
+				}
+			}
 		
 		}
 
