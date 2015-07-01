@@ -15,7 +15,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24M12, T24M13, T24E1, T24E2;
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M7start, T26M7end, T26M8, T26M10, T26M11, T26E1, T26E2;
 		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
-		public FeedbackElem T3bP1S3, T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M6, T3bP1M7, T3bP1M8, T3bP1M9, T3bP1M10, T3bP1M11, T3bP1E1, T3bP1E2; 
+		public FeedbackElem T3bP1S3, T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M7start, T3bP1M7end, T3bP1M8, T3bP1M10, T3bP1M11, T3bP1E1, T3bP1E2; 
 		public FeedbackElem tooManyReps;
 
 		public FeedbackData (String taskID, StudentModel student){
@@ -27,6 +27,8 @@ namespace taskDependentSupport.core
 			int endDenominator = 0;
 			int finalNumerator = 0;
 			int finalDenominator = 0;
+			int resultNumerator = 0;
+			int resultDenominator = 0;
 			String representation = "area";
 
 			if (taskID.Equals ("task1.1setA")) {
@@ -194,6 +196,8 @@ namespace taskDependentSupport.core
 				endDenominator = 12;
 				finalNumerator = 2;
 				finalDenominator = 12;
+				resultNumerator = 7;
+				resultDenominator = 12;
 				representation = "area";
 			}
 			else if (taskID.Equals("task3bPlus.1.setB.area")){
@@ -203,6 +207,8 @@ namespace taskDependentSupport.core
 				endDenominator = 9;
 				finalNumerator = 6;
 				finalDenominator = 9;
+				resultNumerator = 8;
+				resultDenominator = 9;
 				representation = "area";
 			}
 			else if (taskID.Equals("task3bPlus.1.setC.area")){
@@ -212,6 +218,8 @@ namespace taskDependentSupport.core
 				endDenominator = 6;
 				finalNumerator = 8;
 				finalDenominator = 6;
+				resultNumerator = 11;
+				resultDenominator = 6;
 				representation = "number line";
 			}
 			else if (taskID.Equals("task3bPlus.1.setA.numb")){
@@ -221,6 +229,8 @@ namespace taskDependentSupport.core
 				endDenominator = 12;
 				finalNumerator = 2;
 				finalDenominator = 12;
+				resultNumerator = 7;
+				resultDenominator = 12;
 				representation = "number line";
 			}
 			else if (taskID.Equals("task3bPlus.1.setB.numb")){
@@ -230,6 +240,8 @@ namespace taskDependentSupport.core
 				endDenominator = 9;
 				finalNumerator = 6;
 				finalDenominator = 9;
+				resultNumerator = 8;
+				resultDenominator = 9;
 				representation = "number line";
 			}
 			else if (taskID.Equals("task3bPlus.1.setC.numb")){
@@ -239,6 +251,8 @@ namespace taskDependentSupport.core
 				endDenominator = 6;
 				finalNumerator = 8;
 				finalDenominator = 6;
+				resultNumerator = 11;
+				resultDenominator = 6;
 				representation = "number line";
 			}
 			else if (taskID.Equals("task3bPlus.1.setA.sets")){
@@ -248,6 +262,8 @@ namespace taskDependentSupport.core
 				endDenominator = 12;
 				finalNumerator = 2;
 				finalDenominator = 12;
+				resultNumerator = 7;
+				resultDenominator = 12;
 				representation = "sets";
 			}
 			else if (taskID.Equals("task3bPlus.1.setB.sets")){
@@ -257,6 +273,8 @@ namespace taskDependentSupport.core
 				endDenominator = 9;
 				finalNumerator = 6;
 				finalDenominator = 9;
+				resultNumerator = 8;
+				resultDenominator = 9;
 				representation = "sets";
 			}
 			else if (taskID.Equals("task3bPlus.1.setC.sets")){
@@ -266,6 +284,8 @@ namespace taskDependentSupport.core
 				endDenominator = 6;
 				finalNumerator = 8;
 				finalDenominator = 6;
+				resultNumerator = 11;
+				resultDenominator = 6;
 				representation = "sets";
 			}
 			else if (taskID.Equals("task3bPlus.1.setA.liqu")){
@@ -275,6 +295,8 @@ namespace taskDependentSupport.core
 				endDenominator = 12;
 				finalNumerator = 2;
 				finalDenominator = 12;
+				resultNumerator = 7;
+				resultDenominator = 12;
 				representation = "liquid measures";
 			}
 			else if (taskID.Equals("task3bPlus.1.setB.liqu")){
@@ -284,6 +306,8 @@ namespace taskDependentSupport.core
 				endDenominator = 9;
 				finalNumerator = 6;
 				finalDenominator = 9;
+				resultNumerator = 8;
+				resultDenominator = 9;
 				representation = "liquid measures";
 			}
 			else if (taskID.Equals("task3bPlus.1.setC.liqu")){
@@ -293,6 +317,8 @@ namespace taskDependentSupport.core
 				endDenominator = 6;
 				finalNumerator = 8;
 				finalDenominator = 6;
+				resultNumerator = 11;
+				resultDenominator = 6;
 				representation = "liquid measures";
 			}
 
@@ -303,6 +329,8 @@ namespace taskDependentSupport.core
 			feedbackMessageString.setStartDenominator(startDenominator);
 			feedbackMessageString.setEndNumerator(endNumerator);
 			feedbackMessageString.setEndDenominator(endDenominator);
+			feedbackMessageString.setFinalNumerator(finalNumerator);
+			feedbackMessageString.setFinalDenominator(finalDenominator);
 			//feedbackMessageString.setRepresentation(representation);
 
 			tooManyReps = new FeedbackElem ();
@@ -1392,6 +1420,7 @@ namespace taskDependentSupport.core
 			nextStepT3aPE2.setSpeech(true);
 			T3aP1E2.setNextStep (nextStepT3aPE2);
 
+
 			T3bP1S3 = new FeedbackElem ();
 			T3bP1S3.setID ("T3bP1S3");
 			FeedbackMessage T3bP1S3M = new FeedbackMessage ();
@@ -1405,7 +1434,7 @@ namespace taskDependentSupport.core
 			nextStepT3bP1S3.setAnyValue (true);
 			T3bP1S3.setNextStep (nextStepT3bP1S3);
 
-			/*T3bP1M1 = new FeedbackElem ();
+			T3bP1M1 = new FeedbackElem ();
 			T3bP1M1.setID ("T3bP1M1");
 			FeedbackMessage T3bP1M1M = new FeedbackMessage ();
 			T3bP1M1M.setSocratic (feedbackMessageString.T3bP1M1_socratic());
@@ -1413,17 +1442,138 @@ namespace taskDependentSupport.core
 			T3bP1M1M.setDidacticConceptual (feedbackMessageString.T3bP1M1_didacticConceptual());
 			T3bP1M1M.setDidacticProcedural (feedbackMessageString.T3bP1M1_didacticProcedural());
 			T3bP1M1.setFeedbackMessage (T3bP1M1M);
-			T3bP1M1.setFeedbackType (FeedbackType.nextStep);
+			T3bP1M1.setFeedbackType (FeedbackType.problemSolving);
 			Fraction nextStepT3bP1M1 = new Fraction ();
-			nextStepT3bP1M1.setDenomitors
-
-				(true);
+			int[] valuesM1denom = new int[2] {startDenominator, endDenominator};
+			nextStepT3bP1M1.setDenominators(valuesM1denom);
 			T3bP1M1.setNextStep (nextStepT3bP1M1);
 
+			T3bP1M2 = new FeedbackElem ();
+			T3bP1M2.setID ("T3bP1M2");
+			FeedbackMessage T3bP1M2M = new FeedbackMessage ();
+			T3bP1M2M.setSocratic (feedbackMessageString.T3bP1M2_socratic());
+			T3bP1M2M.setGuidance (feedbackMessageString.T3bP1M2_guidance());
+			T3bP1M2M.setDidacticConceptual (feedbackMessageString.T3bP1M2_didacticConceptual());
+			T3bP1M2M.setDidacticProcedural (feedbackMessageString.T3bP1M2_didacticProcedural());
+			T3bP1M2.setFeedbackMessage (T3bP1M2M);
+			T3bP1M2.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3bP1M2 = new Fraction ();
+			nextStepT3bP1M2.setDenominator(startDenominator);
+			T3bP1M2.setNextStep (nextStepT3bP1M2);
 
-				T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M6, T3bP1M7, T3bP1M8, T3bP1M9, T3bP1M10, T3bP1M11, T3bP1E1, T3bP1E2; 
-	*/
+			T3bP1M3 = new FeedbackElem ();
+			T3bP1M3.setID ("T3bP1M3");
+			FeedbackMessage T3bP1M3M = new FeedbackMessage ();
+			T3bP1M3M.setSocratic (feedbackMessageString.T3bP1M3_socratic());
+			T3bP1M3M.setGuidance (feedbackMessageString.T3bP1M3_guidance());
+			T3bP1M3M.setDidacticConceptual (feedbackMessageString.T3bP1M3_didacticConceptual());
+			T3bP1M3.setFeedbackMessage (T3bP1M3M);
+			T3bP1M3.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3bP1M3 = new Fraction ();
+			int[] valuesT3bM3num = new int[2] {startNumerator, endNumerator};
+			int[] valuesT3bM3denom = new int[2] {startDenominator, endDenominator};
+			nextStepT3bP1M3.setNumerators(valuesT3bM3num);
+			nextStepT3bP1M3.setDenominators(valuesT3bM3denom);
+			T3bP1M3.setNextStep (nextStepT3bP1M3);
 
+			T3bP1M4 = new FeedbackElem ();
+			T3bP1M4.setID ("T3bP1M4");
+			FeedbackMessage T3bP1M4M = new FeedbackMessage ();
+			T3bP1M4M.setDidacticConceptual (feedbackMessageString.T3bP1M4_didacticConceptual());
+			T3bP1M4.setFeedbackMessage (T3bP1M4M);
+			T3bP1M4.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT3bP1M4 = new Fraction ();
+			nextStepT3bP1M4.setSpeech (true);
+			T3bP1M4.setNextStep (nextStepT3bP1M4);
+
+			T3bP1M5 = new FeedbackElem ();
+			T3bP1M5.setID ("T3bP1M5");
+			FeedbackMessage T3bP1M5M = new FeedbackMessage ();
+			T3bP1M5M.setSocratic (feedbackMessageString.T3bP1M5_socratic());
+			T3bP1M5M.setGuidance (feedbackMessageString.T3bP1M5_guidance());
+			T3bP1M5M.setDidacticConceptual (feedbackMessageString.T3bP1M5_didacticConceptual());
+			T3bP1M5M.setDidacticProcedural (feedbackMessageString.T3bP1M5_didacticProcedural());
+			T3bP1M5.setFeedbackMessage (T3bP1M5M);
+			T3bP1M5.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1M5 = new Fraction ();
+			nextStepT3bP1M5.setDenominator(startDenominator);
+			T3bP1M5.setNextStep (nextStepT3bP1M5);
+
+			T3bP1M7start = new FeedbackElem ();
+			T3bP1M7start.setID ("T3bP1M7start");
+			FeedbackMessage T3bP1M7Mstart = new FeedbackMessage ();
+			T3bP1M7Mstart.setSocratic (feedbackMessageString.T3bP1M7_socratic());
+			T3bP1M7Mstart.setGuidance (feedbackMessageString.T3bP1M7First_guidance());
+			T3bP1M7start.setFeedbackMessage (T3bP1M7Mstart);
+			T3bP1M7start.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1M7start = new Fraction ();
+			nextStepT3bP1M7start.setNumerator(startNumerator);
+			nextStepT3bP1M7start.setDenominator(startDenominator);
+			T3bP1M7start.setNextStep (nextStepT3bP1M7start);
+
+			T3bP1M7end = new FeedbackElem ();
+			T3bP1M7end.setID ("T3bP1M7end");
+			FeedbackMessage T3bP1M7Mend = new FeedbackMessage ();
+			T3bP1M7Mend.setSocratic (feedbackMessageString.T3bP1M7_socratic());
+			T3bP1M7Mend.setGuidance (feedbackMessageString.T3bP1M7Second_guidance());
+			T3bP1M7end.setFeedbackMessage (T3bP1M7Mend);
+			T3bP1M7end.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1M7end = new Fraction ();
+			nextStepT3bP1M7end.setNumerator(endNumerator);
+			nextStepT3bP1M7end.setDenominator(endDenominator);
+			T3bP1M7end.setNextStep (nextStepT3bP1M7end);
+
+			T3bP1M8 = new FeedbackElem ();
+			T3bP1M8.setID ("T3bP1M8");
+			FeedbackMessage T3bP1M8M = new FeedbackMessage ();
+			T3bP1M8M.setSocratic (feedbackMessageString.T3bP1M8_socratic());
+			T3bP1M8M.setGuidance (feedbackMessageString.T3bP1M8_guidance());
+			T3bP1M8M.setDidacticConceptual (feedbackMessageString.T3bP1M8_didacticConceptual());
+			T3bP1M8M.setDidacticProcedural (feedbackMessageString.T3bP1M8_didacticProcedural());
+			T3bP1M8.setFeedbackMessage (T3bP1M8M);
+			T3bP1M8.setFeedbackType (FeedbackType.problemSolving);
+			Fraction nextStepT3bP1M8 = new Fraction ();
+			nextStepT3bP1M8.setDenominator(endDenominator);
+			T3bP1M8.setNextStep (nextStepT3bP1M8);
+
+			T3bP1M10 = new FeedbackElem ();
+			T3bP1M10.setID ("T3bP1M10");
+			FeedbackMessage T3bP1M10M = new FeedbackMessage ();
+			T3bP1M10M.setDidacticConceptual (feedbackMessageString.T3bP1M10_didacticConceptual());
+			T3bP1M10.setFeedbackMessage (T3bP1M10M);
+			T3bP1M10.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT3bP1M10 = new Fraction ();
+			nextStepT3bP1M10.setSpeech (true);
+			T3bP1M10.setNextStep (nextStepT3bP1M10);
+
+			T3bP1M11 = new FeedbackElem ();
+			T3bP1M11.setID ("T3bP1M11");
+			FeedbackMessage T3bP1M11M = new FeedbackMessage ();
+			T3bP1M11M.setSocratic (feedbackMessageString.T3bP1M11_socratic());
+			T3bP1M11M.setGuidance (feedbackMessageString.T3bP1M11_guidance());
+			T3bP1M11M.setDidacticConceptual (feedbackMessageString.T3bP1M11_didacticConceptual());
+			T3bP1M11.setFeedbackMessage (T3bP1M11M);
+			T3bP1M11.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1M11 = new Fraction ();
+			nextStepT3bP1M11.setAdditionBox (true);
+			T3bP1M11.setNextStep (nextStepT3bP1M11);
+
+			T3bP1E1 = new FeedbackElem ();
+			T3bP1E1.setID ("T3bP1E1");
+			FeedbackMessage T3bP1E1M = new FeedbackMessage ();
+			T3bP1E1M.setDidacticConceptual (feedbackMessageString.T3bP1E1_didacticConceptual());
+			T3bP1E1.setFeedbackMessage (T3bP1E1M);
+			T3bP1E1.setFeedbackType (FeedbackType.affirmation);
+		
+			T3bP1E2 = new FeedbackElem ();
+			T3bP1E2.setID ("T3bP1E2");
+			FeedbackMessage T3bP1E2M = new FeedbackMessage ();
+			T3bP1E2M.setDidacticConceptual (feedbackMessageString.T3bP1E2_didacticConceptual());
+			T3bP1E2.setFeedbackMessage (T3bP1E2M);
+			T3bP1E2.setFeedbackType (FeedbackType.reflection);
+			Fraction nextStepT3bP1E2 = new Fraction ();
+			nextStepT3bP1E2.setSpeech(true);
+			T3bP1E2.setNextStep (nextStepT3bP1E2);
 
 		}
 
@@ -1527,20 +1677,19 @@ namespace taskDependentSupport.core
 			else if (T3aP1E1.getID ().Equals (id))return T3aP1E1;
 			else if (T3aP1E2.getID ().Equals (id)) return T3aP1E2;
 
-			/*else if (T3bP1S3.getID ().Equals (id)) return T3bP1S3;
+			else if (T3bP1S3.getID ().Equals (id)) return T3bP1S3;
 			else if (T3bP1M1.getID ().Equals (id)) return T3bP1M1;
 			else if (T3bP1M2.getID ().Equals (id)) return T3bP1M2;
 			else if (T3bP1M3.getID ().Equals (id)) return T3bP1M3;
 			else if (T3bP1M4.getID ().Equals (id)) return T3bP1M4;
 			else if (T3bP1M5.getID ().Equals (id)) return T3bP1M5;
-			else if (T3bP1M6.getID ().Equals (id)) return T3bP1M6;
-			else if (T3bP1M7.getID ().Equals (id)) return T3bP1M7;
+			else if (T3bP1M7start.getID ().Equals (id)) return T3bP1M7start;
+			else if (T3bP1M7end.getID ().Equals (id)) return T3bP1M7end;
 			else if (T3bP1M8.getID ().Equals (id)) return T3bP1M8;
-			else if (T3bP1M9.getID ().Equals (id)) return T3bP1M9;
 			else if (T3bP1M10.getID ().Equals (id)) return T3bP1M10;
 			else if (T3bP1M11.getID ().Equals (id)) return T3bP1M11;
 			else if (T3bP1E1.getID ().Equals (id)) return T3bP1E1;
-			else if (T3bP1E2.getID ().Equals (id)) return T3bP1E2; */
+			else if (T3bP1E2.getID ().Equals (id)) return T3bP1E2; 
 
 			else return new FeedbackElem ();
 		}

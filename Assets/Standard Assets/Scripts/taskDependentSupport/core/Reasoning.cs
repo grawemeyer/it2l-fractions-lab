@@ -77,8 +77,16 @@ namespace taskDependentSupport.core
 				         taskID.Equals("task3aPlus.1.setA.numb") || taskID.Equals("task3aPlus.1.setB.numb") || taskID.Equals("task3aPlus.1.setC.numb") ||
 				         taskID.Equals("task3aPlus.1.setA.sets") || taskID.Equals("task3aPlus.1.setB.sets") || taskID.Equals("task3aPlus.1.setC.sets") ||
 				         taskID.Equals("task3aPlus.1.setA.liqu") || taskID.Equals("task3aPlus.1.setB.liqu") || taskID.Equals("task3aPlus.1.setC.liqu") ){
-					studentModel.setMessageRule("processDoneEvent-taskCompleted-task3");
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task3a");
 					currentFeedback = feedbackData.T3aP1E2;
+					setNewFeedback();
+				}
+				else if (taskID.Equals("task3bPlus.1.setA.area") || taskID.Equals("task3bPlus.1.setB.area") || taskID.Equals("task3bPlus.1.setC.area") ||
+				         taskID.Equals("task3bPlus.1.setA.numb") || taskID.Equals("task3bPlus.1.setB.numb") || taskID.Equals("task3bPlus.1.setC.numb") ||
+				         taskID.Equals("task3bPlus.1.setA.sets") || taskID.Equals("task3bPlus.1.setB.sets") || taskID.Equals("task3bPlus.1.setC.sets") ||
+				         taskID.Equals("task3bPlus.1.setA.liqu") || taskID.Equals("task3bPlus.1.setB.liqu") || taskID.Equals("task3bPlus.1.setC.liqu") ){
+					studentModel.setMessageRule("processDoneEvent-taskCompleted-task3b");
+					currentFeedback = feedbackData.T3bP1E2;
 					setNewFeedback();
 				}
 				TDSWrapper.ArrowButtonEnable (true);
@@ -703,12 +711,261 @@ namespace taskDependentSupport.core
 		}
 
 
+		private bool includesSolution(int finalNumerator, int finalDenominator, int endNumerator, int endDenominator, int resultNumerator, int resultDenominator){
+			if (currentSetContainsFraction(finalNumerator, finalDenominator) &&
+			    currentSetContainsFraction(endNumerator, endDenominator) && 
+			    currentSetContainsFraction(resultNumerator, resultDenominator)){
+				return true;
+			}
+			return false;
+		}
+
+
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
 			Debug.Log ("taskID: "+taskID);
 			Fraction testCurrentFraction = studentModel.getCurrentFraction ();
 			Debug.Log ("testCurrentFraction: "+testCurrentFraction);
+
+			if (taskID.Equals ("task3bPlus.1.setA.area") || taskID.Equals ("task3bPlus.1.setB.area") || taskID.Equals ("task3bPlus.1.setC.area") ||
+				taskID.Equals ("task3bPlus.1.setA.numb") || taskID.Equals ("task3bPlus.1.setB.numb") || taskID.Equals ("task3bPlus.1.setC.numb") ||
+				taskID.Equals ("task3bPlus.1.setA.sets") || taskID.Equals ("task3bPlus.1.setB.sets") || taskID.Equals ("task3bPlus.1.setC.sets") ||
+				taskID.Equals ("task3bPlus.1.setA.liqu") || taskID.Equals ("task3bPlus.1.setB.liqu") || taskID.Equals ("task3bPlus.1.setC.liqu")) {
+			
+				checkForFeedbackFollowed ();
+				
+				int startNumerator = 0;
+				int startDenominator = 0;
+				int endNumerator = 0;
+				int endDenominator = 0;
+				int finalNumerator = 0;
+				int finalDenominator = 0;
+				int resultNumerator = 0;
+				int resultDenominator = 0;
+
+				string representation = "area";
+
+				if (taskID.Equals("task3bPlus.1.setA.area")){
+					startNumerator = 1;
+					startDenominator = 6;
+					endNumerator = 5;
+					endDenominator = 12;
+					finalNumerator = 2;
+					finalDenominator = 12;
+					resultNumerator = 7;
+					resultDenominator = 12;
+					representation = "area";
+				}
+				else if (taskID.Equals("task3bPlus.1.setB.area")){
+					startNumerator = 2;
+					startDenominator = 3;
+					endNumerator = 2;
+					endDenominator = 9;
+					finalNumerator = 6;
+					finalDenominator = 9;
+					resultNumerator = 8;
+					resultDenominator = 9;
+					representation = "area";
+				}
+				else if (taskID.Equals("task3bPlus.1.setC.area")){
+					startNumerator = 4;
+					startDenominator = 3;
+					endNumerator = 3;
+					endDenominator = 6;
+					finalNumerator = 8;
+					finalDenominator = 6;
+					resultNumerator = 11;
+					resultDenominator = 6;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3bPlus.1.setA.numb")){
+					startNumerator = 1;
+					startDenominator = 6;
+					endNumerator = 5;
+					endDenominator = 12;
+					finalNumerator = 2;
+					finalDenominator = 12;
+					resultNumerator = 7;
+					resultDenominator = 12;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3bPlus.1.setB.numb")){
+					startNumerator = 2;
+					startDenominator = 3;
+					endNumerator = 2;
+					endDenominator = 9;
+					finalNumerator = 6;
+					finalDenominator = 9;
+					resultNumerator = 8;
+					resultDenominator = 9;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3bPlus.1.setC.numb")){
+					startNumerator = 4;
+					startDenominator = 3;
+					endNumerator = 3;
+					endDenominator = 6;
+					finalNumerator = 8;
+					finalDenominator = 6;
+					resultNumerator = 11;
+					resultDenominator = 6;
+					representation = "number line";
+				}
+				else if (taskID.Equals("task3bPlus.1.setA.sets")){
+					startNumerator = 1;
+					startDenominator = 6;
+					endNumerator = 5;
+					endDenominator = 12;
+					finalNumerator = 2;
+					finalDenominator = 12;
+					resultNumerator = 7;
+					resultDenominator = 12;
+					representation = "sets";
+				}
+				else if (taskID.Equals("task3bPlus.1.setB.sets")){
+					startNumerator = 2;
+					startDenominator = 3;
+					endNumerator = 2;
+					endDenominator = 9;
+					finalNumerator = 6;
+					finalDenominator = 9;
+					resultNumerator = 8;
+					resultDenominator = 9;
+					representation = "sets";
+				}
+				else if (taskID.Equals("task3bPlus.1.setC.sets")){
+					startNumerator = 4;
+					startDenominator = 3;
+					endNumerator = 3;
+					endDenominator = 6;
+					finalNumerator = 8;
+					finalDenominator = 6;
+					resultNumerator = 11;
+					resultDenominator = 6;
+					representation = "sets";
+				}
+				else if (taskID.Equals("task3bPlus.1.setA.liqu")){
+					startNumerator = 1;
+					startDenominator = 6;
+					endNumerator = 5;
+					endDenominator = 12;
+					finalNumerator = 2;
+					finalDenominator = 12;
+					resultNumerator = 7;
+					resultDenominator = 12;
+					representation = "liquid measures";
+				}
+				else if (taskID.Equals("task3bPlus.1.setB.liqu")){
+					startNumerator = 2;
+					startDenominator = 3;
+					endNumerator = 2;
+					endDenominator = 9;
+					finalNumerator = 6;
+					finalDenominator = 9;
+					resultNumerator = 8;
+					resultDenominator = 9;
+					representation = "liquid measures";
+				}
+				else if (taskID.Equals("task3bPlus.1.setC.liqu")){
+					startNumerator = 4;
+					startDenominator = 3;
+					endNumerator = 3;
+					endDenominator = 6;
+					finalNumerator = 8;
+					finalDenominator = 6;
+					resultNumerator = 11;
+					resultDenominator = 6;
+					representation = "liquid measures";
+				}
+				
+				Fraction currentFraction = studentModel.getCurrentFraction ();
+
+				if (currentFraction != null) {
+					int numerator = currentFraction.getNumerator ();
+					int denominator = currentFraction.getDenominator ();
+					int partition = currentFraction.getPartition ();
+					
+					
+					if (partition != 0) {
+						numerator = numerator * partition;
+						denominator = denominator * partition;
+					}
+					
+					if ((numerator == 0) && (denominator == 0)) {
+						studentModel.setMessageRule("processEvent-task3b-checkFor-Num-Den-Not-0");
+						currentFeedback = feedbackData.T3bP1S3;
+					}
+					else if (includesSolution(finalNumerator, finalDenominator, endNumerator, endDenominator, resultNumerator, resultDenominator) && studentModel.getAdditionBox()){
+						studentModel.setMessageRule("processEvent-task3b-checkForAddedFraction-Num-Den-AddBox");
+						studentModel.setTaskCompleted(true);
+						currentFeedback = feedbackData.T3bP1E1;
+					}
+					else if (includesSolution(finalNumerator, finalDenominator, endNumerator, endDenominator, resultNumerator, resultDenominator) && !studentModel.getAdditionBox()){
+						studentModel.setMessageRule("processEvent-task3b-checkForAddedFraction-Num-Den");
+						currentFeedback = feedbackData.T3bP1M11;
+					}
+
+					else if (((denominator == startDenominator) ||  (denominator == endDenominator)) &&
+					         (studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3bP1M1.getID ()) ||
+							 studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3bP1M2.getID ()))){
+						studentModel.setMessageRule("processEvent-task3b-correct-Den-PreviousFeedback-T3bP1M1-T3bP1M2");
+						currentFeedback = feedbackData.T3bP1M4;
+					}
+
+					else if ((denominator == finalDenominator) && (numerator == finalNumerator) && (partition != 0)){
+						studentModel.setMessageRule("processEvent-task3b-correct-finalNum-finalDen-partition");
+						currentFeedback = feedbackData.T3bP1M10;
+					}
+
+					else if ((denominator == finalDenominator) && (numerator == finalNumerator)){
+						studentModel.setMessageRule("processEvent-task3b-correct-finalNum-finalDen-no-partition");
+						currentFeedback = feedbackData.T3bP1M10;
+					}
+
+					else if ((denominator == startDenominator) && (numerator == startNumerator)){
+						studentModel.setMessageRule("processEvent-task3b-correct-startNum-startDen");
+						currentFeedback = feedbackData.T3bP1M8;
+					}
+
+					else if (denominator == startDenominator){
+						studentModel.setMessageRule("processEvent-task3b-correct-startDen");
+						currentFeedback = feedbackData.T3bP1M7start;
+					}
+
+					else if (denominator == endDenominator){
+						studentModel.setMessageRule("processEvent-task3b-correct-endDen");
+						currentFeedback = feedbackData.T3bP1M7end;
+					}
+
+					else if ((numerator == startDenominator) &&
+					         studentModel.getPreviousFeedback().getID().Equals(feedbackData.T3bP1M1.getID ())){
+						studentModel.setMessageRule("processEvent-task3-Den-PreviousFeedback-T3bP1M1");
+						currentFeedback = feedbackData.T3bP1M5;
+					}
+
+					else if (numerator == startDenominator){
+						studentModel.setMessageRule("processEvent-task3b-checkFor-Numerator-asDenominator");
+						currentFeedback = feedbackData.T3bP1M2;
+					}
+
+					else if ((denominator != startDenominator) || (denominator != endDenominator)){
+						studentModel.setMessageRule("processEvent-task3b-checkFor-startDen-endDen");
+						currentFeedback = feedbackData.T3bP1M1;
+					}
+
+					else if (((numerator != startNumerator) && (denominator != startDenominator)) ||
+					         ((numerator != endNumerator) && (denominator != endDenominator))){
+						studentModel.setMessageRule("processEvent-task3b-checkFor-num-Den-notFromSet");
+						currentFeedback = feedbackData.T3bP1M3;
+					}
+				}
+				else {
+					studentModel.setMessageRule("processEvent-task3b-Default-02");
+					currentFeedback = new FeedbackElem();
+				}
+				setNewFeedback();
+			}
 
 
 

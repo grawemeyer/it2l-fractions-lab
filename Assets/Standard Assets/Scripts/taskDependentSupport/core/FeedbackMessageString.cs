@@ -7,6 +7,8 @@ namespace taskDependentSupport.core
 		private static int endNumerator = 0;
 		private static int startDenominator = 0;
 		private static int endDenominator = 0;
+		private static int finalNumerator = 0;
+		private static int finalDenominator = 0;
 		private static String representation = "area";
 		private bool english = true;
 		private bool german  =false;
@@ -378,15 +380,13 @@ namespace taskDependentSupport.core
 		String fT3bP1M8_didacticConceptual = "Change the fraction "+startNumerator+"/"+startDenominator+" so that it remains equivalent but has the denominator "+endDenominator+". You could use the partition tool to help.";
 		String fT3bP1M8_didacticProcedural = "Use the partition tool to change the fraction "+startNumerator+"/"+startDenominator+" into a fraction with the denominator "+endDenominator+".";
 
-		String fT3bP1M10setA_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make 2/12?";
-		String fT3bP1M10setB_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make 6/9?";
-		String fT3bP1M10setC_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make 8/6?";
+		String fT3bP1M10_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make "+finalNumerator+"/"+finalDenominator+"?";
 
 		String fT3bP1M11_socratic = "How can you check, using a Fractions Lab tool,  that your solution is correct?";
 		String fT3bP1M11_guidance = "You could use the addition box to add your fractions.";
 		String fT3bP1M11_didacticConceptual = "Add your two fractions using the addition box.";
 
-		String fT3bP1E1_didacticConceptual = "The way that you worked that out was excellent. Well done.";
+		String fT3bP1E1_didacticConceptual = "The way that you worked that out was excellent. Now go to the next task.";
 
 		String fT3bP1E2_didacticConceptual = "Please explain how you answered the task. Why did you make the fractions that you made?";
 	
@@ -754,10 +754,8 @@ namespace taskDependentSupport.core
 		String gT3bP1M8_didacticConceptual = "GERMAN Change the fraction "+startNumerator+"/"+startDenominator+" so that it remains equivalent but has the denominator "+endDenominator+". You could use the partition tool to help.";
 		String gT3bP1M8_didacticProcedural = "GERMAN Use the partition tool to change the fraction "+startNumerator+"/"+startDenominator+" into a fraction with the denominator "+endDenominator+".";
 		
-		String gT3bP1M10setA_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make 2/12?";
-		String gT3bP1M10setB_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make 6/9?";
-		String gT3bP1M10setC_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make 8/6?";
-		
+		String gT3bP1M10_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make "+finalNumerator+"/"+finalDenominator+"?";
+
 		String gT3bP1M11_socratic = "GERMAN How can you check, using a Fractions Lab tool,  that your solution is correct?";
 		String gT3bP1M11_guidance = "GERMAN You could use the addition box to add your fractions.";
 		String gT3bP1M11_didacticConceptual = "GERMAN Add your two fractions using the addition box.";
@@ -1128,10 +1126,8 @@ namespace taskDependentSupport.core
 		String sT3bP1M8_didacticConceptual = "SPANISH Change the fraction "+startNumerator+"/"+startDenominator+" so that it remains equivalent but has the denominator "+endDenominator+". You could use the partition tool to help.";
 		String sT3bP1M8_didacticProcedural = "SPANISH Use the partition tool to change the fraction "+startNumerator+"/"+startDenominator+" into a fraction with the denominator "+endDenominator+".";
 		
-		String sT3bP1M10setA_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make 2/12?";
-		String sT3bP1M10setB_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make 6/9?";
-		String sT3bP1M10setC_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make 8/6?";
-		
+		String sT3bP1M10_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make "+finalNumerator+"/"+finalDenominator+"?";
+
 		String sT3bP1M11_socratic = "SPANISH How can you check, using a Fractions Lab tool,  that your solution is correct?";
 		String sT3bP1M11_guidance = "SPANISH You could use the addition box to add your fractions.";
 		String sT3bP1M11_didacticConceptual = "SPANISH Add your two fractions using the addition box.";
@@ -1147,7 +1143,13 @@ namespace taskDependentSupport.core
 			spanish = spanishValue;
 		}
 
+		public void setFinalNumerator(int value){
+			finalNumerator = value;
+		}
 
+		public void setFinalDenominator(int value){
+			finalDenominator = value;
+		}
 			
 		public void setStartNumerator(int value){
 			startNumerator = value;
@@ -4161,39 +4163,15 @@ namespace taskDependentSupport.core
 			}
 		} 
 
-		public String T3bP1M10setA_didacticConceptual(){
+		public String T3bP1M10_didacticConceptual(){
 			if (spanish) {
-				return sT3bP1M10setA_didacticConceptual;
+				return sT3bP1M10_didacticConceptual;
 			} 
 			else if (german){
-				return gT3bP1M10setA_didacticConceptual;
+				return gT3bP1M10_didacticConceptual;
 			}
 			else {
-				return fT3bP1M10setA_didacticConceptual;
-			}
-		} 
-
-		public String T3bP1M10setB_didacticConceptual(){
-			if (spanish) {
-				return sT3bP1M10setB_didacticConceptual;
-			} 
-			else if (german){
-				return gT3bP1M10setB_didacticConceptual;
-			}
-			else {
-				return fT3bP1M10setB_didacticConceptual;
-			}
-		} 
-
-		public String T3bP1M10setC_didacticConceptual(){
-			if (spanish) {
-				return sT3bP1M10setC_didacticConceptual;
-			} 
-			else if (german){
-				return gT3bP1M10setC_didacticConceptual;
-			}
-			else {
-				return fT3bP1M10setC_didacticConceptual;
+				return fT3bP1M10_didacticConceptual;
 			}
 		} 
 
