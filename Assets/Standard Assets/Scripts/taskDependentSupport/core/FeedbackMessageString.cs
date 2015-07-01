@@ -342,7 +342,54 @@ namespace taskDependentSupport.core
 
 		 String fT3aP1E2M_didacticConceptual = "Please explain how you answered the task. Why did you make the fractions that you made?.";
 
+		String fT3bP1_affirmationInstruction_socratic = "Good. What do you need to do now, to change the fraction?";
+		String fT3bP1_affirmationInstruction_guidance = "You can use the arrow buttons to change the fraction.";
+		String fT3bP1_affirmationInstruction_didacticConceptual = "Now click the up arrow next to the empty fraction, to make the denominator.";
+		String fT3bP1_affirmationInstruction_didacticProcedural = "Now click the up arrow next to the empty fraction, to make the denominator "+startDenominator+".";
 
+
+		String fT3bP1M1_socratic = "Is the denominator in your fraction correct?";
+		String fT3bP1M1_guidance = "You can click the up arrow next to your fraction to change it.";
+		String fT3bP1M1_didacticConceptual = "Check that the denominator in your fraction is correct.";
+		String fT3bP1M1_didacticProcedural = "Check that the denominator (the bottom part of your fraction) is "+startDenominator+".";
+
+		String fT3bP1M2_socratic = "Have you changed the numerator or denominator?";
+		String fT3bP1M2_guidance = "Remember that the denominator is the bottom part of the fraction.";
+		String fT3bP1M2_didacticConceptual = "Check that you have changed the denominator, not the numerator.";
+		String fT3bP1M2_didacticProcedural = "Check that the denominator in your fraction, not the numerator, is "+startDenominator+".";
+
+		String fT3bP1M3_socratic = "Is this the fraction you were planning to make?";
+		String fT3bP1M3_guidance = "Please read the task again carefully.";
+		String fT3bP1M3_didacticConceptual = "Re-read the task then check your fraction.";
+
+		String fT3bP1M4_didacticConceptual = "Excellent. Please explain what the 'numerator' and ‘denominator’ are";
+
+		String fT3bP1M5_socratic = "Have you changed the denominator or the numerator?";
+		String fT3bP1M5_guidance = "The denominator is the bottom part of the fraction.";
+		String fT3bP1M5_didacticConceptual = "You changed the numerator. You need to change the denominator.";
+		String fT3bP1M5_didacticProcedural = "You changed the numerator. You need to change the denominator to "+startDenominator+".";
+
+		String fT3bP1M7_socratic = "Excellent. You’ve made one fraction. What do you need to do now, to complete the task?";
+		String fT3bP1M7First_guidance = "You now need to make a second fraction: "+startNumerator+"/"+startDenominator+".";
+		String fT3bP1M7Second_guidance = "You now need to make a second fraction: "+endNumerator+"/"+endDenominator+".";
+
+		String fT3bP1M8_socratic = "Think about how you add two fractions together. What do you need to do to the denominators?";
+		String fT3bP1M8_guidance = "To add two fractions together, the denominators need to be the same. Think about how you can change "+startNumerator+"/"+startDenominator+" so that it is equivalent but has the denominator "+endDenominator+".";
+		String fT3bP1M8_didacticConceptual = "Change the fraction "+startNumerator+"/"+startDenominator+" so that it remains equivalent but has the denominator "+endDenominator+". You could use the partition tool to help.";
+		String fT3bP1M8_didacticProcedural = "Use the partition tool to change the fraction "+startNumerator+"/"+startDenominator+" into a fraction with the denominator "+endDenominator+".";
+
+		String fT3bP1M10setA_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make 2/12?";
+		String fT3bP1M10setB_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make 6/9?";
+		String fT3bP1M10setC_didacticConceptual = "Excellent. Please explain why you partitioned the fraction to make 8/6?";
+
+		String fT3bP1M11_socratic = "How can you check, using a Fractions Lab tool,  that your solution is correct?";
+		String fT3bP1M11_guidance = "You could use the addition box to add your fractions.";
+		String fT3bP1M11_didacticConceptual = "Add your two fractions using the addition box.";
+
+		String fT3bP1E1_didacticConceptual = "The way that you worked that out was excellent. Well done.";
+
+		String fT3bP1E2_didacticConceptual = "Please explain how you answered the task. Why did you make the fractions that you made?";
+	
 		String gfS1M_socratic = "Wie willst du diese Aufgabe bearbeiten?";
 		String gfS1M_didacticConceptual = "Lies die Aufgabe erneut und erkläre, wie du vorgehst, um die Aufgabe zu lösen.";
 		
@@ -671,6 +718,53 @@ namespace taskDependentSupport.core
 		
 		String gfT3aP1E2M_didacticConceptual = "Bitte erkläre, wie du die Aufgabe beantwortet hast. Warum hast du diese Brüche erstellt?";
 
+		String gT3bP1_affirmationInstruction_socratic = "GERMAN Good. What do you need to do now, to change the fraction?";
+		String gT3bP1_affirmationInstruction_guidance = "GERMAN You can use the arrow buttons to change the fraction.";
+		String gT3bP1_affirmationInstruction_didacticConceptual = "GERMAN Now click the up arrow next to the empty fraction, to make the denominator.";
+		String gT3bP1_affirmationInstruction_didacticProcedural = "GERMAN Now click the up arrow next to the empty fraction, to make the denominator "+startDenominator+".";
+		
+		
+		String gT3bP1M1_socratic = "GERMAN Is the denominator in your fraction correct?";
+		String gT3bP1M1_guidance = "GERMAN You can click the up arrow next to your fraction to change it.";
+		String gT3bP1M1_didacticConceptual = "GERMAN Check that the denominator in your fraction is correct.";
+		String gT3bP1M1_didacticProcedural = "GERMAN Check that the denominator (the bottom part of your fraction) is "+startDenominator+".";
+		
+		String gT3bP1M2_socratic = "GERMAN Have you changed the numerator or denominator?";
+		String gT3bP1M2_guidance = "GERMAN Remember that the denominator is the bottom part of the fraction.";
+		String gT3bP1M2_didacticConceptual = "GERMAN Check that you have changed the denominator, not the numerator.";
+		String gT3bP1M2_didacticProcedural = "GERMAN Check that the denominator in your fraction, not the numerator, is "+startDenominator+".";
+		
+		String gT3bP1M3_socratic = "GERMAN Is this the fraction you were planning to make?";
+		String gT3bP1M3_guidance = "GERMAN Please read the task again carefully.";
+		String gT3bP1M3_didacticConceptual = "GERMAN Re-read the task then check your fraction.";
+		
+		String gT3bP1M4_didacticConceptual = "GERMAN Excellent. Please explain what the 'numerator' and ‘denominator’ are";
+		
+		String gT3bP1M5_socratic = "GERMAN Have you changed the denominator or the numerator?";
+		String gT3bP1M5_guidance = "GERMAN The denominator is the bottom part of the fraction.";
+		String gT3bP1M5_didacticConceptual = "GERMAN You changed the numerator. You need to change the denominator.";
+		String gT3bP1M5_didacticProcedural = "GERMAN You changed the numerator. You need to change the denominator to "+startDenominator+".";
+		
+		String gT3bP1M7_socratic = "GERMAN Excellent. You’ve made one fraction. What do you need to do now, to complete the task?";
+		String gT3bP1M7First_guidance = "GERMAN You now need to make a second fraction: "+startNumerator+"/"+startDenominator+".";
+		String gT3bP1M7Second_guidance = "GERMAN You now need to make a second fraction: "+endNumerator+"/"+endDenominator+".";
+		
+		String gT3bP1M8_socratic = "GERMAN Think about how you add two fractions together. What do you need to do to the denominators?";
+		String gT3bP1M8_guidance = "GERMAN To add two fractions together, the denominators need to be the same. Think about how you can change "+startNumerator+"/"+startDenominator+" so that it is equivalent but has the denominator "+endDenominator+".";
+		String gT3bP1M8_didacticConceptual = "GERMAN Change the fraction "+startNumerator+"/"+startDenominator+" so that it remains equivalent but has the denominator "+endDenominator+". You could use the partition tool to help.";
+		String gT3bP1M8_didacticProcedural = "GERMAN Use the partition tool to change the fraction "+startNumerator+"/"+startDenominator+" into a fraction with the denominator "+endDenominator+".";
+		
+		String gT3bP1M10setA_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make 2/12?";
+		String gT3bP1M10setB_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make 6/9?";
+		String gT3bP1M10setC_didacticConceptual = "GERMAN Excellent. Please explain why you partitioned the fraction to make 8/6?";
+		
+		String gT3bP1M11_socratic = "GERMAN How can you check, using a Fractions Lab tool,  that your solution is correct?";
+		String gT3bP1M11_guidance = "GERMAN You could use the addition box to add your fractions.";
+		String gT3bP1M11_didacticConceptual = "GERMAN Add your two fractions using the addition box.";
+		
+		String gT3bP1E1_didacticConceptual = "GERMAN The way that you worked that out was excellent. Well done.";
+		
+		String gT3bP1E2_didacticConceptual = "GERMAN Please explain how you answered the task. Why did you make the fractions that you made?";
 
 		String sfS1M_socratic = "SPANISH How are you going to tackle this task?";
 		String sfS1M_didacticConceptual = "SPANISH Read the task again, and explain how you are going to tackle it.";
@@ -997,6 +1091,54 @@ namespace taskDependentSupport.core
 		String sfT3aP1E1M_didacticConceptual = "SPANISH The way that you worked that out was excellent. Well done.";
 		
 		String sfT3aP1E2M_didacticConceptual = "SPANISH Please explain how you answered the task. Why did you make the fractions that you made?.";
+
+		String sT3bP1_affirmationInstruction_socratic = "SPANISH Good. What do you need to do now, to change the fraction?";
+		String sT3bP1_affirmationInstruction_guidance = "SPANISH You can use the arrow buttons to change the fraction.";
+		String sT3bP1_affirmationInstruction_didacticConceptual = "SPANISH Now click the up arrow next to the empty fraction, to make the denominator.";
+		String sT3bP1_affirmationInstruction_didacticProcedural = "SPANISH Now click the up arrow next to the empty fraction, to make the denominator "+startDenominator+".";
+		
+		
+		String sT3bP1M1_socratic = "SPANISH Is the denominator in your fraction correct?";
+		String sT3bP1M1_guidance = "SPANISH You can click the up arrow next to your fraction to change it.";
+		String sT3bP1M1_didacticConceptual = "SPANISH Check that the denominator in your fraction is correct.";
+		String sT3bP1M1_didacticProcedural = "SPANISH Check that the denominator (the bottom part of your fraction) is "+startDenominator+".";
+		
+		String sT3bP1M2_socratic = "SPANISH Have you changed the numerator or denominator?";
+		String sT3bP1M2_guidance = "SPANISH Remember that the denominator is the bottom part of the fraction.";
+		String sT3bP1M2_didacticConceptual = "SPANISH Check that you have changed the denominator, not the numerator.";
+		String sT3bP1M2_didacticProcedural = "SPANISH Check that the denominator in your fraction, not the numerator, is "+startDenominator+".";
+		
+		String sT3bP1M3_socratic = "SPANISH Is this the fraction you were planning to make?";
+		String sT3bP1M3_guidance = "SPANISH Please read the task again carefully.";
+		String sT3bP1M3_didacticConceptual = "SPANISH Re-read the task then check your fraction.";
+		
+		String sT3bP1M4_didacticConceptual = "SPANISH Excellent. Please explain what the 'numerator' and ‘denominator’ are";
+		
+		String sT3bP1M5_socratic = "SPANISH Have you changed the denominator or the numerator?";
+		String sT3bP1M5_guidance = "SPANISH The denominator is the bottom part of the fraction.";
+		String sT3bP1M5_didacticConceptual = "SPANISH You changed the numerator. You need to change the denominator.";
+		String sT3bP1M5_didacticProcedural = "SPANISH You changed the numerator. You need to change the denominator to "+startDenominator+".";
+		
+		String sT3bP1M7_socratic = "SPANISH Excellent. You’ve made one fraction. What do you need to do now, to complete the task?";
+		String sT3bP1M7First_guidance = "SPANISH You now need to make a second fraction: "+startNumerator+"/"+startDenominator+".";
+		String sT3bP1M7Second_guidance = "SPANISH You now need to make a second fraction: "+endNumerator+"/"+endDenominator+".";
+		
+		String sT3bP1M8_socratic = "SPANISH Think about how you add two fractions together. What do you need to do to the denominators?";
+		String sT3bP1M8_guidance = "SPANISH To add two fractions together, the denominators need to be the same. Think about how you can change "+startNumerator+"/"+startDenominator+" so that it is equivalent but has the denominator "+endDenominator+".";
+		String sT3bP1M8_didacticConceptual = "SPANISH Change the fraction "+startNumerator+"/"+startDenominator+" so that it remains equivalent but has the denominator "+endDenominator+". You could use the partition tool to help.";
+		String sT3bP1M8_didacticProcedural = "SPANISH Use the partition tool to change the fraction "+startNumerator+"/"+startDenominator+" into a fraction with the denominator "+endDenominator+".";
+		
+		String sT3bP1M10setA_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make 2/12?";
+		String sT3bP1M10setB_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make 6/9?";
+		String sT3bP1M10setC_didacticConceptual = "SPANISH Excellent. Please explain why you partitioned the fraction to make 8/6?";
+		
+		String sT3bP1M11_socratic = "SPANISH How can you check, using a Fractions Lab tool,  that your solution is correct?";
+		String sT3bP1M11_guidance = "SPANISH You could use the addition box to add your fractions.";
+		String sT3bP1M11_didacticConceptual = "SPANISH Add your two fractions using the addition box.";
+		
+		String sT3bP1E1_didacticConceptual = "SPANISH The way that you worked that out was excellent. Well done.";
+		
+		String sT3bP1E2_didacticConceptual = "SPANISH Please explain how you answered the task. Why did you make the fractions that you made?";
 
 
 		public FeedbackMessageString (bool englishValue, bool germanValue, bool spanishValue){
@@ -3695,9 +3837,425 @@ namespace taskDependentSupport.core
 			}
 		} 
 			
+		public String T3bP1_affirmationInstruction_socratic(){
+			if (spanish) {
+				return sT3bP1_affirmationInstruction_socratic;
+			} 
+			else if (german){
+				return gT3bP1_affirmationInstruction_socratic;
+			}
+			else {
+				return fT3bP1_affirmationInstruction_socratic;
+			}
+		} 
 
+		public String T3bP1_affirmationInstruction_guidance(){
+			if (spanish) {
+				return sT3bP1_affirmationInstruction_guidance;
+			} 
+			else if (german){
+				return gT3bP1_affirmationInstruction_guidance;
+			}
+			else {
+				return fT3bP1_affirmationInstruction_guidance;
+			}
+		} 
 
+		public String T3bP1_affirmationInstruction_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1_affirmationInstruction_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1_affirmationInstruction_didacticConceptual;
+			}
+			else {
+				return fT3bP1_affirmationInstruction_didacticConceptual;
+			}
+		} 
 
+		public String T3bP1_affirmationInstruction_didacticProcedural(){
+			if (spanish) {
+				return sT3bP1_affirmationInstruction_didacticProcedural;
+			} 
+			else if (german){
+				return gT3bP1_affirmationInstruction_didacticProcedural;
+			}
+			else {
+				return fT3bP1_affirmationInstruction_didacticProcedural;
+			}
+		} 
+		
+		public String T3bP1M1_socratic(){
+			if (spanish) {
+				return sT3bP1M1_socratic;
+			} 
+			else if (german){
+				return gT3bP1M1_socratic;
+			}
+			else {
+				return fT3bP1M1_socratic;
+			}
+		} 
+
+		public String T3bP1M1_guidance(){
+			if (spanish) {
+				return sT3bP1M1_guidance;
+			} 
+			else if (german){
+				return gT3bP1M1_guidance;
+			}
+			else {
+				return fT3bP1M1_guidance;
+			}
+		} 
+
+		public String T3bP1M1_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M1_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M1_didacticConceptual;
+			}
+			else {
+				return fT3bP1M1_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M1_didacticProcedural(){
+			if (spanish) {
+				return sT3bP1M1_didacticProcedural;
+			} 
+			else if (german){
+				return gT3bP1M1_didacticProcedural;
+			}
+			else {
+				return fT3bP1M1_didacticProcedural;
+			}
+		} 
+
+		public String T3bP1M2_socratic(){
+			if (spanish) {
+				return sT3bP1M2_socratic;
+			} 
+			else if (german){
+				return gT3bP1M2_socratic;
+			}
+			else {
+				return fT3bP1M2_socratic;
+			}
+		} 
+
+		public String T3bP1M2_guidance(){
+			if (spanish) {
+				return sT3bP1M2_guidance;
+			} 
+			else if (german){
+				return gT3bP1M2_guidance;
+			}
+			else {
+				return fT3bP1M2_guidance;
+			}
+		} 
+
+		public String T3bP1M2_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M2_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M2_didacticConceptual;
+			}
+			else {
+				return fT3bP1M2_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M2_didacticProcedural(){
+			if (spanish) {
+				return sT3bP1M2_didacticProcedural;
+			} 
+			else if (german){
+				return gT3bP1M2_didacticProcedural;
+			}
+			else {
+				return fT3bP1M2_didacticProcedural;
+			}
+		} 
+
+		public String T3bP1M3_socratic(){
+			if (spanish) {
+				return sT3bP1M3_socratic;
+			} 
+			else if (german){
+				return gT3bP1M3_socratic;
+			}
+			else {
+				return fT3bP1M3_socratic;
+			}
+		} 
+
+		public String T3bP1M3_guidance(){
+			if (spanish) {
+				return sT3bP1M3_guidance;
+			} 
+			else if (german){
+				return gT3bP1M3_guidance;
+			}
+			else {
+				return fT3bP1M3_guidance;
+			}
+		} 
+
+		public String T3bP1M3_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M3_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M3_didacticConceptual;
+			}
+			else {
+				return fT3bP1M3_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M4_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M4_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M4_didacticConceptual;
+			}
+			else {
+				return fT3bP1M4_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M5_socratic(){
+			if (spanish) {
+				return sT3bP1M5_socratic;
+			} 
+			else if (german){
+				return gT3bP1M5_socratic;
+			}
+			else {
+				return fT3bP1M5_socratic;
+			}
+		} 
+
+		public String T3bP1M5_guidance(){
+			if (spanish) {
+				return sT3bP1M5_guidance;
+			} 
+			else if (german){
+				return gT3bP1M5_guidance;
+			}
+			else {
+				return fT3bP1M5_guidance;
+			}
+		} 
+
+		public String T3bP1M5_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M5_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M5_didacticConceptual;
+			}
+			else {
+				return fT3bP1M5_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M5_didacticProcedural(){
+			if (spanish) {
+				return sT3bP1M5_didacticProcedural;
+			} 
+			else if (german){
+				return gT3bP1M5_didacticProcedural;
+			}
+			else {
+				return fT3bP1M5_didacticProcedural;
+			}
+		} 
+
+		public String T3bP1M7_socratic(){
+			if (spanish) {
+				return sT3bP1M7_socratic;
+			} 
+			else if (german){
+				return gT3bP1M7_socratic;
+			}
+			else {
+				return fT3bP1M7_socratic;
+			}
+		} 
+
+		public String T3bP1M7First_guidance(){
+			if (spanish) {
+				return sT3bP1M7First_guidance;
+			} 
+			else if (german){
+				return gT3bP1M7First_guidance;
+			}
+			else {
+				return fT3bP1M7First_guidance;
+			}
+		} 
+
+		public String T3bP1M7Second_guidance(){
+			if (spanish) {
+				return sT3bP1M7Second_guidance;
+			} 
+			else if (german){
+				return gT3bP1M7Second_guidance;
+			}
+			else {
+				return fT3bP1M7Second_guidance;
+			}
+		} 
+
+		public String T3bP1M8_socratic(){
+			if (spanish) {
+				return sT3bP1M8_socratic;
+			} 
+			else if (german){
+				return gT3bP1M8_socratic;
+			}
+			else {
+				return fT3bP1M8_socratic;
+			}
+		} 
+
+		public String T3bP1M8_guidance(){
+			if (spanish) {
+				return sT3bP1M8_guidance;
+			} 
+			else if (german){
+				return gT3bP1M8_guidance;
+			}
+			else {
+				return fT3bP1M8_guidance;
+			}
+		} 
+
+		public String T3bP1M8_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M8_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M8_didacticConceptual;
+			}
+			else {
+				return fT3bP1M8_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M8_didacticProcedural(){
+			if (spanish) {
+				return sT3bP1M8_didacticProcedural;
+			} 
+			else if (german){
+				return gT3bP1M8_didacticProcedural;
+			}
+			else {
+				return fT3bP1M8_didacticProcedural;
+			}
+		} 
+
+		public String T3bP1M10setA_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M10setA_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M10setA_didacticConceptual;
+			}
+			else {
+				return fT3bP1M10setA_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M10setB_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M10setB_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M10setB_didacticConceptual;
+			}
+			else {
+				return fT3bP1M10setB_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M10setC_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M10setC_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M10setC_didacticConceptual;
+			}
+			else {
+				return fT3bP1M10setC_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M11_socratic(){
+			if (spanish) {
+				return sT3bP1M11_socratic;
+			} 
+			else if (german){
+				return gT3bP1M11_socratic;
+			}
+			else {
+				return fT3bP1M11_socratic;
+			}
+		} 
+
+		public String T3bP1M11_guidance(){
+			if (spanish) {
+				return sT3bP1M11_guidance;
+			} 
+			else if (german){
+				return gT3bP1M11_guidance;
+			}
+			else {
+				return fT3bP1M11_guidance;
+			}
+		} 
+
+		public String T3bP1M11_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1M11_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1M11_didacticConceptual;
+			}
+			else {
+				return fT3bP1M11_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1E1_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1E1_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1E1_didacticConceptual;
+			}
+			else {
+				return fT3bP1E1_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1E2_didacticConceptual(){
+			if (spanish) {
+				return sT3bP1E2_didacticConceptual;
+			} 
+			else if (german){
+				return gT3bP1E2_didacticConceptual;
+			}
+			else {
+				return fT3bP1E2_didacticConceptual;
+			}
+		} 
 
 	}
 }

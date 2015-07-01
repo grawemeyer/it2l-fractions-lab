@@ -15,6 +15,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24M12, T24M13, T24E1, T24E2;
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M7start, T26M7end, T26M8, T26M10, T26M11, T26E1, T26E2;
 		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
+		public FeedbackElem T3bP1S3, T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M6, T3bP1M7, T3bP1M8, T3bP1M9, T3bP1M10, T3bP1M11, T3bP1E1, T3bP1E2; 
 		public FeedbackElem tooManyReps;
 
 		public FeedbackData (String taskID, StudentModel student){
@@ -24,6 +25,8 @@ namespace taskDependentSupport.core
 			int endNumerator = 0;
 			int startDenominator = 0;
 			int endDenominator = 0;
+			int finalNumerator = 0;
+			int finalDenominator = 0;
 			String representation = "area";
 
 			if (taskID.Equals ("task1.1setA")) {
@@ -181,6 +184,115 @@ namespace taskDependentSupport.core
 			else if (taskID.Equals("task3aPlus.1.setC.liqu")){
 				startNumerator = 12;
 				startDenominator = 9;
+				representation = "liquid measures";
+			}
+
+			else if (taskID.Equals("task3bPlus.1.setA.area")){
+				startNumerator = 1;
+				startDenominator = 6;
+				endNumerator = 5;
+				endDenominator = 12;
+				finalNumerator = 2;
+				finalDenominator = 12;
+				representation = "area";
+			}
+			else if (taskID.Equals("task3bPlus.1.setB.area")){
+				startNumerator = 2;
+				startDenominator = 3;
+				endNumerator = 2;
+				endDenominator = 9;
+				finalNumerator = 6;
+				finalDenominator = 9;
+				representation = "area";
+			}
+			else if (taskID.Equals("task3bPlus.1.setC.area")){
+				startNumerator = 4;
+				startDenominator = 3;
+				endNumerator = 3;
+				endDenominator = 6;
+				finalNumerator = 8;
+				finalDenominator = 6;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3bPlus.1.setA.numb")){
+				startNumerator = 1;
+				startDenominator = 6;
+				endNumerator = 5;
+				endDenominator = 12;
+				finalNumerator = 2;
+				finalDenominator = 12;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3bPlus.1.setB.numb")){
+				startNumerator = 2;
+				startDenominator = 3;
+				endNumerator = 2;
+				endDenominator = 9;
+				finalNumerator = 6;
+				finalDenominator = 9;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3bPlus.1.setC.numb")){
+				startNumerator = 4;
+				startDenominator = 3;
+				endNumerator = 3;
+				endDenominator = 6;
+				finalNumerator = 8;
+				finalDenominator = 6;
+				representation = "number line";
+			}
+			else if (taskID.Equals("task3bPlus.1.setA.sets")){
+				startNumerator = 1;
+				startDenominator = 6;
+				endNumerator = 5;
+				endDenominator = 12;
+				finalNumerator = 2;
+				finalDenominator = 12;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task3bPlus.1.setB.sets")){
+				startNumerator = 2;
+				startDenominator = 3;
+				endNumerator = 2;
+				endDenominator = 9;
+				finalNumerator = 6;
+				finalDenominator = 9;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task3bPlus.1.setC.sets")){
+				startNumerator = 4;
+				startDenominator = 3;
+				endNumerator = 3;
+				endDenominator = 6;
+				finalNumerator = 8;
+				finalDenominator = 6;
+				representation = "sets";
+			}
+			else if (taskID.Equals("task3bPlus.1.setA.liqu")){
+				startNumerator = 1;
+				startDenominator = 6;
+				endNumerator = 5;
+				endDenominator = 12;
+				finalNumerator = 2;
+				finalDenominator = 12;
+				representation = "liquid measures";
+			}
+			else if (taskID.Equals("task3bPlus.1.setB.liqu")){
+				startNumerator = 2;
+				startDenominator = 3;
+				endNumerator = 2;
+				endDenominator = 9;
+				finalNumerator = 6;
+				finalDenominator = 9;
+				representation = "liquid measures";
+			}
+			else if (taskID.Equals("task3bPlus.1.setC.liqu")){
+				startNumerator = 4;
+				startDenominator = 3;
+				endNumerator = 3;
+				endDenominator = 6;
+				finalNumerator = 8;
+				finalDenominator = 6;
 				representation = "liquid measures";
 			}
 
@@ -1272,12 +1384,45 @@ namespace taskDependentSupport.core
 			T3aP1E2 = new FeedbackElem ();
 			T3aP1E2.setID ("T3aP1E2");
 			FeedbackMessage T3aP1E2M = new FeedbackMessage ();
+
 			T3aP1E2M.setDidacticConceptual (feedbackMessageString.T3aP1E2M_didacticConceptual());
-			T3aP1E2.setFeedbackMessage (T3aP1E1M);
+			T3aP1E2.setFeedbackMessage (T3aP1E2M);
 			T3aP1E2.setFeedbackType (FeedbackType.reflection);
 			Fraction nextStepT3aPE2 = new Fraction ();
 			nextStepT3aPE2.setSpeech(true);
 			T3aP1E2.setNextStep (nextStepT3aPE2);
+
+			T3bP1S3 = new FeedbackElem ();
+			T3bP1S3.setID ("T3bP1S3");
+			FeedbackMessage T3bP1S3M = new FeedbackMessage ();
+			T3bP1S3M.setSocratic (feedbackMessageString.T3bP1_affirmationInstruction_socratic());
+			T3bP1S3M.setGuidance (feedbackMessageString.T3bP1_affirmationInstruction_guidance());
+			T3bP1S3M.setDidacticConceptual (feedbackMessageString.T3bP1_affirmationInstruction_didacticConceptual());
+			T3bP1S3M.setDidacticProcedural (feedbackMessageString.T3bP1_affirmationInstruction_didacticProcedural());
+			T3bP1S3.setFeedbackMessage (T3bP1S3M);
+			T3bP1S3.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1S3 = new Fraction ();
+			nextStepT3bP1S3.setAnyValue (true);
+			T3bP1S3.setNextStep (nextStepT3bP1S3);
+
+			/*T3bP1M1 = new FeedbackElem ();
+			T3bP1M1.setID ("T3bP1M1");
+			FeedbackMessage T3bP1M1M = new FeedbackMessage ();
+			T3bP1M1M.setSocratic (feedbackMessageString.T3bP1M1_socratic());
+			T3bP1M1M.setGuidance (feedbackMessageString.T3bP1M1_guidance());
+			T3bP1M1M.setDidacticConceptual (feedbackMessageString.T3bP1M1_didacticConceptual());
+			T3bP1M1M.setDidacticProcedural (feedbackMessageString.T3bP1M1_didacticProcedural());
+			T3bP1M1.setFeedbackMessage (T3bP1M1M);
+			T3bP1M1.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1M1 = new Fraction ();
+			nextStepT3bP1M1.setDenomitors
+
+				(true);
+			T3bP1M1.setNextStep (nextStepT3bP1M1);
+
+
+				T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M6, T3bP1M7, T3bP1M8, T3bP1M9, T3bP1M10, T3bP1M11, T3bP1E1, T3bP1E2; 
+	*/
 
 
 		}
@@ -1285,6 +1430,7 @@ namespace taskDependentSupport.core
 
 
 		public FeedbackElem getFeedbackElem(string id){
+
 			if (S1.getID ().Equals (id)) return S1;
 			else if (S2.getID ().Equals (id)) return S2;
 			else if (S3.getID ().Equals (id)) return S3;
@@ -1376,11 +1522,25 @@ namespace taskDependentSupport.core
 			else if (T3aP1M6.getID ().Equals (id)) return T3aP1M6;
 			else if (T3aP1M7.getID ().Equals (id)) return T3aP1M7;
 			else if (T3aP1M8.getID ().Equals (id)) return T3aP1M8;
-			else if (T3aP1M9.getID ().Equals (id)) return T3aP1M9;
 			else if (T3aP1M10.getID ().Equals (id)) return T3aP1M10;
 			else if (T3aP1M11.getID ().Equals (id)) return T3aP1M11;
-			else if (T3aP1E1.getID ().Equals (id)) return T3aP1E1;
+			else if (T3aP1E1.getID ().Equals (id))return T3aP1E1;
 			else if (T3aP1E2.getID ().Equals (id)) return T3aP1E2;
+
+			/*else if (T3bP1S3.getID ().Equals (id)) return T3bP1S3;
+			else if (T3bP1M1.getID ().Equals (id)) return T3bP1M1;
+			else if (T3bP1M2.getID ().Equals (id)) return T3bP1M2;
+			else if (T3bP1M3.getID ().Equals (id)) return T3bP1M3;
+			else if (T3bP1M4.getID ().Equals (id)) return T3bP1M4;
+			else if (T3bP1M5.getID ().Equals (id)) return T3bP1M5;
+			else if (T3bP1M6.getID ().Equals (id)) return T3bP1M6;
+			else if (T3bP1M7.getID ().Equals (id)) return T3bP1M7;
+			else if (T3bP1M8.getID ().Equals (id)) return T3bP1M8;
+			else if (T3bP1M9.getID ().Equals (id)) return T3bP1M9;
+			else if (T3bP1M10.getID ().Equals (id)) return T3bP1M10;
+			else if (T3bP1M11.getID ().Equals (id)) return T3bP1M11;
+			else if (T3bP1E1.getID ().Equals (id)) return T3bP1E1;
+			else if (T3bP1E2.getID ().Equals (id)) return T3bP1E2; */
 
 			else return new FeedbackElem ();
 		}

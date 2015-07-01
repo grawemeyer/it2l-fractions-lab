@@ -114,7 +114,7 @@ namespace taskDependentSupport
 
 		public static void SaveEvent(String id, String message){
 			String result = id+":"+message;
-			Debug.Log ("saveEvent: "+result);
+			Debug.Log (":::::: saveEvent :::::: "+result);
 			Application.ExternalCall("saveEvent", result);
 		}
 
@@ -150,6 +150,10 @@ namespace taskDependentSupport
 				studentID = elem.Substring(12);
 			}
 			else if (checkTaskID.Equals ("task3aP")){
+				taskID = elem.Substring(0,22);
+				studentID = elem.Substring(22);
+			}
+			else if (checkTaskID.Equals ("task3bP")){
 				taskID = elem.Substring(0,22);
 				studentID = elem.Substring(22);
 			}

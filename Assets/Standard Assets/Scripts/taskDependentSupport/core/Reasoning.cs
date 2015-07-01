@@ -116,17 +116,13 @@ namespace taskDependentSupport.core
 			string socratic = currentFeedback.getFeedbackMessage ().getSocratic ();
 			string didacticConceptual = currentFeedback.getFeedbackMessage ().getDidacticConceptual ();
 			string didacticProcedural = currentFeedback.getFeedbackMessage ().getDidacticProcedural();
-
-
-			Debug.Log ("setNewFeedback: "+currentFeedbackID);
-
+		
 			FeedbackData thisFeedbackData = studentModel.getFeedbackData ();
 			if (thisFeedbackData == null) {
 				thisFeedbackData = feedbackData;
 			}
-
+		
 			FeedbackElem studentFeedbackElem = thisFeedbackData.getFeedbackElem (currentFeedbackID);
-			Debug.Log ("studentFeedbackElem: "+studentFeedbackElem.getID());
 			int studentCounter = studentFeedbackElem.getCounter();
 			currentCounter = studentCounter;
 
