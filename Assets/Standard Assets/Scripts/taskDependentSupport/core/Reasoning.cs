@@ -720,6 +720,14 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
+		private bool includesSolution(int finalNumerator, int finalDenominator, int endNumerator, int endDenominator){
+			if (currentSetContainsFraction(finalNumerator, finalDenominator) &&
+			    currentSetContainsFraction(endNumerator, endDenominator)){
+				return true;
+			}
+			return false;
+		}
+
 
 		public void processEvent()
 		{
@@ -881,6 +889,8 @@ namespace taskDependentSupport.core
 				
 				Fraction currentFraction = studentModel.getCurrentFraction ();
 
+				Debug.Log ("<<< currentFraction: "+currentFraction);
+
 				if (currentFraction != null) {
 					int numerator = currentFraction.getNumerator ();
 					int denominator = currentFraction.getDenominator ();
@@ -891,7 +901,10 @@ namespace taskDependentSupport.core
 						numerator = numerator * partition;
 						denominator = denominator * partition;
 					}
-					
+
+					Debug.Log ("<<< numerator: "+numerator);
+					Debug.Log ("<<< denominator: "+denominator);
+
 					if ((numerator == 0) && (denominator == 0)) {
 						studentModel.setMessageRule("processEvent-task3b-checkFor-Num-Den-Not-0");
 						currentFeedback = feedbackData.T3bP1S3;
@@ -918,9 +931,9 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.T3bP1M10;
 					}
 
-					else if ((denominator == finalDenominator) && (numerator == finalNumerator)){
-						studentModel.setMessageRule("processEvent-task3b-correct-finalNum-finalDen-no-partition");
-						currentFeedback = feedbackData.T3bP1M10;
+					else if (includesSolution(finalNumerator, finalDenominator, endNumerator, endDenominator)){
+						studentModel.setMessageRule("processEvent-task3b-correct-finalNum-finalDen-more-Fractions");
+						currentFeedback = feedbackData.T3bP1M12;
 					}
 
 					else if ((denominator == startDenominator) && (numerator == startNumerator)){
@@ -928,12 +941,12 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.T3bP1M8;
 					}
 
-					else if (denominator == startDenominator){
+					else if ((denominator == startDenominator) && onlyOneFraction()){
 						studentModel.setMessageRule("processEvent-task3b-correct-startDen");
 						currentFeedback = feedbackData.T3bP1M7start;
 					}
 
-					else if (denominator == endDenominator){
+					else if ((denominator == endDenominator) && onlyOneFraction()){
 						studentModel.setMessageRule("processEvent-task3b-correct-endDen");
 						currentFeedback = feedbackData.T3bP1M7end;
 					}
@@ -949,15 +962,20 @@ namespace taskDependentSupport.core
 						currentFeedback = feedbackData.T3bP1M2;
 					}
 
-					else if ((denominator != startDenominator) || (denominator != endDenominator)){
+					else if ((denominator != startDenominator) && (denominator != endDenominator)){
 						studentModel.setMessageRule("processEvent-task3b-checkFor-startDen-endDen");
 						currentFeedback = feedbackData.T3bP1M1;
 					}
 
 					else if (((numerator != startNumerator) && (denominator != startDenominator)) ||
-					         ((numerator != endNumerator) && (denominator != endDenominator))){
+					         ((numerator != endNumerator) && (denominator != endDenominator)) ||
+					         (denominator != finalDenominator) && (numerator != finalNumerator)){
 						studentModel.setMessageRule("processEvent-task3b-checkFor-num-Den-notFromSet");
 						currentFeedback = feedbackData.T3bP1M3;
+					}
+					else {
+						studentModel.setMessageRule("processEvent-task3b-Default-01");
+						currentFeedback = new FeedbackElem();
 					}
 				}
 				else {

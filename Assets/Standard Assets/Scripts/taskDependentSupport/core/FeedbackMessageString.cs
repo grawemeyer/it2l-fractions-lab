@@ -386,6 +386,9 @@ namespace taskDependentSupport.core
 		String fT3bP1M11_guidance = "You could use the addition box to add your fractions.";
 		String fT3bP1M11_didacticConceptual = "Add your two fractions using the addition box.";
 
+		String fT3bP1M12_socratic = "How can you add your fractions?";
+		String fT3bP1M12_guidance = "Double click your fractions to add them together.";
+
 		String fT3bP1E1_didacticConceptual = "The way that you worked that out was excellent. Now go to the next task.";
 
 		String fT3bP1E2_didacticConceptual = "Please explain how you answered the task. Why did you make the fractions that you made?";
@@ -759,6 +762,9 @@ namespace taskDependentSupport.core
 		String gT3bP1M11_socratic = "GERMAN How can you check, using a Fractions Lab tool,  that your solution is correct?";
 		String gT3bP1M11_guidance = "GERMAN You could use the addition box to add your fractions.";
 		String gT3bP1M11_didacticConceptual = "GERMAN Add your two fractions using the addition box.";
+
+		String gT3bP1M12_socratic = "GERMAN How can you add your fractions?";
+		String gT3bP1M12_guidance = "GERMAN Double click your fractions to add them together.";
 		
 		String gT3bP1E1_didacticConceptual = "GERMAN The way that you worked that out was excellent. Well done.";
 		
@@ -1131,6 +1137,9 @@ namespace taskDependentSupport.core
 		String sT3bP1M11_socratic = "SPANISH How can you check, using a Fractions Lab tool,  that your solution is correct?";
 		String sT3bP1M11_guidance = "SPANISH You could use the addition box to add your fractions.";
 		String sT3bP1M11_didacticConceptual = "SPANISH Add your two fractions using the addition box.";
+
+		String sT3bP1M12_socratic = "SPANISH How can you add your fractions?";
+		String sT3bP1M12_guidance = "SPANISH Double click your fractions to add them together.";
 		
 		String sT3bP1E1_didacticConceptual = "SPANISH The way that you worked that out was excellent. Well done.";
 		
@@ -4208,6 +4217,30 @@ namespace taskDependentSupport.core
 			}
 			else {
 				return fT3bP1M11_didacticConceptual;
+			}
+		} 
+
+		public String T3bP1M12_socratic(){
+			if (spanish) {
+				return sT3bP1M12_socratic;
+			} 
+			else if (german){
+				return gT3bP1M12_socratic;
+			}
+			else {
+				return fT3bP1M12_socratic;
+			}
+		} 
+		
+		public String T3bP1M12_guidance(){
+			if (spanish) {
+				return sT3bP1M12_guidance;
+			} 
+			else if (german){
+				return gT3bP1M12_guidance;
+			}
+			else {
+				return fT3bP1M12_guidance;
 			}
 		} 
 

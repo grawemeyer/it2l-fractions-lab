@@ -40,6 +40,33 @@ namespace taskDependentSupport.core
 		private String feedbackCounterRule = "";
 		private FeedbackElem viewedFeedback = new FeedbackElem ();
 		private String viewedMessage = "";
+		private bool addedFractions = false;
+		private Fraction currentAddedFraction;
+
+
+		public void setCurrentAddedFraction(String value){
+			//vrect_1_cut
+			int valueLength = value.Length;
+			String id = value;
+			if (valueLength > 4){
+				id = value.Substring (0, (valueLength-4));
+			}
+			Debug.Log ("addedFraction value: "+value);
+			Debug.Log ("addedFraction id: "+id);
+			currentAddedFraction = getFraction(id);
+		}
+
+		public Fraction getcurrentAddedFraction(){
+			return currentAddedFraction;
+		}
+
+		public void setAddedFractions(bool value){
+			addedFractions = value;
+		}
+
+		public bool getAddedFractions(){
+			return addedFractions;
+		}
 
 		public void setViewedMessage (String value){
 			viewedMessage = value;

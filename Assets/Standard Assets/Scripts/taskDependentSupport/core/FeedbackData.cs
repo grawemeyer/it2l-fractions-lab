@@ -15,7 +15,7 @@ namespace taskDependentSupport.core
 		public FeedbackElem T24M1, T24M2, T24M3, T24M4, T24M5, T24M6, T24M7, T24M8, T24M9, T24M10, T24M11, T24M12, T24M13, T24E1, T24E2;
 		public FeedbackElem T26M1, T26M2, T26M3, T26M4, T26M5, T26M6, T26M7, T26M7start, T26M7end, T26M8, T26M10, T26M11, T26E1, T26E2;
 		public FeedbackElem T3aP1M1, T3aP1M2, T3aP1M3, T3aP1M4, T3aP1M5, T3aP1M6, T3aP1M7, T3aP1M8, T3aP1M9, T3aP1M10, T3aP1M11, T3aP1E1, T3aP1E2; 
-		public FeedbackElem T3bP1S3, T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M7start, T3bP1M7end, T3bP1M8, T3bP1M10, T3bP1M11, T3bP1E1, T3bP1E2; 
+		public FeedbackElem T3bP1S3, T3bP1M1, T3bP1M2, T3bP1M3, T3bP1M4, T3bP1M5, T3bP1M7start, T3bP1M7end, T3bP1M8, T3bP1M10, T3bP1M11, T3bP1M12, T3bP1E1, T3bP1E2; 
 		public FeedbackElem tooManyReps;
 
 		public FeedbackData (String taskID, StudentModel student){
@@ -1558,6 +1558,18 @@ namespace taskDependentSupport.core
 			nextStepT3bP1M11.setAdditionBox (true);
 			T3bP1M11.setNextStep (nextStepT3bP1M11);
 
+			T3bP1M12 = new FeedbackElem ();
+			T3bP1M12.setID ("T3bP1M12");
+			FeedbackMessage T3bP1M12M = new FeedbackMessage ();
+			T3bP1M12M.setSocratic (feedbackMessageString.T3bP1M12_socratic());
+			T3bP1M12M.setGuidance (feedbackMessageString.T3bP1M12_guidance());
+			T3bP1M12.setFeedbackMessage (T3bP1M12M);
+			T3bP1M12.setFeedbackType (FeedbackType.nextStep);
+			Fraction nextStepT3bP1M12 = new Fraction ();
+			nextStepT3bP1M12.setNumerator (resultNumerator);
+			nextStepT3bP1M12.setDenominator (resultDenominator);
+			T3bP1M12.setNextStep (nextStepT3bP1M12);
+
 			T3bP1E1 = new FeedbackElem ();
 			T3bP1E1.setID ("T3bP1E1");
 			FeedbackMessage T3bP1E1M = new FeedbackMessage ();
@@ -1688,6 +1700,7 @@ namespace taskDependentSupport.core
 			else if (T3bP1M8.getID ().Equals (id)) return T3bP1M8;
 			else if (T3bP1M10.getID ().Equals (id)) return T3bP1M10;
 			else if (T3bP1M11.getID ().Equals (id)) return T3bP1M11;
+			else if (T3bP1M12.getID ().Equals (id)) return T3bP1M12;
 			else if (T3bP1E1.getID ().Equals (id)) return T3bP1E1;
 			else if (T3bP1E2.getID ().Equals (id)) return T3bP1E2; 
 

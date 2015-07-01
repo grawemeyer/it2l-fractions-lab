@@ -17,6 +17,13 @@ namespace taskDependentSupport.core
 
 			Debug.Log ("::: ANAYLSE: "+type+" name: "+name+" id: "+id+" value: "+value+" fractionsValue: "+fractionsValue);
 
+			if (type.Equals ("ActionEvent")){
+				if (name.Equals ("ProperSum")){
+					studentModel.setAddedFractions(true);
+					studentModel.setCurrentAddedFraction(value);
+				}
+			}
+
 			if (type.Equals ("ClickButton")){
 				if (name.Equals ("Equivalence")){
 					if (studentModel.getEquivalenceOpen() == 0) studentModel.setEquivalenceOpen(1);
@@ -33,6 +40,19 @@ namespace taskDependentSupport.core
 				Fraction thisFraction = new Fraction();
 				thisFraction.setName(name);
 				thisFraction.setID(id);
+				if (studentModel.getAddedFractions()){
+					Debug.Log ("<<<<< added Fraction!!!!!");
+					Fraction addedFraction = studentModel.getcurrentAddedFraction();
+					Debug.Log ("<<<< added Fraction "+addedFraction);
+					int currentDenoninator = 0;
+					if (addedFraction != null){
+						currentDenoninator = addedFraction.getDenominator();
+					}
+					Debug.Log ("<<<< acurrentDenoninator "+currentDenoninator);
+					thisFraction.setDenominator (currentDenoninator);
+					Debug.Log ("<<<< after setDenominator at id"+id+" denominator: "+currentDenoninator);
+					studentModel.setAddedFractions(false);
+				}
 				studentModel.addCurrentFractions(thisFraction);
 				studentModel.setCompared(false);
 				studentModel.setComparedResult(false);
