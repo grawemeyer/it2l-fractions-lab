@@ -25,7 +25,9 @@ namespace taskDependentSupport.core
 			taskID = taskIDvalue;
 			feedbackData = new FeedbackData (taskIDvalue, student);
 		}
-	
+
+		//provide relevant feedback when the done button is pressed. 
+		//This is either a reflective prompt or task not finished message
 		public void processDoneEvent(){
 			Debug.Log ("::: processDoneEvent ::: ");
 			processEvent ();
@@ -108,7 +110,7 @@ namespace taskDependentSupport.core
 		}
 
 
-
+		//determine what the level of the feedback is.
 		private void setNewFeedback(){
 
 			String feedbackID = currentFeedback.getID();;
@@ -177,6 +179,7 @@ namespace taskDependentSupport.core
 			Debug.Log ("<<<<< feedback followed >>>>> "+wasFeedbackFollowed);
 		}
 
+		//calculate if the feedback that was previously provided was followed or not.
 		private bool feedbackFollowed(){
 			FeedbackElem previousFeedback = studentModel.getPreviousFeedback ();
 			Fraction feedbackNextSteps = previousFeedback.getNextStep ();
@@ -728,7 +731,7 @@ namespace taskDependentSupport.core
 			return false;
 		}
 
-
+		//calculate the next feeback message
 		public void processEvent()
 		{
 			Debug.Log ("processEvent");
@@ -754,6 +757,7 @@ namespace taskDependentSupport.core
 
 				string representation = "area";
 
+				//set relevant values
 				if (taskID.Equals("task3bPlus.1.setA.area")){
 					startNumerator = 1;
 					startDenominator = 6;
@@ -892,6 +896,7 @@ namespace taskDependentSupport.core
 				Debug.Log ("<<< currentFraction: "+currentFraction);
 
 				if (currentFraction != null) {
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator ();
 					int denominator = currentFraction.getDenominator ();
 					int partition = currentFraction.getPartition ();
@@ -998,6 +1003,7 @@ namespace taskDependentSupport.core
 				int startDenominator = 0;
 				string representation = "area";
 
+				//set relevant values
 				if (taskID.Equals("task3aPlus.1.setA.area")){
 					startNumerator = 3;
 					startDenominator = 5;
@@ -1062,6 +1068,7 @@ namespace taskDependentSupport.core
 				Fraction currentFraction = studentModel.getCurrentFraction ();
 				
 				if (currentFraction != null) {
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator ();
 					int denominator = currentFraction.getDenominator ();
 					int partition = currentFraction.getPartition ();
@@ -1164,6 +1171,7 @@ namespace taskDependentSupport.core
 				int endNumerator = 0;
 				int endDenominator = 0;
 
+				//set relevant values
 				if (taskID.Equals("task2.6.setA")){
 					startNumerator = 3;
 					startDenominator = 4;
@@ -1186,6 +1194,7 @@ namespace taskDependentSupport.core
 				Fraction currentFraction = studentModel.getCurrentFraction ();
 				
 				if (currentFraction != null) {
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator ();
 					int denominator = currentFraction.getDenominator ();
 					int partition = currentFraction.getPartition ();
@@ -1282,6 +1291,7 @@ namespace taskDependentSupport.core
 				int startDenominator = 0;
 				string representation = "area";
 
+				//set relevant values
 				if (taskID.Equals("task2.4.setA.area")){
 					startNumerator = 1;
 					startDenominator = 2;
@@ -1343,6 +1353,7 @@ namespace taskDependentSupport.core
 				Fraction currentFraction = studentModel.getCurrentFraction ();
 				
 				if (currentFraction != null) {
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator ();
 					int denominator = currentFraction.getDenominator ();
 					int partition = currentFraction.getPartition ();
@@ -1474,6 +1485,7 @@ namespace taskDependentSupport.core
 				Fraction currentFraction = studentModel.getCurrentFraction ();
 
 				if (currentFraction != null) {
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator ();
 					int denominator = currentFraction.getDenominator ();
 					int partition = currentFraction.getPartition ();
@@ -1547,6 +1559,7 @@ namespace taskDependentSupport.core
 
 				Fraction currentFraction =studentModel.getCurrentFraction();
 				if (currentFraction != null){
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator();
 					int denominator = currentFraction.getDenominator();
 					int partition = currentFraction.getPartition();
@@ -1622,6 +1635,7 @@ namespace taskDependentSupport.core
 				Fraction currentFraction =studentModel.getCurrentFraction();
 
 				if (currentFraction != null){
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator();
 					int denominator = currentFraction.getDenominator();
 					int partition = currentFraction.getPartition();
@@ -1733,6 +1747,7 @@ namespace taskDependentSupport.core
 				int startDenominator = 0;
 				int endDenominator = 0;
 
+				//set relevant values
 				if (taskID.Equals("task2.7.setA")){
 					startNumerator = 1;
 					endNumerator = 3;
@@ -1759,7 +1774,7 @@ namespace taskDependentSupport.core
 				Debug.Log (":::: currentFraction: "+currentFraction);
 
 				if (currentFraction != null){
-						
+					//retrieve the fraction that is currently worked on
 					int numerator = currentFraction.getNumerator();
 					int denominator = currentFraction.getDenominator();
 					int partition = currentFraction.getPartition();
